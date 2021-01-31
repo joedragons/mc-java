@@ -24,41 +24,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include("annotator")
-include("factories")
-include("entity-queries")
-include("known-types")
-include("model-compiler")
-include("rejection")
-include("validating-options")
-include("validation")
-include("validation-gen")
+package io.spine.tools.protoc;
 
-/*
- * Dependency links established with the Gradle included build.
- *
- * See the `includeBuild(...)` block below for more info.
- */
-val links = mapOf(
-        "io.spine:spine-base"                 to ":base",
-        "io.spine.tools:spine-tool-base"      to ":tool-base",
-        "io.spine.tools:spine-model-compiler" to ":model-compiler",
-        "io.spine:spine-testlib"              to ":testlib"
-)
+import com.google.common.collect.ImmutableList;
+import com.squareup.javapoet.MethodSpec;
+import io.spine.type.MessageType;
+import jdk.nashorn.internal.ir.annotations.Immutable;
 
-/*
- * Include the `base` build into the `tests` project build.
- *
- * Integration tests are built separately in order to be able to test the current
- * version of the Gradle plugins.
- *
- * See the Gradle manual for more info:
- * https://docs.gradle.org/current/userguide/composite_builds.html
- */
-includeBuild("$rootDir/../") {
-    dependencySubstitution {
-        links.forEach { (id, projectPath) ->
-            substitute(module(id)).with(project(projectPath))
-        }
+import javax.lang.model.element.Modifier;
+import java.util.List;
+
+@Immutable
+public final class TestMethodFactory implements MethodFactory {
+
+    @Override
+    public List<Method> generateMethodsFor(MessageType messageType) {
+        MethodSpec spec = MethodSpec
+                .methodBuilder("ownType")
+                .returns(MessageType.class)
+                .addStatement("return new $T(getDescriptor())", MessageType.class)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                .addJavadoc("Returns {@link $T MessageType} of the current message.%n",
+                            MessageType.class)
+                .build();
+        return ImmutableList.of(new Method(spec.toString()));
     }
 }
