@@ -24,16 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+// https://github.com/forge/roaster
+object Roaster {
+    private const val version = "2.22.2.Final"
+    const val api = "org.jboss.forge.roaster:roaster-api:${version}"
+    const val jdt = "org.jboss.forge.roaster:roaster-jdt:${version}"
 }

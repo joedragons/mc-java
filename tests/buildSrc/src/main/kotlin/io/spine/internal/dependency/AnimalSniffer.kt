@@ -24,16 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
+/**
+ * Versions of one-line dependencies.
+ *
+ * For versions of other dependencies please see `version` properties of objects declared below.
+ *
+ * See also: https://github.com/SpineEventEngine/config/issues/171
+ */
 
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+// https://www.mojohaus.org/animal-sniffer/animal-sniffer-maven-plugin/
+object AnimalSniffer {
+    private const val version = "1.19"
+    const val lib = "org.codehaus.mojo:animal-sniffer-annotations:${version}"
 }

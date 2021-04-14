@@ -24,16 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.gradle
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
+import io.spine.internal.dependency.AssertK
+import io.spine.internal.dependency.BouncyCastle
+import io.spine.internal.dependency.JavaJwt
+import io.spine.internal.dependency.Klaxon
 
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+@Suppress("unused")
+object Publishing {
+    const val klaxon = Klaxon.lib
+    const val oauthJwt = JavaJwt.lib
+    const val bouncyCastlePkcs = BouncyCastle.libPkcsJdk15
+    const val assertK = AssertK.libJvm
 }

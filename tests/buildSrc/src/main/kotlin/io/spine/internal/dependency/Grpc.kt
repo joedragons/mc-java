@@ -24,16 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+// https://github.com/grpc/grpc-java
+@Suppress("unused")
+object Grpc {
+    @Suppress("MemberVisibilityCanBePrivate")
+    const val version     = "1.35.1"
+    const val core        = "io.grpc:grpc-core:${version}"
+    const val stub        = "io.grpc:grpc-stub:${version}"
+    const val okHttp      = "io.grpc:grpc-okhttp:${version}"
+    const val protobuf    = "io.grpc:grpc-protobuf:${version}"
+    const val netty       = "io.grpc:grpc-netty:${version}"
+    const val nettyShaded = "io.grpc:grpc-netty-shaded:${version}"
+    const val context     = "io.grpc:grpc-context:${version}"
 }

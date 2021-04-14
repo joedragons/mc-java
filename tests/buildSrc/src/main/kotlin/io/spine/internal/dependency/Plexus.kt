@@ -24,16 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+/**
+ * Plexus Utils is a transitive dependency which we don't use directly.
+ * We `force` it in [DependencyResolution.forceConfiguration].
+ *
+ * [Plexus Utils](https://codehaus-plexus.github.io/plexus-utils/)
+ */
+object Plexus {
+    private const val version = "3.3.0"
+    const val utils = "org.codehaus.plexus:plexus-utils:${version}"
 }

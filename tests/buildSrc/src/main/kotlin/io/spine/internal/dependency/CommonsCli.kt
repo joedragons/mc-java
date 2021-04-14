@@ -24,16 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+/**
+ * Commons CLI is a transitive dependency which we don't use directly.
+ * We `force` it in [DependencyResolution.forceConfiguration].
+ *
+ * [Commons CLI]](https://commons.apache.org/proper/commons-cli/)
+ */
+object CommonsCli {
+    private const val version = "1.4"
+    const val lib = "commons-cli:commons-cli:${version}"
 }

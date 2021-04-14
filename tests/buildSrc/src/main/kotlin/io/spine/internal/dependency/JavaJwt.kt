@@ -24,16 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+/**
+ * A Java implementation of JSON Web Token (JWT) - RFC 7519.
+ *
+ * [Java JWT](https://github.com/auth0/java-jwt)
+ */
+object JavaJwt {
+    private const val version = "3.14.0"
+    const val lib = "com.auth0:java-jwt:${version}"
 }

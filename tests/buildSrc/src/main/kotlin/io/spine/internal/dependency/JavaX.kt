@@ -24,16 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+// This artifact which used to be a part of J2EE moved under Eclipse EE4J project.
+// https://github.com/eclipse-ee4j/common-annotations-api
+object JavaX {
+    const val annotations = "javax.annotation:javax.annotation-api:1.3.2"
 }

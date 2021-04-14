@@ -24,16 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+/**
+ * The FindBugs project is dead since 2017. It has a successor called SpotBugs, but we don't use it.
+ * We use ErrorProne for static analysis instead. The only reason for having this dependency is
+ * the annotations for null-checking introduced by JSR-305. These annotations are troublesome,
+ * but no alternatives are known for some of them so far.  Please see
+ * [this issue](https://github.com/SpineEventEngine/base/issues/108) for more details.
+ */
+object FindBugs {
+    private const val version = "3.0.2"
+    const val annotations = "com.google.code.findbugs:jsr305:${version}"
 }

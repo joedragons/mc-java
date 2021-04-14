@@ -24,16 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+/**
+ * A JSON parser in Kotlin
+ *
+ * [Klaxon](https://github.com/cbeust/klaxon)
+ */
+object Klaxon {
+    private const val version = "5.4"
+    const val lib = "com.beust:klaxon:${version}"
 }

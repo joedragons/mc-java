@@ -24,16 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+// https://github.com/google/flogger
+object Flogger {
+    internal const val version = "0.6"
+    const val lib     = "com.google.flogger:flogger:${version}"
+    @Suppress("unused")
+    object Runtime {
+        const val systemBackend = "com.google.flogger:flogger-system-backend:${version}"
+        const val log4J         = "com.google.flogger:flogger-log4j:${version}"
+        const val slf4J         = "com.google.flogger:slf4j-backend-factory:${version}"
+    }
 }

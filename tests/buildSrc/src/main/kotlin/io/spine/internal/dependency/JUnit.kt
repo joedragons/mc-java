@@ -24,16 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
+// https://junit.org/junit5/
+object JUnit {
+    private const val version            = "5.7.1"
+    private const val platformVersion    = "1.7.1"
+    private const val legacyVersion      = "4.13.1"
 
-val spineVersion: String by extra
+    // https://github.com/apiguardian-team/apiguardian
+    private const val apiGuardianVersion = "1.1.1"
+    // https://github.com/junit-pioneer/junit-pioneer
+    private const val pioneerVersion     = "1.3.8"
 
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+    const val legacy = "junit:junit:${legacyVersion}"
+    val api = listOf(
+        "org.apiguardian:apiguardian-api:${apiGuardianVersion}",
+        "org.junit.jupiter:junit-jupiter-api:${version}",
+        "org.junit.jupiter:junit-jupiter-params:${version}"
+    )
+    const val runner  = "org.junit.jupiter:junit-jupiter-engine:${version}"
+    @Suppress("unused")
+    const val pioneer = "org.junit-pioneer:junit-pioneer:${pioneerVersion}"
+    const val platformCommons = "org.junit.platform:junit-platform-commons:${platformVersion}"
+    const val platformLauncher = "org.junit.platform:junit-platform-launcher:${platformVersion}"
 }

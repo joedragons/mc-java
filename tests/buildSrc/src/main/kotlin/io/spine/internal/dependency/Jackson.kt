@@ -24,16 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+@Suppress("unused")
+object Jackson {
+    private const val version = "2.12.3"
+    // https://github.com/FasterXML/jackson-databind
+    const val databind = "com.fasterxml.jackson.core:jackson-databind:${version}"
+    // https://github.com/FasterXML/jackson-dataformat-xml/releases
+    const val dataformatXml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${version}"
 }

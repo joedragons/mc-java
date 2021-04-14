@@ -24,16 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
+// https://github.com/protocolbuffers/protobuf
+@Suppress("MemberVisibilityCanBePrivate") // used directly from outside
+object Protobuf {
+    const val version    = "3.15.7"
+    val libs = listOf(
+        "com.google.protobuf:protobuf-java:${version}",
+        "com.google.protobuf:protobuf-java-util:${version}"
+    )
+    const val compiler = "com.google.protobuf:protoc:${version}"
 
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+    object GradlePlugin {
+        const val version = "0.8.13"
+        const val id = "com.google.protobuf"
+        const val lib = "com.google.protobuf:protobuf-gradle-plugin:${version}"
+    }
 }

@@ -24,16 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+/**
+ * J2ObjC is a transitive dependency which we don't use directly.
+ * We `force` it in [DependencyResolution.forceConfiguration()].
+ *
+ * [J2ObjC](https://developers.google.com/j2objc)
+ */
+object J2ObjC {
+    private const val version = "1.3"
+    const val lib = "com.google.j2objc:j2objc-annotations:${version}"
 }

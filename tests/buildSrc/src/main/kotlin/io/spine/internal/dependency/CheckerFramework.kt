@@ -24,16 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+// https://checkerframework.org/
+object CheckerFramework {
+    private const val version = "3.12.0"
+    const val annotations = "org.checkerframework:checker-qual:${version}"
+    @Suppress("unused")
+    val dataflow = listOf(
+        "org.checkerframework:dataflow:${version}",
+        "org.checkerframework:javacutil:${version}"
+    )
+    /**
+     * This is discontinued artifact, which we do not use directly.
+     * This is a transitive dependency for us, which we force in
+     * [DependencyResolution.forceConfiguration]
+     */
+    const val compatQual = "org.checkerframework:checker-compat-qual:2.5.5"
 }

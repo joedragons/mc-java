@@ -24,16 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+// https://github.com/google/truth
+object Truth {
+    private const val version = "1.1.2"
+    val libs = listOf(
+        "com.google.truth:truth:${version}",
+        "com.google.truth.extensions:truth-java8-extension:${version}",
+        "com.google.truth.extensions:truth-proto-extension:${version}"
+    )
 }

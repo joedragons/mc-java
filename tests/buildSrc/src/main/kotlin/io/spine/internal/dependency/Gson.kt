@@ -24,16 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
+package io.spine.internal.dependency
 
-/* 
-    This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
-*/
-
-val spineVersion: String by extra
-
-dependencies {
-    implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+/**
+ * Gson is a transitive dependency which we don't use directly.
+ * We `force` it in [DependencyResolution.forceConfiguration()].
+ *
+ * [Gson](https://github.com/google/gson)
+ */
+object Gson {
+    private const val version = "2.8.6"
+    const val lib = "com.google.code.gson:gson:${version}"
 }
