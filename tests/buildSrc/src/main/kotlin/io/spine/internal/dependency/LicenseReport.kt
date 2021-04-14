@@ -27,6 +27,7 @@
 package io.spine.internal.dependency
 
 // https://github.com/jk1/Gradle-License-Report
+@Suppress("unused")
 object LicenseReport {
     private const val version = "1.16"
     const val lib = "com.github.jk1:gradle-license-report:${version}"
