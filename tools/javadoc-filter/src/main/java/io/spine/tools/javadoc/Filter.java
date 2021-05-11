@@ -26,41 +26,12 @@
 
 package io.spine.tools.javadoc;
 
-import com.sun.javadoc.AnnotationDesc;
 import com.sun.javadoc.ProgramElementDoc;
 
-import java.lang.annotation.Annotation;
+import java.util.function.Predicate;
 
 /**
- * {@code AnnotationAnalyst} provides methods to check accessory to the specified annotation.
- *
- * @param <C> the type of an annotation to analyze
+ * Tells if a {@link ProgramElementDoc} matches a specified condition.
  */
-public class AnnotationAnalyst<C extends Class<? extends Annotation>> {
-
-    private final C annotationClass;
-
-    AnnotationAnalyst(C annotationClass) {
-        this.annotationClass = annotationClass;
-    }
-
-    boolean hasAnnotation(ProgramElementDoc doc) {
-        return isAnnotationPresent(doc.annotations());
-    }
-
-    boolean isAnnotationPresent(AnnotationDesc[] annotations) {
-        for (AnnotationDesc annotation : annotations) {
-            if (isQualifiedAnnotation(annotation)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean isQualifiedAnnotation(AnnotationDesc annotation) {
-        return annotation.annotationType()
-                         .qualifiedTypeName()
-                         .equals(annotationClass.getName());
-    }
+interface Filter extends Predicate<ProgramElementDoc> {
 }
