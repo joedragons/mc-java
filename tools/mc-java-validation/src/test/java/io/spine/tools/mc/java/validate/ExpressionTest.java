@@ -24,43 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.validate;
 
-group = "io.spine.tools"
+import com.squareup.javapoet.CodeBlock;
+import io.spine.tools.mc.java.validate.Expression;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import static com.google.common.truth.Truth.assertThat;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+@DisplayName("`Expression` should")
+class ExpressionTest {
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
-
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    @Test
+    @DisplayName("create formatted expressions")
+    void format() {
+        Expression<?> expression =
+                Expression.formatted("%s %s %d!", "hello", new StringBuilder("world"), 42);
+        CodeBlock code = expression.toCode();
+        assertThat(code.toString())
+                .isEqualTo("hello world 42!");
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
 }

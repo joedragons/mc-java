@@ -24,43 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.validate;
 
-group = "io.spine.tools"
+import com.google.errorprone.annotations.FormatMethod;
+import com.google.errorprone.annotations.FormatString;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import static java.lang.String.format;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+/**
+ * An expression which does not yield a value.
+ *
+ * <p>The actual generated code might formally be non-void. In this case, by using
+ * {@code VoidExpression} we state that the value of the expression is irrelevant. Example of such
+ * an expression is {@code collection.add(element)}, which returns a {@code boolean} value, but it
+ * is not used.
+ */
+final class VoidExpression extends CodeExpression<Void> {
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
+    private static final long serialVersionUID = 0L;
 
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    private VoidExpression(String value) {
+        super(value);
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
+
+    /**
+     * Creates a {@code VoidExpression} by formatting the given template string by the rules of
+     * {@code String.format()}.
+     */
+    @FormatMethod
+    public static VoidExpression formatted(@FormatString String template, Object... args) {
+        return new VoidExpression(format(template, args));
+    }
 }

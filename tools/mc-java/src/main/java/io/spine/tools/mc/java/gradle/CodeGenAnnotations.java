@@ -24,43 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.gradle;
 
-group = "io.spine.tools"
+import io.spine.annotation.Beta;
+import io.spine.annotation.Experimental;
+import io.spine.annotation.Internal;
+import io.spine.annotation.SPI;
+import io.spine.code.java.ClassName;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import static com.google.common.base.Preconditions.checkNotNull;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+/**
+ * Type names of Java annotations used to mark generated code.
+ */
+@SuppressWarnings({"PublicField", "WeakerAccess"}) // Expose fields as a part of Gradle extension.
+public class CodeGenAnnotations {
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
+    public String experimental = Experimental.class.getCanonicalName();
+    public String beta = Beta.class.getCanonicalName();
+    public String spi = SPI.class.getCanonicalName();
+    public String internal = Internal.class.getCanonicalName();
 
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    public ClassName experimentalClassName() {
+        checkNotNull(experimental);
+        return ClassName.of(experimental);
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
+
+    public ClassName betaClassName() {
+        checkNotNull(beta);
+        return ClassName.of(beta);
+    }
+
+    public ClassName spiClassName() {
+        checkNotNull(spi);
+        return ClassName.of(spi);
+    }
+
+    public ClassName internalClassName() {
+        checkNotNull(internal);
+        return ClassName.of(internal);
+    }
 }

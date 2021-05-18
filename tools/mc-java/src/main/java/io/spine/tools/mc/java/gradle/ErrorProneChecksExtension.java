@@ -24,43 +24,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.gradle;
 
-group = "io.spine.tools"
+import org.gradle.api.Project;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import static io.spine.tools.mc.java.gradle.ErrorProneChecksPlugin.extensionName;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+/**
+ * The Error Prone Checks plugin extension.
+ *
+ * <p>Allows configuring severity for all the Spine-custom Error Prone checks applied to the
+ * project.
+ *
+ * @see Severity
+ */
+@SuppressWarnings("PublicField" /* required for exposing the property in Gradle. */)
+public class ErrorProneChecksExtension {
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
+    public Severity useValidatingBuilder;
 
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    /**
+     * Creates an instance of the extension in the passed project.
+     */
+    public static void createIn(Project project) {
+        project.getExtensions()
+                .create(extensionName(), ErrorProneChecksExtension.class);
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
+
+    public static Severity getUseValidatingBuilder(Project project) {
+        ErrorProneChecksExtension extension = (ErrorProneChecksExtension)
+                project.getExtensions()
+                       .getByName(extensionName());
+        return extension.useValidatingBuilder;
+    }
 }

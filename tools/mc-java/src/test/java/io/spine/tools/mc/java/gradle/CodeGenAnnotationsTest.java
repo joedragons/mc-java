@@ -24,43 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.gradle;
 
-group = "io.spine.tools"
+import io.spine.annotation.Beta;
+import io.spine.annotation.Experimental;
+import io.spine.annotation.Internal;
+import io.spine.annotation.SPI;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+@DisplayName("modelCompiler.generateAnnotations Gradle extension should")
+class CodeGenAnnotationsTest {
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
+    @Test
+    @DisplayName("have default values")
+    void defaults() {
+        CodeGenAnnotations annotations = new CodeGenAnnotations();
 
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+        assertEquals(Experimental.class.getName(), annotations.experimentalClassName().value());
+        assertEquals(SPI.class.getName(), annotations.spiClassName().value());
+        assertEquals(Internal.class.getName(), annotations.internalClassName().value());
+        assertEquals(Beta.class.getName(), annotations.betaClassName().value());
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
 }

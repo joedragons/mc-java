@@ -24,43 +24,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.field;
 
-group = "io.spine.tools"
+import com.google.common.collect.ImmutableSet;
+import com.squareup.javapoet.TypeName;
+import io.spine.code.proto.FieldDeclaration;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+/**
+ * The type information of a field for a code-generation.
+ */
+public interface FieldType {
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+    /**
+     * Obtains the {@link TypeName} for the field.
+     *
+     * @return the type name
+     */
+    TypeName getTypeName();
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
+    /**
+     * Obtains the setter prefix for the field.
+     *
+     * @return the setter prefix
+     */
+    AccessorTemplate primarySetterTemplate();
 
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+    /**
+     * Obtains the templates of the generated Java accessors for a field of this type.
+     *
+     * @return the accessor templates
+     */
+    ImmutableSet<AccessorTemplate> generatedAccessorTemplates();
 
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
-    }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
+    /**
+     * Creates a an instances basing on the type of the field.
+     */
+    static FieldType of(FieldDeclaration field) {
+        if (field.isMap()) {
+            return new MapFieldType(field);
+        } else if (field.isRepeated()) {
+            return new RepeatedFieldType(field);
+        } else {
+            return new SingularFieldType(field);
         }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
+    }
 }

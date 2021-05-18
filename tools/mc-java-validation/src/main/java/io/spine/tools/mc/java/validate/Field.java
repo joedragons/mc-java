@@ -24,43 +24,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.validate;
 
-group = "io.spine.tools"
+import com.google.common.base.Objects;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.TypeSpec;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import static com.google.common.base.Preconditions.checkNotNull;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+/**
+ * A field to be attached to a Java class.
+ *
+ * @implNote A {@code Field} wraps a JavaPoet {@link FieldSpec} which can be added to a JavaPoet
+ *         {@link TypeSpec} builder.
+ */
+final class Field implements ClassMember {
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
+    private final FieldSpec fieldSpec;
 
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    Field(FieldSpec fieldSpec) {
+        this.fieldSpec = checkNotNull(fieldSpec);
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
+
+    @Override
+    public void attachTo(TypeSpec.Builder type) {
+        type.addField(fieldSpec);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
+        if (!(o instanceof Field)) {
+            return false;
+        }
+        Field field = (Field) o;
+        return Objects.equal(fieldSpec, field.fieldSpec);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(fieldSpec);
+    }
 }

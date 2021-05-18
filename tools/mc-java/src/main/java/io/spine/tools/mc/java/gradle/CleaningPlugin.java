@@ -23,44 +23,35 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.tools.mc.java.gradle;
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+import io.spine.tools.mc.java.fs.DirectoryCleaner;
+import io.spine.tools.gradle.GradleTask;
+import io.spine.tools.gradle.SpinePlugin;
+import org.gradle.api.Action;
+import org.gradle.api.Project;
+import org.gradle.api.Task;
 
-group = "io.spine.tools"
+import static io.spine.tools.gradle.BaseTaskName.clean;
+import static io.spine.tools.gradle.ModelCompilerTaskName.preClean;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+/**
+ * Plugin which performs additional cleanup of the Spine-generated folders.
+ *
+ * <p>Adds a custom `:preClean` task, which is executed before the `:clean` task.
+ */
+public class CleaningPlugin extends SpinePlugin {
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
-
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
-
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    @Override
+    public void apply(Project project) {
+        Action<Task> preCleanAction = task -> {
+            _debug().log("Pre-clean: deleting the directories.");
+            DirectoryCleaner.deleteDirs(Extension.getDirsToClean(project));
+        };
+        GradleTask preCleanTask =
+                newTask(preClean, preCleanAction)
+                        .insertBeforeTask(clean)
+                        .applyNowTo(project);
+        _debug().log("Pre-clean phase initialized: `%s`.", preCleanTask);
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
 }

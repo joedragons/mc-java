@@ -24,43 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.validate;
 
-group = "io.spine.tools"
+import io.spine.protobuf.Messages;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import static io.spine.tools.mc.java.validate.BooleanExpression.fromCode;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+/**
+ * Set of utilities for working with values of container types.
+ *
+ * <p>Container types are types composed of homogeneous elements: a collection, a string, etc.
+ */
+final class Containers {
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
-
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
-
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private Containers() {
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
+
+    /**
+     * Obtains the expression which calls {@code isEmpty()} method on the given {@code value}.
+     *
+     * @param value
+     *         an expression which yields an object which has a {@code isEmpty()} method, e.g.
+     *         a {@code String}
+     */
+    public static BooleanExpression isEmpty(Expression<?> value) {
+        return fromCode("$L.isEmpty()", value.toCode());
+    }
+
+    /**
+     * Obtains the expression which calls {@code Messages.isDefault())} method on the given
+     * {@code value}.
+     *
+     * @param value
+     *         an expression of a Protobuf message or a Protobuf enum
+     */
+    public static BooleanExpression isDefault(Expression<?> value) {
+        return fromCode("$T.isDefault($L)", Messages.class, value.toCode());
+    }
 }

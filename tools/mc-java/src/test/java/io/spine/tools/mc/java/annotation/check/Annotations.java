@@ -24,43 +24,39 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.JavaX
+package io.spine.tools.mc.java.annotation.check;
 
-group = "io.spine.tools"
+import io.spine.annotation.Internal;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
+import org.jboss.forge.roaster.model.source.AnnotationTargetSource;
 
-dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
-    implementation(project(":mc-java-validation"))
-    implementation(JavaPoet.lib)
-    implementation(JavaX.annotations)
+import java.lang.annotation.Annotation;
+import java.util.Optional;
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":mute-logging"))
-}
+import static java.util.Optional.ofNullable;
 
-tasks.jar {
-    dependsOn(
-            ":tool-base:jar",
-            ":mc-java-validation:jar"
-    )
+/**
+ * Utilities for working with annotations in the generated code.
+ */
+class Annotations {
 
-    // See https://stackoverflow.com/questions/35704403/what-are-the-eclipsef-rsa-and-eclipsef-sf-in-a-java-jar-file
-    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+    private static final Class<? extends Annotation> ANNOTATION_CLASS = Internal.class;
 
-    manifest {
-        attributes(mapOf("Main-Class" to "io.spine.tools.mc.java.protoc.Plugin"))
+    /** Prevents instantiation of this utility class. */
+    private Annotations() {
     }
-    // Assemble "Fat-JAR" artifact containing all the dependencies.
-    from(configurations.runtimeClasspath.get().map {
-        when {
-            it.isDirectory -> it
-            else -> zipTree(it)
-        }
-    })
-    // We should provide a classifier or else Protobuf Gradle plugin will substitute it with
-    // an OS-specific one.
-    archiveClassifier.set("exe")
+
+    static Optional<? extends AnnotationSource<?>>
+    findInternalAnnotation(AnnotationTargetSource<?, ?> javaSource) {
+        return findAnnotation(javaSource, ANNOTATION_CLASS);
+    }
+
+    static Optional<? extends AnnotationSource<?>>
+    findAnnotation(AnnotationTargetSource<?, ?> javaSource,
+                   Class<? extends Annotation> annotationType) {
+        String annotationName = annotationType.getName();
+        AnnotationSource<?> annotation = javaSource
+                .getAnnotation(annotationName);
+        return ofNullable(annotation);
+    }
 }
