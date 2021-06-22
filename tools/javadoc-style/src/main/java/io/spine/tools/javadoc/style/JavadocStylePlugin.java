@@ -23,9 +23,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.tools.protodoc;
+package io.spine.tools.javadoc.style;
 
-import com.google.common.collect.ImmutableList;
 import io.spine.tools.gradle.SpinePlugin;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -37,12 +36,12 @@ import java.nio.file.Files;
 
 import static io.spine.tools.gradle.JavaTaskName.compileJava;
 import static io.spine.tools.gradle.JavaTaskName.compileTestJava;
-import static io.spine.tools.gradle.JavadocPrettifierTaskName.formatProtoDoc;
-import static io.spine.tools.gradle.JavadocPrettifierTaskName.formatTestProtoDoc;
 import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
 import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
-import static io.spine.tools.protodoc.Extension.getAbsoluteMainGenProtoDir;
-import static io.spine.tools.protodoc.Extension.getAbsoluteTestGenProtoDir;
+import static io.spine.tools.javadoc.style.JavadocStyleExtension.getAbsoluteMainGenProtoDir;
+import static io.spine.tools.javadoc.style.JavadocStyleExtension.getAbsoluteTestGenProtoDir;
+import static io.spine.tools.javadoc.style.JavadocStyleTaskName.formatProtoDoc;
+import static io.spine.tools.javadoc.style.JavadocStyleTaskName.formatTestProtoDoc;
 import static java.lang.String.format;
 
 /**
@@ -66,15 +65,12 @@ import static java.lang.String.format;
  * So, if the folders contain not only the sources generated basing on Protobuf definitions,
  * they will be formatted either.
  */
-public class ProtoJavadocPlugin extends SpinePlugin {
-
-    static final String PROTO_JAVADOC_EXTENSION_NAME = "protoJavadoc";
+public class JavadocStylePlugin extends SpinePlugin {
 
     @Override
     public void apply(Project project) {
         _debug().log("Adding the ProtoJavadocPlugin extension to the project.");
-        project.getExtensions()
-               .create(PROTO_JAVADOC_EXTENSION_NAME, Extension.class);
+        JavadocStyleExtension.createIn(project);
 
         Action<Task> mainAction = createAction(project, TaskType.MAIN);
         newTask(formatProtoDoc, mainAction)
@@ -102,8 +98,8 @@ public class ProtoJavadocPlugin extends SpinePlugin {
         }
 
         JavadocFormatter formatter = new JavadocFormatter(
-                ImmutableList.of(new BacktickFormatting(),
-                                 new PreTagFormatting())
+                new BacktickFormatting(),
+                new PreTagFormatting()
         );
         try {
             _debug().log("Starting Javadocs formatting in `%s`.", genProtoDir);

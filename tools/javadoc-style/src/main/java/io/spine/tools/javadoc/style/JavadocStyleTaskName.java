@@ -23,35 +23,25 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.tools.mc.java.gradle;
 
-import io.spine.tools.mc.java.fs.DirectoryCleaner;
-import io.spine.tools.gradle.GradleTask;
-import io.spine.tools.gradle.SpinePlugin;
-import org.gradle.api.Action;
-import org.gradle.api.Project;
-import org.gradle.api.Task;
+package io.spine.tools.javadoc.style;
 
-import static io.spine.tools.gradle.BaseTaskName.clean;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.preClean;
+import io.spine.annotation.Internal;
+import io.spine.tools.gradle.TaskName;
 
 /**
- * Plugin which performs additional cleanup of the Spine-generated folders.
- *
- * <p>Adds a custom `:preClean` task, which is executed before the `:clean` task.
+ * Names of Gradle tasks defined by the Javadoc Prettifier plugin.
  */
-public class CleaningPlugin extends SpinePlugin {
+@Internal
+public enum JavadocStyleTaskName implements TaskName {
 
-    @Override
-    public void apply(Project project) {
-        Action<Task> preCleanAction = task -> {
-            _debug().log("Pre-clean: deleting the directories.");
-            DirectoryCleaner.deleteDirs(McJavaExtension.getDirsToClean(project));
-        };
-        GradleTask preCleanTask =
-                newTask(preClean, preCleanAction)
-                        .insertBeforeTask(clean)
-                        .applyNowTo(project);
-        _debug().log("Pre-clean phase initialized: `%s`.", preCleanTask);
-    }
+    /**
+     * Formats the Javadoc in sources generated from {@code .proto} files in the {@code main} scope.
+     */
+    formatProtoDoc,
+
+    /**
+     * Formats the Javadoc in sources generated from {@code .proto} files in the {@code test} scope.
+     */
+    formatTestProtoDoc
 }
