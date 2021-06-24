@@ -24,35 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.config;
+package io.spine.tools.mc.java.codegen;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.protobuf.Message;
-import io.spine.tools.protoc.ByPattern;
 import io.spine.tools.protoc.FilePattern;
-import org.gradle.api.Project;
-import org.gradle.api.provider.SetProperty;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import static com.google.common.truth.Truth.assertThat;
 
-abstract class MessageGroupConfig<P extends Message> extends ConfigWithFields<P> {
+@DisplayName("`WithSuffix` pattern should")
+final class WithSuffixTest {
 
-    private final SetProperty<FilePattern> file;
-
-    MessageGroupConfig(Project p) {
-        super(p);
-        this.file = p.getObjects().setProperty(FilePattern.class);
-    }
-
-    void convention(FilePattern pattern) {
-        file.convention(ImmutableSet.of(pattern));
-    }
-
-    Set<FilePattern> patterns() {
-        return file.get();
-    }
-
-    public void inFiles(ByPattern pattern) {
-        this.file.add(pattern.toProto());
+    @Test
+    @DisplayName("translate itself to Protobuf counterpart")
+    void convertToProtobufCounterpart() {
+        String suffix = "test.proto";
+        FilePattern pattern = new WithSuffix(suffix).toProto();
+        assertThat(pattern.getSuffix())
+                .isEqualTo(suffix);
     }
 }

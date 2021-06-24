@@ -24,19 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.config;
+package io.spine.tools.mc.java.codegen;
 
-import com.google.protobuf.Message;
-import io.spine.tools.protoc.JavaClassName;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-abstract class Config<P extends Message> {
+import static com.google.common.truth.Truth.assertThat;
 
-    abstract P toProto();
+@DisplayName("`MessageSelector` should")
+final class MessageSelectorTest {
 
-    static JavaClassName className(String canonical) {
-        return JavaClassName
-                .newBuilder()
-                .setCanonical(canonical)
-                .build();
+    @Test
+    @DisplayName("be enabled by default")
+    void beEnabledByDefault() {
+        assertThat(new DefaultSelector().enabled())
+                .isTrue();
+    }
+
+    @Test
+    @DisplayName("allow disabling and enabling itself")
+    void allowDisablingAndEnablingItself() {
+        MessageSelector selector = new DefaultSelector();
+        selector.disable();
+        assertThat(selector.enabled())
+                .isFalse();
+        selector.enable();
+        assertThat(selector.enabled())
+                .isTrue();
+    }
+
+    /**
+     * A test implementation of a {@code MessageSelector}.
+     */
+    private static class DefaultSelector extends MessageSelector {
     }
 }

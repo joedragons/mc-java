@@ -24,10 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.config;
+package io.spine.tools.mc.java.codegen;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+import io.spine.tools.protoc.FilePattern;
+import org.checkerframework.checker.regex.qual.Regex;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * A selector of proto files whose names start with a certain prefix.
+ */
+public final class WithPrefix extends ByPattern {
+
+    WithPrefix(@Regex String prefix) {
+        super(prefix);
+    }
+
+    @Override
+    public FilePattern toProto() {
+        return FilePatterns.filePrefix(getPattern());
+    }
+}

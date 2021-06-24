@@ -24,48 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.config;
+package io.spine.tools.mc.java.codegen;
 
 import com.google.protobuf.Message;
-import io.spine.tools.protoc.AddInterface;
-import org.gradle.api.Project;
-import org.gradle.api.provider.SetProperty;
+import io.spine.tools.protoc.JavaClassName;
 
-import java.util.List;
+abstract class Config<P extends Message> {
 
-import static java.util.stream.Collectors.toList;
+    abstract P toProto();
 
-abstract class ConfigWithInterfaces<P extends Message> extends Config<P> {
-
-    private final SetProperty<String> interfaceNames;
-
-    ConfigWithInterfaces(Project p) {
-        super();
-        this.interfaceNames = p.getObjects().setProperty(String.class);
-    }
-
-    public final void markAs(String interfaceName) {
-        interfaceNames.add(interfaceName);
-    }
-
-    public final void markAs(String firstInterface, String secondInterface, String... otherInterfaces) {
-        interfaceNames.add(firstInterface);
-        interfaceNames.add(secondInterface);
-        interfaceNames.addAll(otherInterfaces);
-    }
-
-    final List<AddInterface> interfaces() {
-        return interfaceNames
-                .get()
-                .stream()
-                .map(Config::className)
-                .map(name -> AddInterface.newBuilder()
-                        .setName(name)
-                        .build())
-                .collect(toList());
-    }
-
-    final SetProperty<String> interfaceNames() {
-        return interfaceNames;
+    static JavaClassName className(String canonical) {
+        return JavaClassName
+                .newBuilder()
+                .setCanonical(canonical)
+                .build();
     }
 }

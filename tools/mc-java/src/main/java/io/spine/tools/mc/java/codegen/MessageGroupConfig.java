@@ -24,51 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.config;
+package io.spine.tools.mc.java.codegen;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.Message;
-import io.spine.tools.protoc.ForUuids;
-import io.spine.tools.protoc.MethodFactory;
-import io.spine.tools.protoc.MethodFactoryName;
+import io.spine.tools.protoc.FilePattern;
 import org.gradle.api.Project;
 import org.gradle.api.provider.SetProperty;
 
-import java.util.List;
+import java.util.Set;
 
-import static java.util.stream.Collectors.toList;
+abstract class MessageGroupConfig<P extends Message> extends ConfigWithFields<P> {
 
-public final class UuidConfig extends ConfigWithInterfaces<ForUuids> {
+    private final SetProperty<FilePattern> file;
 
-    public final SetProperty<String> methodFactories;
-
-    UuidConfig(Project p) {
+    MessageGroupConfig(Project p) {
         super(p);
-        methodFactories = p.getObjects()
-                           .setProperty(String.class);
+        this.file = p.getObjects().setProperty(FilePattern.class);
     }
 
-    void convention(Class<? extends MethodFactory> methodFactory,
-                    Class<? extends Message> markerInterface) {
-        methodFactories.convention(ImmutableSet.of(methodFactory.getCanonicalName()));
-        interfaceNames().convention(ImmutableSet.of(markerInterface.getCanonicalName()));
+    void convention(FilePattern pattern) {
+        file.convention(ImmutableSet.of(pattern));
     }
 
-    @Override
-    ForUuids toProto() {
-        return ForUuids.newBuilder()
-                .addAllMethodFactory(factories())
-                .addAllAddInterface(interfaces())
-                .build();
+    Set<FilePattern> patterns() {
+        return file.get();
     }
 
-    private List<MethodFactoryName> factories() {
-        return methodFactories.get()
-                              .stream()
-                              .map(Config::className)
-                              .map(name -> MethodFactoryName.newBuilder()
-                                      .setClassName(name)
-                                      .build())
-                              .collect(toList());
+    public void inFiles(ByPattern pattern) {
+        this.file.add(pattern.toProto());
     }
 }
