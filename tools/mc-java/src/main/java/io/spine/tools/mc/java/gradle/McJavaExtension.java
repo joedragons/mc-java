@@ -32,6 +32,7 @@ import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.gradle.GradleExtension;
 import io.spine.tools.java.fs.DefaultJavaPaths;
+import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.mc.java.codegen.Codegen;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Action;
@@ -50,13 +51,13 @@ import static com.google.common.collect.Lists.newLinkedList;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * A configuration for the {@link ModelCompilerPlugin}.
+ * A configuration for the {@link McJavaPlugin}.
  */
 @SuppressWarnings({
         "PublicField", "WeakerAccess" /* Expose fields as a Gradle extension */,
         "ClassWithTooManyMethods" /* The methods are needed for handing default values. */,
         "PMD.TooManyFields" /* Gradle extensions are flat like this. */})
-public class Extension extends GradleExtension {
+public class McJavaExtension extends GradleExtension {
 
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
@@ -150,8 +151,8 @@ public class Extension extends GradleExtension {
     /**
      * The severity of the Spine-custom Error Prone checks.
      *
-     * <p>If this value is not set, the default severities are used, which are specific for the
-     * each check.
+     * <p>If this value is not set, the default severities are used,
+     * which are specific for each check.
      *
      * <p>May be overridden by the values provided by the {@link ErrorProneChecksExtension}.
      */
@@ -192,10 +193,18 @@ public class Extension extends GradleExtension {
         return logger.atFine();
     }
 
+    @SuppressWarnings({
+            "PMD.MethodNamingConventions",
+            "FloggerSplitLogStatement" // See: https://github.com/SpineEventEngine/base/issues/612
+    })
+    private static FluentLogger.Api _info() {
+        return logger.atInfo();
+    }
+
     @SuppressWarnings("FloggerSplitLogStatement")
 
     public static String getMainProtoDir(Project project) {
-        Extension extension = extension(project);
+        McJavaExtension extension = extension(project);
         _debug().log("Extension is `%s`.", extension);
         String protoDir = extension.mainProtoDir;
         _debug().log("`modelCompiler.mainProtoSrcDir` is `%s`.", protoDir);
@@ -211,14 +220,14 @@ public class Extension extends GradleExtension {
     }
 
     public static File getMainDescriptorSetFile(Project project) {
-        Extension extension = extension(project);
+        McJavaExtension extension = extension(project);
         String path = pathOrDefault(extension.mainDescriptorSetFile,
                                     extension.defaultMainDescriptor(project));
         return new File(path);
     }
 
     public static File getTestDescriptorSetFile(Project project) {
-        Extension extension = extension(project);
+        McJavaExtension extension = extension(project);
         String path = pathOrDefault(extension.testDescriptorSetFile,
                                     extension.defaultTestDescriptor(project));
         return new File(path);
@@ -296,8 +305,7 @@ public class Extension extends GradleExtension {
         List<String> dirs = extension(project).dirsToClean;
         String singleDir = extension(project).dirToClean;
         if (dirs.size() > 0) {
-            logger.atInfo()
-                  .log("Found %d directories to clean: `%s`.", dirs.size(), dirs);
+            _info().log("Found %d directories to clean: `%s`.", dirs.size(), dirs);
             dirsToClean.addAll(dirs);
         } else if (singleDir != null && !singleDir.isEmpty()) {
             _debug().log("Found directory to clean: `%s`.", singleDir);
@@ -375,9 +383,9 @@ public class Extension extends GradleExtension {
         }
     }
 
-    private static Extension extension(Project project) {
-        return (Extension)
+    private static McJavaExtension extension(Project project) {
+        return (McJavaExtension)
                 project.getExtensions()
-                       .getByName(ModelCompilerPlugin.extensionName());
+                       .getByName(McJavaPlugin.extensionName());
     }
 }

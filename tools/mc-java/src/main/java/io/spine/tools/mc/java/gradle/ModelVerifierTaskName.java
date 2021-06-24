@@ -24,15 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.mc.java.gradle;
+
+import io.spine.annotation.Internal;
+import io.spine.tools.gradle.TaskName;
+
 /**
- * This package provides the Gradle plugin for
- * Javadocs formatting in generated Protobuf declarations.
+ * Names of Gradle tasks defined by the Spine Model Verifier plugin.
  */
+@Internal
+public enum ModelVerifierTaskName implements TaskName {
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.protodoc;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * Verifies correctness of the domain model definition.
+     */
+    verifyModel
+}
