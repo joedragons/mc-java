@@ -78,15 +78,6 @@ class ColumnGenTest {
     }
 
     private static SpineProtocConfig newConfig() {
-        AddEntityQueries addQueries = AddEntityQueries
-                .newBuilder()
-                .setGenerate(true)
-                .build();
-        SpineProtocConfig result = SpineProtocConfig
-                .newBuilder()
-                .setAddEntityQueries(addQueries)
-                .setClasspath(Classpath.getDefaultInstance())
-                .build();
-        return result;
+        return SpineProtocConfig.getDefaultInstance();
     }
 }

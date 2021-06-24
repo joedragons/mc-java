@@ -31,6 +31,7 @@ import io.spine.base.SubscribableField;
 import io.spine.tools.java.code.field.FieldFactory;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.protoc.ConfigByType;
+import io.spine.tools.protoc.ProtoTypeName;
 import io.spine.tools.protoc.TypePattern;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.MessageType;
@@ -144,9 +145,11 @@ final class GenerateFieldsByTypeTest {
     }
 
     private static TypePattern pattern(String expectedType) {
-        TypePattern result = TypePattern
-                .newBuilder()
-                .setExpectedType(expectedType)
+        ProtoTypeName name = ProtoTypeName.newBuilder()
+                .setValue(expectedType)
+                .build();
+        TypePattern result = TypePattern.newBuilder()
+                .setExpectedType(name)
                 .build();
         return result;
     }

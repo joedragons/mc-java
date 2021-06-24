@@ -30,7 +30,10 @@ import com.google.common.collect.ImmutableList;
 import io.spine.tools.protoc.Classpath;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
+import io.spine.tools.protoc.ForUuids;
+import io.spine.tools.protoc.JavaClassName;
 import io.spine.tools.protoc.MethodFactory;
+import io.spine.tools.protoc.MethodFactoryName;
 import io.spine.tools.protoc.UuidConfig;
 import io.spine.tools.protoc.plugin.method.NonEnhancedMessage;
 import io.spine.tools.protoc.plugin.method.TestUuidValue;
@@ -57,14 +60,14 @@ final class GenerateUuidMethodsTest {
         @Test
         @DisplayName("is created with `null` arguments")
         void isCreatedWithNullArguments() {
-            assertNpe(() -> new GenerateUuidMethods(null, UuidConfig.getDefaultInstance()));
+            assertNpe(() -> new GenerateUuidMethods(null, ForUuids.getDefaultInstance()));
             assertNpe(() -> new GenerateUuidMethods(testClassLoader(), null));
         }
 
         @Test
         @DisplayName("`null` `MessageType` is supplied")
         void nullMessageTypeIsSupplied() {
-            UuidConfig config = newTaskConfig("test");
+            ForUuids config = newTaskConfig("test");
             GenerateUuidMethods task = new GenerateUuidMethods(testClassLoader(), config);
             assertNpe(() -> task.generateFor(null));
         }
@@ -74,7 +77,7 @@ final class GenerateUuidMethodsTest {
     @ValueSource(strings = {"", "  "})
     @DisplayName("throw `IllegalArgumentException` if factory name is ")
     void throwIllegalArgumentException(String factoryName) {
-        UuidConfig config = newTaskConfig(factoryName);
+        ForUuids config = newTaskConfig(factoryName);
         assertIllegalArgument(() -> new GenerateUuidMethods(testClassLoader(), config));
     }
 
@@ -89,7 +92,7 @@ final class GenerateUuidMethodsTest {
         }
 
         private void assertEmptyResult(String factoryName) {
-            UuidConfig config = newTaskConfig(factoryName);
+            ForUuids config = newTaskConfig(factoryName);
             ImmutableList<CompilerOutput> result = newTask(config)
                     .generateFor(new MessageType(NonEnhancedMessage.getDescriptor()));
             assertThat(result).isEmpty();
@@ -99,18 +102,24 @@ final class GenerateUuidMethodsTest {
     @Test
     @DisplayName("generate new methods")
     void generateNewMethods() {
-        UuidConfig config = newTaskConfig(TestMethodFactory.class.getName());
+        ForUuids config = newTaskConfig(TestMethodFactory.class.getName());
         assertThat(newTask(config).generateFor(testType()))
                 .isNotEmpty();
     }
 
-    private static UuidConfig newTaskConfig(String factoryName) {
-        return UuidConfig.newBuilder()
-                                 .setValue(factoryName)
-                                 .build();
+    private static ForUuids newTaskConfig(String factoryName) {
+        JavaClassName factoryClass = JavaClassName.newBuilder()
+                .setCanonical(factoryName)
+                .build();
+        MethodFactoryName name = MethodFactoryName.newBuilder()
+                .setClassName(factoryClass)
+                .build();
+        return ForUuids.newBuilder()
+                .setMethodFactory(name)
+                .build();
     }
 
-    private static GenerateUuidMethods newTask(UuidConfig config) {
+    private static GenerateUuidMethods newTask(ForUuids config) {
         return new GenerateUuidMethods(testClassLoader(), config);
     }
 
