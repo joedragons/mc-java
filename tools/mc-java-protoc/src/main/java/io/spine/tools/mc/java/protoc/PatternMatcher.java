@@ -24,15 +24,42 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.mc.java.protoc;
+
+import io.spine.tools.protoc.Pattern;
+import io.spine.type.MessageType;
+
+import java.util.function.Predicate;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * Test environment for the tests related to the nested classes generation in scope of Spine Protoc
- * plugin.
+ * A {@link MessageType} predicate which checks if the type matches a given {@link Pattern}.
+ *
+ * <p>If the type matches the pattern, by the file name or by the type name, the predicate
+ * is {@code true}.
  */
+public final class PatternMatcher implements Predicate<MessageType> {
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.protoc.method.given;
+    private final Predicate<MessageType> delegate;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    public PatternMatcher(Pattern pattern) {
+        checkNotNull(pattern);
+        switch (pattern.getKindCase()) {
+            case FILE:
+                delegate = new FilePatternMatcher(pattern.getFile());
+                break;
+            case TYPE:
+                delegate = new TypePatternMatcher(pattern.getType());
+                break;
+            case KIND_NOT_SET:
+            default:
+                throw new IllegalArgumentException("Pattern must not be empty.");
+        }
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Override
+    public boolean test(MessageType type) {
+        return delegate.test(type);
+    }
+}

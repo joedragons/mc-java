@@ -24,24 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.protoc.method.given;
+package io.spine.tools.mc.java.protoc;
 
-import io.spine.tools.protoc.Classpath;
-import io.spine.tools.mc.java.protoc.ExternalClassLoader;
-import io.spine.tools.protoc.NestedClassFactory;
+import io.spine.tools.protoc.Entities;
+import io.spine.type.MessageType;
+
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A test wrapper for the {@link ExternalClassLoader}.
+ * A predicate which checks if a {@link MessageType} represents an entity state type.
+ *
+ * <p>An entity state type may be marked by a Protobuf option or be matched by a file pattern.
  */
-public final class TestClassLoader {
+public final class EntityMatcher implements Predicate<MessageType> {
 
-    private static final ExternalClassLoader<NestedClassFactory> INSTANCE =
-            new ExternalClassLoader<>(Classpath.getDefaultInstance(), NestedClassFactory.class);
+    private final Predicate<MessageType> matcher;
 
-    private TestClassLoader() {
+    public EntityMatcher(Entities entities) {
+        checkNotNull(entities);
+        matcher = matchAgainst(entities.getOptionList(), OptionMatcher::new)
+                .or(matchAgainst(entities.getPatternList(), FilePatternMatcher::new));
     }
 
-    public static ExternalClassLoader<NestedClassFactory> instance() {
-        return INSTANCE;
+    private static <T> Predicate<MessageType>
+    matchAgainst(List<T> criteria, Function<T, Predicate<MessageType>> newMatcher) {
+        return type -> criteria.stream()
+                               .map(newMatcher)
+                               .anyMatch(matcher -> matcher.test(type));
+    }
+
+    @Override
+    public boolean test(MessageType type) {
+        return matcher.test(type);
     }
 }
