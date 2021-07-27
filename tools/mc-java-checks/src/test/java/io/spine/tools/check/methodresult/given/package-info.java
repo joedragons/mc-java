@@ -24,26 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.check.vbuild;
-
-import com.google.errorprone.fixes.Fix;
-import com.google.errorprone.fixes.SuggestedFix;
-import com.sun.source.tree.Tree;
-
 /**
- * The alternatives to the {@code Builder.build()} method.
+ * This package declares a number of classes which are analyzed by the check in tests.
  *
- * @see io.spine.validate.ValidatingBuilder
+ * <p>See the test resources of this module.
  */
-enum BuildMethodAlternative {
 
-    vBuild,
-    buildPartial;
 
-    /**
-     * Creates a fix which suggests to replace the given tree element with this method.
-     */
-    public Fix replace(Tree tree) {
-        return SuggestedFix.replace(tree, name());
-    }
-}
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.check.methodresult.given;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;

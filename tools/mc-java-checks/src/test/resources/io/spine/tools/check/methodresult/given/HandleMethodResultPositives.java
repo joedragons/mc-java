@@ -24,15 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.check.methodresult.given;
+
+import io.spine.base.Error;
+
 /**
- * This package contains the custom Error Prone check to detect usage of ordinary {@code build()}
- * method for the Protobuf messages and advice using the {@code vBuild()} method added by Spine.
+ * Contains statements for which the {@link HandleMethodResult} bug pattern should return a match.
+ *
+ * <p>Comments in this file should not be modified as they serve as indicator for the
+ * {@link com.google.errorprone.CompilationTestHelper} Error Prone tool.
  */
+class HandleMethodResultPositives {
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.check.vbuild;
+    void callBuild() {
 
-import com.google.errorprone.annotations.CheckReturnValue;
+        // BUG: Diagnostic matches: HandleMethodResult
+        Error.newBuilder().build();
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    void callGetter() {
+
+        // BUG: Diagnostic matches: HandleMethodResult
+        Error.newBuilder().getAttributesCount();
+    }
+
+    void callAsMethodReference() {
+        Error.Builder builder = Error.newBuilder();
+
+        // BUG: Diagnostic matches: HandleMethodResult
+        Runnable faulty = builder::build;
+        faulty.run();
+    }
+
+    void callNonBuilder() {
+        // BUG: Diagnostic matches: HandleMethodResult
+        checkMe();
+    }
+
+    public String checkMe() {
+        return "42";
+    }
+}
