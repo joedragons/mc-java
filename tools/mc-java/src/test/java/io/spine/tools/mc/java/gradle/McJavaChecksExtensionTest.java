@@ -26,39 +26,44 @@
 
 package io.spine.tools.mc.java.gradle;
 
+import io.spine.tools.mc.java.gradle.given.StubProject;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionContainer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newProject;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static io.spine.tools.mc.java.gradle.Severity.ERROR;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-/**
- * This test contains very basic scenarios of the plugin usage.
- *
- * <p>For the tests of actual plugin functionality, see {@code io.spine.tools.check} test suites
- * from this module.
- */
-@DisplayName("ErrorProneChecksPlugin should")
-class ErrorProneChecksPluginTest {
+@DisplayName("ErrorProneChecksExtension should")
+class McJavaChecksExtensionTest {
 
-    @Test
-    @DisplayName("create Spine check extension")
-    void create_spine_check_extension() {
-        Project project = newProject();
-        project.getPluginManager()
-               .apply(ErrorProneChecksPlugin.class);
+    private Project project;
+    private McJavaChecksExtension extension;
+
+    @BeforeEach
+    void setUp() {
+        project = StubProject.createFor(getClass()).get();
         ExtensionContainer extensions = project.getExtensions();
-        Object found = extensions.findByName(ErrorProneChecksPlugin.extensionName());
-        assertNotNull(found);
+        extension = extensions.create(McJavaChecksPlugin.extensionName(),
+                                      McJavaChecksExtension.class);
     }
 
     @Test
-    @DisplayName("apply to empty project")
-    void apply_to_empty_project_without_exceptions() {
-        Project project = newProject();
-        project.getPluginManager()
-               .apply(ErrorProneChecksPlugin.class);
+    @DisplayName("return use validating builder severity")
+    void obtainingSeverity() {
+        final Severity expected = ERROR;
+        extension.useValidatingBuilderSeverity = expected;
+        final Severity actual = McJavaChecksExtension.getUseValidatingBuilderSeverity(project);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("return `null` severity if not set")
+    void ifNotSet() {
+        final Severity severity = McJavaChecksExtension.getUseValidatingBuilderSeverity(project);
+        assertNull(severity);
     }
 }

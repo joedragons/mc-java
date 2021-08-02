@@ -26,49 +26,48 @@
 
 package io.spine.tools.mc.java.gradle;
 
+import io.spine.tools.mc.java.gradle.given.StubProject;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
-import java.nio.file.Path;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static io.spine.tools.mc.java.gradle.Severity.ERROR;
-import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newProject;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+/**
+ * This test contains very basic scenarios of the plugin usage.
+ *
+ * <p>For the tests of actual plugin functionality, see {@code io.spine.tools.check} test suites
+ * from this module.
+ */
+@DisplayName("`McJavaChecksPlugin` should")
+class McJavaChecksPluginTest {
 
-@DisplayName("ErrorProneChecksExtension should")
-class ErrorProneChecksExtensionTest {
-
-    private Project project;
-    private ErrorProneChecksExtension extension;
+    private StubProject stubProject;
 
     @BeforeEach
-    void setUp(@TempDir Path tempDirPath) {
-        File tempDir = tempDirPath.toFile();
-        project = newProject(tempDir);
+    void createStubProject() {
+        stubProject = StubProject.createFor(getClass())
+                                 .withMavenRepositories();
+    }
+
+    @Test
+    @DisplayName("create Spine check extension")
+    void addingExtension() {
+        Project project = stubProject.get();
+        project.getPluginManager()
+               .apply(McJavaChecksPlugin.class);
         ExtensionContainer extensions = project.getExtensions();
-        extension = extensions.create(ErrorProneChecksPlugin.extensionName(),
-                                      ErrorProneChecksExtension.class);
+        Object found = extensions.findByName(McJavaChecksPlugin.extensionName());
+        assertNotNull(found);
     }
 
     @Test
-    @DisplayName("return use validating builder severity")
-    void return_use_validating_builder_severity() {
-        final Severity expected = ERROR;
-        extension.useValidatingBuilderSeverity = expected;
-        final Severity actual = ErrorProneChecksExtension.getUseValidatingBuilderSeverity(project);
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    @DisplayName("return null severity if not set")
-    void return_null_use_validating_builder_severity_if_not_set() {
-        final Severity severity = ErrorProneChecksExtension.getUseValidatingBuilderSeverity(project);
-        assertNull(severity);
+    @DisplayName("apply to empty project")
+    void applyingToEmptyProject() {
+        Project project = stubProject.get();
+        project.getPluginManager()
+               .apply(McJavaChecksPlugin.class);
     }
 }

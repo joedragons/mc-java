@@ -24,39 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.check.vbuild;
+package io.spine.tools.mc.java.gradle;
 
-import com.google.errorprone.CompilationTestHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.gradle.api.Project;
 
-import static io.spine.tools.check.vbuild.UseVBuild.NAME;
-import static io.spine.tools.check.vbuild.UseVBuild.SUMMARY;
+import static io.spine.tools.mc.java.gradle.McJavaChecksPlugin.extensionName;
 
-@DisplayName("UseVBuild check should")
-class UseVBuildTest {
+/**
+ * Allows configuring severity for all the Spine Java Checks applied to the project.
+ *
+ * @see Severity
+ */
+@SuppressWarnings("PublicField" /* required for exposing the property in Gradle. */)
+public class McJavaChecksExtension {
 
-    private CompilationTestHelper compilationTestHelper;
+    public Severity useValidatingBuilderSeverity;
 
-    @BeforeEach
-    void setUp() {
-        compilationTestHelper =
-                CompilationTestHelper.newInstance(UseVBuild.class, getClass());
+    /**
+     * Creates an instance of the extension in the passed project.
+     */
+    static void createIn(Project project) {
+        project.getExtensions()
+               .create(extensionName(), McJavaChecksExtension.class);
     }
 
-    @Test
-    @DisplayName("recognize positive cases")
-    void recognizePositiveCases() {
-        compilationTestHelper.expectErrorMessage(NAME, msg -> msg.contains(SUMMARY))
-                             .addSourceFile("given/UseVBuildPositives.java")
-                             .doTest();
-    }
-
-    @Test
-    @DisplayName("recognize negative cases")
-    void recognizeNegativeCases() {
-        compilationTestHelper.addSourceFile("given/UseVBuildNegatives.java")
-                             .doTest();
+    public static Severity getUseValidatingBuilderSeverity(Project project) {
+        McJavaChecksExtension extension = (McJavaChecksExtension)
+                project.getExtensions()
+                       .getByName(extensionName());
+        return extension.useValidatingBuilderSeverity;
     }
 }
