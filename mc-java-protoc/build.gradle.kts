@@ -26,24 +26,19 @@
 
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.JavaX
-
-group = "io.spine.tools"
+import io.spine.internal.dependency.Spine
 
 dependencies {
-    implementation(project(":tool-base"))
-    implementation(project(":plugin-base"))
+    implementation(Spine(project).toolBase)
+    implementation(Spine(project).pluginBase)
     implementation(project(":mc-java-validation"))
     implementation(JavaPoet.lib)
     implementation(JavaX.annotations)
 
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
+    testImplementation(Spine(project).base)
+    testImplementation(Spine(project).testlib)
     testImplementation(project(":mc-java"))
 }
-
-//TODO:2021-07-22:alexander.yevsyukov: Turn to WARN and investigate duplicates.
-// see https://github.com/SpineEventEngine/base/issues/657
-val dupStrategy = DuplicatesStrategy.INCLUDE
 
 tasks.jar {
     //TODO:2021-08-01:alexander.yevsyukov: Replace the below dependencies with output of `jar` tasks
@@ -52,9 +47,6 @@ tasks.jar {
     //   https://docs.gradle.org/current/userguide/userguide_single.html?&_ga=2.136886832.1455643218.1627825963-149591519.1626535262#sec:link_output_dir_to_input_files
     //
     dependsOn(
-        project(":base").tasks.jar,
-        project(":tool-base").tasks.jar,
-        project(":plugin-base").tasks.jar,
         project(":mc-java-validation").tasks.jar
     )
 
@@ -75,7 +67,5 @@ tasks.jar {
     // an OS-specific one.
     archiveClassifier.set("exe")
 
-    duplicatesStrategy = dupStrategy
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
-
-tasks.sourceJar.get().duplicatesStrategy = dupStrategy

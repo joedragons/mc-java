@@ -26,17 +26,11 @@
 
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.JavaX
-
-group = "io.spine.tools"
+import io.spine.internal.dependency.Spine
 
 dependencies {
     api(JavaPoet.lib)
-    implementation(project(":tool-base"))
+    implementation(Spine(project).toolBase)
     implementation(JavaX.annotations)
-    testImplementation(project(":base"))
-    testImplementation(project(":testlib"))
+    testImplementation(Spine(project).testlib)
 }
-
-//TODO:2021-07-22:alexander.yevsyukov: Turn to WARN and investigate duplicates.
-// see https://github.com/SpineEventEngine/base/issues/657
-tasks.sourceJar.get().duplicatesStrategy = DuplicatesStrategy.INCLUDE

@@ -26,4 +26,6 @@
 
 project.extra.apply {
     this["versionToPublish"] = "0.0.1"
+    this["spineBaseVersion"] = "2.0.0-SNAPSHOT.56"
+    this["mcVersion"] = "0.0.1"
 }
