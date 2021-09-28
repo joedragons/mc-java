@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.mc.java.DefaultRepos.applyDefault;
+import static io.spine.tools.mc.java.StandardRepos.applyStandard;
 import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainRejectionsDir;
 import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainResourcesDir;
 import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedTestResourcesDir;
@@ -58,7 +58,7 @@ class McJavaExtensionTest {
         File projectDir = TempDir.forClass(McJavaExtensionTest.class);
         project = StubProject.createAt(projectDir);
         RepositoryHandler repositories = project.getRepositories();
-        applyDefault(repositories);
+        applyStandard(repositories);
         repositories.mavenLocal();
         repositories.mavenCentral();
         project.getPluginManager()
