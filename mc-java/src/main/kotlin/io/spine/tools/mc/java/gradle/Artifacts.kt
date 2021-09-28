@@ -35,7 +35,7 @@ import io.spine.tools.gradle.DependencyVersions
 import io.spine.tools.gradle.ThirdPartyDependency
 
 /**
- * This file defiles utilities for generating instances of [Artifact].
+ * This file defines utilities for generating instances of [Artifact].
  */
 
 private const val JAR_EXTENSION = "jar"
