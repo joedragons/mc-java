@@ -26,7 +26,7 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
-import com.google.common.io.Files.*
+import com.google.common.io.Files.createParentDirs
 import com.google.protobuf.gradle.protobuf
 import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.CheckerFramework
