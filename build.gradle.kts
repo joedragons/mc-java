@@ -27,6 +27,8 @@
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
 import com.google.common.io.Files.*
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.CheckerFramework
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.FindBugs
@@ -173,6 +175,10 @@ subprojects {
         from(Scripts.slowTests(project))
         from(Scripts.testOutput(project))
         from(Scripts.javadocOptions(project))
+    }
+
+    protobuf {
+        protoc { artifact = Protobuf.compiler }
     }
 }
 

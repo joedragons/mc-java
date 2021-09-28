@@ -198,6 +198,11 @@ all modules and does not describe the project structure per-subproject.
     <version>9+181-r4173-1</version>
   </dependency>
   <dependency>
+    <groupId>com.google.protobuf</groupId>
+    <artifactId>protoc</artifactId>
+    <version>3.18.0</version>
+  </dependency>
+  <dependency>
     <groupId>net.sourceforge.pmd</groupId>
     <artifactId>pmd-java</artifactId>
     <version>6.36.0</version>
