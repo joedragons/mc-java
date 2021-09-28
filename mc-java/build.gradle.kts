@@ -31,8 +31,11 @@ import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
+import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.WriteVersions
+
+apply<IncrementGuard>()
 
 var protocPluginDependency: Dependency? = null
 val spineBaseVersion: String by extra
