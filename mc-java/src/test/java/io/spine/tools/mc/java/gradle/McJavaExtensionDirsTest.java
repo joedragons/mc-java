@@ -27,6 +27,7 @@ package io.spine.tools.mc.java.gradle;
 
 import io.spine.testing.TempDir;
 import io.spine.tools.java.fs.DefaultJavaPaths;
+import io.spine.tools.mc.java.DefaultRepos;
 import io.spine.tools.mc.java.gradle.given.StubProject;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
@@ -41,6 +42,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.truth.Truth.assertThat;
+import static io.spine.tools.mc.java.DefaultRepos.applyDefault;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,8 +58,7 @@ class McJavaExtensionDirsTest {
         projectDir = TempDir.forClass(McJavaExtensionDirsTest.class);
         project = StubProject.createAt(projectDir);
         RepositoryHandler repositories = project.getRepositories();
-        repositories.mavenLocal();
-        repositories.mavenCentral();
+        applyDefault(repositories);
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
     }

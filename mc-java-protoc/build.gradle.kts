@@ -29,6 +29,7 @@ import io.spine.internal.dependency.JavaX
 import io.spine.internal.dependency.Spine
 
 dependencies {
+    implementation(gradleApi())
     implementation(Spine(project).toolBase)
     implementation(Spine(project).pluginBase)
     implementation(project(":mc-java-validation"))
@@ -37,6 +38,7 @@ dependencies {
 
     testImplementation(Spine(project).base)
     testImplementation(Spine(project).testlib)
+    testImplementation(Spine(project).pluginTestlib)
     testImplementation(project(":mc-java"))
 }
 

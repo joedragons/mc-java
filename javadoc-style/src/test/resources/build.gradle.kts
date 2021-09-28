@@ -33,11 +33,13 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven { url = uri(io.spine.internal.gradle.Repos.artifactRegistry) }
+        maven { url = uri(io.spine.internal.gradle.Repos.artifactRegistrySnapshots) }
     }
 
-    val spineVersion: String by extra
+    val mcJavaVersion: String by extra
     dependencies {
-        classpath("io.spine.tools:spine-javadoc-style:$spineVersion")
+        classpath("io.spine.tools:javadoc-style:$mcJavaVersion")
         classpath(io.spine.internal.dependency.Protobuf.GradlePlugin.lib)
     }
 }

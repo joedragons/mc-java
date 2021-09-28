@@ -26,10 +26,8 @@
 
 package io.spine.tools.mc.java.gradle;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import io.spine.logging.Logging;
-import io.spine.tools.gradle.DependencyVersions;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
@@ -44,6 +42,8 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP;
+import static io.spine.tools.mc.java.gradle.Artifacts.MC_JAVA_CHECKS_ARTIFACT;
+import static io.spine.tools.mc.java.gradle.Artifacts.mcJavaChecks;
 import static java.lang.String.format;
 
 /**
@@ -51,22 +51,11 @@ import static java.lang.String.format;
  */
 public final class McJavaChecksDependency implements Logging {
 
-    /**
-     * The name of the Maven artifact of the Model Compiler Java Checks.
-     */
-    @VisibleForTesting
-    public static final String SPINE_MC_JAVA_CHECKS_ARTIFACT = "spine-mc-java-checks";
-
     /** The configuration to be extended. */
     private final Configuration configuration;
 
-    /** The version of the dependency, which is the same as one for {@code spine-base}. */
-    private final String version;
-
     private McJavaChecksDependency(Configuration cfg) {
         this.configuration = cfg;
-        DependencyVersions versions = DependencyVersions.get();
-        this.version = versions.spineBase();
     }
 
     /**
@@ -104,19 +93,16 @@ public final class McJavaChecksDependency implements Logging {
      * Adds the dependency to the project configuration.
      */
     private void addDependencyTo(Configuration cfg) {
-        _debug().log("Adding a dependency on `%s` to the `%s` configuration.", artifactId(), cfg);
+        _debug().log("Adding a dependency on `%s` to the `%s` configuration.", mcJavaChecks(), cfg);
         DependencySet dependencies = cfg.getDependencies();
         Dependency dependency = checksDependency();
         dependencies.add(dependency);
     }
 
-    private String artifactId() {
-        return format("%s:%s:%s", SPINE_TOOLS_GROUP, SPINE_MC_JAVA_CHECKS_ARTIFACT, version);
-    }
-
-    private DefaultExternalModuleDependency checksDependency() {
+    private static DefaultExternalModuleDependency checksDependency() {
+        String version = Artifacts.mcJavaVersion();
         return new DefaultExternalModuleDependency(
-                SPINE_TOOLS_GROUP, SPINE_MC_JAVA_CHECKS_ARTIFACT, version
+                SPINE_TOOLS_GROUP, MC_JAVA_CHECKS_ARTIFACT, version
         );
     }
 
@@ -162,13 +148,8 @@ public final class McJavaChecksDependency implements Logging {
                     "Unable to add a dependency on `%s` to the configuration `%s` because some " +
                             "dependencies could not be resolved: " +
                             "%s.",
-                    artifactId(), configuration.getName(), problemReport
+                    mcJavaChecks(), configuration.getName(), problemReport
             );
-        }
-
-        private String resultDisplayName(UnresolvedDependencyResult r) {
-            return r.getAttempted()
-                    .getDisplayName();
         }
 
         private String toErrorMessage(UnresolvedDependencyResult entry) {

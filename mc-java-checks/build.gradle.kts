@@ -29,12 +29,6 @@ import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Spine
 import java.net.URI
 
-repositories {
-    maven { url = URI(io.spine.internal.gradle.Repos.sonatypeSnapshots) }
-    mavenLocal()
-    mavenCentral()
-}
-
 dependencies {
     annotationProcessor(AutoService.processor)
     compileOnlyApi(AutoService.annotations)

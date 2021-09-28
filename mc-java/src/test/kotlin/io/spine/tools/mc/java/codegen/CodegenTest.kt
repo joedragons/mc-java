@@ -39,6 +39,7 @@ import io.spine.base.UuidValue
 import io.spine.option.OptionsProto
 import io.spine.query.EntityStateField
 import io.spine.tools.java.code.UuidMethodFactory
+import io.spine.tools.mc.java.applyDefault
 import io.spine.tools.mc.java.gradle.McJavaExtension
 import io.spine.tools.mc.java.gradle.McJavaPlugin
 import io.spine.tools.protoc.GenerateFields
@@ -61,10 +62,7 @@ class `'java { }' block should` {
         val project = ProjectBuilder.builder().build()
         // Add repositories for resolving locally built artifacts (via `mavenLocal()`)
         // and their dependencies via `mavenCentral()`.
-        with(project.repositories) {
-            mavenLocal()
-            mavenCentral()
-        }
+        project.repositories.applyDefault()
         project.apply {
             it.plugin("java")
             it.plugin(McJavaPlugin::class.java)

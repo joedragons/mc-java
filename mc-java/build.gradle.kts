@@ -26,10 +26,13 @@
 
 import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
+import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
+import io.spine.internal.gradle.VersionWriter
+import io.spine.internal.gradle.WriteVersions
 
 var protocPluginDependency: Dependency? = null
 val spineBaseVersion: String by extra
@@ -67,25 +70,18 @@ protobuf {
         }
     }
 }
-//
-//sourceSets {
-//    main {
-//        java.srcDir("$projectDir/generated/main/spine")
-//        resources.srcDir("$projectDir/generated/main/resources")
-//        resources.srcDir("$buildDir/descriptors/main")
-//    }
-//    test {
-//        java.srcDir("$projectDir/generated/test/spine")
-//        resources.srcDir("$buildDir/descriptors/test")
-//    }
-//}
 
-// TODO:2021-09-15:dmytro.dashenkov: Whyy?
 // Tests use the Protobuf plugin.
-//tasks.test {
-//    dependsOn(
-//        project(":mc-java-checks").tasks.publishToMavenLocal,
-//        project(":mc-java-protoc").tasks.publishToMavenLocal,
-//        tasks.publishToMavenLocal
-//    )
-//}
+tasks.test {
+    dependsOn(
+        project(":mc-java-checks").tasks.publishToMavenLocal,
+        project(":mc-java-protoc").tasks.publishToMavenLocal,
+        tasks.publishToMavenLocal
+    )
+}
+
+apply<VersionWriter>()
+
+tasks.withType<WriteVersions> {
+    version(Grpc.protobufPlugin)
+}

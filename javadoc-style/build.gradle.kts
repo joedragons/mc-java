@@ -26,6 +26,10 @@
 
 import io.spine.internal.dependency.Spine
 
+plugins {
+    `maven-publish`
+}
+
 dependencies {
     implementation(gradleApi())
     implementation(Spine(project).base)
@@ -35,7 +39,6 @@ dependencies {
     testImplementation(gradleTestKit())
 }
 
-// TODO:2021-09-15:dmytro.dashenkov: Why?
-//tasks.test {
-//    dependsOn(tasks["publishToMavenLocal"])
-//}
+tasks.test {
+    dependsOn(tasks["publishToMavenLocal"])
+}
