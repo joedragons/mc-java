@@ -31,7 +31,6 @@ import com.google.protobuf.gradle.ExecutableLocator;
 import com.google.protobuf.gradle.GenerateProtoTask;
 import io.spine.code.proto.DescriptorReference;
 import io.spine.io.Files2;
-import io.spine.tools.gradle.Artifact;
 import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.ProtocConfigurationPlugin;
 import io.spine.tools.gradle.SourceScope;
@@ -58,6 +57,9 @@ import static io.spine.tools.gradle.Projects.sourceSet;
 import static io.spine.tools.gradle.ProtocPluginName.grpc;
 import static io.spine.tools.gradle.ProtocPluginName.spineProtoc;
 import static io.spine.tools.java.fs.DefaultJavaPaths.at;
+import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
+import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
+import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writePluginConfiguration;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestDescriptorReference;
@@ -70,30 +72,15 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  */
 public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlugin {
 
-    private static final String JAR_EXTENSION = "jar";
-    private static final String GRPC_GROUP = "io.grpc";
-    private static final String GRPC_PLUGIN_NAME = "protoc-gen-grpc-java";
-    private static final String SPINE_PLUGIN_NAME = "spine-mc-java-protoc";
-    private static final String EXECUTABLE_CLASSIFIER = "exe";
-
     @Override
     protected void
     configureProtocPlugins(NamedDomainObjectContainer<ExecutableLocator> plugins, Project project) {
-        Artifact gRpcPlugin = Artifact.newBuilder()
-                .setGroup(GRPC_GROUP)
-                .setName(GRPC_PLUGIN_NAME)
-                .setVersion(VERSIONS.grpc())
-                .build();
-        Artifact spinePlugin = Artifact.newBuilder()
-                .useSpineToolsGroup()
-                .setName(SPINE_PLUGIN_NAME)
-                .setVersion(VERSIONS.spineBase())
-                .setClassifier(EXECUTABLE_CLASSIFIER)
-                .setExtension(JAR_EXTENSION)
-                .build();
-        plugins.create(grpc.name(), locator -> locator.setArtifact(gRpcPlugin.notation()));
-        plugins.create(spineProtoc.name(), locator -> locator.setArtifact(spinePlugin.notation()));
-
+        plugins.create(grpc.name(),
+                       locator -> locator.setArtifact(gRpcProtocPlugin().notation())
+        );
+        plugins.create(spineProtoc.name(),
+                       locator -> locator.setArtifact(spineProtocPlugin().notation())
+        );
     }
 
     @Override
@@ -214,7 +201,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         File buildDir = project.getBuildDir();
         Path spinePluginTmpDir = Paths.get(buildDir.getAbsolutePath(),
                                            "tmp",
-                                           SPINE_PLUGIN_NAME);
+                                           SPINE_PROTOC_PLUGIN_NAME);
         Path protocConfigPath = isTestsTask(protocTask) ?
                                 spinePluginTmpDir.resolve("test-config.pb") :
                                 spinePluginTmpDir.resolve("config.pb");

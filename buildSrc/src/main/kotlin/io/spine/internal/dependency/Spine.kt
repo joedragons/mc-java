@@ -24,14 +24,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaX
-import io.spine.internal.dependency.Grpc
-import io.spine.internal.dependency.Spine
+package io.spine.internal.dependency
 
-dependencies {
-    implementation(files("${System.getProperty("java.home")}/../lib/tools.jar"))
-    implementation(Spine(project).base)
-    implementation(JavaX.annotations)
-    implementation(Grpc.core)
-    testImplementation(Spine(project).testlib)
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.extra
+
+/**
+ * Dependencies on Spine `base` modules.
+ *
+ * @constructor
+ * Creates a new instance of `Spine` taking the `spineBaseVersion` from the given project's
+ * extra properties.
+ */
+class Spine(p: Project) {
+
+    val base = "io.spine:spine-base:${p.spineVersion}"
+    val testlib = "io.spine.tools:spine-testlib:${p.spineVersion}"
+
+    val toolBase = "io.spine.tools:tool-base:${p.mcVersion}"
+    val pluginBase = "io.spine.tools:plugin-base:${p.mcVersion}"
+    val pluginTestlib = "io.spine.tools:plugin-testlib:${p.mcVersion}"
+    val mc = "io.spine.tools:mc:${p.mcVersion}"
+
+    private val Project.spineVersion: String
+        get() = extra["spineBaseVersion"] as String
+    private val Project.mcVersion: String
+        get() = extra["mcVersion"] as String
 }

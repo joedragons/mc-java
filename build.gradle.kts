@@ -26,6 +26,9 @@
 
 @file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
 
+import com.google.common.io.Files.createParentDirs
+import com.google.protobuf.gradle.protobuf
+import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.CheckerFramework
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.FindBugs
@@ -39,6 +42,7 @@ import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.spinePublishing
+import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -54,12 +58,14 @@ plugins {
 }
 
 spinePublishing {
-    projectsToPublish.addAll(
-    )
+    projectsToPublish.addAll(subprojects.map { it.path })
     targetRepositories.addAll(
         PublishingRepos.cloudRepo,
         PublishingRepos.cloudArtifactRegistry
     )
+    // Skip the `spine-` part of the artifact name to avoid collisions with the currently "live"
+    // versions. See https://github.com/SpineEventEngine/model-compiler/issues/3
+    spinePrefix.set(false)
 }
 
 allprojects {
@@ -131,21 +137,64 @@ subprojects {
         }
     }
 
+    val spineBaseVersion: String by extra
+    val generatedResources = "$projectDir/generated/main/resources"
+
+    tasks.create<DefaultTask>(name = "prepareProtocConfigVersions") {
+        description = "Prepares the versions.properties file."
+
+        val propertiesFile = file("$generatedResources/versions.properties")
+        outputs.file(propertiesFile)
+
+        val versions = Properties()
+        versions.setProperty("baseVersion", spineBaseVersion)
+        versions.setProperty("protobufVersion", Protobuf.version)
+        versions.setProperty("gRPCVersion", io.spine.internal.dependency.Grpc.version)
+
+        @Suppress("UNCHECKED_CAST")
+        inputs.properties(HashMap(versions) as MutableMap<String, *>)
+
+        doLast {
+            createParentDirs(propertiesFile)
+            propertiesFile.createNewFile()
+            propertiesFile.outputStream().use {
+                versions.store(it, "Versions of dependencies of the Model Compiler plugin and the Spine Protoc plugin.")
+            }
+        }
+
+        tasks.processResources {
+            dependsOn(this@create)
+        }
+    }
+
+    sourceSets.main {
+        resources.srcDir(generatedResources)
+    }
+
     apply {
         from(Scripts.slowTests(project))
         from(Scripts.testOutput(project))
         from(Scripts.javadocOptions(project))
     }
+
+    protobuf {
+        protoc { artifact = Protobuf.compiler }
+    }
 }
 
 apply {
-
-    // Aggregated coverage report across all subprojects.
-    from(Scripts.jacoco(project))
-
     // Generate a repository-wide report of 3rd-party dependencies and their licenses.
     from(Scripts.repoLicenseReport(project))
 
     // Generate a `pom.xml` file containing first-level dependency of all projects in the repository.
     from(Scripts.generatePom(project))
+}
+
+// The JaCoCo config script uses `evaluationDependsOnChildren()` to scan subprojects to find all
+// the Java projects. Such an evaluation-time dependency, in some cases, causes Gradle to fail.
+// When applying the JaCoCo script after the evaluation is done, the error goes away.
+// See this Gradle discussion for the description of the issue: https://discuss.gradle.org/t/gradle-7-fails-with-cannot-run-project-afterevaluate-action-when-the-project-is-already-evaluated/40296
+afterEvaluate {
+    // Aggregated coverage report across all subprojects.
+    apply(from = Scripts.jacoco(project))
 }

@@ -36,6 +36,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 import static com.google.common.truth.Truth.assertThat;
+import static io.spine.tools.mc.java.StandardRepos.applyStandard;
 import static io.spine.tools.mc.java.gradle.McJavaExtension.getSpineCheckSeverity;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
 
@@ -49,8 +50,7 @@ class McJavaExtensionChecksTest {
         File projectDir = TempDir.forClass(McJavaExtensionChecksTest.class);
         project = StubProject.createAt(projectDir);
         RepositoryHandler repositories = project.getRepositories();
-        repositories.mavenLocal();
-        repositories.mavenCentral();
+        applyStandard(repositories);
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
     }

@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP;
-import static io.spine.tools.mc.java.gradle.McJavaChecksDependency.SPINE_MC_JAVA_CHECKS_ARTIFACT;
+import static io.spine.tools.mc.java.gradle.Artifacts.MC_JAVA_CHECKS_ARTIFACT;
 
 /**
  * A test for the {@link McJavaChecksDependency} part of the Spine Error Prone Checks plugin.
@@ -90,7 +90,7 @@ class McJavaChecksDependencyTest {
         Configuration config = AnnotationProcessorConfiguration.in(project);
         DependencySet dependencies = config.getDependencies();
         for (Dependency d : dependencies) {
-            if (SPINE_MC_JAVA_CHECKS_ARTIFACT.equals(d.getName())
+            if (MC_JAVA_CHECKS_ARTIFACT.equals(d.getName())
                     && SPINE_TOOLS_GROUP.equals(d.getGroup())) {
                 return true;
             }

@@ -39,11 +39,12 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-
-        maven { url = java.net.URI(io.spine.internal.gradle.Repos.spine) }
+        maven { url = uri(io.spine.internal.gradle.Repos.artifactRegistry) }
+        maven { url = uri(io.spine.internal.gradle.Repos.artifactRegistrySnapshots) }
     }
 
-    val spineVersion: String by extra
+    val spineBaseVersion: String by extra
+    val mcJavaVersion: String by extra
     dependencies {
         io.spine.internal.dependency.Protobuf.libs.forEach { classpath(it) }
 
@@ -51,7 +52,7 @@ buildscript {
         classpath(io.spine.internal.dependency.Protobuf.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
-        classpath("io.spine.tools:spine-mc-java:${spineVersion}")
+        classpath("io.spine.tools:mc-java:${mcJavaVersion}")
         classpath(io.spine.internal.dependency.ErrorProne.GradlePlugin.lib)
     }
 }
@@ -75,13 +76,13 @@ version = "3.14"
 repositories {
     mavenLocal()
     mavenCentral()
-
-    maven { url = URI(Repos.spine) }
+    maven { url = uri(Repos.artifactRegistry) }
+    maven { url = uri(Repos.artifactRegistrySnapshots) }
 }
 
-val spineVersion: String by extra
+val spineBaseVersion: String by extra
 dependencies {
-    implementation("io.spine:spine-base:$spineVersion")
+    implementation("io.spine:spine-base:$spineBaseVersion")
 }
 
 sourceSets {

@@ -24,14 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaX
-import io.spine.internal.dependency.Grpc
-import io.spine.internal.dependency.Spine
+import org.gradle.api.Project
+import org.gradle.api.tasks.javadoc.Javadoc
+import org.gradle.external.javadoc.CoreJavadocOptions
+import org.gradle.kotlin.dsl.named
 
-dependencies {
-    implementation(files("${System.getProperty("java.home")}/../lib/tools.jar"))
-    implementation(Spine(project).base)
-    implementation(JavaX.annotations)
-    implementation(Grpc.core)
-    testImplementation(Spine(project).testlib)
+@Suppress("unused")
+object TravisLogs {
+
+    /**
+     * Specific setup for a Travis build, which prevents warning messages related to
+     * `javadoc` tasks in build logs.
+     *
+     * It is expected that warnings are viewed and analyzed during local builds.
+     */
+    fun hideJavadocWarnings(p: Project) {
+        //
+        val isTravis = System.getenv("TRAVIS") == "true"
+        if (isTravis) {
+            // Set the maximum number of Javadoc warnings to print.
+            // If the parameter value is zero, all warnings will be printed.
+            p.tasks.named<Javadoc>("javadoc") {
+                val opt = options
+                if (opt is CoreJavadocOptions) {
+                    opt.addStringOption("Xmaxwarns", "1")
+                }
+            }
+        }
+    }
 }

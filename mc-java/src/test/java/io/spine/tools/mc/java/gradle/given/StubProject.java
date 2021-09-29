@@ -35,6 +35,7 @@ import java.io.File;
 
 import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
 import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
+import static io.spine.tools.mc.java.StandardRepos.applyStandard;
 import static org.gradle.internal.impldep.com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -90,8 +91,7 @@ public final class StubProject {
      */
     public StubProject withMavenRepositories() {
         RepositoryHandler repositories = project.getRepositories();
-        repositories.mavenLocal();
-        repositories.mavenCentral();
+        applyStandard(repositories);
         return this;
     }
 

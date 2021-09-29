@@ -26,17 +26,23 @@
 
 import com.google.protobuf.gradle.generateProtoTasks
 import com.google.protobuf.gradle.protobuf
+import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Roaster
+import io.spine.internal.dependency.Spine
+import io.spine.internal.gradle.IncrementGuard
+import io.spine.internal.gradle.VersionWriter
+import io.spine.internal.gradle.WriteVersions
 
-group = "io.spine.tools"
+apply<IncrementGuard>()
 
 var protocPluginDependency: Dependency? = null
-val spineVersion: String by extra
+val spineBaseVersion: String by extra
 
 dependencies {
-    api(project(":plugin-base"))
+    api(Spine(project).pluginBase)
+    implementation(gradleApi())
     implementation(JavaPoet.lib)
 
     // A library for parsing Java sources.
@@ -49,9 +55,9 @@ dependencies {
         exclude(group = "com.google.guava")
     }
     implementation(Protobuf.GradlePlugin.lib)
-    testImplementation(project(":testlib"))
+    testImplementation(Spine(project).testlib)
     testImplementation(gradleTestKit())
-    testImplementation(project(":plugin-testlib"))
+    testImplementation(Spine(project).pluginTestlib)
 }
 
 protobuf {
@@ -68,31 +74,17 @@ protobuf {
     }
 }
 
-sourceSets {
-    main {
-        java.srcDir("$projectDir/generated/main/spine")
-        resources.srcDir("$projectDir/generated/main/resources")
-        resources.srcDir("$buildDir/descriptors/main")
-    }
-    test {
-        java.srcDir("$projectDir/generated/test/spine")
-        resources.srcDir("$buildDir/descriptors/test")
-    }
-}
-
 // Tests use the Protobuf plugin.
 tasks.test {
     dependsOn(
         project(":mc-java-checks").tasks.publishToMavenLocal,
         project(":mc-java-protoc").tasks.publishToMavenLocal,
-        project(":mc").tasks.publishToMavenLocal,
         tasks.publishToMavenLocal
     )
 }
 
-//TODO:2021-07-22:alexander.yevsyukov: Turn to WARN and investigate duplicates.
-// see https://github.com/SpineEventEngine/base/issues/657
-val dupStrategy = DuplicatesStrategy.INCLUDE
-tasks.processResources.get().duplicatesStrategy = dupStrategy
-tasks.processTestResources.get().duplicatesStrategy = dupStrategy
-tasks.sourceJar.get().duplicatesStrategy = dupStrategy
+apply<VersionWriter>()
+
+tasks.withType<WriteVersions> {
+    version(Grpc.protobufPlugin)
+}

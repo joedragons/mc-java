@@ -24,14 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.JavaX
-import io.spine.internal.dependency.Grpc
-import io.spine.internal.dependency.Spine
+package io.spine.internal.gradle
 
-dependencies {
-    implementation(files("${System.getProperty("java.home")}/../lib/tools.jar"))
-    implementation(Spine(project).base)
-    implementation(JavaX.annotations)
-    implementation(Grpc.core)
-    testImplementation(Spine(project).testlib)
-}
+import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.kotlin.dsl.getByType
+
+/**
+ * This file contains extension methods and properties for the Gradle `Project`.
+ */
+
+/**
+ * Obtains the Java plugin extension of the project.
+ */
+val Project.javaPluginExtension: JavaPluginExtension
+    get() = extensions.getByType()
+
+/**
+ * Obtains source set container of the Java project.
+ */
+val Project.sourceSets: SourceSetContainer
+    get() = javaPluginExtension.sourceSets

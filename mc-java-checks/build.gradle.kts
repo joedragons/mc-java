@@ -26,21 +26,14 @@
 
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.ErrorProne
+import io.spine.internal.dependency.Spine
 import java.net.URI
-
-group = "io.spine.tools"
-
-repositories {
-    maven { url = URI(io.spine.internal.gradle.Repos.sonatypeSnapshots) }
-    mavenLocal()
-    mavenCentral()
-}
 
 dependencies {
     annotationProcessor(AutoService.processor)
     compileOnlyApi(AutoService.annotations)
-    implementation(project(":base"))
-    implementation(project(":plugin-base"))
+    implementation(Spine(project).base)
+    implementation(Spine(project).pluginBase)
     api(ErrorProne.core)
     ErrorProne.annotations.forEach { api(it) }
     testImplementation(ErrorProne.testHelpers)
@@ -63,9 +56,3 @@ afterEvaluate {
     val javacPath = getResolvedArtifactFor("javac")
     test.jvmArgs("-Xbootclasspath/p:$javacPath")
 }
-
-//TODO:2021-07-22:alexander.yevsyukov: Turn to WARN and investigate duplicates.
-// see https://github.com/SpineEventEngine/base/issues/657
-val dupStrategy = DuplicatesStrategy.INCLUDE
-tasks.processTestResources.get().duplicatesStrategy = dupStrategy
-tasks.sourceJar.get().duplicatesStrategy = dupStrategy

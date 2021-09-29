@@ -24,28 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-group = "io.spine.tools"
+import io.spine.internal.dependency.Spine
+
+plugins {
+    `maven-publish`
+}
 
 dependencies {
-    implementation(project(":base"))
-    implementation(project(":plugin-base"))
-    testImplementation(project(":testlib"))
-    testImplementation(project(":plugin-testlib"))
+    implementation(gradleApi())
+    implementation(Spine(project).base)
+    implementation(Spine(project).pluginBase)
+    testImplementation(Spine(project).testlib)
+    testImplementation(Spine(project).pluginTestlib)
     testImplementation(gradleTestKit())
 }
 
-tasks.test.configure {
-    dependsOn(
-        project(":base").tasks.publishToMavenLocal,
-        project(":tool-base").tasks.publishToMavenLocal,
-        project(":plugin-base").tasks.publishToMavenLocal,
-        tasks.publishToMavenLocal
-    )
+tasks.test {
+    dependsOn(tasks["publishToMavenLocal"])
 }
-
-//TODO:2021-07-22:alexander.yevsyukov: Turn to WARN and investigate duplicates.
-// see https://github.com/SpineEventEngine/base/issues/657
-val dupStrategy = DuplicatesStrategy.INCLUDE
-tasks.processResources.get().duplicatesStrategy = dupStrategy
-tasks.processTestResources.get().duplicatesStrategy = dupStrategy
-tasks.sourceJar.get().duplicatesStrategy = dupStrategy
