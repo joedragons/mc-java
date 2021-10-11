@@ -24,17 +24,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.gradle
+package io.spine.internal.gradle.checkstyle
 
-import io.spine.internal.dependency.AssertK
-import io.spine.internal.dependency.BouncyCastle
-import io.spine.internal.dependency.JavaJwt
-import io.spine.internal.dependency.Klaxon
+import io.spine.internal.dependency.CheckStyle
+import org.gradle.api.Project
+import org.gradle.api.plugins.quality.Checkstyle
+import org.gradle.api.plugins.quality.CheckstyleExtension
+import org.gradle.api.plugins.quality.CheckstylePlugin
+import org.gradle.kotlin.dsl.the
 
+/**
+ * Configures the Checkstyle plugin.
+ *
+ * Usage:
+ * ```
+ *      CheckStyleConfig.applyTo(project)
+ * ```
+ *
+ * Please note, the checks of the `test` sources are disabled.
+ *
+ * Also, this type is named in double-camel-case to avoid re-declaration due to a clash
+ * with some Gradle-provided types.
+ */
 @Suppress("unused")
-object Publishing {
-    const val klaxon = Klaxon.lib
-    const val oauthJwt = JavaJwt.lib
-    const val bouncyCastlePkcs = BouncyCastle.libPkcsJdk15
-    const val assertK = AssertK.libJvm
+object CheckStyleConfig {
+
+    /**
+     * Applies the configuration to the passed [project].
+     */
+    fun applyTo(project: Project) {
+        project.apply {
+            plugin(CheckstylePlugin::class.java)
+        }
+
+        with(project.the<CheckstyleExtension>()) {
+            toolVersion = CheckStyle.version
+            configFile = project.rootDir.resolve("config/quality/checkstyle.xml")
+        }
+
+        project.afterEvaluate {
+            // Disables checking the test sources.
+            val checkstyleTest = project.tasks.findByName("checkstyleTest") as Checkstyle
+            checkstyleTest.enabled = false
+        }
+    }
 }
