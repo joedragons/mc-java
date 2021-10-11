@@ -111,6 +111,10 @@
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
+1. **Group:** antlr **Name:** antlr **Version:** 2.7.7
+     * **POM Project URL:** [http://www.antlr.org/](http://www.antlr.org/)
+     * **POM License: BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
 1. **Group:** com.beust **Name:** jcommander **Version:** 1.48
      * **POM Project URL:** [http://beust.com/jcommander](http://beust.com/jcommander)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -220,9 +224,25 @@
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.puppycrawl.tools **Name:** checkstyle **Version:** 8.29
+     * **POM Project URL:** [https://checkstyle.org/](https://checkstyle.org/)
+     * **POM License: LGPL-2.1+** - [http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt)
+
+1. **Group:** commons-beanutils **Name:** commons-beanutils **Version:** 1.9.4
+     * **Project URL:** [https://commons.apache.org/proper/commons-beanutils/](https://commons.apache.org/proper/commons-beanutils/)
+     * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-collections **Name:** commons-collections **Version:** 3.2.2
+     * **Project URL:** [http://commons.apache.org/collections/](http://commons.apache.org/collections/)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** commons-io **Name:** commons-io **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/proper/commons-io/](http://commons.apache.org/proper/commons-io/)
      * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** info.picocli **Name:** picocli **Version:** 4.1.4
+     * **POM Project URL:** [http://picocli.info](http://picocli.info)
+     * **POM License: The Apache Software License, version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** io.github.java-diff-utils **Name:** java-diff-utils **Version:** 4.0
      * **POM Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
@@ -253,6 +273,10 @@
      * **POM Project URL:** [http://junit.org](http://junit.org)
      * **POM License: Eclipse Public License 1.0** - [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html)
 
+1. **Group:** net.sf.saxon **Name:** Saxon-HE **Version:** 9.9.1-6
+     * **POM Project URL:** [http://www.saxonica.com/](http://www.saxonica.com/)
+     * **POM License: Mozilla Public License Version 2.0** - [http://www.mozilla.org/MPL/2.0/](http://www.mozilla.org/MPL/2.0/)
+
 1. **Group:** net.sourceforge.pmd **Name:** pmd-core **Version:** 6.36.0
      * **POM License: BSD-style** - [http://pmd.sourceforge.net/license.html](http://pmd.sourceforge.net/license.html)
 
@@ -264,6 +288,10 @@
      * **POM License: Mozilla Public License Version 1.0** - [http://www.mozilla.org/MPL/MPL-1.0.txt](http://www.mozilla.org/MPL/MPL-1.0.txt)
 
 1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.7.2
+     * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
+     * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
+1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.8-1
      * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
      * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
 
@@ -440,7 +468,7 @@
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Oct 11 21:59:01 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Oct 11 22:02:25 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -552,6 +580,10 @@ This report was generated on **Mon Oct 11 21:59:01 EEST 2021** using [Gradle-Lic
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
+1. **Group:** antlr **Name:** antlr **Version:** 2.7.7
+     * **POM Project URL:** [http://www.antlr.org/](http://www.antlr.org/)
+     * **POM License: BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
 1. **Group:** com.beust **Name:** jcommander **Version:** 1.48
      * **POM Project URL:** [http://beust.com/jcommander](http://beust.com/jcommander)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -665,9 +697,21 @@ This report was generated on **Mon Oct 11 21:59:01 EEST 2021** using [Gradle-Lic
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.puppycrawl.tools **Name:** checkstyle **Version:** 8.29
+     * **POM Project URL:** [https://checkstyle.org/](https://checkstyle.org/)
+     * **POM License: LGPL-2.1+** - [http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt)
+
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-beanutils **Name:** commons-beanutils **Version:** 1.9.4
+     * **Project URL:** [https://commons.apache.org/proper/commons-beanutils/](https://commons.apache.org/proper/commons-beanutils/)
+     * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-collections **Name:** commons-collections **Version:** 3.2.2
+     * **Project URL:** [http://commons.apache.org/collections/](http://commons.apache.org/collections/)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** commons-io **Name:** commons-io **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/proper/commons-io/](http://commons.apache.org/proper/commons-io/)
@@ -676,6 +720,10 @@ This report was generated on **Mon Oct 11 21:59:01 EEST 2021** using [Gradle-Lic
 1. **Group:** commons-lang **Name:** commons-lang **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** info.picocli **Name:** picocli **Version:** 4.1.4
+     * **POM Project URL:** [http://picocli.info](http://picocli.info)
+     * **POM License: The Apache Software License, version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** io.github.java-diff-utils **Name:** java-diff-utils **Version:** 4.0
      * **POM Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
@@ -694,6 +742,10 @@ This report was generated on **Mon Oct 11 21:59:01 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
+1. **Group:** net.sf.saxon **Name:** Saxon-HE **Version:** 9.9.1-6
+     * **POM Project URL:** [http://www.saxonica.com/](http://www.saxonica.com/)
+     * **POM License: Mozilla Public License Version 2.0** - [http://www.mozilla.org/MPL/2.0/](http://www.mozilla.org/MPL/2.0/)
+
 1. **Group:** net.sourceforge.pmd **Name:** pmd-core **Version:** 6.36.0
      * **POM License: BSD-style** - [http://pmd.sourceforge.net/license.html](http://pmd.sourceforge.net/license.html)
 
@@ -705,6 +757,10 @@ This report was generated on **Mon Oct 11 21:59:01 EEST 2021** using [Gradle-Lic
      * **POM License: Mozilla Public License Version 1.0** - [http://www.mozilla.org/MPL/MPL-1.0.txt](http://www.mozilla.org/MPL/MPL-1.0.txt)
 
 1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.7.2
+     * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
+     * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
+1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.8-1
      * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
      * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
 
@@ -877,7 +933,7 @@ This report was generated on **Mon Oct 11 21:59:01 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Oct 11 22:02:25 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -997,6 +1053,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
+1. **Group:** antlr **Name:** antlr **Version:** 2.7.7
+     * **POM Project URL:** [http://www.antlr.org/](http://www.antlr.org/)
+     * **POM License: BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
 1. **Group:** com.beust **Name:** jcommander **Version:** 1.48
      * **POM Project URL:** [http://beust.com/jcommander](http://beust.com/jcommander)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1110,9 +1170,21 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.puppycrawl.tools **Name:** checkstyle **Version:** 8.29
+     * **POM Project URL:** [https://checkstyle.org/](https://checkstyle.org/)
+     * **POM License: LGPL-2.1+** - [http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt)
+
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-beanutils **Name:** commons-beanutils **Version:** 1.9.4
+     * **Project URL:** [https://commons.apache.org/proper/commons-beanutils/](https://commons.apache.org/proper/commons-beanutils/)
+     * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-collections **Name:** commons-collections **Version:** 3.2.2
+     * **Project URL:** [http://commons.apache.org/collections/](http://commons.apache.org/collections/)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** commons-io **Name:** commons-io **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/proper/commons-io/](http://commons.apache.org/proper/commons-io/)
@@ -1121,6 +1193,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
 1. **Group:** commons-lang **Name:** commons-lang **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** info.picocli **Name:** picocli **Version:** 4.1.4
+     * **POM Project URL:** [http://picocli.info](http://picocli.info)
+     * **POM License: The Apache Software License, version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** io.github.java-diff-utils **Name:** java-diff-utils **Version:** 4.0
      * **POM Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
@@ -1139,6 +1215,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
+1. **Group:** net.sf.saxon **Name:** Saxon-HE **Version:** 9.9.1-6
+     * **POM Project URL:** [http://www.saxonica.com/](http://www.saxonica.com/)
+     * **POM License: Mozilla Public License Version 2.0** - [http://www.mozilla.org/MPL/2.0/](http://www.mozilla.org/MPL/2.0/)
+
 1. **Group:** net.sourceforge.pmd **Name:** pmd-core **Version:** 6.36.0
      * **POM License: BSD-style** - [http://pmd.sourceforge.net/license.html](http://pmd.sourceforge.net/license.html)
 
@@ -1150,6 +1230,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
      * **POM License: Mozilla Public License Version 1.0** - [http://www.mozilla.org/MPL/MPL-1.0.txt](http://www.mozilla.org/MPL/MPL-1.0.txt)
 
 1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.7.2
+     * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
+     * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
+1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.8-1
      * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
      * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
 
@@ -1330,7 +1414,7 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Oct 11 22:02:26 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1495,6 +1579,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
      * **POM License: The MIT License** - [http://www.opensource.org/licenses/mit-license.php](http://www.opensource.org/licenses/mit-license.php)
 
 ## Compile, tests and tooling
+1. **Group:** antlr **Name:** antlr **Version:** 2.7.7
+     * **POM Project URL:** [http://www.antlr.org/](http://www.antlr.org/)
+     * **POM License: BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
 1. **Group:** com.beust **Name:** jcommander **Version:** 1.48
      * **POM Project URL:** [http://beust.com/jcommander](http://beust.com/jcommander)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1633,9 +1721,21 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.puppycrawl.tools **Name:** checkstyle **Version:** 8.29
+     * **POM Project URL:** [https://checkstyle.org/](https://checkstyle.org/)
+     * **POM License: LGPL-2.1+** - [http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt)
+
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-beanutils **Name:** commons-beanutils **Version:** 1.9.4
+     * **Project URL:** [https://commons.apache.org/proper/commons-beanutils/](https://commons.apache.org/proper/commons-beanutils/)
+     * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-collections **Name:** commons-collections **Version:** 3.2.2
+     * **Project URL:** [http://commons.apache.org/collections/](http://commons.apache.org/collections/)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** commons-io **Name:** commons-io **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/proper/commons-io/](http://commons.apache.org/proper/commons-io/)
@@ -1644,6 +1744,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
 1. **Group:** commons-lang **Name:** commons-lang **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** info.picocli **Name:** picocli **Version:** 4.1.4
+     * **POM Project URL:** [http://picocli.info](http://picocli.info)
+     * **POM License: The Apache Software License, version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** io.github.java-diff-utils **Name:** java-diff-utils **Version:** 4.0
      * **POM Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
@@ -1662,6 +1766,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
+1. **Group:** net.sf.saxon **Name:** Saxon-HE **Version:** 9.9.1-6
+     * **POM Project URL:** [http://www.saxonica.com/](http://www.saxonica.com/)
+     * **POM License: Mozilla Public License Version 2.0** - [http://www.mozilla.org/MPL/2.0/](http://www.mozilla.org/MPL/2.0/)
+
 1. **Group:** net.sourceforge.pmd **Name:** pmd-core **Version:** 6.36.0
      * **POM License: BSD-style** - [http://pmd.sourceforge.net/license.html](http://pmd.sourceforge.net/license.html)
 
@@ -1673,6 +1781,10 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
      * **POM License: Mozilla Public License Version 1.0** - [http://www.mozilla.org/MPL/MPL-1.0.txt](http://www.mozilla.org/MPL/MPL-1.0.txt)
 
 1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.7.2
+     * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
+     * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
+1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.8-1
      * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
      * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
 
@@ -1848,7 +1960,7 @@ This report was generated on **Mon Oct 11 21:59:02 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Oct 11 22:02:26 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1960,6 +2072,10 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
+1. **Group:** antlr **Name:** antlr **Version:** 2.7.7
+     * **POM Project URL:** [http://www.antlr.org/](http://www.antlr.org/)
+     * **POM License: BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
 1. **Group:** com.beust **Name:** jcommander **Version:** 1.48
      * **POM Project URL:** [http://beust.com/jcommander](http://beust.com/jcommander)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2073,9 +2189,21 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.puppycrawl.tools **Name:** checkstyle **Version:** 8.29
+     * **POM Project URL:** [https://checkstyle.org/](https://checkstyle.org/)
+     * **POM License: LGPL-2.1+** - [http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt)
+
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-beanutils **Name:** commons-beanutils **Version:** 1.9.4
+     * **Project URL:** [https://commons.apache.org/proper/commons-beanutils/](https://commons.apache.org/proper/commons-beanutils/)
+     * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-collections **Name:** commons-collections **Version:** 3.2.2
+     * **Project URL:** [http://commons.apache.org/collections/](http://commons.apache.org/collections/)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** commons-io **Name:** commons-io **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/proper/commons-io/](http://commons.apache.org/proper/commons-io/)
@@ -2084,6 +2212,10 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
 1. **Group:** commons-lang **Name:** commons-lang **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/lang/](http://commons.apache.org/lang/)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** info.picocli **Name:** picocli **Version:** 4.1.4
+     * **POM Project URL:** [http://picocli.info](http://picocli.info)
+     * **POM License: The Apache Software License, version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** io.github.java-diff-utils **Name:** java-diff-utils **Version:** 4.0
      * **POM Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
@@ -2102,6 +2234,10 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [https://github.com/trustin/os-maven-plugin/](https://github.com/trustin/os-maven-plugin/)
      * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
+1. **Group:** net.sf.saxon **Name:** Saxon-HE **Version:** 9.9.1-6
+     * **POM Project URL:** [http://www.saxonica.com/](http://www.saxonica.com/)
+     * **POM License: Mozilla Public License Version 2.0** - [http://www.mozilla.org/MPL/2.0/](http://www.mozilla.org/MPL/2.0/)
+
 1. **Group:** net.sourceforge.pmd **Name:** pmd-core **Version:** 6.36.0
      * **POM License: BSD-style** - [http://pmd.sourceforge.net/license.html](http://pmd.sourceforge.net/license.html)
 
@@ -2113,6 +2249,10 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
      * **POM License: Mozilla Public License Version 1.0** - [http://www.mozilla.org/MPL/MPL-1.0.txt](http://www.mozilla.org/MPL/MPL-1.0.txt)
 
 1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.7.2
+     * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
+     * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
+1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.8-1
      * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
      * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
 
@@ -2293,7 +2433,7 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Oct 11 22:02:27 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2389,6 +2529,10 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
      * **POM License: The Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## Compile, tests and tooling
+1. **Group:** antlr **Name:** antlr **Version:** 2.7.7
+     * **POM Project URL:** [http://www.antlr.org/](http://www.antlr.org/)
+     * **POM License: BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
 1. **Group:** com.beust **Name:** jcommander **Version:** 1.48
      * **POM Project URL:** [http://beust.com/jcommander](http://beust.com/jcommander)
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2494,13 +2638,29 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
 1. **Group:** com.google.truth.extensions **Name:** truth-proto-extension **Version:** 1.1.3
      * **POM License: The Apache Software License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** com.puppycrawl.tools **Name:** checkstyle **Version:** 8.29
+     * **POM Project URL:** [https://checkstyle.org/](https://checkstyle.org/)
+     * **POM License: LGPL-2.1+** - [http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt)
+
 1. **Group:** com.squareup **Name:** javapoet **Version:** 1.13.0
      * **POM Project URL:** [http://github.com/square/javapoet/](http://github.com/square/javapoet/)
      * **POM License: Apache 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
+1. **Group:** commons-beanutils **Name:** commons-beanutils **Version:** 1.9.4
+     * **Project URL:** [https://commons.apache.org/proper/commons-beanutils/](https://commons.apache.org/proper/commons-beanutils/)
+     * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** commons-collections **Name:** commons-collections **Version:** 3.2.2
+     * **Project URL:** [http://commons.apache.org/collections/](http://commons.apache.org/collections/)
+     * **POM License: Apache License, Version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 1. **Group:** commons-io **Name:** commons-io **Version:** 2.6
      * **Project URL:** [http://commons.apache.org/proper/commons-io/](http://commons.apache.org/proper/commons-io/)
      * **POM License: Apache License, Version 2.0** - [https://www.apache.org/licenses/LICENSE-2.0.txt](https://www.apache.org/licenses/LICENSE-2.0.txt)
+
+1. **Group:** info.picocli **Name:** picocli **Version:** 4.1.4
+     * **POM Project URL:** [http://picocli.info](http://picocli.info)
+     * **POM License: The Apache Software License, version 2.0** - [http://www.apache.org/licenses/LICENSE-2.0.txt](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1. **Group:** io.github.java-diff-utils **Name:** java-diff-utils **Version:** 4.0
      * **POM Project URL:** [https://github.com/java-diff-utils/java-diff-utils](https://github.com/java-diff-utils/java-diff-utils)
@@ -2515,6 +2675,10 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
      * **POM Project URL:** [http://junit.org](http://junit.org)
      * **POM License: Eclipse Public License 1.0** - [http://www.eclipse.org/legal/epl-v10.html](http://www.eclipse.org/legal/epl-v10.html)
 
+1. **Group:** net.sf.saxon **Name:** Saxon-HE **Version:** 9.9.1-6
+     * **POM Project URL:** [http://www.saxonica.com/](http://www.saxonica.com/)
+     * **POM License: Mozilla Public License Version 2.0** - [http://www.mozilla.org/MPL/2.0/](http://www.mozilla.org/MPL/2.0/)
+
 1. **Group:** net.sourceforge.pmd **Name:** pmd-core **Version:** 6.36.0
      * **POM License: BSD-style** - [http://pmd.sourceforge.net/license.html](http://pmd.sourceforge.net/license.html)
 
@@ -2526,6 +2690,10 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
      * **POM License: Mozilla Public License Version 1.0** - [http://www.mozilla.org/MPL/MPL-1.0.txt](http://www.mozilla.org/MPL/MPL-1.0.txt)
 
 1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.7.2
+     * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
+     * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
+
+1. **Group:** org.antlr **Name:** antlr4-runtime **Version:** 4.8-1
      * **Manifest Project URL:** [http://www.antlr.org](http://www.antlr.org)
      * **POM License: The BSD License** - [http://www.antlr.org/license.html](http://www.antlr.org/license.html)
 
@@ -2698,4 +2866,4 @@ This report was generated on **Mon Oct 11 21:59:03 EEST 2021** using [Gradle-Lic
  The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
 
-This report was generated on **Mon Oct 11 21:59:04 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Mon Oct 11 22:02:27 EEST 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

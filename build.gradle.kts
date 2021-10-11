@@ -38,6 +38,7 @@ import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.checkstyle.CheckStyleConfig
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javadoc.JavadocConfig
@@ -126,6 +127,7 @@ subprojects {
     }
 
     JavadocConfig.applyTo(project)
+    CheckStyleConfig.applyTo(project)
 
     kotlin {
         explicitApi()
@@ -194,7 +196,7 @@ subprojects {
 
 apply {
     // Aggregated coverage report across all subprojects.
-    apply(from = Scripts.jacoco(project))
+    from(Scripts.jacoco(project))
 
     // Generate a repository-wide report of 3rd-party dependencies and their licenses.
     from(Scripts.repoLicenseReport(project))
