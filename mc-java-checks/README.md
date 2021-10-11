@@ -9,7 +9,7 @@ configuration of the project:
 
 ```groovy
 dependencies {
-    annotationProcessor "io.spine.tools:spine-mc-java-checks:$spineBaseVersion"
+    annotationProcessor "io.spine.tools:spine-mc-java-checks:$mcJavaVersion"
 }
 ```
 
