@@ -24,14 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.mc.java.check.methodresult.given;
+
+import io.spine.base.Error;
+
 /**
- * Contains the ErrorProne checker which tests that a method result is not ignored.
+ * Contains statements for which the {@link HandleMethodResult} bug pattern should return a match.
+ *
+ * <p>Comments in this file should not be modified as they serve as indicator for the
+ * {@link com.google.errorprone.CompilationTestHelper} Error Prone tool.
  */
+class HandleMethodResultPositives {
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.check.methodresult;
+    void callBuild() {
+        // BUG: Diagnostic contains: HandleMethodResult
+        Error.newBuilder().build();
+    }
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    void callGetter() {
+        // BUG: Diagnostic contains: HandleMethodResult
+        Error.newBuilder().getAttributesCount();
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    void callAsMethodReference() {
+        Error.Builder builder = Error.newBuilder();
+        // BUG: Diagnostic contains: HandleMethodResult
+        Runnable faulty = builder::build;
+        faulty.run();
+    }
+
+    void callNonBuilder() {
+        // BUG: Diagnostic contains: HandleMethodResult
+        checkMe();
+    }
+
+    public String checkMe() {
+        return "42";
+    }
+}

@@ -25,15 +25,13 @@
  */
 
 /**
- * This package declares a number of classes which are analyzed by the check in tests.
- *
- * <p>See the test resources of this module.
+ * This package provides the custom Error Prone checks used in Spine.
+ * No code should be used directly from this package as the checks are automatically exported
+ * via the {@link com.google.auto.service.AutoService} annotation.
  */
-
-
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.tools.check.methodresult.given;
+package io.spine.tools.mc.java.check;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

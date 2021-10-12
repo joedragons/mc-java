@@ -25,13 +25,12 @@
  */
 
 /**
- * This package provides the custom Error Prone checks used in Spine. No code should be used
- * directly from this package as the checks are automatically exported via the
- * {@link com.google.auto.service.AutoService} annotation.
+ * Contains the ErrorProne checker which tests that a method result is not ignored.
  */
+
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.tools.check;
+package io.spine.tools.mc.java.check.methodresult;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

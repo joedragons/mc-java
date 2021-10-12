@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.check.methodresult;
+package io.spine.tools.mc.java.check.methodresult;
 
 import com.google.errorprone.CompilationTestHelper;
 import org.junit.jupiter.api.BeforeEach;
