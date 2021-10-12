@@ -112,38 +112,29 @@ public final class McJavaChecksDependency implements Logging {
      */
     private class ResolutionHelper {
 
-        private final ResolutionResult resolutionResult;
+        private final ImmutableList<UnresolvedDependencyResult> unresolved;
 
         private ResolutionHelper() {
             Configuration configCopy = configuration.copy();
             addDependencyTo(configCopy);
-            resolutionResult = configCopy.getIncoming()
-                                         .getResolutionResult();
+            ResolutionResult rr =
+                    configCopy.getIncoming()
+                              .getResolutionResult();
+            unresolved = unresolvedIn(rr);
         }
 
         private boolean wasResolved() {
-            boolean wasResolved = unresolved().isEmpty();
+            boolean wasResolved = unresolved.isEmpty();
             return wasResolved;
         }
 
-        private ImmutableList<UnresolvedDependencyResult> unresolved() {
-            return allDeps().stream()
-                            .filter(UnresolvedDependencyResult.class::isInstance)
-                            .map(UnresolvedDependencyResult.class::cast)
-                            .collect(toImmutableList());
-        }
-
-        private Set<? extends DependencyResult> allDeps() {
-            return resolutionResult.getAllDependencies();
-        }
 
         private void logUnresolved() {
             ImmutableList<String> problemReport =
-                    unresolved()
-                         .stream()
-                         .map(this::toErrorMessage)
-                         .sorted()
-                         .collect(toImmutableList());
+                    unresolved.stream()
+                              .map(this::toErrorMessage)
+                              .sorted()
+                              .collect(toImmutableList());
             _warn().log(
                     "Unable to add a dependency on `%s` to the configuration `%s` because some " +
                             "dependencies could not be resolved: " +
@@ -157,5 +148,16 @@ public final class McJavaChecksDependency implements Logging {
             Throwable throwable = entry.getFailure();
             return format("%nDependency: `%s`%nProblem: `%s`", dependency, throwable);
         }
+    }
+
+    private static
+    ImmutableList<UnresolvedDependencyResult> unresolvedIn(ResolutionResult rr) {
+        Set<? extends DependencyResult> allDeps = rr.getAllDependencies();
+        ImmutableList<UnresolvedDependencyResult> unresolved =
+                allDeps.stream()
+                       .filter(UnresolvedDependencyResult.class::isInstance)
+                       .map(UnresolvedDependencyResult.class::cast)
+                       .collect(toImmutableList());
+        return unresolved;
     }
 }
