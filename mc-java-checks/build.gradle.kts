@@ -32,11 +32,14 @@ import io.spine.internal.gradle.VersionWriter
 dependencies {
     annotationProcessor(AutoService.processor)
     compileOnlyApi(AutoService.annotations)
+
+    api(ErrorProne.core)
+    ErrorProne.annotations.forEach { api(it) }
+
     implementation(gradleApi())
     implementation(Spine(project).base)
     implementation(Spine(project).modelCompiler)
-    api(ErrorProne.core)
-    ErrorProne.annotations.forEach { api(it) }
+
     testImplementation(ErrorProne.testHelpers)
     testImplementation(Spine(project).testlib)
 }
