@@ -24,14 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Contains the ErrorProne checker which tests that a method result is not ignored.
- */
+package io.spine.tools.mc.java.checks.check.methodresult;
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.check.methodresult;
+import com.google.errorprone.CompilationTestHelper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+@DisplayName("`HandleMethodResult` check should")
+class HandleMethodResultTest {
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    private CompilationTestHelper helper;
+
+    @BeforeEach
+    void setUp() {
+        helper = CompilationTestHelper.newInstance(HandleMethodResult.class, getClass());
+    }
+
+    @Test
+    @DisplayName("match positive cases")
+    void recognizePositiveCases() {
+        helper.addSourceFile("given/HandleMethodResultPositives.java")
+              .doTest();
+    }
+
+    @Test
+    @DisplayName("match negative cases")
+    void recognizeNegativeCases() {
+        helper.addSourceFile("given/HandleMethodResultNegatives.java")
+              .doTest();
+    }
+}

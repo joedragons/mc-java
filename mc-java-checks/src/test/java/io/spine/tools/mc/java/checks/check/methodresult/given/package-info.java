@@ -24,34 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.check.methodresult;
+/**
+ * This package declares a number of classes which are analyzed by the check in tests.
+ *
+ * <p>See the test resources of this module.
+ */
 
-import com.google.errorprone.CompilationTestHelper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
-@DisplayName("`HandleMethodResult` check should")
-class HandleMethodResultTest {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.checks.check.methodresult.given;
 
-    private CompilationTestHelper helper;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    @BeforeEach
-    void setUp() {
-        helper = CompilationTestHelper.newInstance(HandleMethodResult.class, getClass());
-    }
-
-    @Test
-    @DisplayName("match positive cases")
-    void recognizePositiveCases() {
-        helper.addSourceFile("given/HandleMethodResultPositives.java")
-              .doTest();
-    }
-
-    @Test
-    @DisplayName("match negative cases")
-    void recognizeNegativeCases() {
-        helper.addSourceFile("given/HandleMethodResultNegatives.java")
-              .doTest();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.check.methodresult;
+package io.spine.tools.mc.java.checks.check.methodresult;
 
 import com.google.auto.service.AutoService;
 import com.google.errorprone.BugPattern;

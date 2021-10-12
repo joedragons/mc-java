@@ -25,15 +25,12 @@
  */
 
 /**
- * This package declares a number of classes which are analyzed by the check in tests.
- *
- * <p>See the test resources of this module.
+ * Contains the ErrorProne checker which tests that a method result is not ignored.
  */
-
 
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.check.methodresult.given;
+package io.spine.tools.mc.java.checks.check.methodresult;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

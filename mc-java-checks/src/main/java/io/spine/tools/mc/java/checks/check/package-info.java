@@ -24,41 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.check.methodresult.given;
-
-import io.spine.base.Error;
-
 /**
- * Contains statements for which the {@link HandleMethodResult} bug pattern should return a match.
- *
- * <p>Comments in this file should not be modified as they serve as indicator for the
- * {@link com.google.errorprone.CompilationTestHelper} Error Prone tool.
+ * This package provides the custom Error Prone checks used in Spine.
+ * No code should be used directly from this package as the checks are automatically exported
+ * via the {@link com.google.auto.service.AutoService} annotation.
  */
-class HandleMethodResultPositives {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.checks.check;
 
-    void callBuild() {
-        // BUG: Diagnostic contains: HandleMethodResult
-        Error.newBuilder().build();
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    void callGetter() {
-        // BUG: Diagnostic contains: HandleMethodResult
-        Error.newBuilder().getAttributesCount();
-    }
-
-    void callAsMethodReference() {
-        Error.Builder builder = Error.newBuilder();
-        // BUG: Diagnostic contains: HandleMethodResult
-        Runnable faulty = builder::build;
-        faulty.run();
-    }
-
-    void callNonBuilder() {
-        // BUG: Diagnostic contains: HandleMethodResult
-        checkMe();
-    }
-
-    public String checkMe() {
-        return "42";
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;
