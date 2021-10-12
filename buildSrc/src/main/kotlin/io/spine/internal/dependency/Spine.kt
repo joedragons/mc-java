@@ -41,10 +41,10 @@ class Spine(p: Project) {
     val base = "io.spine:spine-base:${p.spineVersion}"
     val testlib = "io.spine.tools:spine-testlib:${p.spineVersion}"
 
-    val toolBase = "io.spine.tools:tool-base:${p.mcVersion}"
-    val pluginBase = "io.spine.tools:plugin-base:${p.mcVersion}"
-    val pluginTestlib = "io.spine.tools:plugin-testlib:${p.mcVersion}"
-    val mc = "io.spine.tools:mc:${p.mcVersion}"
+    val toolBase = "io.spine.tools:spine-tool-base:${p.mcVersion}"
+    val pluginBase = "io.spine.tools:spine-plugin-base:${p.mcVersion}"
+    val pluginTestlib = "io.spine.tools:spine-plugin-testlib:${p.mcVersion}"
+    val modelCompiler = "io.spine.tools:spine-model-compiler:${p.mcVersion}"
 
     private val Project.spineVersion: String
         get() = extra["spineBaseVersion"] as String

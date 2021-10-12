@@ -24,34 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.checks.gradle.given;
 
-import org.gradle.api.Project;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-import static io.spine.tools.mc.java.gradle.McJavaChecksPlugin.extensionName;
-
-/**
- * Allows configuring severity for all the Spine Java Checks applied to the project.
- *
- * @see Severity
- */
-@SuppressWarnings("PublicField" /* required for exposing the property in Gradle. */)
-public class McJavaChecksExtension {
-
-    public Severity useValidatingBuilderSeverity;
-
-    /**
-     * Creates an instance of the extension in the passed project.
-     */
-    static void createIn(Project project) {
-        project.getExtensions()
-               .create(extensionName(), McJavaChecksExtension.class);
-    }
-
-    public static Severity getUseValidatingBuilderSeverity(Project project) {
-        McJavaChecksExtension extension = (McJavaChecksExtension)
-                project.getExtensions()
-                       .getByName(extensionName());
-        return extension.useValidatingBuilderSeverity;
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.checks.gradle;
 
 import io.spine.tools.gradle.SpinePlugin;
 import io.spine.validate.ValidatingBuilder;
@@ -69,6 +69,7 @@ import org.gradle.api.Project;
  */
 public final class McJavaChecksPlugin extends SpinePlugin {
 
+    //TODO:2021-10-12:alexander.yevsyukov: Have `modelCompiler/java/checks` instead.
     private static final String EXTENSION_NAME = "modelChecks";
 
     public static String extensionName() {

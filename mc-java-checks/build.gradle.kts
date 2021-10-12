@@ -27,16 +27,18 @@
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Spine
-import java.net.URI
+import io.spine.internal.gradle.VersionWriter
 
 dependencies {
     annotationProcessor(AutoService.processor)
     compileOnlyApi(AutoService.annotations)
+    implementation(gradleApi())
     implementation(Spine(project).base)
-    implementation(Spine(project).pluginBase)
+    implementation(Spine(project).modelCompiler)
     api(ErrorProne.core)
     ErrorProne.annotations.forEach { api(it) }
     testImplementation(ErrorProne.testHelpers)
+    testImplementation(Spine(project).testlib)
 }
 
 fun getResolvedArtifactFor(dependency: String): String {
@@ -56,3 +58,5 @@ afterEvaluate {
     val javacPath = getResolvedArtifactFor("javac")
     test.jvmArgs("-Xbootclasspath/p:$javacPath")
 }
+
+apply<VersionWriter>()

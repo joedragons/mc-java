@@ -32,7 +32,6 @@ import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 
@@ -149,16 +148,6 @@ public class McJavaExtension {
      * <p>Either this property OR {@code dirToClean} property is used.
      */
     public List<String> dirsToClean = new ArrayList<>();
-
-    /**
-     * The severity of the Spine-custom Error Prone checks.
-     *
-     * <p>If this value is not set, the default severities are used,
-     * which are specific for each check.
-     *
-     * <p>May be overridden by the values provided by the {@link McJavaChecksExtension}.
-     */
-    public Severity defaultCheckSeverity;
 
     public final CodeGenAnnotations generateAnnotations = new CodeGenAnnotations();
 
@@ -325,13 +314,6 @@ public class McJavaExtension {
             dirsToClean.add(defaultValue);
         }
         return ImmutableList.copyOf(dirsToClean);
-    }
-
-    public static @Nullable Severity getSpineCheckSeverity(Project project) {
-        Severity result = extension(project).defaultCheckSeverity;
-        _debug().log("The severity of Spine-custom Error Prone checks is `%s`.",
-                     (result == null ? "unset" : result.name()));
-        return result;
     }
 
     @SuppressWarnings("unused") // Configures `generateAnnotations` closure.

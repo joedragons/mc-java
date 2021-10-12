@@ -24,48 +24,53 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.checks.gradle.given;
 
+import org.gradle.BuildListener;
 import org.gradle.api.Project;
+import org.gradle.api.internal.GradleInternal;
 import org.gradle.api.tasks.TaskCollection;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.compile.CompileOptions;
 import org.gradle.api.tasks.compile.JavaCompile;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
- * Utilities for working with {@link JavaCompile} tasks.
+ * An extractor for the {@link Project} {@linkplain org.gradle.api.Task tasks} and their arguments.
  */
-public final class JavaCompileTasks {
+class ProjectTasks {
 
-    private final TaskCollection<JavaCompile> tasks;
-
-    private JavaCompileTasks(Project project) {
-        TaskContainer allTasks = project.getTasks();
-        this.tasks = allTasks.withType(JavaCompile.class);
+    /** Prevents instantiation of this utility class. */
+    private ProjectTasks() {
     }
 
     /**
-     * Creates a new instance for the passed projects.
+     * Returns a list of project's tasks of type {@link JavaCompile}.
+     *
+     * <p>Evaluates the project in a process to trigger all tasks' arguments modifications.
+     *
+     * @param project the project to obtain tasks from
+     * @return the project {@link JavaCompile} tasks
      */
-    static JavaCompileTasks of(Project project) {
-        checkNotNull(project);
-        return new JavaCompileTasks(project);
+    static TaskCollection<JavaCompile> acquireJavaCompileTasks(Project project) {
+        GradleInternal gradle = (GradleInternal) project.getGradle();
+        BuildListener buildListenerBroadcaster = gradle.getBuildListenerBroadcaster();
+        buildListenerBroadcaster.projectsEvaluated(project.getGradle());
+        TaskContainer tasks = project.getTasks();
+        TaskCollection<JavaCompile> javaCompileTasks = tasks.withType(JavaCompile.class);
+        return javaCompileTasks;
     }
 
     /**
-     * Adds specified arguments to all {@code JavaCompile} tasks of the project.
+     * Returns compiler arguments from the given {@code JavaCompile} task.
+     *
+     * @param task the task to obtain the arguments from
+     * @return the {@code List} of the compiler arguments
      */
-    void addArgs(String... arguments) {
-        checkNotNull(arguments);
-        for (JavaCompile task : tasks) {
-            CompileOptions taskOptions = task.getOptions();
-            List<String> compilerArgs = taskOptions.getCompilerArgs();
-            compilerArgs.addAll(Arrays.asList(arguments));
-        }
+    static List<String> obtainCompilerArgs(JavaCompile task) {
+        CompileOptions options = task.getOptions();
+        List<String> compilerArgs = options.getCompilerArgs();
+        return compilerArgs;
     }
 }

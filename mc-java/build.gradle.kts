@@ -41,7 +41,7 @@ var protocPluginDependency: Dependency? = null
 val spineBaseVersion: String by extra
 
 dependencies {
-    api(Spine(project).pluginBase)
+    api(Spine(project).modelCompiler)
     implementation(gradleApi())
     implementation(JavaPoet.lib)
 
@@ -55,6 +55,8 @@ dependencies {
         exclude(group = "com.google.guava")
     }
     implementation(Protobuf.GradlePlugin.lib)
+    implementation(project(":mc-java-checks"))
+
     testImplementation(Spine(project).testlib)
     testImplementation(gradleTestKit())
     testImplementation(Spine(project).pluginTestlib)

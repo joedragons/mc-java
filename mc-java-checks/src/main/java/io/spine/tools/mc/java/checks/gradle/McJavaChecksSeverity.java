@@ -24,10 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.checks.gradle;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.spine.logging.Logging;
+import io.spine.tools.gradle.JavaCompileTasks;
+import io.spine.tools.mc.checks.Severity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -35,17 +37,13 @@ import org.gradle.api.invocation.Gradle;
 import org.gradle.api.plugins.PluginContainer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.mc.java.gradle.McJavaChecksExtension.getUseValidatingBuilderSeverity;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getSpineCheckSeverity;
+import static io.spine.tools.mc.java.checks.gradle.McJavaChecksExtension.getUseValidatingBuilderSeverity;
 
 /**
  * The helper for the Spine-custom Error Prone checks configuration of the {@link Project}.
  *
  * <p>This class cannot configure the check severities without the Error Prone plugin applied to
  * the project.
- *
- * @see McJavaChecksExtension
- * @see McJavaExtension#getSpineCheckSeverity(Project)
  */
 public final class McJavaChecksSeverity implements Logging {
 
@@ -90,7 +88,8 @@ public final class McJavaChecksSeverity implements Logging {
                                  "plugin is not applied to the project `%s`.", project.getName());
             return;
         }
-        Severity defaultSeverity = getSpineCheckSeverity(project);
+        //TODO:2021-10-12:alexander.yevsyukov: Take it from ModelCompiler/checks
+        Severity defaultSeverity = Severity.WARN;
         configureUseValidatingBuilder(defaultSeverity);
     }
 

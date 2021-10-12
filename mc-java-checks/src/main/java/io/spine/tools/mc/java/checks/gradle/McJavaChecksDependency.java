@@ -24,10 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.checks.gradle;
 
 import com.google.common.collect.ImmutableList;
 import io.spine.logging.Logging;
+import io.spine.tools.mc.java.checks.Artifacts;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
@@ -42,8 +43,7 @@ import java.util.Set;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP;
-import static io.spine.tools.mc.java.gradle.Artifacts.MC_JAVA_CHECKS_ARTIFACT;
-import static io.spine.tools.mc.java.gradle.Artifacts.mcJavaChecks;
+import static io.spine.tools.mc.java.checks.Artifacts.mcJavaChecks;
 import static java.lang.String.format;
 
 /**
@@ -100,9 +100,9 @@ public final class McJavaChecksDependency implements Logging {
     }
 
     private static DefaultExternalModuleDependency checksDependency() {
-        String version = Artifacts.mcJavaVersion();
+        String version = Artifacts.mcJavaChecksVersion();
         return new DefaultExternalModuleDependency(
-                SPINE_TOOLS_GROUP, MC_JAVA_CHECKS_ARTIFACT, version
+                SPINE_TOOLS_GROUP, Artifacts.MC_JAVA_CHECKS_ARTIFACT, version
         );
     }
 

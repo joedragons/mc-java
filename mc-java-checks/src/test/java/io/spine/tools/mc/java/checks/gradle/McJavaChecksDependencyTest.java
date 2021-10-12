@@ -24,11 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.checks.gradle;
 
 import io.spine.testing.SlowTest;
 import io.spine.testing.logging.mute.MuteLogging;
-import io.spine.tools.mc.java.gradle.given.StubProject;
+import io.spine.tools.mc.java.checks.gradle.given.StubProject;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP;
-import static io.spine.tools.mc.java.gradle.Artifacts.MC_JAVA_CHECKS_ARTIFACT;
+import static io.spine.tools.mc.java.checks.Artifacts.MC_JAVA_CHECKS_ARTIFACT;
 
 /**
  * A test for the {@link McJavaChecksDependency} part of the Spine Error Prone Checks plugin.

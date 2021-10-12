@@ -23,54 +23,31 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 @file:JvmName("Artifacts")
 
-package io.spine.tools.mc.java.gradle
+package io.spine.tools.mc.java.checks
 
 import io.spine.tools.gradle.Artifact
-import io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP
 import io.spine.tools.gradle.Dependency
 import io.spine.tools.gradle.DependencyVersions
 import io.spine.tools.gradle.ThirdPartyDependency
 
 /**
- * This file defines utilities for generating instances of [Artifact].
+ * The name of the Maven artifact of the Model Compiler Java Checks.
  */
+internal const val MC_JAVA_CHECKS_ARTIFACT = "mc-java-checks"
 
-private const val JAR_EXTENSION = "jar"
-private const val GRPC_GROUP = "io.grpc"
-private const val GRPC_PLUGIN_NAME = "protoc-gen-grpc-java"
-private const val MC_JAVA_NAME = "mc-java"
-private const val EXECUTABLE_CLASSIFIER = "exe"
+private val versions = DependencyVersions.loadFor(MC_JAVA_CHECKS_ARTIFACT)
 
 /**
- * The name of the Maven artifact of the Spine Protobuf compiler plugin.
+ * The Maven artifact containing the `mc-java-checks` module.
  */
-internal const val SPINE_PROTOC_PLUGIN_NAME = "mc-java-protoc"
-
-private val versions = DependencyVersions.loadFor("mc-java")
-
-/**
- * The Maven artifact of the gRPC Protobuf compiler plugin.
- */
-@get:JvmName("gRpcProtocPlugin")
-internal val gRpcProtocPlugin: Artifact by lazy {
-    val gRpcPlugin: Dependency = ThirdPartyDependency(GRPC_GROUP, GRPC_PLUGIN_NAME)
-    gRpcPlugin.withVersionFrom(versions)
-}
-
-/**
- * The Maven artifact containing the `mc-java-protoc` module.
- */
-@get:JvmName("spineProtocPlugin")
-internal val spineProtocPlugin: Artifact by lazy {
+@get:JvmName("mcJavaChecks")
+internal val mcJavaChecks: Artifact by lazy {
     Artifact.newBuilder()
         .useSpineToolsGroup()
-        .setName(SPINE_PROTOC_PLUGIN_NAME)
-        .setVersion(mcJavaVersion)
-        .setClassifier(EXECUTABLE_CLASSIFIER)
-        .setExtension(JAR_EXTENSION)
+        .setName(MC_JAVA_CHECKS_ARTIFACT)
+        .setVersion(mcJavaChecksVersion)
         .build()
 }
 
@@ -79,9 +56,11 @@ internal val spineProtocPlugin: Artifact by lazy {
  *
  * This is the version of all the modules declared in this project.
  */
-@get:JvmName("mcJavaVersion")
-internal val mcJavaVersion: String by lazy {
-    val self: Dependency = ThirdPartyDependency(SPINE_TOOLS_GROUP, MC_JAVA_NAME)
+@get:JvmName("mcJavaChecksVersion")
+internal val mcJavaChecksVersion: String by lazy {
+    val self: Dependency = ThirdPartyDependency(Artifact.SPINE_TOOLS_GROUP, MC_JAVA_CHECKS_ARTIFACT)
     versions.versionOf(self)
         .orElseThrow { IllegalStateException() }
 }
+
+

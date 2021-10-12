@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle.given;
+package io.spine.tools.mc.java.checks.gradle.given;
 
 import org.gradle.api.Project;
 import org.gradle.api.tasks.TaskCollection;
@@ -34,8 +34,8 @@ import java.util.List;
 
 import static com.google.common.collect.testing.Helpers.assertEmpty;
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.mc.java.gradle.given.ProjectTasks.acquireJavaCompileTasks;
-import static io.spine.tools.mc.java.gradle.given.ProjectTasks.obtainCompilerArgs;
+import static io.spine.tools.mc.java.checks.gradle.given.ProjectTasks.acquireJavaCompileTasks;
+import static io.spine.tools.mc.java.checks.gradle.given.ProjectTasks.obtainCompilerArgs;
 
 /**
  * A test helper providing various {@code assert...} methods related to the {@link Project}

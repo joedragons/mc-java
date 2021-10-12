@@ -23,58 +23,49 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.tools.mc.java.gradle;
 
-import io.spine.testing.TempDir;
-import io.spine.tools.mc.java.gradle.given.StubProject;
+package io.spine.tools.mc.java.checks.gradle;
+
+import io.spine.tools.mc.checks.Severity;
+import io.spine.tools.mc.java.checks.gradle.given.StubProject;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.dsl.RepositoryHandler;
+import org.gradle.api.plugins.ExtensionContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.mc.java.StandardRepos.applyStandard;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getSpineCheckSeverity;
-import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
+import static io.spine.tools.mc.java.checks.gradle.McJavaChecksExtension.getUseValidatingBuilderSeverity;
 
-@DisplayName("`McJavaExtension` for checks should return")
-class McJavaExtensionChecksTest {
+@DisplayName("`McJavaChecksExtension` should")
+class McJavaChecksExtensionTest {
 
-    private Project project = null;
+    private Project project;
+    private McJavaChecksExtension extension;
 
     @BeforeEach
     void setUp() {
-        File projectDir = TempDir.forClass(McJavaExtensionChecksTest.class);
-        project = StubProject.createAt(projectDir);
-        RepositoryHandler repositories = project.getRepositories();
-        applyStandard(repositories);
-        project.getPluginManager()
-               .apply(MC_JAVA_GRADLE_PLUGIN_ID);
+        project = StubProject.createFor(getClass()).get();
+        ExtensionContainer extensions = project.getExtensions();
+        extension = extensions.create(McJavaChecksPlugin.extensionName(),
+                                      McJavaChecksExtension.class);
     }
 
     @Test
-    @DisplayName("severity, if set")
-    void specifiedValue() {
-        spineProtobuf().defaultCheckSeverity = Severity.ERROR;
-        Severity actualSeverity = getSpineCheckSeverity(project);
-
-        assertThat(actualSeverity)
-                .isEqualTo(spineProtobuf().defaultCheckSeverity);
+    @DisplayName("return use validating builder severity")
+    void obtainingSeverity() {
+        final Severity expected = Severity.ERROR;
+        extension.useValidatingBuilderSeverity = expected;
+        final Severity actual = getUseValidatingBuilderSeverity(project);
+        assertThat(actual)
+                .isEqualTo(expected);
     }
 
     @Test
-    @DisplayName("`null`, if not set")
-    void nullValue() {
-        Severity actualSeverity = getSpineCheckSeverity(project);
-        assertThat(actualSeverity)
+    @DisplayName("return `null` severity if not set")
+    void ifNotSet() {
+        Severity severity = getUseValidatingBuilderSeverity(project);
+        assertThat(severity)
                 .isNull();
-    }
-
-    private McJavaExtension spineProtobuf() {
-        return (McJavaExtension) project.getExtensions()
-                                        .getByName(McJavaPlugin.extensionName());
     }
 }

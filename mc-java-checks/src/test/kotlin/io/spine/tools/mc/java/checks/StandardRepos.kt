@@ -24,16 +24,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:JvmName("StandardRepos")
+
+package io.spine.tools.mc.java.checks
+
+import java.net.URI
+import org.gradle.api.artifacts.dsl.RepositoryHandler
+
 /**
- * This package declares a number of classes which are analyzed by the check in tests.
+ * Adds the standard Maven repositories to the receiver [RepositoryHandler].
  *
- * <p>See the test resources of this module.
+ * This is analogous to the eponymous method in the build scripts with the exception that this
+ * method is available at the module's test runtime.
+ *
+ * Note that not all the Maven repositories may be added to the test projects, but only those that
+ * are required for tests. We are not trying to keep these repositories is perfect synchrony with
+ * the ones defined in build scripts.
  */
-
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.checks.check.methodresult.given;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+fun RepositoryHandler.applyStandard() {
+    mavenLocal()
+    mavenCentral()
+    val registryBaseUrl = "https://europe-maven.pkg.dev/spine-event-engine"
+    maven {
+        it.url = URI("$registryBaseUrl/releases")
+    }
+    maven {
+        it.url = URI("$registryBaseUrl/snapshots")
+    }
+}
