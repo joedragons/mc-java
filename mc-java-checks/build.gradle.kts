@@ -36,12 +36,14 @@ dependencies {
     api(ErrorProne.core)
     ErrorProne.annotations.forEach { api(it) }
 
+    val spine = Spine(project)
+
     implementation(gradleApi())
-    implementation(Spine(project).base)
-    implementation(Spine(project).modelCompiler)
+    implementation(spine.base)
+    implementation(spine.modelCompiler)
 
     testImplementation(ErrorProne.testHelpers)
-    testImplementation(Spine(project).testlib)
+    testImplementation(spine.testlib)
 }
 
 fun getResolvedArtifactFor(dependency: String): String {
