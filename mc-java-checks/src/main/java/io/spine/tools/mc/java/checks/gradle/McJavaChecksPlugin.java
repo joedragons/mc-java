@@ -26,46 +26,20 @@
 package io.spine.tools.mc.java.checks.gradle;
 
 import io.spine.tools.gradle.SpinePlugin;
-import io.spine.validate.ValidatingBuilder;
 import org.gradle.api.Project;
 
 /**
- * A Gradle plugin which configures the project to run Spine-custom Error Prone checks during the
+ * A Gradle plugin which configures the project to run Model Compiler Checks for Java during the
  * compilation stage.
  *
  * <p>To work, this plugin requires <a href="https://github.com/tbroyer/gradle-errorprone-plugin">
  * the Error Prone plugin</a> to be applied to the project.
  *
  * <p>The plugin adds
- * a {@link Artifacts#MC_JAVA_CHECKS_ARTIFACT mc-java-checks} dependency
- * to the {@code annotationProcessor} configuration of a Gradle project.
+ * a {@link io.spine.tools.mc.java.checks.Artifacts#MC_JAVA_CHECKS_ARTIFACT mc-java-checks}
+ * dependency to the {@code annotationProcessor} configuration of a Gradle project.
  * For the older Gradle versions (pre {@code 4.6}), where there is no such configuration,
  * the plugin creates it.
- *
- * <p>Dependency has the same version as the project's {@code spine-mc-java} plugin dependency.
- *
- * <p>Checks severity may be configured for all checks:
- *
- * <pre>
- * {@code
- *   modelCompiler {
- *      spineCheckSeverity = "OFF"
- *   }
- * }
- * </pre>
- * or for the specific ones:
- *
- * <pre>
- * {@code
- *   modelChecks {
- *      useValidatingBuilderSeverity = "ERROR"
- *   }
- * }
- * </pre>
- *
- * <p>The latter overrides the former.
- *
- * @see ValidatingBuilder
  */
 public final class McJavaChecksPlugin extends SpinePlugin {
 
