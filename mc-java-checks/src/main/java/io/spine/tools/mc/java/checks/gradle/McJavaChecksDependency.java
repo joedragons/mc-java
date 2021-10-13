@@ -26,13 +26,14 @@
 
 package io.spine.tools.mc.java.checks.gradle;
 
-import com.google.common.collect.ImmutableList;
 import io.spine.logging.Logging;
 import io.spine.tools.mc.java.checks.Artifacts;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.DependencySet;
+import org.gradle.api.artifacts.component.ComponentSelector;
 import org.gradle.api.artifacts.result.DependencyResult;
 import org.gradle.api.artifacts.result.ResolutionResult;
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult;
@@ -41,10 +42,10 @@ import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDepen
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP;
 import static io.spine.tools.mc.java.checks.Artifacts.mcJavaChecks;
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Adds a {@code spine-mc-java-checks} dependency to the given project {@link Configuration}.
@@ -54,8 +55,12 @@ public final class McJavaChecksDependency implements Logging {
     /** The configuration to be extended. */
     private final Configuration configuration;
 
+    /** The dependency to be added. */
+    private final Dependency dependency;
+
     private McJavaChecksDependency(Configuration cfg) {
         this.configuration = cfg;
+        this.dependency = checksDependency();
     }
 
     /**
@@ -95,7 +100,6 @@ public final class McJavaChecksDependency implements Logging {
     private void addDependencyTo(Configuration cfg) {
         _debug().log("Adding a dependency on `%s` to the `%s` configuration.", mcJavaChecks(), cfg);
         DependencySet dependencies = cfg.getDependencies();
-        Dependency dependency = checksDependency();
         dependencies.add(dependency);
     }
 
@@ -112,29 +116,45 @@ public final class McJavaChecksDependency implements Logging {
      */
     private class ResolutionHelper {
 
-        private final ImmutableList<UnresolvedDependencyResult> unresolved;
+        private final ResolutionResult resolutionResult;
+        private @Nullable UnresolvedDependencyResult unresolved;
 
         private ResolutionHelper() {
             Configuration configCopy = configuration.copy();
             addDependencyTo(configCopy);
-            ResolutionResult rr =
+            resolutionResult =
                     configCopy.getIncoming()
                               .getResolutionResult();
-            unresolved = unresolvedIn(rr);
         }
 
+        /**
+         * Verifies if the {@link #dependency} to be added was resolved, returning {@code true}
+         * if so.
+         *
+         * <p>If the {@link #dependency} was not resolved, the corresponding
+         * {@link UnresolvedDependencyResult} is {@linkplain #unresolved stored} for
+         * future logging needs.
+         */
         private boolean wasResolved() {
-            boolean wasResolved = unresolved.isEmpty();
-            return wasResolved;
+            Set<? extends DependencyResult> allDeps = resolutionResult.getAllDependencies();
+            String group = requireNonNull(dependency.getGroup());
+            String name = dependency.getName();
+            for (DependencyResult dep : allDeps) {
+                if (dep instanceof UnresolvedDependencyResult) {
+                    UnresolvedDependencyResult unresolved = (UnresolvedDependencyResult) dep;
+                    ComponentSelector attempted = unresolved.getAttempted();
+                    String displayName = attempted.getDisplayName();
+                    if (displayName.contains(group) && displayName.contains(name)) {
+                        this.unresolved = unresolved;
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
-
 
         private void logUnresolved() {
-            ImmutableList<String> problemReport =
-                    unresolved.stream()
-                              .map(this::toErrorMessage)
-                              .sorted()
-                              .collect(toImmutableList());
+            String problemReport = toErrorMessage(requireNonNull(unresolved));
             _warn().log(
                     "Unable to add a dependency on `%s` to the configuration `%s` because some " +
                             "dependencies could not be resolved: " +
@@ -148,16 +168,5 @@ public final class McJavaChecksDependency implements Logging {
             Throwable throwable = entry.getFailure();
             return format("%nDependency: `%s`%nProblem: `%s`", dependency, throwable);
         }
-    }
-
-    private static
-    ImmutableList<UnresolvedDependencyResult> unresolvedIn(ResolutionResult rr) {
-        Set<? extends DependencyResult> allDeps = rr.getAllDependencies();
-        ImmutableList<UnresolvedDependencyResult> unresolved =
-                allDeps.stream()
-                       .filter(UnresolvedDependencyResult.class::isInstance)
-                       .map(UnresolvedDependencyResult.class::cast)
-                       .collect(toImmutableList());
-        return unresolved;
     }
 }
