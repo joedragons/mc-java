@@ -36,7 +36,9 @@ import io.spine.internal.dependency.Guava
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
+import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.Scripts
+import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.checkstyle.CheckStyleConfig
 import io.spine.internal.gradle.excludeProtobufLite
@@ -66,9 +68,7 @@ spinePublishing {
         PublishingRepos.cloudRepo,
         PublishingRepos.cloudArtifactRegistry
     )
-    // Skip the `spine-` part of the artifact name to avoid collisions with the currently "live"
-    // versions. See https://github.com/SpineEventEngine/model-compiler/issues/3
-    spinePrefix.set(false)
+    spinePrefix.set(true)
 }
 
 allprojects {
@@ -183,6 +183,9 @@ subprojects {
     sourceSets.main {
         resources.srcDir(generatedResources)
     }
+
+    apply<IncrementGuard>()
+    apply<VersionWriter>()
 
     apply {
         from(Scripts.slowTests(project))

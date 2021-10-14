@@ -30,8 +30,9 @@ import io.spine.internal.dependency.Spine
 
 dependencies {
     implementation(files("${System.getProperty("java.home")}/../lib/tools.jar"))
-    implementation(Spine(project).base)
     implementation(JavaX.annotations)
     implementation(Grpc.core)
-    testImplementation(Spine(project).testlib)
+    val spine = Spine(project)
+    implementation(spine.base)
+    testImplementation(spine.testlib)
 }

@@ -23,42 +23,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@file:JvmName("Artifacts")
 
-package io.spine.tools.mc.java.checks
+import io.spine.internal.dependency.Spine
 
-import io.spine.tools.gradle.Artifact
-import io.spine.tools.gradle.Dependency
-import io.spine.tools.gradle.DependencyVersions
-import io.spine.tools.gradle.ThirdPartyDependency
+dependencies {
+    api(gradleApi())
 
-/**
- * The name of the Maven artifact of the Model Compiler for Java Checks.
- */
-internal const val MC_JAVA_CHECKS_ARTIFACT = "mc-java-checks"
+    val spine = Spine(project)
+    api(spine.modelCompiler)
 
-private val versions = DependencyVersions.loadFor(MC_JAVA_CHECKS_ARTIFACT)
-
-/**
- * The Maven artifact containing the `mc-java-checks` module.
- */
-@get:JvmName("mcJavaChecks")
-internal val mcJavaChecks: Artifact by lazy {
-    Artifact.newBuilder()
-        .useSpineToolsGroup()
-        .setName(MC_JAVA_CHECKS_ARTIFACT)
-        .setVersion(mcJavaChecksVersion)
-        .build()
+    testImplementation(spine.testlib)
+    testImplementation(gradleTestKit())
+    testImplementation(spine.pluginTestlib)
 }
-
-/**
- * The version of the Model Compiler for Java Checks.
- */
-@get:JvmName("mcJavaChecksVersion")
-internal val mcJavaChecksVersion: String by lazy {
-    val self: Dependency = ThirdPartyDependency(Artifact.SPINE_TOOLS_GROUP, MC_JAVA_CHECKS_ARTIFACT)
-    versions.versionOf(self)
-        .orElseThrow { IllegalStateException() }
-}
-
-

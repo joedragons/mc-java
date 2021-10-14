@@ -52,7 +52,7 @@ buildscript {
         classpath(io.spine.internal.dependency.Protobuf.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
-        classpath("io.spine.tools:mc-java:${mcJavaVersion}")
+        classpath("io.spine.tools:spine-mc-java:${mcJavaVersion}")
         classpath(io.spine.internal.dependency.ErrorProne.GradlePlugin.lib)
     }
 }
