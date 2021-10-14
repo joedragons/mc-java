@@ -62,7 +62,6 @@ import static io.spine.base.MessageFile.REJECTIONS;
 /**
  * A configuration for the Model Compiler code generation.
  */
-@SuppressWarnings("OverlyCoupledClass") // OK for a Gradle config.
 public final class JavaCodegenConfig extends Config<SpineProtocConfig> {
 
     private final SignalConfig commands;
