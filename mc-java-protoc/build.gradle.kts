@@ -30,15 +30,16 @@ import io.spine.internal.dependency.Spine
 
 dependencies {
     implementation(gradleApi())
-    implementation(Spine(project).toolBase)
-    implementation(Spine(project).pluginBase)
+    val spine = Spine(project)
+    implementation(spine.toolBase)
+    implementation(spine.pluginBase)
     implementation(project(":mc-java-validation"))
     implementation(JavaPoet.lib)
     implementation(JavaX.annotations)
 
-    testImplementation(Spine(project).base)
-    testImplementation(Spine(project).testlib)
-    testImplementation(Spine(project).pluginTestlib)
+    testImplementation(spine.base)
+    testImplementation(spine.testlib)
+    testImplementation(spine.pluginTestlib)
     testImplementation(project(":mc-java"))
 }
 
