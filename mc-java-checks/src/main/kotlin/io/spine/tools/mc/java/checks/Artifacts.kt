@@ -35,7 +35,7 @@ import io.spine.tools.gradle.ThirdPartyDependency
 /**
  * The name of the Maven artifact of the Model Compiler for Java Checks.
  */
-internal const val MC_JAVA_CHECKS_ARTIFACT = "mc-java-checks"
+internal const val MC_JAVA_CHECKS_ARTIFACT = "spine-mc-java-checks"
 
 private val versions = DependencyVersions.loadFor(MC_JAVA_CHECKS_ARTIFACT)
 
@@ -58,7 +58,7 @@ internal val mcJavaChecks: Artifact by lazy {
 internal val mcJavaChecksVersion: String by lazy {
     val self: Dependency = ThirdPartyDependency(Artifact.SPINE_TOOLS_GROUP, MC_JAVA_CHECKS_ARTIFACT)
     versions.versionOf(self)
-        .orElseThrow { IllegalStateException() }
+        .orElseThrow { IllegalStateException("Unable to load versions of ${self}.") }
 }
 
 
