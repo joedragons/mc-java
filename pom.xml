@@ -10,7 +10,7 @@ all modules and does not describe the project structure per-subproject.
  -->
 <groupId>io.spine.tools</groupId>
 <artifactId>mc-java</artifactId>
-<version>0.0.6</version>
+<version>0.0.7</version>
 
 <inceptionYear>2015</inceptionYear>
 
@@ -56,19 +56,19 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-model-compiler</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-plugin-base</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-tool-base</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <scope>compile</scope>
   </dependency>
   <dependency>
@@ -128,7 +128,7 @@ all modules and does not describe the project structure per-subproject.
   <dependency>
     <groupId>io.spine.tools</groupId>
     <artifactId>spine-plugin-testlib</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <scope>test</scope>
   </dependency>
   <dependency>
