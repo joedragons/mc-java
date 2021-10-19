@@ -24,35 +24,60 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.protoc.message;
+package io.spine.tools.mc.java.codegen;
 
-import io.spine.tools.mc.java.protoc.given.TestInterface;
 import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.JavaClassName;
-import io.spine.tools.protoc.plugin.message.tests.ProjectCreated;
-import io.spine.type.MessageType;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.checkerframework.checker.regex.qual.Regex;
 
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileSuffix;
-import static io.spine.tools.protoc.Names.className;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
-@DisplayName("`GenerateInterfaces` should")
-final class InterfacesTest {
+/**
+ * A factory of file patterns.
+ */
+public final class PatternFactory {
 
-    @DisplayName("implement interface")
-    @Test
-    void implementInterface() {
-        FilePattern pattern = fileSuffix("test_events.proto");
-        JavaClassName className = className(TestInterface.class);
-        ImplementByPattern implementByPattern = newTask(className, pattern);
-        MessageType targetType = new MessageType(ProjectCreated.getDescriptor());
-        assertThat(implementByPattern.generateFor(targetType))
-                .isNotEmpty();
+    private static final PatternFactory instance = new PatternFactory();
+
+    static PatternFactory instance() {
+        return instance;
     }
 
-    private static ImplementByPattern newTask(JavaClassName className, FilePattern pattern) {
-        return new ImplementByPattern(className, pattern);
+    /**
+     * Prevents direct instantiation.
+     */
+    private PatternFactory() {
+    }
+
+    /**
+     * Creates a new suffix pattern.
+     *
+     * @param value
+     *         the suffix value
+     */
+    public FilePattern suffix(String value) {
+        checkNotEmptyOrBlank(value);
+        return FilePatterns.fileSuffix(value);
+    }
+
+    /**
+     * Creates a new prefix pattern.
+     *
+     * @param value
+     *         the prefix value
+     */
+    public FilePattern prefix(String value) {
+        checkNotEmptyOrBlank(value);
+        return FilePatterns.filePrefix(value);
+    }
+
+    /**
+     * Creates a new regular expression pattern.
+     *
+     * @param value
+     *         the regex value
+     */
+    public FilePattern regex(@Regex String value) {
+        checkNotEmptyOrBlank(value);
+        return FilePatterns.fileRegex(value);
     }
 }

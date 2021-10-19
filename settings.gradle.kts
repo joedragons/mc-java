@@ -30,6 +30,7 @@ include(
     "javadoc-filter",
     "javadoc-style",
     "mc-java",
+    "mc-java-annotation",
     "mc-java-base",
     "mc-java-checks",
     "mc-java-protoc",

@@ -24,35 +24,46 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.protoc.message;
+package io.spine.tools.mc.java.annotation.mark;
 
-import io.spine.tools.mc.java.protoc.given.TestInterface;
-import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.JavaClassName;
-import io.spine.tools.protoc.plugin.message.tests.ProjectCreated;
-import io.spine.type.MessageType;
+import com.google.common.testing.NullPointerTester;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileSuffix;
-import static io.spine.tools.protoc.Names.className;
+import static com.google.common.testing.NullPointerTester.Visibility.PACKAGE;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("`GenerateInterfaces` should")
-final class InterfacesTest {
+@DisplayName("`MethodPattern` should")
+class MethodPatternTest {
 
-    @DisplayName("implement interface")
     @Test
-    void implementInterface() {
-        FilePattern pattern = fileSuffix("test_events.proto");
-        JavaClassName className = className(TestInterface.class);
-        ImplementByPattern implementByPattern = newTask(className, pattern);
-        MessageType targetType = new MessageType(ProjectCreated.getDescriptor());
-        assertThat(implementByPattern.generateFor(targetType))
-                .isNotEmpty();
+    @DisplayName("not be created with null parameters")
+    void notAllowNullInCtor() {
+        new NullPointerTester()
+                .testStaticMethods(MethodPattern.class, PACKAGE);
     }
 
-    private static ImplementByPattern newTask(JavaClassName className, FilePattern pattern) {
-        return new ImplementByPattern(className, pattern);
+    @Test
+    @DisplayName("not allow null parameters")
+    void notAllowNulls() {
+        new NullPointerTester()
+                .testInstanceMethods(MethodPattern.exactly("getValue"), PACKAGE);
+    }
+
+    @Test
+    @DisplayName("match exactly by name")
+    void matchExactly() {
+        String methodName = "getUnknownFields";
+        MethodPattern pattern = MethodPattern.exactly(methodName);
+        assertTrue(pattern.matches(methodName));
+    }
+
+    @Test
+    @DisplayName("not match different names")
+    void notMatch() {
+        String methodName = "parseFrom";
+        MethodPattern pattern = MethodPattern.exactly(methodName);
+        assertFalse(pattern.matches(methodName.toLowerCase()));
     }
 }

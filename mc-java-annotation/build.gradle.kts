@@ -24,61 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.protobuf
-import io.spine.internal.dependency.Grpc
-import io.spine.internal.dependency.JavaPoet
-import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
-import io.spine.internal.gradle.WriteVersions
-
-var protocPluginDependency: Dependency? = null
-val spineBaseVersion: String by extra
 
 dependencies {
-    implementation(JavaPoet.lib)
     implementation(Roaster.api) {
         exclude(group = "com.google.guava")
     }
     implementation(Roaster.jdt) {
         exclude(group = "com.google.guava")
     }
-    implementation(Protobuf.GradlePlugin.lib)
 
+    implementation(gradleApi())
+
+    val spine = Spine(project)
     implementation(project(":mc-java-base"))
-    implementation(project(":mc-java-annotation"))
-    implementation(project(":mc-java-checks"))
 
-    testImplementation(Spine(project).testlib)
-    testImplementation(gradleTestKit())
-    testImplementation(Spine(project).pluginTestlib)
-}
-
-protobuf {
-    generateProtoTasks {
-        all().forEach { task ->
-            val scope = task.sourceSet.name
-            task.generateDescriptorSet = true
-            with(task.descriptorSetOptions) {
-                path = "$buildDir/descriptors/${scope}/io.spine.tools.spine-mc-java-${scope}.desc"
-                includeImports = true
-                includeSourceInfo = true
-            }
-        }
-    }
-}
-
-// Tests use the Protobuf plugin.
-tasks.test {
-    dependsOn(
-        project(":mc-java-base").tasks.publishToMavenLocal,
-        project(":mc-java-checks").tasks.publishToMavenLocal,
-        project(":mc-java-protoc").tasks.publishToMavenLocal,
-        tasks.publishToMavenLocal
-    )
-}
-
-tasks.withType<WriteVersions> {
-    version(Grpc.protobufPlugin)
+    testImplementation(spine.pluginTestlib)
 }

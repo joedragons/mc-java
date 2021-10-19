@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val mcVersion by extra("0.0.8")
-val mcJavaVersion by extra(mcVersion)
-val versionToPublish by extra(mcJavaVersion)
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.67")
+package io.spine.tools.mc.java.gradle;
+
+import io.spine.annotation.Beta;
+import io.spine.annotation.Experimental;
+import io.spine.annotation.Internal;
+import io.spine.annotation.SPI;
+import io.spine.code.java.ClassName;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static com.google.common.truth.Truth.assertThat;
+
+@DisplayName("`CodeGenAnnotations` extension should")
+class CodeGenAnnotationsTest {
+
+    @Test
+    @DisplayName("have default values")
+    void defaults() {
+        CodeGenAnnotations annotations = new CodeGenAnnotations();
+
+        assertMatches(Experimental.class, annotations.experimentalClassName());
+        assertMatches(SPI.class, annotations.spiClassName());
+        assertMatches(Internal.class, annotations.internalClassName());
+        assertMatches(Beta.class, annotations.betaClassName());
+    }
+
+    private static void assertMatches(Class<?> annotationClass, ClassName className) {
+        assertThat(className.value())
+                .isEqualTo(annotationClass.getName());
+    }
+}

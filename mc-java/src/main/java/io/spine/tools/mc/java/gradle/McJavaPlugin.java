@@ -27,6 +27,7 @@ package io.spine.tools.mc.java.gradle;
 
 import io.spine.logging.Logging;
 import io.spine.tools.gradle.SpinePlugin;
+import io.spine.tools.mc.java.annotation.gradle.AnnotatorPlugin;
 import io.spine.tools.mc.java.checks.gradle.McJavaChecksPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

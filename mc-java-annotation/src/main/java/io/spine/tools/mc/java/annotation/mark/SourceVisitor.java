@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val mcVersion by extra("0.0.8")
-val mcJavaVersion by extra(mcVersion)
-val versionToPublish by extra(mcJavaVersion)
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.67")
+package io.spine.tools.mc.java.annotation.mark;
+
+import org.jboss.forge.roaster.model.impl.AbstractJavaSource;
+import org.jboss.forge.roaster.model.source.JavaSource;
+
+import java.util.function.Consumer;
+
+/**
+ * A {@link AbstractJavaSource} visitor.
+ *
+ * <p>Used to perform some actions with {@link AbstractJavaSource}.
+ * A typical scenario is modification of the source or its validation.
+ *
+ * @param <T> the type of {@link JavaSource} to visit
+ */
+@FunctionalInterface
+interface SourceVisitor<T extends JavaSource<T>> extends Consumer<AbstractJavaSource<T>> {
+}
