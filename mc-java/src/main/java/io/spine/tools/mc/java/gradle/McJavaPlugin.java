@@ -40,16 +40,9 @@ import java.util.stream.Stream;
  */
 public class McJavaPlugin implements Plugin<Project>, Logging {
 
-    /**
-     * Obtains the extension name of the plugin.
-     */
-    public static String extensionName() {
-        return McJavaExtension.NAME;
-    }
-
     @Override
     public void apply(Project project) {
-        createExtensionIn(project);
+        McJavaExtension.createIn(project);
 
         // Plugins that deal with Protobuf types must depend on `mergeDescriptorSet` and
         // `mergeTestDescriptorSet` tasks to be able to access every declared type
@@ -62,13 +55,6 @@ public class McJavaPlugin implements Plugin<Project>, Logging {
                   new JavaProtocConfigurationPlugin(),
                   new McJavaChecksPlugin())
               .forEach(plugin -> apply(plugin, project));
-    }
-
-    private void createExtensionIn(Project project) {
-        String extensionName = extensionName();
-        _debug().log("Adding the extension `%s` to the project `%s`.", extensionName, project);
-        project.getExtensions()
-               .create(extensionName, McJavaExtension.class, project);
     }
 
     private void apply(SpinePlugin plugin, Project project) {

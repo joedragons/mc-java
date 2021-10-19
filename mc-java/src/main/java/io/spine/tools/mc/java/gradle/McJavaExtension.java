@@ -170,6 +170,21 @@ public class McJavaExtension {
     }
 
     /**
+     * Obtains the extension name of the plugin.
+     */
+    public static String name() {
+        return NAME;
+    }
+
+    public static void createIn(Project project) {
+        String extensionName = name();
+        logger.atFine()
+              .log("Adding the extension `%s` to the project `%s`.", extensionName, project);
+        project.getExtensions()
+               .create(extensionName, McJavaExtension.class, project);
+    }
+
+    /**
      * Configures the Model Compilation code generation by applying the given action.
      */
     public void java(Action<JavaCodegenConfig> action) {
@@ -376,6 +391,6 @@ public class McJavaExtension {
     private static McJavaExtension extension(Project project) {
         return (McJavaExtension)
                 project.getExtensions()
-                       .getByName(McJavaPlugin.extensionName());
+                       .getByName(name());
     }
 }
