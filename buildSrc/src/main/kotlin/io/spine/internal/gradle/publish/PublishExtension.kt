@@ -60,8 +60,7 @@ abstract class PublishExtension @Inject constructor() {
          * Creates a new instance of the extension and adds it to the given project.
          */
         fun createIn(project: Project): PublishExtension {
-            val extension: PublishExtension =
-                project.extensions.create(name, PublishExtension::class.java)
+            val extension = project.extensions.create(name, PublishExtension::class.java)
             extension.spinePrefix.convention(true)
             return extension
         }

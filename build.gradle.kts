@@ -32,6 +32,7 @@ import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.CheckerFramework
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.FindBugs
+import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.Guava
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
@@ -46,6 +47,7 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.spinePublishing
+import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.pom.PomGenerator
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -81,6 +83,8 @@ allprojects {
 
     group = "io.spine.tools"
     version = extra["versionToPublish"]!!
+
+    repositories.applyStandard()
 }
 
 subprojects {
@@ -98,7 +102,6 @@ subprojects {
         from(Scripts.testArtifacts(project))
     }
 
-    repositories.applyStandard()
 
     dependencies {
         errorprone(ErrorProne.core)
@@ -160,9 +163,11 @@ subprojects {
         outputs.file(propertiesFile)
 
         val versions = Properties()
-        versions.setProperty("baseVersion", spineBaseVersion)
-        versions.setProperty("protobufVersion", Protobuf.version)
-        versions.setProperty("gRPCVersion", io.spine.internal.dependency.Grpc.version)
+        with(versions) {
+            setProperty("baseVersion", spineBaseVersion)
+            setProperty("protobufVersion", Protobuf.version)
+            setProperty("gRPCVersion", Grpc.version)
+        }
 
         @Suppress("UNCHECKED_CAST")
         inputs.properties(HashMap(versions) as MutableMap<String, *>)
@@ -171,7 +176,9 @@ subprojects {
             createParentDirs(propertiesFile)
             propertiesFile.createNewFile()
             propertiesFile.outputStream().use {
-                versions.store(it, "Versions of dependencies of the Model Compiler plugin and the Spine Protoc plugin.")
+                versions.store(it,
+                    "Versions of dependencies of the Spine Model Compiler for Java plugin and" +
+                            " the Spine Protoc plugin.")
             }
         }
 
@@ -198,12 +205,9 @@ subprojects {
 }
 
 apply {
-    // Aggregated coverage report across all subprojects.
-    from(Scripts.jacoco(project))
-
     // Generate a repository-wide report of 3rd-party dependencies and their licenses.
     from(Scripts.repoLicenseReport(project))
-
 }
 
+JacocoConfig.applyTo(project)
 PomGenerator.applyTo(project)
