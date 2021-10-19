@@ -24,11 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.internal.gradle.report.license
 
-// https://checkstyle.sourceforge.io/
-// See `io.spine.internal.gradle.checkstyle.CheckStyleConfig`.
-@Suppress("unused")
-object CheckStyle {
-    const val version = "8.29"
+import com.github.jk1.license.ConfigurationData
+
+/**
+ * The names of Gradle `Configuration`s.
+ */
+@Suppress("EnumEntryName", "EnumNaming")
+/* Dubbing the actual values in Gradle. */
+internal enum class Configuration {
+    runtime,
+    runtimeClasspath
+}
+
+/**
+ * Tells whether this configuration data is one of the passed `Configuration` types.
+ */
+internal fun ConfigurationData.isOneOf(vararg configs: Configuration): Boolean {
+    configs.forEach {
+        if (it.name == this.name) {
+            return true
+        }
+    }
+    return false
 }

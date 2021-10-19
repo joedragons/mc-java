@@ -24,11 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.internal.gradle.report.coverage
 
-// https://checkstyle.sourceforge.io/
-// See `io.spine.internal.gradle.checkstyle.CheckStyleConfig`.
-@Suppress("unused")
-object CheckStyle {
-    const val version = "8.29"
+import java.io.File
+
+/**
+ * Utilities for filtering the groups of `File`s.
+ */
+internal object FileFilter {
+
+    /**
+     * Excludes the generated files from this file collection, leaving only those which were
+     * created by human beings.
+     */
+    fun producedByHuman(files: Iterable<File>): Iterable<File> {
+        return files.filter { !it.isGenerated }
+    }
+
+    /**
+     * Filters this file collection so that only generated files are present.
+     */
+    fun generatedOnly(files: Iterable<File>): Iterable<File> {
+        return files.filter { it.isGenerated }
+    }
 }
