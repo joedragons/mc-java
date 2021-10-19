@@ -47,7 +47,7 @@ class McJavaChecksExtensionTest {
     void setUp() {
         project = StubProject.createFor(getClass()).get();
         ExtensionContainer extensions = project.getExtensions();
-        extension = extensions.create(McJavaChecksPlugin.extensionName(),
+        extension = extensions.create(McJavaChecksExtension.name(),
                                       McJavaChecksExtension.class);
     }
 

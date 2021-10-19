@@ -59,7 +59,7 @@ class McJavaChecksPluginTest {
         project.getPluginManager()
                .apply(McJavaChecksPlugin.class);
         ExtensionContainer extensions = project.getExtensions();
-        Object found = extensions.findByName(McJavaChecksPlugin.extensionName());
+        Object found = extensions.findByName(McJavaChecksExtension.name());
         assertNotNull(found);
     }
 

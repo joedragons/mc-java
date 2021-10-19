@@ -43,13 +43,6 @@ import org.gradle.api.Project;
  */
 public final class McJavaChecksPlugin extends SpinePlugin {
 
-    //TODO:2021-10-12:alexander.yevsyukov: Have `modelCompiler/java/checks` instead.
-    private static final String EXTENSION_NAME = "modelChecks";
-
-    public static String extensionName() {
-        return EXTENSION_NAME;
-    }
-
     /**
      * Applies the plugin to the given {@code Project}.
      *

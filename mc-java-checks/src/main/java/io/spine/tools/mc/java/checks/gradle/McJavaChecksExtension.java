@@ -29,8 +29,6 @@ package io.spine.tools.mc.java.checks.gradle;
 import io.spine.tools.mc.checks.Severity;
 import org.gradle.api.Project;
 
-import static io.spine.tools.mc.java.checks.gradle.McJavaChecksPlugin.extensionName;
-
 /**
  * Allows configuring severity for all the Spine Java Checks applied to the project.
  *
@@ -39,20 +37,27 @@ import static io.spine.tools.mc.java.checks.gradle.McJavaChecksPlugin.extensionN
 @SuppressWarnings("PublicField" /* required for exposing the property in Gradle. */)
 public class McJavaChecksExtension {
 
+    //TODO:2021-10-12:alexander.yevsyukov: Have `modelCompiler/java/checks` instead.
+    private static final String EXTENSION_NAME = "modelChecks";
+
     public Severity useValidatingBuilderSeverity;
 
     /**
-     * Creates an instance of the extension in the passed project.
+     * Creates an instance of the extension in the given project.
      */
     static void createIn(Project project) {
         project.getExtensions()
-               .create(extensionName(), McJavaChecksExtension.class);
+               .create(name(), McJavaChecksExtension.class);
     }
 
     public static Severity getUseValidatingBuilderSeverity(Project project) {
         McJavaChecksExtension extension = (McJavaChecksExtension)
                 project.getExtensions()
-                       .getByName(extensionName());
+                       .getByName(name());
         return extension.useValidatingBuilderSeverity;
+    }
+
+    public static String name() {
+        return EXTENSION_NAME;
     }
 }

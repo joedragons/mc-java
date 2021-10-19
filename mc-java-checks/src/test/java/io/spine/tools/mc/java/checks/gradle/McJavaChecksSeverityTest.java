@@ -85,7 +85,7 @@ class McJavaChecksSeverityTest {
     private McJavaChecksExtension configureSpineCheckExtension() {
         ExtensionContainer extensions = project.getExtensions();
         McJavaChecksExtension extension =
-                extensions.create(McJavaChecksPlugin.extensionName(),
+                extensions.create(McJavaChecksExtension.name(),
                                   McJavaChecksExtension.class);
         return extension;
     }
