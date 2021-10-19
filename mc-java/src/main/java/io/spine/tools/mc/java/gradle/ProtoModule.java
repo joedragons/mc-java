@@ -54,7 +54,6 @@ final class ProtoModule {
     /**
      * The name of the source set which defines where the Protobuf sources are located in a module.
      */
-    @SuppressWarnings("DuplicateStringLiteralInspection") // local semantics
     private static final String PROTO_SOURCE_SET = "proto";
 
     private final Project project;
