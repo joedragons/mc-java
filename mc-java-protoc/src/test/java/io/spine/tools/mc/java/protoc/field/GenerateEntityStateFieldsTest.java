@@ -47,7 +47,7 @@ import org.junit.jupiter.api.Test;
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.Assertions.assertIllegalArgument;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
-import static io.spine.tools.mc.java.codegen.Names.className;
+import static io.spine.tools.protoc.Names.className;
 import static io.spine.tools.mc.java.protoc.InsertionPoint.class_scope;
 
 @DisplayName("`GenerateEntityStateFields` task should")

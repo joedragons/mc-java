@@ -46,6 +46,7 @@ import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.PublishingRepos
+import io.spine.internal.gradle.publish.PublishingRepos.gitHub
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.pom.PomGenerator
@@ -68,7 +69,8 @@ spinePublishing {
     projectsToPublish.addAll(subprojects.map { it.path })
     targetRepositories.addAll(
         PublishingRepos.cloudRepo,
-        PublishingRepos.cloudArtifactRegistry
+        PublishingRepos.cloudArtifactRegistry,
+        gitHub("mc-java")
     )
     spinePrefix.set(true)
 }
@@ -119,8 +121,20 @@ subprojects {
         testRuntimeOnly(JUnit.runner)
     }
 
-    configurations.forceVersions()
-    configurations.excludeProtobufLite()
+    val spineBaseVersion: String by extra
+
+    with(configurations) {
+        forceVersions()
+        excludeProtobufLite()
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-testlib:$spineBaseVersion"
+                )
+            }
+        }
+    }
 
     val javaVersion = JavaVersion.VERSION_1_8
 
@@ -153,7 +167,6 @@ subprojects {
         }
     }
 
-    val spineBaseVersion: String by extra
     val generatedResources = "$projectDir/generated/main/resources"
 
     tasks.create<DefaultTask>(name = "prepareProtocConfigVersions") {

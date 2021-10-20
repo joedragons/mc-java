@@ -44,7 +44,7 @@ import java.nio.file.Path;
 import java.util.Base64;
 
 import static com.google.common.base.Charsets.UTF_8;
-import static io.spine.tools.mc.java.codegen.Names.className;
+import static io.spine.tools.protoc.Names.className;
 
 /**
  * A helper class for {@link com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest

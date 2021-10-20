@@ -40,7 +40,7 @@ dependencies {
     testImplementation(spine.base)
     testImplementation(spine.testlib)
     testImplementation(spine.pluginTestlib)
-    testImplementation(project(":mc-java"))
+    testImplementation(project(":mc-java-base"))
 }
 
 tasks.jar {

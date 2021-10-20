@@ -102,10 +102,10 @@ public final class InterfaceGen extends CodeGenerator {
         }
         for (Messages messages : spineProtocConfig.getMessagesList()) {
             Pattern pattern = messages.getPattern();
-
-            for (AddInterface ai : messages.getAddInterfaceList()) {
-                tasks.add(new ImplementByPattern(ai.getName(), pattern));
-            }
+            messages.getAddInterfaceList()
+                    .stream()
+                    .map(ai -> new ImplementByPattern(ai.getName(), pattern))
+                    .forEach(tasks::add);
         }
         return new InterfaceGen(tasks.build());
     }
