@@ -24,11 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.internal.gradle.report.coverage
 
-// https://checkstyle.sourceforge.io/
-// See `io.spine.internal.gradle.checkstyle.CheckStyleConfig`.
-@Suppress("unused")
-object CheckStyle {
-    const val version = "8.29"
+/**
+ * The names of Gradle tasks involved into the JaCoCo reporting.
+ */
+@Suppress("EnumEntryName", "EnumNaming") /* Dubbing the actual values in Gradle. */
+internal enum class TaskName {
+    jacocoRootReport,
+    copyReports,
+
+    check,
+    jacocoTestReport
 }

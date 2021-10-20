@@ -24,11 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.internal.gradle.report.coverage
 
-// https://checkstyle.sourceforge.io/
-// See `io.spine.internal.gradle.checkstyle.CheckStyleConfig`.
-@Suppress("unused")
-object CheckStyle {
-    const val version = "8.29"
+/**
+ * File extensions.
+ */
+internal enum class FileExtension(val value: String) {
+
+    /**
+     * Extension of a Java source file.
+     */
+    JAVA_SOURCE(".java"),
+
+    /**
+     * Extension of a Java compiled file.
+     */
+    COMPILED_CLASS(".class");
+
+    /**
+     * The number of symbols in the extension.
+     */
+    val length: Int
+        get() = this.value.length
 }
