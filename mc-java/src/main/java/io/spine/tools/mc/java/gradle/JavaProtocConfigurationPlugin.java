@@ -171,16 +171,19 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         try (FileOutputStream fos = new FileOutputStream(configPath.toFile())) {
             config.writeTo(fos);
         } catch (FileNotFoundException e) {
-            throw newIllegalStateException(
-                    e,
-                    "Unable to create Spine Protoc Plugin configuration file at: `%s`.",
-                    configPath);
+            throw errorOn("create", e, configPath);
         } catch (IOException e) {
-            throw newIllegalStateException(
-                    e,
-                    "Unable store Spine Protoc Plugin configuration file at: `%s`.",
-                    configPath);
+            throw errorOn("store", e, configPath);
         }
+    }
+
+    private static
+    IllegalStateException errorOn(String action, IOException cause, Path configPath) {
+        return newIllegalStateException(
+                cause,
+                "Unable to %s Spine Protoc Plugin configuration file at: `%s`.",
+                action,
+                configPath);
     }
 
     private static String base64Encoded(String value) {
