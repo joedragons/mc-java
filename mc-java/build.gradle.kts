@@ -73,6 +73,7 @@ protobuf {
 tasks.test {
     dependsOn(
         project(":mc-java-base").tasks.publishToMavenLocal,
+        project(":mc-java-annotation").tasks.publishToMavenLocal,
         project(":mc-java-checks").tasks.publishToMavenLocal,
         project(":mc-java-protoc").tasks.publishToMavenLocal,
         tasks.publishToMavenLocal

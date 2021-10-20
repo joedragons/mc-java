@@ -48,7 +48,7 @@ import static io.spine.tools.gradle.JavaTaskName.classes;
 import static io.spine.tools.gradle.JavaTaskName.compileJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.preClean;
-import static io.spine.tools.mc.java.gradle.ModelVerifierTaskName.verifyModel;
+import static io.spine.tools.mc.java.gradle.plugins.ModelVerifierTaskName.verifyModel;
 import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
 import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
 import static io.spine.tools.gradle.testing.GradleProject.javaPlugin;

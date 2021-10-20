@@ -24,22 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Roaster
-import io.spine.internal.dependency.Spine
+/**
+ * This package provides code-generation of rejections.
+ */
 
-dependencies {
-    implementation(Roaster.api) {
-        exclude(group = "com.google.guava")
-    }
-    implementation(Roaster.jdt) {
-        exclude(group = "com.google.guava")
-    }
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.rejection.gen;
 
-    implementation(gradleApi())
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    val spine = Spine(project)
-    implementation(project(":mc-java-base"))
-
-    testImplementation(spine.pluginTestlib)
-    testImplementation(gradleTestKit())
-}
+import javax.annotation.ParametersAreNonnullByDefault;

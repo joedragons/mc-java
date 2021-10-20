@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.gradle.plugins;
 
 import com.google.common.base.Charsets;
 import com.google.protobuf.gradle.ExecutableLocator;
@@ -36,6 +36,7 @@ import io.spine.tools.gradle.SourceScope;
 import io.spine.tools.gradle.TaskName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.GeneratedRoot;
+import io.spine.tools.mc.java.gradle.McJavaExtension;
 import io.spine.tools.protoc.SpineProtocConfig;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Project;

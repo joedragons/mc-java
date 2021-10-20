@@ -26,14 +26,13 @@
 
 package io.spine.tools.mc.java.annotation.mark;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.Descriptors.FileDescriptor;
-import io.spine.tools.java.fs.SourceFile;
-import io.spine.tools.java.code.NestedClassName;
 import io.spine.code.java.ClassName;
 import io.spine.code.java.SimpleClassName;
 import io.spine.code.proto.TypeSet;
+import io.spine.tools.java.code.NestedClassName;
+import io.spine.tools.java.fs.SourceFile;
 import org.jboss.forge.roaster.model.impl.AbstractJavaSource;
 import org.jboss.forge.roaster.model.source.AnnotationTargetSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -127,7 +126,7 @@ final class PatternAnnotator extends Annotator {
                 return root;
             } else {
                 ImmutableList<SimpleClassName> names = NestedClassName.from(targetClass).split();
-                Preconditions.checkState(!names.isEmpty(), "Invalid class name %s.", targetClass);
+                checkState(!names.isEmpty(), "Invalid class name `%s`.", targetClass);
                 SimpleClassName rootName = names.get(0);
                 checkArgument(root.getName()
                                   .equals(rootName.value()));

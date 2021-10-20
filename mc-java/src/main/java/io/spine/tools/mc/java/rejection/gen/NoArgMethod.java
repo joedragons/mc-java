@@ -24,13 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.mc.java.rejection.gen;
+
+import com.google.errorprone.annotations.Immutable;
+import io.spine.tools.protoc.Method;
+
 /**
- * Classes for <a href = "https://github.com/square/javapoet">JavaPoet</a>-based code generation.
+ * A reference to a method with no arguments.
  */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.rejection;
+@Immutable
+final class NoArgMethod extends Method {
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    private static final long serialVersionUID = 0L;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    NoArgMethod(String methodName) {
+        super(methodName);
+    }
+
+    public String name() {
+        return value();
+    }
+
+    String signature() {
+        return value() + "()";
+    }
+}

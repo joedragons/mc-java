@@ -24,28 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.rejection;
+package io.spine.tools.mc.java.gradle.plugins;
 
-import com.google.errorprone.annotations.Immutable;
-import io.spine.tools.protoc.Method;
+import io.spine.annotation.Internal;
+import io.spine.tools.gradle.TaskName;
 
 /**
- * A reference to a method with no arguments.
+ * Names of Gradle tasks defined by the Spine Model Verifier plugin.
  */
-@Immutable
-final class NoArgMethod extends Method {
+@Internal
+public enum ModelVerifierTaskName implements TaskName {
 
-    private static final long serialVersionUID = 0L;
-
-    NoArgMethod(String methodName) {
-        super(methodName);
-    }
-
-    public String name() {
-        return value();
-    }
-
-    String signature() {
-        return value() + "()";
-    }
+    /**
+     * Verifies correctness of the domain model definition.
+     */
+    verifyModel
 }

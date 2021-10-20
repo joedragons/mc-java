@@ -24,22 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Roaster
-import io.spine.internal.dependency.Spine
+/**
+ * This package provides
+ * the {@linkplain io.spine.tools.mc.java.gradle.McJavaExtension Gradle project extension}
+ * of Spine Model Compiler for Java ({@code mc-java}) and associated types.
+ *
+ * <p>The extension is the central place of the configuration of {@code mc-java}.
+ * Therefore, this package is used by modules that comprise {@code mc-java} for obtaining
+ * corresponding configuration settings.
+ */
 
-dependencies {
-    implementation(Roaster.api) {
-        exclude(group = "com.google.guava")
-    }
-    implementation(Roaster.jdt) {
-        exclude(group = "com.google.guava")
-    }
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.gradle;
 
-    implementation(gradleApi())
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    val spine = Spine(project)
-    implementation(project(":mc-java-base"))
-
-    testImplementation(spine.pluginTestlib)
-    testImplementation(gradleTestKit())
-}
+import javax.annotation.ParametersAreNonnullByDefault;

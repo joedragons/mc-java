@@ -29,7 +29,7 @@
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.gradle.plugins;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

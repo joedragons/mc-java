@@ -29,10 +29,9 @@ package io.spine.tools.mc.java.annotation.mark;
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
-import io.spine.tools.java.fs.SourceFile;
 import io.spine.code.java.ClassName;
 import io.spine.code.java.SimpleClassName;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import io.spine.tools.java.fs.SourceFile;
 import org.jboss.forge.roaster.model.impl.AbstractJavaSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
@@ -57,20 +56,20 @@ final class MessageAnnotator extends OptionAnnotator<Descriptor> {
     }
 
     @Override
-    public final void annotate() {
+    public void annotate() {
         for (FileDescriptor file : descriptors()) {
             annotate(file);
         }
     }
 
     @Override
-    protected final void annotateOneFile(FileDescriptor file) {
+    protected void annotateOneFile(FileDescriptor file) {
         SourceFile outerClass = SourceFile.forOuterClassOf(file.toProto());
         rewriteSource(outerClass, new AnnotateNestedType(file));
     }
 
     @Override
-    protected final void annotateMultipleFiles(FileDescriptor file) {
+    protected void annotateMultipleFiles(FileDescriptor file) {
         for (Descriptor definitionDescriptor : getDefinitions(file)) {
             if (shouldAnnotate(definitionDescriptor)) {
                 annotateMessageTypes(definitionDescriptor, file);
@@ -88,15 +87,15 @@ final class MessageAnnotator extends OptionAnnotator<Descriptor> {
     }
 
     static <T extends JavaSource<T>>
-    JavaSource findNestedType(AbstractJavaSource<T> enclosingClass, String typeName) {
-        for (JavaSource nestedType : enclosingClass.getNestedTypes()) {
+    JavaSource<?> findNestedType(AbstractJavaSource<T> enclosingClass, String typeName) {
+        for (JavaSource<?> nestedType : enclosingClass.getNestedTypes()) {
             if (nestedType.getName()
                           .equals(typeName)) {
                 return nestedType;
             }
         }
 
-        String errMsg = String.format("Nested type `%s` is not defined in `%s`.",
+        String errMsg = format("Nested type `%s` is not defined in `%s`.",
                                       typeName, enclosingClass.getName());
         throw new IllegalStateException(errMsg);
     }
@@ -113,17 +112,17 @@ final class MessageAnnotator extends OptionAnnotator<Descriptor> {
         }
 
         @Override
-        public void accept(@Nullable AbstractJavaSource<JavaClassSource> input) {
+        public void accept(AbstractJavaSource<JavaClassSource> input) {
             checkNotNull(input);
             for (Descriptor definition : getDefinitions(file)) {
                 if (shouldAnnotate(definition)) {
                     String messageName = definition.getName();
-                    JavaSource message = findNestedType(input, messageName);
+                    JavaSource<?> message = findNestedType(input, messageName);
                     addAnnotation(message);
 
                     String javaType = SimpleClassName.messageOrBuilder(messageName)
                                                      .value();
-                    JavaSource messageOrBuilder = findNestedType(input, javaType);
+                    JavaSource<?> messageOrBuilder = findNestedType(input, javaType);
                     addAnnotation(messageOrBuilder);
                 }
             }

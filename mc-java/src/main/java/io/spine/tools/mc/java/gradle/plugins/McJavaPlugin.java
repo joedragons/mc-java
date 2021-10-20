@@ -23,12 +23,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.logging.Logging;
 import io.spine.tools.gradle.SpinePlugin;
 import io.spine.tools.mc.java.annotation.gradle.AnnotatorPlugin;
 import io.spine.tools.mc.java.checks.gradle.McJavaChecksPlugin;
+import io.spine.tools.mc.java.gradle.McJavaExtension;
+import io.spine.tools.mc.java.rejection.gradle.RejectionGenPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 

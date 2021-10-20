@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.rejection.gradle;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.base.RejectionType;
@@ -36,7 +36,8 @@ import io.spine.code.java.SimpleClassName;
 import io.spine.code.proto.FileSet;
 import io.spine.code.proto.RejectionsFile;
 import io.spine.code.proto.SourceProtoBelongsToModule;
-import io.spine.tools.mc.java.rejection.RThrowableSpec;
+import io.spine.tools.mc.java.gradle.McJavaExtension;
+import io.spine.tools.mc.java.rejection.gen.RThrowableSpec;
 import io.spine.tools.gradle.CodeGenerationAction;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -72,7 +73,8 @@ final class RejectionGenAction extends CodeGenerationAction {
 
     @Override
     public void execute(Task task) {
-        ImmutableSet<RejectionsFile> rejectionFiles = findModuleRejections(protoFiles().get());
+        FileSet files = protoFiles().get();
+        ImmutableSet<RejectionsFile> rejectionFiles = findModuleRejections(files);
         _debug().log("Processing the file descriptors for the rejections `%s`.",
                      rejectionFiles);
         for (RejectionsFile source : rejectionFiles) {

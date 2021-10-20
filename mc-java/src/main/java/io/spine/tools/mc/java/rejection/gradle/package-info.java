@@ -24,19 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
-
-import io.spine.annotation.Internal;
-import io.spine.tools.gradle.TaskName;
-
 /**
- * Names of Gradle tasks defined by the Spine Model Verifier plugin.
+ * This package contains the Gradle plugin of the rejection generation module of {@code mc-java}.
  */
-@Internal
-public enum ModelVerifierTaskName implements TaskName {
 
-    /**
-     * Verifies correctness of the domain model definition.
-     */
-    verifyModel
-}
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.rejection.gradle;
+
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;

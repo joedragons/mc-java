@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.rejection;
+package io.spine.tools.mc.java.rejection.gen;
 
 import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.ClassName;
@@ -63,7 +63,6 @@ import static javax.lang.model.element.Modifier.STATIC;
 final class RThrowableBuilderSpec implements BuilderSpec {
 
     private static final NoArgMethod newBuilder = new NoArgMethod(Messages.METHOD_NEW_BUILDER);
-    @SuppressWarnings("DuplicateStringLiteralInspection") // local semantics.
     private static final String BUILDER_FIELD = "builder";
 
     private final RejectionType rejection;

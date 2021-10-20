@@ -23,11 +23,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.gradle.plugins;
 
 import com.google.common.flogger.FluentLogger;
 import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.SpinePlugin;
+import io.spine.tools.mc.java.gradle.McJavaExtension;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;

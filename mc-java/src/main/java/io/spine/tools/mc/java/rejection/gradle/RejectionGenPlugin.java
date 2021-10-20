@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.proto.FileSet;
 import io.spine.tools.gradle.GradleTask;

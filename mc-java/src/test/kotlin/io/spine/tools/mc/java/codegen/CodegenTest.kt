@@ -41,7 +41,7 @@ import io.spine.query.EntityStateField
 import io.spine.tools.java.code.UuidMethodFactory
 import io.spine.tools.mc.java.applyStandard
 import io.spine.tools.mc.java.gradle.McJavaExtension
-import io.spine.tools.mc.java.gradle.McJavaPlugin
+import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
 import io.spine.tools.protoc.GenerateFields
 import io.spine.tools.protoc.Messages
 import io.spine.tools.protoc.Pattern
