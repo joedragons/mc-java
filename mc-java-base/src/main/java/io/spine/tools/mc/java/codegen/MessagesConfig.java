@@ -41,7 +41,7 @@ import org.gradle.api.Project;
 import java.util.Set;
 
 import static io.spine.protobuf.Messages.isNotDefault;
-import static io.spine.tools.mc.java.codegen.Names.className;
+import static io.spine.tools.protoc.Names.className;
 import static java.util.stream.Collectors.toSet;
 
 /**

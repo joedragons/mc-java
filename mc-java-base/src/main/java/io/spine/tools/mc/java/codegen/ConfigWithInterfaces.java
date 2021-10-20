@@ -33,7 +33,7 @@ import io.spine.tools.protoc.AddInterface;
 import org.gradle.api.Project;
 import org.gradle.api.provider.SetProperty;
 
-import static io.spine.tools.mc.java.codegen.Names.className;
+import static io.spine.tools.protoc.Names.className;
 
 /**
  * A config for messages which can implement certain Java interfaces.
@@ -69,7 +69,7 @@ abstract class ConfigWithInterfaces<P extends Message> extends Config<P> {
      */
     final ImmutableSet<AddInterface> interfaces() {
         return interfaceNames.transform(name -> AddInterface.newBuilder()
-                .setName(Names.className(name))
+                .setName(className(name))
                 .build());
     }
 
