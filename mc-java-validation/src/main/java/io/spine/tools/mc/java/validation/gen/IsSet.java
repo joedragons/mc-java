@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
 import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
 import com.squareup.javapoet.CodeBlock;
@@ -36,8 +36,8 @@ import io.spine.validate.Alternative;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.squareup.javapoet.ClassName.bestGuess;
-import static io.spine.tools.mc.java.validate.BooleanExpression.falseLiteral;
-import static io.spine.tools.mc.java.validate.BooleanExpression.trueLiteral;
+import static io.spine.tools.mc.java.validation.gen.BooleanExpression.falseLiteral;
+import static io.spine.tools.mc.java.validation.gen.BooleanExpression.trueLiteral;
 import static java.lang.String.format;
 import static javax.lang.model.element.Modifier.PRIVATE;
 import static javax.lang.model.element.Modifier.STATIC;

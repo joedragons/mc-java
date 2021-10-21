@@ -24,47 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
-import com.google.common.base.Objects;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import io.spine.protobuf.Messages;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.tools.mc.java.validation.gen.BooleanExpression.fromCode;
 
 /**
- * A method to be attached to a Java class.
+ * Set of utilities for working with values of container types.
  *
- * @implNote A {@code Method} wraps a JavaPoet {@link MethodSpec} which can be added to a JavaPoet
- *         {@link TypeSpec} builder.
+ * <p>Container types are types composed of homogeneous elements: a collection, a string, etc.
  */
-final class Method implements ClassMember {
+final class Containers {
 
-    private final MethodSpec methodSpec;
-
-    Method(MethodSpec methodSpec) {
-        this.methodSpec = checkNotNull(methodSpec);
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private Containers() {
     }
 
-    @Override
-    public void attachTo(TypeSpec.Builder type) {
-        type.addMethod(methodSpec);
+    /**
+     * Obtains the expression which calls {@code isEmpty()} method on the given {@code value}.
+     *
+     * @param value
+     *         an expression which yields an object which has a {@code isEmpty()} method, e.g.
+     *         a {@code String}
+     */
+    public static BooleanExpression isEmpty(Expression<?> value) {
+        return fromCode("$L.isEmpty()", value.toCode());
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Method)) {
-            return false;
-        }
-        Method method = (Method) o;
-        return Objects.equal(methodSpec, method.methodSpec);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(methodSpec);
+    /**
+     * Obtains the expression which calls {@code Messages.isDefault())} method on the given
+     * {@code value}.
+     *
+     * @param value
+     *         an expression of a Protobuf message or a Protobuf enum
+     */
+    public static BooleanExpression isDefault(Expression<?> value) {
+        return fromCode("$T.isDefault($L)", Messages.class, value.toCode());
     }
 }

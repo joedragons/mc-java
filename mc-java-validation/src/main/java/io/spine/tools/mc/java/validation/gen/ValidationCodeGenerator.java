@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -67,11 +67,10 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.mc.java.validate.ValidateMethod.VIOLATIONS;
-import static io.spine.tools.mc.java.validate.BooleanExpression.fromCode;
-import static io.spine.tools.mc.java.validate.Containers.isEmpty;
-import static io.spine.tools.mc.java.validate.IsSet.alternativeIsSet;
-import static io.spine.tools.mc.java.validate.VoidExpression.formatted;
+import static io.spine.tools.mc.java.validation.gen.Containers.isEmpty;
+import static io.spine.tools.mc.java.validation.gen.IsSet.alternativeIsSet;
+import static io.spine.tools.mc.java.validation.gen.ValidateMethod.VIOLATIONS;
+import static io.spine.tools.mc.java.validation.gen.VoidExpression.formatted;
 import static io.spine.util.Exceptions.unsupported;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 import static io.spine.validate.diags.ViolationText.errorMessage;
@@ -82,12 +81,13 @@ import static java.util.stream.Collectors.toList;
  * A {@link ConstraintTranslator} which generates Java code for message validation.
  *
  * <p>The generator operates under the assumption that the generated code is embedded into
- * the message class. The result of the code generation is a set of methods to be added to a single
- * nesting class. The nesting class need not be the message class. It might be a class nested inside
- * the message class. Note that some methods are declared as {@code static}. Thus, they cannot be
- * placed into an inner (non-static) class.
+ * the message class. The result of the code generation is a set of methods to be added to
+ * a single nesting class.
+ *
+ * <p>The nesting class need not be the message class. It might be a class nested inside
+ * the message class. Note that some methods are declared as {@code static}.
+ * Thus, they cannot be placed into an inner (non-static) class.
  */
-@SuppressWarnings("OverlyCoupledClass")
 final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMember>> {
 
     @SuppressWarnings("UnstableApiUsage")
@@ -105,7 +105,8 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     /**
      * Creates a new {@code ValidationCodeGenerator}.
      *
-     * <p>The {@code methodName} is the name of the method which must be generated. The method:
+     * <p>The {@code methodName} is the name of the method which must be generated.
+     * The method:
      * <ol>
      *     <li>must be {@code static};
      *     <li>must accept the validated message as the only argument;
@@ -143,7 +144,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
         Range<ComparableNumber> range = constraint.range();
         if (bound.exists(range)) {
             Check check = fieldAccess -> bound.matches(fieldAccess, range).negate();
-            CreateViolation violation = fieldAccess -> violation(constraint, field, fieldAccess);
+            CreateViolation violation = fieldAccess -> violation(field, fieldAccess, constraint);
             append(constraintCode(field)
                            .conditionCheck(check)
                            .createViolation(violation)
@@ -158,7 +159,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
         IsSet fieldIsSet = new IsSet(field);
         Check messageIsNotSet = fieldAccess -> fieldIsSet.invocation(messageAccess)
                                                          .negate();
-        CreateViolation violation = fieldAccess -> violation(constraint, field);
+        CreateViolation violation = fieldAccess -> violation(field, constraint);
         append(constraintCode(field)
                        .conditionCheck(messageIsNotSet)
                        .createViolation(violation)
@@ -175,7 +176,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
         String method = constraint.allowsPartialMatch()
                         ? "find()"
                         : "matches()";
-        Check check = fieldAccess -> fromCode(
+        Check check = fieldAccess -> BooleanExpression.fromCode(
                 matcher + method, Pattern.class, pattern, constraint.flagsMask(), fieldAccess
         ).negate();
         CreateViolation violation = fieldAccess -> newViolation(field, constraint)
@@ -205,7 +206,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
                                             Duplicates.class,
                                             fieldAccess);
         Check check = fieldAccess -> isEmpty(Expression.of(duplicatesName)).negate();
-        CreateViolation violation = fieldAccess -> violation(constraint, field);
+        CreateViolation violation = fieldAccess -> violation(field, constraint);
         append(constraintCode(field)
                        .preparingDeclarations(duplicates)
                        .conditionCheck(check)
@@ -320,17 +321,12 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
                         () -> new IllegalStateException("`(required_field)` must not be empty.")
                 );
         BooleanExpression condition = fieldsAreSet.negate();
-        @SuppressWarnings("DuplicateStringLiteralInspection") // Duplicates in generated code.
-        Expression<ConstraintViolation> violation = NewViolation
-                .forMessage(fieldContext, type)
+        Expression<ConstraintViolation> violation = newViolation()
                 .setMessage("Required fields are not set. Must match pattern `%s`.")
                 .setField(fieldContext.fieldPath())
                 .addParam(constraint.optionValue())
                 .build();
-        CodeBlock check = condition.ifTrue(violationAccumulator
-                                                   .apply(violation)
-                                                   .toCode())
-                                   .toCode();
+        CodeBlock check = applyIfTrue(condition, violation);
         compiledConstraints.add(check);
     }
 
@@ -338,16 +334,13 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     public void visitRequiredOneof(IsRequiredConstraint constraint) {
         Expression<ProtocolMessageEnum> caseValue =
                 messageAccess.oneofCase(constraint.declaration());
-        BooleanExpression condition = fromCode("$L.getNumber() == $L", caseValue, 0);
-        Expression<ConstraintViolation> violation = NewViolation
-                .forMessage(fieldContext, type)
+        BooleanExpression condition =
+                BooleanExpression.fromCode("$L.getNumber() == $L", caseValue, 0);
+        Expression<ConstraintViolation> violation = newViolation()
                 .setMessage(constraint.errorMessage(fieldContext))
                 .setField(fieldContext.fieldPath())
                 .build();
-        CodeBlock check = condition.ifTrue(violationAccumulator
-                                                   .apply(violation)
-                                                   .toCode())
-                                   .toCode();
+        CodeBlock check = applyIfTrue(condition, violation);
         compiledConstraints.add(check);
     }
 
@@ -380,8 +373,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
                 .stream()
                 .map(ExternalConstraintFlag::asClassMember)
                 .collect(toList());
-        ImmutableSet<ClassMember> methods = ImmutableSet
-                .<ClassMember>builder()
+        ImmutableSet<ClassMember> methods = ImmutableSet.<ClassMember>builder()
                 .add(validateMethod.asClassMember())
                 .addAll(isSetMethods)
                 .addAll(externalFlags)
@@ -389,38 +381,51 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
         return methods;
     }
 
+    /*
+     * Convenience factory methods for creating code generators or their builders.
+     */
+    private ConstraintCode.Builder constraintCode(FieldDeclaration field) {
+        return ConstraintCode.forField(field)
+                             .messageAccess(messageAccess)
+                             .onViolation(violationAccumulator);
+    }
+
     private void compileCustomConstraints() {
-        CodeBlock code = CodeBlock.of("$N.addAll($T.violationsOfCustomConstraints($L));$L",
-                                      VIOLATIONS,
-                                      Validate.class,
-                                      messageAccess,
-                                      lineSeparator());
+        CodeBlock code = CodeBlock.of(
+                "$N.addAll($T.violationsOfCustomConstraints($L));$L",
+                VIOLATIONS, Validate.class, messageAccess, lineSeparator()
+        );
         compiledConstraints.add(code);
+    }
+
+    private NewViolation.Builder newViolation() {
+        return NewViolation.forMessage(type, fieldContext);
     }
 
     private NewViolation.Builder newViolation(FieldDeclaration field, Constraint constraint) {
         FieldContext context = fieldContext.forChild(field);
-        return NewViolation
-                .forField(context)
+        return NewViolation.forField(context)
                 .setMessage(constraint.errorMessage(context));
     }
 
-    private NewViolation violation(Constraint constraint, FieldDeclaration field) {
+    private NewViolation violation(FieldDeclaration field, Constraint constraint) {
         return newViolation(field, constraint).build();
     }
 
-    private NewViolation violation(Constraint constraint,
-                                   FieldDeclaration field,
-                                   FieldAccess getter) {
+    private
+    NewViolation violation(FieldDeclaration field, FieldAccess getter, Constraint constraint) {
         return newViolation(field, constraint)
                 .setFieldValue(getter)
                 .build();
     }
 
-    private ConstraintCode.Builder constraintCode(FieldDeclaration field) {
-        return ConstraintCode
-                .forField(field)
-                .messageAccess(messageAccess)
-                .onViolation(violationAccumulator);
+    private
+    CodeBlock applyIfTrue(BooleanExpression condition, Expression<ConstraintViolation> violation) {
+        CodeBlock codeBlock =
+                violationAccumulator.apply(violation)
+                                    .toCode();
+        CodeBlock result = condition.ifTrue(codeBlock)
+                                    .toCode();
+        return result;
     }
 }

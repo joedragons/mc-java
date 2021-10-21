@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
 import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.CodeBlock;
@@ -127,7 +127,7 @@ final class NewViolation implements Expression<ConstraintViolation> {
                 .setField(field.fieldPath());
     }
 
-    public static Builder forMessage(FieldContext context, MessageType type) {
+    public static Builder forMessage(MessageType type, FieldContext context) {
         checkNotNull(context);
         return new Builder()
                 .setType(type)

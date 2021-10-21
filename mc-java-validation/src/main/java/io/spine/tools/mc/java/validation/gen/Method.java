@@ -24,15 +24,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.mc.java.validation.gen;
+
+import com.google.common.base.Objects;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * This package provides the types for generating validation code in accordance to
- * validation attributes defined in options of proto types.
+ * A method to be attached to a Java class.
+ *
+ * @implNote A {@code Method} wraps a JavaPoet {@link MethodSpec} which can be added to a JavaPoet
+ *         {@link TypeSpec} builder.
  */
+final class Method implements ClassMember {
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.mc.java.validate;
+    private final MethodSpec methodSpec;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    Method(MethodSpec methodSpec) {
+        this.methodSpec = checkNotNull(methodSpec);
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    @Override
+    public void attachTo(TypeSpec.Builder type) {
+        type.addMethod(methodSpec);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Method)) {
+            return false;
+        }
+        Method method = (Method) o;
+        return Objects.equal(methodSpec, method.methodSpec);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(methodSpec);
+    }
+}

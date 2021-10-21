@@ -24,14 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.validation.gradle;
 
-import java.util.function.Function;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-/**
- * A function which accepts a field and produces an expression which checks some property of
- * the field.
- */
-@FunctionalInterface
-interface Check extends Function<FieldAccess, BooleanExpression> {
-}
+import javax.annotation.ParametersAreNonnullByDefault;

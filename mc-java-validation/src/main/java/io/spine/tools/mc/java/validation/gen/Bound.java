@@ -24,12 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
 import com.google.common.collect.Range;
 
 import static com.google.common.collect.BoundType.OPEN;
-import static io.spine.tools.mc.java.validate.BooleanExpression.fromCode;
+import static io.spine.tools.mc.java.validation.gen.BooleanExpression.fromCode;
 
 /**
  * A bound of a comparable field value.

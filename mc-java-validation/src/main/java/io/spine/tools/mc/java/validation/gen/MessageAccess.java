@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.ProtocolMessageEnum;
@@ -32,8 +32,8 @@ import io.spine.code.proto.FieldDeclaration;
 import io.spine.code.proto.OneofDeclaration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.mc.java.validate.FieldAccess.fieldOfMessage;
-import static io.spine.tools.mc.java.validate.Expression.formatted;
+import static io.spine.tools.mc.java.validation.gen.FieldAccess.fieldOfMessage;
+import static io.spine.tools.mc.java.validation.gen.Expression.formatted;
 
 /**
  * An expression which yields a message.

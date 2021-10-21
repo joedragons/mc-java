@@ -24,44 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
-import io.spine.protobuf.Messages;
+import io.spine.validate.ConstraintViolation;
 
-import static io.spine.tools.mc.java.validate.BooleanExpression.fromCode;
+import java.util.function.Function;
 
 /**
- * Set of utilities for working with values of container types.
- *
- * <p>Container types are types composed of homogeneous elements: a collection, a string, etc.
+ * A function which accepts a field and produces an expression of a {@link ConstraintViolation}
+ * on that field.
  */
-final class Containers {
-
-    /**
-     * Prevents the utility class instantiation.
-     */
-    private Containers() {
-    }
-
-    /**
-     * Obtains the expression which calls {@code isEmpty()} method on the given {@code value}.
-     *
-     * @param value
-     *         an expression which yields an object which has a {@code isEmpty()} method, e.g.
-     *         a {@code String}
-     */
-    public static BooleanExpression isEmpty(Expression<?> value) {
-        return fromCode("$L.isEmpty()", value.toCode());
-    }
-
-    /**
-     * Obtains the expression which calls {@code Messages.isDefault())} method on the given
-     * {@code value}.
-     *
-     * @param value
-     *         an expression of a Protobuf message or a Protobuf enum
-     */
-    public static BooleanExpression isDefault(Expression<?> value) {
-        return fromCode("$T.isDefault($L)", Messages.class, value.toCode());
-    }
+@FunctionalInterface
+interface CreateViolation extends Function<FieldAccess, Expression<ConstraintViolation>> {
 }

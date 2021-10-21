@@ -24,27 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
-import io.spine.validate.ConstraintViolation;
+import com.google.errorprone.annotations.FormatMethod;
+import com.google.errorprone.annotations.FormatString;
 
-import java.util.function.Function;
+import static java.lang.String.format;
 
 /**
- * A function which accepts an expression of a {@link ConstraintViolation} and transforms it into
- * an expression of the violation being saved.
+ * An expression which does not yield a value.
  *
- * <p>Typically, one accumulator is used many times for different violations.
- *
- * <p>For example:
- * <pre>{@code
- * AccumulateViolation accumulator =
- *     (violationExpression) -> formatted("errorBuilder.addViolation(%s);", violationExpression);
- * }</pre>
- *
- * <p>In the example above a function takes a {@link ConstraintViolation} expression and uses it
- * to add the violation to a {@code ValidationError} builder.
+ * <p>The actual generated code might formally be non-void. In this case, by using
+ * {@code VoidExpression} we state that the value of the expression is irrelevant. Example of such
+ * an expression is {@code collection.add(element)}, which returns a {@code boolean} value, but it
+ * is not used.
  */
-@FunctionalInterface
-interface AccumulateViolations extends Function<Expression<ConstraintViolation>, VoidExpression> {
+final class VoidExpression extends CodeExpression<Void> {
+
+    private static final long serialVersionUID = 0L;
+
+    private VoidExpression(String value) {
+        super(value);
+    }
+
+    /**
+     * Creates a {@code VoidExpression} by formatting the given template string by the rules of
+     * {@code String.format()}.
+     */
+    @FormatMethod
+    public static VoidExpression formatted(@FormatString String template, Object... args) {
+        return new VoidExpression(format(template, args));
+    }
 }

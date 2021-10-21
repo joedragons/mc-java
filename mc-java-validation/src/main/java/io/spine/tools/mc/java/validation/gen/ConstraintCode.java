@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
 import com.squareup.javapoet.CodeBlock;
 import io.spine.code.proto.FieldDeclaration;
@@ -33,7 +33,7 @@ import io.spine.logging.Logging;
 import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.mc.java.validate.FieldAccess.element;
+import static io.spine.tools.mc.java.validation.gen.FieldAccess.element;
 import static java.lang.System.lineSeparator;
 
 /**

@@ -24,19 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.validate;
+package io.spine.tools.mc.java.validation.gen;
 
-import com.squareup.javapoet.TypeSpec;
+import java.util.function.Function;
 
 /**
- * A member of a Java class.
- *
- * <p>The member can be {@linkplain #attachTo attached} to a type constructed with Java Poet.
+ * A function which accepts a field and produces an expression which checks some property of
+ * the field.
  */
-interface ClassMember {
-
-    /**
-     * Adds this member to the constructed {@code type}.
-     */
-    void attachTo(TypeSpec.Builder type);
+@FunctionalInterface
+interface Check extends Function<FieldAccess, BooleanExpression> {
 }
