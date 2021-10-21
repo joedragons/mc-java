@@ -30,7 +30,12 @@ import io.spine.internal.dependency.Spine
 
 dependencies {
     api(JavaPoet.lib)
-    implementation(Spine(project).toolBase)
+    val spine = Spine(project)
+    implementation(spine.toolBase)
     implementation(JavaX.annotations)
-    testImplementation(Spine(project).testlib)
+    testImplementation(spine.testlib)
+
+    testImplementation(gradleTestKit())
+    testImplementation(spine.pluginBase)
+    testImplementation(spine.pluginTestlib)
 }
