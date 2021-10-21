@@ -44,10 +44,12 @@ import io.spine.protobuf.Messages;
 import io.spine.tools.mc.java.field.FieldType;
 import io.spine.validate.Validate;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static com.squareup.javapoet.MethodSpec.constructorBuilder;
+import static com.squareup.javapoet.MethodSpec.methodBuilder;
+import static io.spine.tools.java.javadoc.JavadocText.fromEscaped;
 import static io.spine.tools.java.javadoc.JavadocText.fromUnescaped;
 import static javax.lang.model.element.Modifier.FINAL;
 import static javax.lang.model.element.Modifier.PRIVATE;
@@ -106,13 +108,11 @@ final class RThrowableBuilderSpec implements BuilderSpec {
      * @return the {@code newInstance} specification
      */
     MethodSpec newBuilder() {
-        @SuppressWarnings("DuplicateStringLiteralInspection") // The duplicated string is in
-                // tests of the code which cannot share common constants with this class.
-                // For the time being let's keep it as is.
-        JavadocText javadoc = JavadocText.fromEscaped("@return a new builder for the rejection")
-                                         .withNewLine();
-        return MethodSpec
-                .methodBuilder(newBuilder.name())
+        @SuppressWarnings("DuplicateStringLiteralInspection") /* The duplicated string is in
+                tests of the code which cannot share common constants with this class.
+                For the time being let's keep it as is. */
+        JavadocText javadoc = fromEscaped("@return a new builder for the rejection").withNewLine();
+        return methodBuilder(newBuilder.name())
                 .addModifiers(PUBLIC, STATIC)
                 .addJavadoc(javadoc.value())
                 .returns(thisType())
@@ -148,19 +148,16 @@ final class RThrowableBuilderSpec implements BuilderSpec {
 
     private static MethodSpec constructor() {
         String rawJavadoc = "Prevent direct instantiation of the builder.";
-        JavadocText javadoc = JavadocText.fromEscaped(rawJavadoc)
-                                         .withNewLine();
-        return MethodSpec.constructorBuilder()
-                         .addJavadoc(javadoc.value())
-                         .addModifiers(PRIVATE)
-                         .build();
+        JavadocText javadoc = fromEscaped(rawJavadoc).withNewLine();
+        return constructorBuilder()
+                .addJavadoc(javadoc.value())
+                .addModifiers(PRIVATE)
+                .build();
     }
 
     private MethodSpec rejectionMessage() {
-        JavadocText javadoc = JavadocText.fromEscaped("Obtains the rejection and validates it.")
-                                         .withNewLine();
-        return MethodSpec
-                .methodBuilder("rejectionMessage")
+        JavadocText javadoc = fromEscaped("Obtains the rejection and validates it.").withNewLine();
+        return methodBuilder("rejectionMessage")
                 .addModifiers(PRIVATE)
                 .addJavadoc(javadoc.value())
                 .returns(messageClass.value())
@@ -173,10 +170,8 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     @SuppressWarnings("DuplicateStringLiteralInspection") // The same string has different semantics
     private MethodSpec build() {
         String rawJavadoc = "Creates the rejection from the builder and validates it.";
-        JavadocText javadoc = JavadocText.fromEscaped(rawJavadoc)
-                                         .withNewLine();
-        return MethodSpec
-                .methodBuilder(BuilderSpec.BUILD_METHOD_NAME)
+        JavadocText javadoc = fromEscaped(rawJavadoc).withNewLine();
+        return methodBuilder(BuilderSpec.BUILD_METHOD_NAME)
                 .addModifiers(PUBLIC)
                 .addJavadoc(javadoc.value())
                 .returns(throwableClass.value())
@@ -185,14 +180,13 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private JavadocText classJavadoc() {
-        String rejectionName = rejection.simpleJavaClassName()
-                                        .value();
+        String rejectionName = rejection.simpleJavaClassName().value();
         String javadocText = CodeBlock
                 .builder()
                 .add("The builder for the {@code $L} rejection.", rejectionName)
                 .build()
                 .toString();
-        return JavadocText.fromEscaped(javadocText)
+        return fromEscaped(javadocText)
                           .withNewLine();
     }
 
@@ -209,7 +203,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private List<MethodSpec> setters() {
-        List<MethodSpec> methods = newArrayList();
+        List<MethodSpec> methods = new ArrayList<>();
         ImmutableList<FieldDeclaration> fields = rejection.fields();
         for (FieldDeclaration field : fields) {
             FieldType fieldType = FieldType.of(field);
@@ -225,8 +219,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
         String methodName =
                 fieldType.primarySetter()
                          .format(io.spine.tools.java.code.field.FieldName.from(fieldName));
-        MethodSpec.Builder methodBuilder = MethodSpec
-                .methodBuilder(methodName)
+        MethodSpec.Builder methodBuilder = methodBuilder(methodName)
                 .addModifiers(PUBLIC)
                 .returns(thisType())
                 .addParameter(fieldType.name(), parameterName)
@@ -239,7 +232,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private static String wrapInPre(String text) {
-        JavadocText javaDoc = JavadocText.fromUnescaped(text).inPreTags();
+        JavadocText javaDoc = fromUnescaped(text).inPreTags();
         return javaDoc.value();
     }
 
