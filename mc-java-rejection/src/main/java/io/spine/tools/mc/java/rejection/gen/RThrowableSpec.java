@@ -32,14 +32,14 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 import io.spine.base.RejectionThrowable;
 import io.spine.base.RejectionType;
-import io.spine.tools.java.code.field.FieldName;
+import io.spine.code.java.PackageName;
+import io.spine.code.java.SimpleClassName;
+import io.spine.logging.Logging;
 import io.spine.tools.java.code.GeneratedBy;
 import io.spine.tools.java.code.JavaPoetName;
 import io.spine.tools.java.code.TypeSpec;
-import io.spine.code.java.PackageName;
-import io.spine.code.java.SimpleClassName;
+import io.spine.tools.java.code.field.FieldName;
 import io.spine.tools.java.javadoc.JavadocText;
-import io.spine.logging.Logging;
 
 import static com.squareup.javapoet.MethodSpec.constructorBuilder;
 import static javax.lang.model.element.Modifier.FINAL;
@@ -100,13 +100,12 @@ public final class RThrowableSpec implements TypeSpec, Logging {
         return rejection;
     }
 
-    @SuppressWarnings("DuplicateStringLiteralInspection") // Random duplication.
     private MethodSpec constructor() {
         _debug().log("Creating the constructor for the type `%s`.",
                     declaration.simpleJavaClassName());
         ParameterSpec builderParameter = builder.asParameter();
         CodeBlock buildRejectionMessage = builder.buildRejectionMessage();
-        return MethodSpec.constructorBuilder()
+        return constructorBuilder()
                          .addJavadoc(constructorJavadoc(builderParameter))
                          .addModifiers(PRIVATE)
                          .addParameter(builderParameter)
