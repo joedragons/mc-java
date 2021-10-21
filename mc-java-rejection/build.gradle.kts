@@ -1,5 +1,7 @@
+import io.spine.internal.dependency.Roaster
+
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,16 +26,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "mc-java"
+dependencies {
+    implementation(Roaster.api) {
+        exclude(group = "com.google.guava")
+    }
+    implementation(Roaster.jdt) {
+        exclude(group = "com.google.guava")
+    }
 
-include(
-    "javadoc-filter",
-    "javadoc-style",
-    "mc-java",
-    "mc-java-annotation",
-    "mc-java-base",
-    "mc-java-checks",
-    "mc-java-protoc",
-    "mc-java-rejection",
-    "mc-java-validation"
-)
+    implementation(project(":mc-java-base"))
+
+    val spine = io.spine.internal.dependency.Spine(project)
+    testImplementation(spine.pluginTestlib)
+    testImplementation(gradleTestKit())
+}

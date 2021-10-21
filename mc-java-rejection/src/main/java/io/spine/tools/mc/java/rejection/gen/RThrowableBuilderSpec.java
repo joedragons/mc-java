@@ -150,10 +150,10 @@ final class RThrowableBuilderSpec implements BuilderSpec {
         String rawJavadoc = "Prevent direct instantiation of the builder.";
         JavadocText javadoc = JavadocText.fromEscaped(rawJavadoc)
                                          .withNewLine();
-        return constructorBuilder()
-                .addJavadoc(javadoc.value())
-                .addModifiers(PRIVATE)
-                .build();
+        return MethodSpec.constructorBuilder()
+                         .addJavadoc(javadoc.value())
+                         .addModifiers(PRIVATE)
+                         .build();
     }
 
     private MethodSpec rejectionMessage() {
@@ -176,7 +176,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
         JavadocText javadoc = JavadocText.fromEscaped(rawJavadoc)
                                          .withNewLine();
         return MethodSpec
-                .methodBuilder(BUILD_METHOD_NAME)
+                .methodBuilder(BuilderSpec.BUILD_METHOD_NAME)
                 .addModifiers(PUBLIC)
                 .addJavadoc(javadoc.value())
                 .returns(throwableClass.value())
@@ -231,7 +231,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
                 .returns(thisType())
                 .addParameter(fieldType.name(), parameterName)
                 .addStatement("$L.$L($L)", BUILDER_FIELD, methodName, parameterName)
-                .addStatement(RETURN_STATEMENT);
+                .addStatement(BuilderSpec.RETURN_STATEMENT);
         field.leadingComments()
              .map(RThrowableBuilderSpec::wrapInPre)
              .ifPresent(methodBuilder::addJavadoc);
@@ -239,7 +239,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private static String wrapInPre(String text) {
-        JavadocText javaDoc = fromUnescaped(text).inPreTags();
+        JavadocText javaDoc = JavadocText.fromUnescaped(text).inPreTags();
         return javaDoc.value();
     }
 

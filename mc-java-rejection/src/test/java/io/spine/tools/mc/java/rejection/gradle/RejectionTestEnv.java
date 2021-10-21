@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle.given;
+package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.Directory;
@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 import static java.lang.String.format;
 
-public class RejectionTestEnv {
+final class RejectionTestEnv {
 
     private static final String CLASS_COMMENT =
             "The rejection definition to test Javadoc generation.";

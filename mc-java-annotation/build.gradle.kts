@@ -35,8 +35,6 @@ dependencies {
         exclude(group = "com.google.guava")
     }
 
-    implementation(gradleApi())
-
     val spine = Spine(project)
     implementation(project(":mc-java-base"))
 

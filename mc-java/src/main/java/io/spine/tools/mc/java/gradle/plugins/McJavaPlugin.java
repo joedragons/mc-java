@@ -26,7 +26,6 @@
 package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.logging.Logging;
-import io.spine.tools.gradle.SpinePlugin;
 import io.spine.tools.mc.java.annotation.gradle.AnnotatorPlugin;
 import io.spine.tools.mc.java.checks.gradle.McJavaChecksPlugin;
 import io.spine.tools.mc.java.gradle.McJavaExtension;
@@ -46,11 +45,18 @@ public class McJavaPlugin implements Plugin<Project>, Logging {
     @Override
     public void apply(Project project) {
         McJavaExtension.createIn(project);
+        createAndApplyPluginsIn(project);
+    }
 
-        // Plugins that deal with Protobuf types must depend on `mergeDescriptorSet` and
-        // `mergeTestDescriptorSet` tasks to be able to access every declared type
-        // in the project classpath.
-
+    /**
+     * Creates all the plugins that are parts of {@code mc-java} and applies them to
+     * the given project.
+     *
+     * @implNote Plugins that deal with Protobuf types must depend on
+     *         {@code mergeDescriptorSet} and {@code mergeTestDescriptorSet} tasks to be able to
+     *         access every declared type in the project classpath.
+     */
+    private void createAndApplyPluginsIn(Project project) {
         Stream.of(new CleaningPlugin(),
                   new DescriptorSetMergerPlugin(),
                   new RejectionGenPlugin(),
@@ -60,7 +66,7 @@ public class McJavaPlugin implements Plugin<Project>, Logging {
               .forEach(plugin -> apply(plugin, project));
     }
 
-    private void apply(SpinePlugin plugin, Project project) {
+    private void apply(Plugin<Project> plugin, Project project) {
         _debug().log("Applying plugin `%s`.", plugin.getClass().getName());
         plugin.apply(project);
     }

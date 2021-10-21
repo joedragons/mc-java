@@ -28,17 +28,17 @@ package io.spine.tools.mc.java.rejection.gradle;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.base.RejectionType;
-import io.spine.tools.code.Indent;
-import io.spine.tools.java.code.TypeSpec;
-import io.spine.tools.java.code.TypeSpecWriter;
 import io.spine.code.java.PackageName;
 import io.spine.code.java.SimpleClassName;
 import io.spine.code.proto.FileSet;
 import io.spine.code.proto.RejectionsFile;
 import io.spine.code.proto.SourceProtoBelongsToModule;
+import io.spine.tools.code.Indent;
+import io.spine.tools.gradle.CodeGenerationAction;
+import io.spine.tools.java.code.TypeSpec;
+import io.spine.tools.java.code.TypeSpecWriter;
 import io.spine.tools.mc.java.gradle.McJavaExtension;
 import io.spine.tools.mc.java.rejection.gen.RThrowableSpec;
-import io.spine.tools.gradle.CodeGenerationAction;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 
@@ -47,7 +47,6 @@ import java.util.function.Supplier;
 
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static com.google.common.flogger.LazyArgs.lazy;
-import static io.spine.code.proto.RejectionsFile.findAll;
 
 /**
  * Generates source code of rejections.
@@ -87,7 +86,7 @@ final class RejectionGenAction extends CodeGenerationAction {
      * Obtains all rejection files belonging to the currently processed module.
      */
     private ImmutableSet<RejectionsFile> findModuleRejections(FileSet allFiles) {
-        ImmutableSet<RejectionsFile> allRejections = findAll(allFiles);
+        ImmutableSet<RejectionsFile> allRejections = RejectionsFile.findAll(allFiles);
         ImmutableSet<RejectionsFile> moduleRejections = allRejections
                 .stream()
                 .filter(new SourceProtoBelongsToModule(protoSrcDir()))

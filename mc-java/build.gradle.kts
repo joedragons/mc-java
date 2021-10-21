@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":mc-java-base"))
     implementation(project(":mc-java-annotation"))
     implementation(project(":mc-java-checks"))
+    implementation(project(":mc-java-rejection"))
 
     testImplementation(Spine(project).testlib)
     testImplementation(gradleTestKit())

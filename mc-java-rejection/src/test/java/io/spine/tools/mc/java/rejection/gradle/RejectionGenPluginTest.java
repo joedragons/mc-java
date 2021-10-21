@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle;
+package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.java.SimpleClassName;
 import io.spine.protobuf.Messages;
@@ -36,6 +36,7 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocCapableSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,14 +45,13 @@ import java.io.File;
 import java.io.IOException;
 
 import static io.spine.tools.gradle.JavaTaskName.compileJava;
-import static io.spine.tools.mc.java.gradle.given.RejectionTestEnv.expectedBuilderClassComment;
-import static io.spine.tools.mc.java.gradle.given.RejectionTestEnv.expectedClassComment;
-import static io.spine.tools.mc.java.gradle.given.RejectionTestEnv.expectedFirstFieldComment;
-import static io.spine.tools.mc.java.gradle.given.RejectionTestEnv.expectedSecondFieldComment;
-import static io.spine.tools.mc.java.gradle.given.RejectionTestEnv.newProjectWithRejectionsJavadoc;
-import static io.spine.tools.mc.java.gradle.given.RejectionTestEnv.rejectionsJavadocThrowableSource;
+import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedBuilderClassComment;
+import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedClassComment;
+import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedFirstFieldComment;
+import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedSecondFieldComment;
+import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.newProjectWithRejectionsJavadoc;
+import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.rejectionsJavadocThrowableSource;
 import static io.spine.util.Exceptions.newIllegalStateException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("`RejectionGenPlugin` should")
 class RejectionGenPluginTest {
@@ -130,6 +130,6 @@ class RejectionGenPluginTest {
 
     private static void assertDoc(String expectedText, JavaDocCapableSource<?> source) {
         JavaDocSource<?> javadoc = source.getJavaDoc();
-        assertEquals(expectedText, javadoc.getFullText());
+        Assertions.assertEquals(expectedText, javadoc.getFullText());
     }
 }

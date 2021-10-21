@@ -106,12 +106,12 @@ public final class RThrowableSpec implements TypeSpec, Logging {
                     declaration.simpleJavaClassName());
         ParameterSpec builderParameter = builder.asParameter();
         CodeBlock buildRejectionMessage = builder.buildRejectionMessage();
-        return constructorBuilder()
-                .addJavadoc(constructorJavadoc(builderParameter))
-                .addModifiers(PRIVATE)
-                .addParameter(builderParameter)
-                .addStatement("super($L)", buildRejectionMessage.toString())
-                .build();
+        return MethodSpec.constructorBuilder()
+                         .addJavadoc(constructorJavadoc(builderParameter))
+                         .addModifiers(PRIVATE)
+                         .addParameter(builderParameter)
+                         .addStatement("super($L)", buildRejectionMessage.toString())
+                         .build();
     }
 
     private MethodSpec messageThrown() {
