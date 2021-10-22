@@ -1,8 +1,8 @@
 # Spine Model Compiler plugin to `protoc`
 
-Spine uses [Google Protobuf](https://developers.google.com/protocol-buffers/) as a model definition
-language. Some of the framework features require compile-time processing of the data model. For that
-a plugin into a Protobuf compiler (a.k.a. `protoc`) is implemented.
+Spine uses [Google Protobuf][protobuf] as a model definition
+language. Some of the framework features require compile-time processing of the data model.
+For that a plugin into a Protobuf compiler (a.k.a. `protoc`) is implemented.
 
 ## Features
 
@@ -83,8 +83,7 @@ configuration.
 
 ## Usage
 
-Add [Protobuf Gradle plugin](https://github.com/google/protobuf-gradle-plugin)
-and Spine Model Compiler for Java:
+Add [Protobuf Gradle plugin][proto-gradle-plugin] and Spine Model Compiler for Java:
  
 ```groovy
 apply plugin: "com.google.protobuf"
@@ -106,7 +105,7 @@ Both the plugins are published alongside with the [Gradle plugin](../mc-java) of
 To update the `protoc` plugin, the user should update the Gradle plugin.
 
 The JAR contains a Java program, which reads from `stdin` and writes into `stdout` according to 
-the [Protobuf compiler contract](https://developers.google.com/protocol-buffers/docs/reference/other#plugins).
+the [Protobuf compiler contract][compiler-plugins].
 
 ### Configuration
 
@@ -135,4 +134,8 @@ If the passed code gen request is not interesting to the Spine plugin, the respo
 ---
 
 For the details on the `protoc` plugin development, see the official 
-[doc](https://developers.google.com/protocol-buffers/docs/reference/other#plugins).
+[documentation][compiler-plugins].
+
+[protobuf]: https://developers.google.com/protocol-buffers/
+[proto-gradle-plugin]: https://github.com/google/protobuf-gradle-plugin
+[compiler-plugins]: https://developers.google.com/protocol-buffers/docs/reference/other#plugins 
