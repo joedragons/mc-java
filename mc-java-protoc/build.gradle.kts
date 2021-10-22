@@ -38,7 +38,6 @@ dependencies {
     implementation(JavaX.annotations)
 
     testImplementation(spine.base)
-    testImplementation(spine.testlib)
     testImplementation(spine.pluginTestlib)
     testImplementation(project(":mc-java-base"))
 }
