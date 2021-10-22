@@ -43,7 +43,7 @@ import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE;
 class ValidatingBuilderGenPluginTest {
 
     /**
-     * The name of the directory under `test/resource` which will be used for creating
+     * The name of the directory under {@code test/resource} which will be used for creating
      * the test project.
      */
     private static final String PROJECT_NAME = "validators-gen-plugin-test";
@@ -51,23 +51,25 @@ class ValidatingBuilderGenPluginTest {
     /**
      * Names of resource files under the resources "root".
      */
-    private static final ImmutableList<String> PROTO_FILES =
-            ImmutableList.of("identifiers.proto",
-                             "attributes.proto",
-                             "changes.proto",
-                             "test_commands.proto");
+    private static final ImmutableList<String> PROTO_FILES = ImmutableList.of(
+            "identifiers.proto",
+            "attributes.proto",
+            "changes.proto",
+            "test_commands.proto"
+    );
 
     private File testProjectDir;
+    private GradleProject project;
 
     @BeforeEach
-    void setUp(@TempDir Path tempDirPath) {
+    void createProject(@TempDir Path tempDirPath) {
         testProjectDir = tempDirPath.toFile();
+        project = newProject();
     }
 
     @Test
-    @DisplayName("compile generated validators")
-    void compileGeneratedValidators() {
-        GradleProject project = newProject();
+    @DisplayName("generate valid Java code")
+    void generatingJavaCode() {
         project.executeTask(compileJava);
     }
 
@@ -79,8 +81,6 @@ class ValidatingBuilderGenPluginTest {
     @DisplayName("skip task if inputs and outputs stay the same")
     @Disabled("Until it's clear if we need to do something with Gradle or not")
     void incremental() {
-        GradleProject project = newProject();
-
         TaskName taskName = StubTaskName.generateValidatingBuilders;
         BuildResult firstRun = project.executeTask(taskName);
         TaskOutcome firstOutcome = firstRun.task(taskName.path()).getOutcome();
