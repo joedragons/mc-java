@@ -38,6 +38,9 @@ option (internal_all) = true;
 
 import "google/protobuf/empty.proto";
 
+import "spine/tools/java/java.proto";
+import "spine/tools/proto/proto.proto";
+
 // Configuration of the Spine Protoc Plugin.
 //
 // The configuration is passed to the plugin as the single option.
@@ -67,7 +70,7 @@ message SpineProtocConfig {
     Uuids uuids = 7;
 
     // The classpath used to lookup types by their fully-qualified names.
-    Classpath classpath = 8;
+    java.Classpath classpath = 8;
 }
 
 // Configuration related to validation code.
@@ -129,7 +132,7 @@ message Entities {
     // messages which match the given patterns and messages which are marked with given options
     // are considered to be entity states.
     //
-    repeated ProtoOption option = 2;
+    repeated proto.ProtoOption option = 2;
 
     // Java interfaces to be added to all entity states.
     //
@@ -159,7 +162,7 @@ message GenerateFields {
     //
     // It's recommended that the class extends `io.spine.base.SubscribableField`.
     //
-    JavaClassName superclass = 1;
+    java.JavaClassName superclass = 1;
 }
 
 // Code generation config for an arbitrary group of messages.
@@ -218,7 +221,7 @@ message Pattern {
 //
 message AddInterface {
 
-    JavaClassName name = 1;
+    java.JavaClassName name = 1;
 }
 
 // Configuration for adding Java methods into a generated class.
@@ -241,7 +244,7 @@ message GenerateNestedClasses {
 //
 message NestedClassFactoryName {
 
-    JavaClassName class_name = 1;
+    java.JavaClassName class_name = 1;
 }
 
 // A Java class name of a method factory.
@@ -250,7 +253,7 @@ message NestedClassFactoryName {
 //
 message MethodFactoryName {
 
-    JavaClassName class_name = 1;
+    java.JavaClassName class_name = 1;
 }
 
 // File pattern used to filter messages residing in files.
@@ -283,44 +286,14 @@ message FilePattern {
 }
 
 // A type name pattern.
-//
 message TypePattern {
 
     oneof value {
 
         // The exact value of the expected type name.
-        ProtoTypeName expected_type = 1;
+        proto.ProtoTypeName expected_type = 1;
 
         // A regular expression to match a type name.
         string regex = 2;
     }
-}
-
-// Full name of a Protobuf message type.
-//
-message ProtoTypeName {
-
-    string value = 1;
-}
-
-// Full name of a Java class.
-//
-message JavaClassName {
-
-    string canonical = 1;
-}
-
-// Full name of a Protobuf option.
-//
-message ProtoOption {
-
-    string name = 1;
-}
-
-// A container for the java classpath items.
-//
-message Classpath {
-
-    // An absolute OS-dependent path to a particular classpath JAR.
-    repeated string jar = 1;
 }
