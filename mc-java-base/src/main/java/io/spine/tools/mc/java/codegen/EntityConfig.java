@@ -32,7 +32,7 @@ import com.google.protobuf.Message;
 import io.spine.annotation.Internal;
 import io.spine.tools.protoc.Entities;
 import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.ProtoOption;
+import io.spine.tools.proto.code.ProtoOption;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
