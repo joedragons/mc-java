@@ -42,10 +42,10 @@ import io.spine.tools.java.code.UuidMethodFactory
 import io.spine.tools.mc.java.applyStandard
 import io.spine.tools.mc.java.gradle.McJavaExtension
 import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
+import io.spine.tools.proto.code.ProtoTypeName
 import io.spine.tools.protoc.GenerateFields
 import io.spine.tools.protoc.Messages
 import io.spine.tools.protoc.Pattern
-import io.spine.tools.protoc.ProtoTypeName
 import io.spine.tools.protoc.TypePattern
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
@@ -393,17 +393,15 @@ class `'java { }' block should` {
             assertThat(updatedConfig.messagesList)
                 .hasSize(1)
             val typeName = ProtoTypeName.newBuilder().setValue(type)
-            val typePattern = TypePattern
-                .newBuilder()
+            val typePattern = TypePattern.newBuilder()
                 .setExpectedType(typeName)
-            val pattern = Pattern
-                .newBuilder()
+            val pattern = Pattern.newBuilder()
                 .setType(typePattern)
             assertThat(updatedConfig.messagesList.first())
                 .isEqualTo(
                     Messages.newBuilder()
-                    .setPattern(pattern)
-                    .buildPartial()
+                        .setPattern(pattern)
+                        .buildPartial()
                 )
         }
 
