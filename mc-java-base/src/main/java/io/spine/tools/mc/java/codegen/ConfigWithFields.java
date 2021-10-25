@@ -32,7 +32,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
 
-import static io.spine.tools.protoc.Names.className;
+import static io.spine.tools.java.code.Names.className;
 
 /**
  * A configuration which includes field generation.

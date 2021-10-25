@@ -29,7 +29,7 @@ package io.spine.tools.mc.java.codegen;
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.Message;
 import io.spine.tools.gradle.Multiple;
-import io.spine.tools.protoc.MethodFactory;
+import io.spine.tools.java.code.MethodFactory;
 import io.spine.tools.protoc.MethodFactoryName;
 import io.spine.tools.protoc.Uuids;
 import org.gradle.api.Project;
@@ -68,7 +68,7 @@ public final class UuidConfig extends ConfigWithInterfaces<Uuids> {
     }
 
     /**
-     * Specifies a {@link io.spine.tools.protoc.MethodFactory} to generate methods for
+     * Specifies a {@link io.spine.tools.java.code.MethodFactory} to generate methods for
      * the UUID message classes.
      *
      * <p>Calling this method multiple times will add provide factories for code generation.

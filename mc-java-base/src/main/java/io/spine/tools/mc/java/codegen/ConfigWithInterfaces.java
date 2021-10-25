@@ -33,7 +33,7 @@ import io.spine.tools.protoc.AddInterface;
 import org.gradle.api.Project;
 import org.gradle.api.provider.SetProperty;
 
-import static io.spine.tools.protoc.Names.className;
+import static io.spine.tools.java.code.Names.className;
 
 /**
  * A config for messages which can implement certain Java interfaces.
