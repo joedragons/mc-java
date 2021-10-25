@@ -36,7 +36,7 @@ import org.gradle.api.Project;
 
 import java.util.Set;
 
-import static io.spine.tools.protoc.Names.className;
+import static io.spine.tools.java.code.Names.className;
 
 /**
  * Configuration for code generation for UUID messages.
