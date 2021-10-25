@@ -286,7 +286,6 @@ message FilePattern {
 }
 
 // A type name pattern.
-//
 message TypePattern {
 
     oneof value {
