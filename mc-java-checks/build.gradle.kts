@@ -60,8 +60,3 @@ fun getResolvedArtifactFor(dependency: String): String {
 val test: Test = tasks.test.get()
 val javacPath = getResolvedArtifactFor("javac")
 test.jvmArgs("-Xbootclasspath/p:$javacPath")
-
-//afterEvaluate {
-//    val javacPath = getResolvedArtifactFor("javac")
-//    test.jvmArgs("-Xbootclasspath/p:$javacPath")
-//}
