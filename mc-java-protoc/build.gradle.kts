@@ -33,13 +33,13 @@ dependencies {
     val spine = Spine(project)
     implementation(spine.toolBase)
     implementation(spine.pluginBase)
+    implementation(project(":mc-java-base"))
     implementation(project(":mc-java-validation"))
     implementation(JavaPoet.lib)
     implementation(JavaX.annotations)
 
     testImplementation(spine.base)
     testImplementation(spine.pluginTestlib)
-    testImplementation(project(":mc-java-base"))
 }
 
 tasks.jar {
