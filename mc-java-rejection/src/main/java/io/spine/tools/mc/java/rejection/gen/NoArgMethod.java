@@ -27,7 +27,7 @@
 package io.spine.tools.mc.java.rejection.gen;
 
 import com.google.errorprone.annotations.Immutable;
-import io.spine.tools.protoc.Method;
+import io.spine.tools.java.code.Method;
 
 /**
  * A reference to a method with no arguments.
