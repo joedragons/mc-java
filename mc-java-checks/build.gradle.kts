@@ -27,7 +27,6 @@
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Spine
-import io.spine.internal.gradle.VersionWriter
 
 dependencies {
     annotationProcessor(AutoService.processor)
@@ -59,9 +58,10 @@ fun getResolvedArtifactFor(dependency: String): String {
 }
 
 val test: Test = tasks.test.get()
-afterEvaluate {
-    val javacPath = getResolvedArtifactFor("javac")
-    test.jvmArgs("-Xbootclasspath/p:$javacPath")
-}
+val javacPath = getResolvedArtifactFor("javac")
+test.jvmArgs("-Xbootclasspath/p:$javacPath")
 
-apply<VersionWriter>()
+//afterEvaluate {
+//    val javacPath = getResolvedArtifactFor("javac")
+//    test.jvmArgs("-Xbootclasspath/p:$javacPath")
+//}

@@ -45,10 +45,12 @@ import io.spine.internal.gradle.checkstyle.CheckStyleConfig
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
+import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -98,9 +100,7 @@ subprojects {
         plugin(Protobuf.GradlePlugin.id)
 
         from(Scripts.javacArgs(project))
-        from(Scripts.projectLicenseReport(project))
         from(Scripts.testOutput(project))
-
         from(Scripts.testArtifacts(project))
     }
 
@@ -206,6 +206,8 @@ subprojects {
 
     apply<IncrementGuard>()
     apply<VersionWriter>()
+    publishProtoArtifact(project)
+    LicenseReporter.generateReportIn(project)
 
     apply {
         from(Scripts.slowTests(project))
@@ -217,10 +219,6 @@ subprojects {
     }
 }
 
-apply {
-    // Generate a repository-wide report of 3rd-party dependencies and their licenses.
-    from(Scripts.repoLicenseReport(project))
-}
-
 JacocoConfig.applyTo(project)
 PomGenerator.applyTo(project)
+LicenseReporter.mergeAllReports(project)
