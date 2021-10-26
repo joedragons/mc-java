@@ -34,7 +34,7 @@ import io.spine.tools.java.code.field.FieldFactory;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.protoc.Entities;
 import io.spine.tools.protoc.GenerateFields;
-import io.spine.tools.protoc.JavaClassName;
+import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.protoc.ProtoOption;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProject;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProjectId;

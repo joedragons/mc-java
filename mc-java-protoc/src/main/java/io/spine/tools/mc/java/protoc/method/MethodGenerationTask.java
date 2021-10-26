@@ -31,7 +31,7 @@ import io.spine.tools.mc.java.protoc.ClassMember;
 import io.spine.tools.mc.java.protoc.CodeGenerationTask;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
-import io.spine.tools.protoc.MethodFactory;
+import io.spine.tools.java.code.MethodFactory;
 import io.spine.tools.protoc.MethodFactoryName;
 import io.spine.type.MessageType;
 import org.checkerframework.checker.nullness.qual.NonNull;

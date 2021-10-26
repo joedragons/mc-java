@@ -27,11 +27,11 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.FilePatternMatcher;
 import io.spine.tools.mc.java.protoc.PatternMatcher;
 import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.JavaClassName;
 import io.spine.tools.protoc.Pattern;
 import io.spine.type.MessageType;
 

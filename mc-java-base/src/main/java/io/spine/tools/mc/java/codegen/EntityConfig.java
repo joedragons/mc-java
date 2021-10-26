@@ -105,7 +105,6 @@ public final class EntityConfig extends MessageGroupConfig<Entities> {
     /**
      * Enables type-safe query API generation for entity states.
      */
-    @SuppressWarnings("unused")
     public void generateQueries() {
         generateQueries.set(true);
     }

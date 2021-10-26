@@ -33,8 +33,8 @@ import io.spine.option.OptionsProto;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.protoc.AddInterface;
 import io.spine.tools.protoc.Entities;
-import io.spine.tools.protoc.JavaClassName;
-import io.spine.tools.protoc.ProtoOption;
+import io.spine.tools.java.code.JavaClassName;
+import io.spine.tools.proto.code.ProtoOption;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProject;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProjectId;
 import io.spine.type.MessageType;
@@ -46,7 +46,7 @@ import org.junit.jupiter.api.Test;
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.Assertions.assertIllegalArgument;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
-import static io.spine.tools.protoc.Names.className;
+import static io.spine.tools.java.code.Names.className;
 import static io.spine.tools.mc.java.protoc.InsertionPoint.message_implements;
 
 @DisplayName("`GenerateEntityStateInterfaces` task should")

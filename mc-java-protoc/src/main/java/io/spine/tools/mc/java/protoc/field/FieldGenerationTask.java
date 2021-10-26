@@ -28,11 +28,11 @@ package io.spine.tools.mc.java.protoc.field;
 
 import com.google.common.collect.ImmutableList;
 import io.spine.code.java.ClassName;
+import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.java.code.field.FieldFactory;
 import io.spine.tools.mc.java.protoc.ClassMember;
 import io.spine.tools.mc.java.protoc.CodeGenerationTask;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.protoc.JavaClassName;
 import io.spine.type.MessageType;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;

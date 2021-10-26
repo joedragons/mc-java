@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.protoc;
 
-import io.spine.tools.protoc.ProtoOption;
+import io.spine.tools.proto.code.ProtoOption;
 import io.spine.type.MessageType;
 
 import java.util.function.Predicate;

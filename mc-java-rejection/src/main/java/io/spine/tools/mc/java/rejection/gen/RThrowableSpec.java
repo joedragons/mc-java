@@ -102,15 +102,15 @@ public final class RThrowableSpec implements TypeSpec, Logging {
 
     private MethodSpec constructor() {
         _debug().log("Creating the constructor for the type `%s`.",
-                    declaration.simpleJavaClassName());
+                     declaration.simpleJavaClassName());
         ParameterSpec builderParameter = builder.asParameter();
         CodeBlock buildRejectionMessage = builder.buildRejectionMessage();
         return constructorBuilder()
-                         .addJavadoc(constructorJavadoc(builderParameter))
-                         .addModifiers(PRIVATE)
-                         .addParameter(builderParameter)
-                         .addStatement("super($L)", buildRejectionMessage.toString())
-                         .build();
+                .addJavadoc(constructorJavadoc(builderParameter))
+                .addModifiers(PRIVATE)
+                .addParameter(builderParameter)
+                .addStatement("super($L)", buildRejectionMessage.toString())
+                .build();
     }
 
     private MethodSpec messageThrown() {
@@ -118,11 +118,11 @@ public final class RThrowableSpec implements TypeSpec, Logging {
         _debug().log("Adding method `%s`.", methodSignature);
         TypeName returnType = messageClass.value();
         return MethodSpec.methodBuilder(messageThrown.name())
-                         .addAnnotation(Override.class)
-                         .addModifiers(PUBLIC)
-                         .returns(returnType)
-                         .addStatement("return ($T) super.$L", returnType, methodSignature)
-                         .build();
+                .addAnnotation(Override.class)
+                .addModifiers(PUBLIC)
+                .returns(returnType)
+                .addStatement("return ($T) super.$L", returnType, methodSignature)
+                .build();
     }
 
     /**
@@ -138,13 +138,11 @@ public final class RThrowableSpec implements TypeSpec, Logging {
                                                    .withNewLine())
                            .orElse(JavadocText.fromEscaped(""));
         PackageName rejectionPackage = declaration.javaPackage();
-        CodeBlock sourceProtoNote = CodeBlock
-                .builder()
+        CodeBlock sourceProtoNote = CodeBlock.builder()
                 .add("Rejection based on proto type ")
                 .add("{@code $L.$L}", rejectionPackage, declaration.simpleJavaClassName())
                 .build();
-        return CodeBlock
-                .builder()
+        return CodeBlock.builder()
                 .add(leadingComments.value())
                 .add(JavadocText.fromEscaped(sourceProtoNote.toString())
                                 .withNewLine()
@@ -160,17 +158,20 @@ public final class RThrowableSpec implements TypeSpec, Logging {
      * @return the constructor Javadoc content
      */
     private static CodeBlock constructorJavadoc(ParameterSpec builderParameter) {
-        JavadocText generalPart = JavadocText.fromUnescaped("Creates a new instance.")
-                                             .withNewLine()
-                                             .withNewLine();
-        CodeBlock paramsBlock = CodeBlock.of("@param $N the builder for the rejection",
-                                             builderParameter);
-        JavadocText paramsPart = JavadocText.fromEscaped(paramsBlock.toString())
-                                            .withNewLine();
+        JavadocText generalPart =
+                JavadocText.fromUnescaped("Creates a new instance.")
+                           .withNewLine()
+                           .withNewLine();
+        CodeBlock paramsBlock =
+                CodeBlock.of("@param $N the builder for the rejection",
+                             builderParameter);
+        JavadocText paramsPart =
+                JavadocText.fromEscaped(paramsBlock.toString())
+                           .withNewLine();
         return CodeBlock.builder()
-                        .add(generalPart.value())
-                        .add(paramsPart.value())
-                        .build();
+                .add(generalPart.value())
+                .add(paramsPart.value())
+                .build();
     }
 
     private static FieldSpec serialVersionUID() {

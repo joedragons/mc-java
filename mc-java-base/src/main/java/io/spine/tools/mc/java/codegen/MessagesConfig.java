@@ -71,8 +71,8 @@ public final class MessagesConfig extends ConfigWithFields<Messages> {
     }
 
     /**
-     * Specifies a {@link io.spine.tools.protoc.MethodFactory} to generate methods for
-     * the message classes.
+     * Specifies a {@link io.spine.tools.java.code.MethodFactory MethodFactory} to generate
+     * methods for the message classes.
      *
      * <p>Calling this method multiple times will add the provided factories for code generation.
      *
@@ -84,8 +84,8 @@ public final class MessagesConfig extends ConfigWithFields<Messages> {
     }
 
     /**
-     * Specifies a {@link io.spine.tools.protoc.NestedClassFactory} to generate nested classes
-     * inside the message classes.
+     * Specifies a {@link io.spine.tools.java.code.NestedClassFactory NestedClassFactory}
+     * to generate nested classes inside the message classes.
      *
      * <p>Calling this method multiple times will add the provided factories for code generation.
      *

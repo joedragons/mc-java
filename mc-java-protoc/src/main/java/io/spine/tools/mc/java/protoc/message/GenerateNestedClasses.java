@@ -27,11 +27,11 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.tools.java.code.NestedClassFactory;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
 import io.spine.tools.mc.java.protoc.PatternMatcher;
 import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.NestedClassFactory;
 import io.spine.tools.protoc.NestedClassFactoryName;
 import io.spine.tools.protoc.Pattern;
 import io.spine.type.MessageType;

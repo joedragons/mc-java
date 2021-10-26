@@ -31,7 +31,7 @@ import io.spine.tools.mc.java.codegen.FilePatterns;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.given.TestNestedClassFactory;
 import io.spine.tools.protoc.GenerateNestedClasses;
-import io.spine.tools.protoc.JavaClassName;
+import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.protoc.Messages;
 import io.spine.tools.protoc.NestedClassFactoryName;
 import io.spine.tools.protoc.Pattern;
