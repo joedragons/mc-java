@@ -64,10 +64,13 @@ public class ProjectConfigurations {
     /**
      * Asserts that the given project's {@link JavaCompile} tasks contain the specified arguments.
      *
-     * @param project the project to check
-     * @param args    the arguments
-     * @throws AssertionError if the any of the project's {@link JavaCompile} tasks do not contain
-     *                        any of the specified arguments
+     * @param project
+     *         the project to check
+     * @param args
+     *         the arguments
+     * @throws AssertionError
+     *         if any of {@link JavaCompile} tasks of the project does not contain
+     *         any of the specified arguments
      */
     public static void assertCompileTasksContain(Project project, String... args) {
         TaskCollection<JavaCompile> javaCompileTasks = acquireJavaCompileTasks(project);

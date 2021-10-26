@@ -27,11 +27,11 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.testing.NullPointerTester;
+import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.mc.java.codegen.FilePatterns;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.given.TestNestedClassFactory;
 import io.spine.tools.protoc.GenerateNestedClasses;
-import io.spine.tools.protoc.JavaClassName;
 import io.spine.tools.protoc.Messages;
 import io.spine.tools.protoc.NestedClassFactoryName;
 import io.spine.tools.protoc.Pattern;
@@ -47,7 +47,7 @@ import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
-import static io.spine.tools.mc.java.codegen.Names.className;
+import static io.spine.tools.java.code.Names.className;
 
 @DisplayName("`NestedClassGenerator` should")
 class NestedClassGenTest {

@@ -28,7 +28,7 @@ package io.spine.tools.mc.java.protoc.message;
 
 import io.spine.tools.mc.java.protoc.given.TestInterface;
 import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.JavaClassName;
+import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.protoc.plugin.message.tests.ProjectCreated;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.mc.java.codegen.FilePatterns.fileSuffix;
-import static io.spine.tools.mc.java.codegen.Names.className;
+import static io.spine.tools.java.code.Names.className;
 
 @DisplayName("`GenerateInterfaces` should")
 final class InterfacesTest {

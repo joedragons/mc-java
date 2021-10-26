@@ -45,7 +45,7 @@ import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
-import static io.spine.tools.mc.java.codegen.Names.className;
+import static io.spine.tools.java.code.Names.className;
 
 @DisplayName("`FieldGenerator` should")
 class FieldGenTest {

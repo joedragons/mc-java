@@ -27,7 +27,7 @@
 package io.spine.tools.mc.java.protoc;
 
 import io.spine.logging.Logging;
-import io.spine.tools.protoc.Classpath;
+import io.spine.tools.java.code.Classpath;
 import org.checkerframework.checker.signature.qual.FullyQualifiedName;
 
 import java.io.File;

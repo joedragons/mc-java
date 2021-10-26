@@ -27,16 +27,22 @@
 import io.spine.internal.dependency.AutoService
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.Spine
-import java.net.URI
 
 dependencies {
     annotationProcessor(AutoService.processor)
     compileOnlyApi(AutoService.annotations)
-    implementation(Spine(project).base)
-    implementation(Spine(project).pluginBase)
+
     api(ErrorProne.core)
     ErrorProne.annotations.forEach { api(it) }
+
+    val spine = Spine(project)
+
+    implementation(gradleApi())
+    implementation(spine.base)
+    implementation(spine.modelCompiler)
+
     testImplementation(ErrorProne.testHelpers)
+    testImplementation(spine.testlib)
 }
 
 fun getResolvedArtifactFor(dependency: String): String {
@@ -52,7 +58,5 @@ fun getResolvedArtifactFor(dependency: String): String {
 }
 
 val test: Test = tasks.test.get()
-afterEvaluate {
-    val javacPath = getResolvedArtifactFor("javac")
-    test.jvmArgs("-Xbootclasspath/p:$javacPath")
-}
+val javacPath = getResolvedArtifactFor("javac")
+test.jvmArgs("-Xbootclasspath/p:$javacPath")

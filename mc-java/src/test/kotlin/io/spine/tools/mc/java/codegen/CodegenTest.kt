@@ -41,15 +41,14 @@ import io.spine.query.EntityStateField
 import io.spine.tools.java.code.UuidMethodFactory
 import io.spine.tools.mc.java.applyStandard
 import io.spine.tools.mc.java.gradle.McJavaExtension
-import io.spine.tools.mc.java.gradle.McJavaPlugin
+import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
+import io.spine.tools.proto.code.ProtoTypeName
 import io.spine.tools.protoc.GenerateFields
 import io.spine.tools.protoc.Messages
 import io.spine.tools.protoc.Pattern
-import io.spine.tools.protoc.ProtoTypeName
 import io.spine.tools.protoc.TypePattern
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -71,8 +70,7 @@ class `'java { }' block should` {
     }
 
     @Test
-    @DisplayName("apply changes immediately")
-    fun immediately() {
+    fun `apply changes immediately`() {
         val factoryName = "fake.Factory"
         extension.java { config ->
             config.forUuids {
@@ -393,17 +391,15 @@ class `'java { }' block should` {
             assertThat(updatedConfig.messagesList)
                 .hasSize(1)
             val typeName = ProtoTypeName.newBuilder().setValue(type)
-            val typePattern = TypePattern
-                .newBuilder()
+            val typePattern = TypePattern.newBuilder()
                 .setExpectedType(typeName)
-            val pattern = Pattern
-                .newBuilder()
+            val pattern = Pattern.newBuilder()
                 .setType(typePattern)
             assertThat(updatedConfig.messagesList.first())
                 .isEqualTo(
                     Messages.newBuilder()
-                    .setPattern(pattern)
-                    .buildPartial()
+                        .setPattern(pattern)
+                        .buildPartial()
                 )
         }
 
@@ -415,5 +411,39 @@ class `'java { }' block should` {
             assertThat(validation.skipValidation)
                 .isFalse()
         }
+    }
+
+    @Nested
+    inner class `allow configuring generation of queries` {
+
+        @Test
+        fun `having queries turned by default`() {
+            assertFlag().isTrue()
+        }
+
+        @Test
+        fun `turning generation of queries off`() {
+            extension.java.forEntities {
+                it.skipQueries()
+            }
+            assertFlag().isFalse()
+        }
+
+        @Test
+        fun `turning generation of queries on`() {
+            // Turn `off`, assuming that the default is `on`.
+            extension.java.forEntities {
+                it.skipQueries()
+            }
+
+            // Turn `on`.
+            extension.java.forEntities {
+                it.generateQueries()
+            }
+
+            assertFlag().isTrue()
+        }
+
+        private fun assertFlag() = assertThat(extension.java.toProto().entities.generateQueries)
     }
 }

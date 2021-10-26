@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,16 +32,26 @@ import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.CheckerFramework
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.FindBugs
+import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.Guava
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.PublishingRepos
+import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.Scripts
+import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.checkstyle.CheckStyleConfig
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
-import io.spine.internal.gradle.spinePublishing
+import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
+import io.spine.internal.gradle.publish.PublishingRepos
+import io.spine.internal.gradle.publish.PublishingRepos.gitHub
+import io.spine.internal.gradle.publish.spinePublishing
+import io.spine.internal.gradle.report.coverage.JacocoConfig
+import io.spine.internal.gradle.report.license.LicenseReporter
+import io.spine.internal.gradle.report.pom.PomGenerator
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -61,11 +71,10 @@ spinePublishing {
     projectsToPublish.addAll(subprojects.map { it.path })
     targetRepositories.addAll(
         PublishingRepos.cloudRepo,
-        PublishingRepos.cloudArtifactRegistry
+        PublishingRepos.cloudArtifactRegistry,
+        gitHub("mc-java")
     )
-    // Skip the `spine-` part of the artifact name to avoid collisions with the currently "live"
-    // versions. See https://github.com/SpineEventEngine/model-compiler/issues/3
-    spinePrefix.set(false)
+    spinePrefix.set(true)
 }
 
 allprojects {
@@ -78,6 +87,8 @@ allprojects {
 
     group = "io.spine.tools"
     version = extra["versionToPublish"]!!
+
+    repositories.applyStandard()
 }
 
 subprojects {
@@ -89,14 +100,10 @@ subprojects {
         plugin(Protobuf.GradlePlugin.id)
 
         from(Scripts.javacArgs(project))
-        from(Scripts.projectLicenseReport(project))
         from(Scripts.testOutput(project))
-        from(Scripts.javadocOptions(project))
-
         from(Scripts.testArtifacts(project))
     }
 
-    repositories.applyStandard()
 
     dependencies {
         errorprone(ErrorProne.core)
@@ -114,8 +121,20 @@ subprojects {
         testRuntimeOnly(JUnit.runner)
     }
 
-    configurations.forceVersions()
-    configurations.excludeProtobufLite()
+    val spineBaseVersion: String by extra
+
+    with(configurations) {
+        forceVersions()
+        excludeProtobufLite()
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-testlib:$spineBaseVersion"
+                )
+            }
+        }
+    }
 
     val javaVersion = JavaVersion.VERSION_1_8
 
@@ -124,10 +143,21 @@ subprojects {
         targetCompatibility = javaVersion
     }
 
+    JavadocConfig.applyTo(project)
+    CheckStyleConfig.applyTo(project)
+
+    kotlin {
+        explicitApi()
+    }
+
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             jvmTarget = javaVersion.toString()
-            freeCompilerArgs = listOf("-Xskip-prerelease-check", "-Xjvm-default=all")
+            freeCompilerArgs = listOf(
+                "-Xskip-prerelease-check",
+                "-Xjvm-default=all",
+                "-Xopt-in=kotlin.contracts.ExperimentalContracts"
+            )
         }
     }
 
@@ -137,7 +167,6 @@ subprojects {
         }
     }
 
-    val spineBaseVersion: String by extra
     val generatedResources = "$projectDir/generated/main/resources"
 
     tasks.create<DefaultTask>(name = "prepareProtocConfigVersions") {
@@ -147,9 +176,11 @@ subprojects {
         outputs.file(propertiesFile)
 
         val versions = Properties()
-        versions.setProperty("baseVersion", spineBaseVersion)
-        versions.setProperty("protobufVersion", Protobuf.version)
-        versions.setProperty("gRPCVersion", io.spine.internal.dependency.Grpc.version)
+        with(versions) {
+            setProperty("baseVersion", spineBaseVersion)
+            setProperty("protobufVersion", Protobuf.version)
+            setProperty("gRPCVersion", Grpc.version)
+        }
 
         @Suppress("UNCHECKED_CAST")
         inputs.properties(HashMap(versions) as MutableMap<String, *>)
@@ -158,7 +189,9 @@ subprojects {
             createParentDirs(propertiesFile)
             propertiesFile.createNewFile()
             propertiesFile.outputStream().use {
-                versions.store(it, "Versions of dependencies of the Model Compiler plugin and the Spine Protoc plugin.")
+                versions.store(it,
+                    "Versions of dependencies of the Spine Model Compiler for Java plugin and" +
+                            " the Spine Protoc plugin.")
             }
         }
 
@@ -171,10 +204,14 @@ subprojects {
         resources.srcDir(generatedResources)
     }
 
+    apply<IncrementGuard>()
+    apply<VersionWriter>()
+    publishProtoArtifact(project)
+    LicenseReporter.generateReportIn(project)
+
     apply {
         from(Scripts.slowTests(project))
         from(Scripts.testOutput(project))
-        from(Scripts.javadocOptions(project))
     }
 
     protobuf {
@@ -182,19 +219,6 @@ subprojects {
     }
 }
 
-apply {
-    // Generate a repository-wide report of 3rd-party dependencies and their licenses.
-    from(Scripts.repoLicenseReport(project))
-
-    // Generate a `pom.xml` file containing first-level dependency of all projects in the repository.
-    from(Scripts.generatePom(project))
-}
-
-// The JaCoCo config script uses `evaluationDependsOnChildren()` to scan subprojects to find all
-// the Java projects. Such an evaluation-time dependency, in some cases, causes Gradle to fail.
-// When applying the JaCoCo script after the evaluation is done, the error goes away.
-// See this Gradle discussion for the description of the issue: https://discuss.gradle.org/t/gradle-7-fails-with-cannot-run-project-afterevaluate-action-when-the-project-is-already-evaluated/40296
-afterEvaluate {
-    // Aggregated coverage report across all subprojects.
-    apply(from = Scripts.jacoco(project))
-}
+JacocoConfig.applyTo(project)
+PomGenerator.applyTo(project)
+LicenseReporter.mergeAllReports(project)

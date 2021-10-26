@@ -194,6 +194,6 @@ class McJavaExtensionTest {
 
     private static McJavaExtension spineProtobuf() {
         return (McJavaExtension) project.getExtensions()
-                                        .getByName(McJavaPlugin.extensionName());
+                                        .getByName(McJavaExtension.name());
     }
 }

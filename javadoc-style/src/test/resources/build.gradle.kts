@@ -39,7 +39,7 @@ buildscript {
 
     val mcJavaVersion: String by extra
     dependencies {
-        classpath("io.spine.tools:javadoc-style:$mcJavaVersion")
+        classpath("io.spine.tools:spine-javadoc-style:$mcJavaVersion")
         classpath(io.spine.internal.dependency.Protobuf.GradlePlugin.lib)
     }
 }

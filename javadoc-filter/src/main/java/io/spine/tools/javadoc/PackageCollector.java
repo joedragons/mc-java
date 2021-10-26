@@ -122,8 +122,9 @@ final class PackageCollector {
     }
 
     private static boolean isSubpackage(PackageDoc target, Iterable<PackageDoc> packages) {
+        String targetName = target.name();
         for (PackageDoc pckg : packages) {
-            if (target.name().startsWith(pckg.name())) {
+            if (targetName.startsWith(pckg.name())) {
                 return true;
             }
         }

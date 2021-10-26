@@ -41,38 +41,21 @@ import io.spine.tools.gradle.ThirdPartyDependency
 private const val JAR_EXTENSION = "jar"
 private const val GRPC_GROUP = "io.grpc"
 private const val GRPC_PLUGIN_NAME = "protoc-gen-grpc-java"
-private const val MC_JAVA_NAME = "mc-java"
+private const val MC_JAVA_NAME = "spine-mc-java"
 private const val EXECUTABLE_CLASSIFIER = "exe"
 
 /**
  * The name of the Maven artifact of the Spine Protobuf compiler plugin.
  */
-const val SPINE_PROTOC_PLUGIN_NAME = "mc-java-protoc"
+internal const val SPINE_PROTOC_PLUGIN_NAME = "spine-mc-java-protoc"
 
-/**
- * The name of the Maven artifact of the Model Compiler Java Checks.
- */
-const val MC_JAVA_CHECKS_ARTIFACT = "mc-java-checks"
-
-private val versions = DependencyVersions.loadFor("mc-java")
-
-/**
- * The Maven artifact containing the `mc-java-checks` module.
- */
-@get:JvmName("mcJavaChecks")
-val mcJavaChecks: Artifact by lazy {
-    Artifact.newBuilder()
-        .useSpineToolsGroup()
-        .setName(MC_JAVA_CHECKS_ARTIFACT)
-        .setVersion(mcJavaVersion)
-        .build()
-}
+private val versions = DependencyVersions.loadFor(MC_JAVA_NAME)
 
 /**
  * The Maven artifact of the gRPC Protobuf compiler plugin.
  */
 @get:JvmName("gRpcProtocPlugin")
-val gRpcProtocPlugin: Artifact by lazy {
+internal val gRpcProtocPlugin: Artifact by lazy {
     val gRpcPlugin: Dependency = ThirdPartyDependency(GRPC_GROUP, GRPC_PLUGIN_NAME)
     gRpcPlugin.withVersionFrom(versions)
 }
@@ -81,7 +64,7 @@ val gRpcProtocPlugin: Artifact by lazy {
  * The Maven artifact containing the `mc-java-protoc` module.
  */
 @get:JvmName("spineProtocPlugin")
-val spineProtocPlugin: Artifact by lazy {
+internal val spineProtocPlugin: Artifact by lazy {
     Artifact.newBuilder()
         .useSpineToolsGroup()
         .setName(SPINE_PROTOC_PLUGIN_NAME)
@@ -97,8 +80,8 @@ val spineProtocPlugin: Artifact by lazy {
  * This is the version of all the modules declared in this project.
  */
 @get:JvmName("mcJavaVersion")
-val mcJavaVersion: String by lazy {
+internal val mcJavaVersion: String by lazy {
     val self: Dependency = ThirdPartyDependency(SPINE_TOOLS_GROUP, MC_JAVA_NAME)
     versions.versionOf(self)
-        .orElseThrow { IllegalStateException() }
+        .orElseThrow { IllegalStateException("Unable to load versions of ${self}.") }
 }

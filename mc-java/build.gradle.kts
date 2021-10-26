@@ -31,23 +31,13 @@ import io.spine.internal.dependency.JavaPoet
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
-import io.spine.internal.gradle.IncrementGuard
-import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.WriteVersions
-
-apply<IncrementGuard>()
 
 var protocPluginDependency: Dependency? = null
 val spineBaseVersion: String by extra
 
 dependencies {
-    api(Spine(project).pluginBase)
-    implementation(gradleApi())
     implementation(JavaPoet.lib)
-
-    // A library for parsing Java sources.
-    // Used for parsing Java sources generated from Protobuf files
-    // to make their annotation more convenient.
     implementation(Roaster.api) {
         exclude(group = "com.google.guava")
     }
@@ -55,6 +45,12 @@ dependencies {
         exclude(group = "com.google.guava")
     }
     implementation(Protobuf.GradlePlugin.lib)
+
+    implementation(project(":mc-java-base"))
+    implementation(project(":mc-java-annotation"))
+    implementation(project(":mc-java-checks"))
+    implementation(project(":mc-java-rejection"))
+
     testImplementation(Spine(project).testlib)
     testImplementation(gradleTestKit())
     testImplementation(Spine(project).pluginTestlib)
@@ -77,13 +73,14 @@ protobuf {
 // Tests use the Protobuf plugin.
 tasks.test {
     dependsOn(
+        project(":mc-java-base").tasks.publishToMavenLocal,
+        project(":mc-java-annotation").tasks.publishToMavenLocal,
         project(":mc-java-checks").tasks.publishToMavenLocal,
         project(":mc-java-protoc").tasks.publishToMavenLocal,
+        project(":mc-java-rejection").tasks.publishToMavenLocal,
         tasks.publishToMavenLocal
     )
 }
-
-apply<VersionWriter>()
 
 tasks.withType<WriteVersions> {
     version(Grpc.protobufPlugin)
