@@ -21,12 +21,8 @@
 package io.spine.tools.mc.java.validation.gradle;
 
 import com.google.common.collect.ImmutableList;
-import io.spine.tools.gradle.TaskName;
 import io.spine.tools.gradle.testing.GradleProject;
-import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -34,19 +30,16 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.nio.file.Path;
 
-import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.gradle.JavaTaskName.compileJava;
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
-import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE;
 
-@DisplayName("ValidatingBuilderGenPlugin should")
-class ValidatingBuilderGenPluginTest {
+@DisplayName("Validation code generation should")
+class ValidatingCodeGenTest {
 
     /**
      * The name of the directory under {@code test/resource} which will be used for creating
      * the test project.
      */
-    private static final String PROJECT_NAME = "validators-gen-plugin-test";
+    private static final String PROJECT_NAME = "validation-gen-plugin-test";
 
     /**
      * Names of resource files under the resources "root".
@@ -71,24 +64,6 @@ class ValidatingBuilderGenPluginTest {
     @DisplayName("generate valid Java code")
     void generatingJavaCode() {
         project.executeTask(compileJava);
-    }
-
-    enum StubTaskName implements TaskName {
-        generateValidatingBuilders
-    }
-
-    @Test
-    @DisplayName("skip task if inputs and outputs stay the same")
-    @Disabled("Until it's clear if we need to do something with Gradle or not")
-    void incremental() {
-        TaskName taskName = StubTaskName.generateValidatingBuilders;
-        BuildResult firstRun = project.executeTask(taskName);
-        TaskOutcome firstOutcome = firstRun.task(taskName.path()).getOutcome();
-        assertThat(firstOutcome).isEqualTo(SUCCESS);
-
-        BuildResult secondRun = project.executeTask(taskName);
-        TaskOutcome secondOutcome = secondRun.task(taskName.path()).getOutcome();
-        assertThat(secondOutcome).isEqualTo(UP_TO_DATE);
     }
 
     private GradleProject newProject() {
