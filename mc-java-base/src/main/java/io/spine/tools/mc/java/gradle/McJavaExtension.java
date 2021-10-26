@@ -176,6 +176,9 @@ public class McJavaExtension {
         return NAME;
     }
 
+    /**
+     * Creates a new instance of the extension in the given project.
+     */
     public static void createIn(Project project) {
         String extensionName = name();
         logger.atFine()
