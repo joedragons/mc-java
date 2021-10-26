@@ -25,7 +25,8 @@
  */
 
 /**
- * This package contains implementation of the {@link AnnotatorPlugin}.
+ * This package contains implementation of
+ * the {@link io.spine.tools.mc.java.annotation.gradle.AnnotatorPlugin AnnotatorPlugin}.
  */
 
 @CheckReturnValue
