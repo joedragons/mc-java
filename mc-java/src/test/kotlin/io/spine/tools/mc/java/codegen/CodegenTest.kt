@@ -414,4 +414,40 @@ class `'java { }' block should` {
                 .isFalse()
         }
     }
+
+    @Nested
+    inner class `allow configuring generation of queries` {
+
+        @Test
+        fun `having queries turned by default`() {
+            assertFlag().isTrue()
+        }
+
+        @Test
+        fun `turning generation of queries off`() {
+            extension.java.forEntities {
+                it.skipQueries()
+            }
+            assertFlag().isFalse()
+        }
+
+        @Test
+        fun `turning generation of queries on`() {
+            // Turn `off`, assuming that the default is `on`.
+            extension.java.forEntities {
+                it.skipQueries()
+            }
+
+            // Turn `on`.
+            extension.java.forEntities {
+                it.generateQueries()
+            }
+
+            assertFlag().isTrue()
+        }
+
+        private fun assertFlag() = assertThat(entities.generateQueries)
+
+        private val entities = extension.java.toProto().entities
+    }
 }
