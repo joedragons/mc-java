@@ -63,14 +63,13 @@ class ModuleAnnotatorTest {
     void annotateByClassPattern() {
         @Regex String classNamePattern = ".+OrBuilder";
         FakeAnnotator.Factory factory = new FakeAnnotator.Factory();
-        ModuleAnnotator annotator = ModuleAnnotator
-                .newBuilder()
+        ModuleAnnotator annotator = ModuleAnnotator.newBuilder()
                 .setInternalPatterns(ImmutableSet.of(classNamePattern))
                 .setAnnotatorFactory(factory)
                 .setInternalAnnotation(ANNOTATION)
                 .build();
         annotator.annotate();
-        Assertions.assertEquals(ANNOTATION, factory.getAnnotationName());
+        assertEquals(ANNOTATION, factory.getAnnotationName());
         assertEquals(compile(classNamePattern), factory.getClassNamePattern());
     }
 
@@ -79,28 +78,26 @@ class ModuleAnnotatorTest {
     void annotateByMethodPattern() {
         String methodName = "setInternalValue";
         FakeAnnotator.Factory factory = new FakeAnnotator.Factory();
-        ModuleAnnotator annotator = ModuleAnnotator
-                .newBuilder()
+        ModuleAnnotator annotator = ModuleAnnotator.newBuilder()
                 .setInternalMethodNames(ImmutableSet.of(methodName))
                 .setAnnotatorFactory(factory)
                 .setInternalAnnotation(ANNOTATION)
                 .build();
         annotator.annotate();
-        Assertions.assertEquals(ANNOTATION, factory.getAnnotationName());
+        assertEquals(ANNOTATION, factory.getAnnotationName());
         assertEquals(ImmutableSet.of(exactly(methodName)), factory.getMethodPatterns());
     }
 
     private static void checkAnnotateByOption(ApiOption option) {
         FakeAnnotator.Factory factory = new FakeAnnotator.Factory();
         ModuleAnnotator.Job optionJob = translate(option).as(ANNOTATION);
-        ModuleAnnotator annotator = ModuleAnnotator
-                .newBuilder()
+        ModuleAnnotator annotator = ModuleAnnotator.newBuilder()
                 .add(optionJob)
                 .setAnnotatorFactory(factory)
                 .setInternalAnnotation(ANNOTATION)
                 .build();
         annotator.annotate();
-        Assertions.assertEquals(ANNOTATION, factory.getAnnotationName());
+        assertEquals(ANNOTATION, factory.getAnnotationName());
         assertEquals(option, factory.getOption());
     }
 }
