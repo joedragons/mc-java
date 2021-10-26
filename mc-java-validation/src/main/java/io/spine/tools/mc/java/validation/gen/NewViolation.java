@@ -113,13 +113,9 @@ final class NewViolation implements Expression<ConstraintViolation> {
     }
 
     /**
-     * Creates a new builder for the instances of this type.
-     *
-     * <p>The builder is preset with the declaring type and name of the given field.
-     *
-     * @return new builder instance
+     * Creates a new builder for the violation in the given field.
      */
-    public static Builder forField(FieldContext field) {
+    static Builder forField(FieldContext field) {
         checkNotNull(field);
         FieldDeclaration declaration = field.targetDeclaration();
         return new Builder()
@@ -127,17 +123,20 @@ final class NewViolation implements Expression<ConstraintViolation> {
                 .setField(field.fieldPath());
     }
 
-    public static Builder forMessage(MessageType type, FieldContext context) {
-        checkNotNull(context);
+    /**
+     * Creates a new builder for a violation in the field of the specified message.
+     */
+    static Builder forMessage(MessageType type, FieldContext field) {
+        checkNotNull(field);
         return new Builder()
                 .setType(type)
-                .setField(context.fieldPath());
+                .setField(field.fieldPath());
     }
 
     /**
      * A builder for the {@code ViolationTemplate} instances.
      */
-    public static final class Builder {
+    static final class Builder {
 
         private String message;
         private @Nullable FieldAccess fieldValue;
@@ -152,33 +151,33 @@ final class NewViolation implements Expression<ConstraintViolation> {
         private Builder() {
         }
 
-        public Builder setMessage(String message) {
+        Builder setMessage(String message) {
             this.message = checkNotNull(message);
             return this;
         }
 
-        public Builder setFieldValue(FieldAccess fieldValue) {
+        Builder setFieldValue(FieldAccess fieldValue) {
             this.fieldValue = checkNotNull(fieldValue);
             return this;
         }
 
-        public Builder setType(MessageType type) {
+        Builder setType(MessageType type) {
             this.type = checkNotNull(type);
             return this;
         }
 
-        public Builder setField(FieldPath field) {
+        Builder setField(FieldPath field) {
             this.field = checkNotNull(field);
             return this;
         }
 
-        public Builder
+        Builder
         setNestedViolations(Expression<? extends Iterable<ConstraintViolation>> nestedViolations) {
             this.nestedViolations = checkNotNull(nestedViolations);
             return this;
         }
 
-        public Builder addParam(String... value) {
+        Builder addParam(String... value) {
             params.addAll(asList(value));
             return this;
         }
@@ -186,7 +185,7 @@ final class NewViolation implements Expression<ConstraintViolation> {
         /**
          * Creates a new instance.
          */
-        public NewViolation build() {
+        NewViolation build() {
             checkNotNull(message);
             checkNotNull(type);
             checkNotNull(field);
