@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.annotation.mark;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
@@ -48,6 +47,7 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static io.spine.tools.mc.java.annotation.mark.MessageAnnotator.findNestedType;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
@@ -78,7 +78,7 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
     protected void annotateOneFile(FileDescriptor file) {
         if (shouldAnnotate(file)) {
             SourceFile outerClass = SourceFile.forOuterClassOf(file.toProto());
-            rewriteSource(outerClass, new FileFieldAnnotation(file));
+            rewriteSource(outerClass, new FileFieldAnnotation(this, file));
         }
     }
 
@@ -86,9 +86,9 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
     protected void annotateMultipleFiles(FileDescriptor file) {
         for (Descriptor type : file.getMessageTypes()) {
             if (shouldAnnotate(type)) {
-                SourceVisitor<JavaClassSource> annotation = new MessageFieldAnnotation(type);
-                SourceFile filePath = SourceFile.forMessage(type.toProto(), file.toProto());
-                rewriteSource(filePath, annotation);
+                SourceVisitor<JavaClassSource> annotation = new MessageFieldAnnotation(this, type);
+                SourceFile sourceFile = SourceFile.forMessage(type.toProto(), file.toProto());
+                rewriteSource(sourceFile, annotation);
             }
         }
     }
@@ -99,134 +99,11 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
     }
 
     /**
-     * Casts a {@link JavaType} to a {@link JavaClassSource}.
-     *
-     * @param javaType the type to cast
-     * @return a casted instance
-     * @throws IllegalStateException if the specified source is not a class
-     */
-    private static JavaClassSource castToClass(JavaType<?> javaType) {
-        Preconditions.checkState(javaType.isClass(), "`%s expected to be a class.", javaType.getQualifiedName());
-        return (JavaClassSource) javaType;
-    }
-
-    /**
-     * An annotation function for the {@link #fileDescriptor}.
-     */
-    private class FileFieldAnnotation implements SourceVisitor<JavaClassSource> {
-
-        /**
-         * A file descriptor, that has {@code false} value for a {@code java_multiple_files} option.
-         */
-        private final FileDescriptor fileDescriptor;
-
-        private FileFieldAnnotation(FileDescriptor file) {
-            checkMultipleFilesOption(file, false);
-            this.fileDescriptor = file;
-        }
-
-        /**
-         * Annotates the accessors, which should be annotated, within the specified input.
-         *
-         * @param input the {@link AbstractJavaSource} for the {@link #fileDescriptor}
-         */
-        @Override
-        public void accept(AbstractJavaSource<JavaClassSource> input) {
-            checkNotNull(input);
-            for (Descriptor messageType : fileDescriptor.getMessageTypes()) {
-                processMessageDescriptor(input, messageType);
-            }
-        }
-
-        private void processMessageDescriptor(AbstractJavaSource<JavaClassSource> input,
-                                              Descriptor messageType) {
-            for (FieldDescriptor field : messageType.getFields()) {
-                if (shouldAnnotate(field)) {
-                    JavaSource<?> message = findNestedType(input, messageType.getName());
-                    annotateMessageField(castToClass(message), new FieldDeclaration(field));
-                }
-            }
-        }
-    }
-
-    /**
-     * An annotation function for a {@link #message}.
-     */
-    final class MessageFieldAnnotation implements SourceVisitor<JavaClassSource> {
-
-        /**
-         * A message descriptor for a file descriptor,
-         * that has {@code true} value for a {@code java_multiple_files} option.
-         */
-        private final Descriptor message;
-
-        private MessageFieldAnnotation(Descriptor message) {
-            checkMultipleFilesOption(message.getFile(), true);
-
-            this.message = message;
-        }
-
-        /**
-         * Annotates the accessors, which should be annotated, within the specified input.
-         *
-         * @param input the {@link AbstractJavaSource} for the {@link #message}
-         */
-        @Override
-        public void accept(AbstractJavaSource<JavaClassSource> input) {
-            checkNotNull(input);
-            for (FieldDescriptor field : message.getFields()) {
-                if (shouldAnnotate(field)) {
-                    annotateMessageField(castToClass(input), new FieldDeclaration(field));
-                }
-            }
-        }
-    }
-
-    /**
-     * Annotates the accessors for the specified field.
-     *
-     * @param message
-     *        the message, that contains field for annotation
-     * @param field
-     *        the field descriptor to get field name
-     */
-    private void annotateMessageField(JavaClassSource message,
-                                      FieldDeclaration field) {
-        JavaClassSource messageBuilder = builderOf(message);
-        annotateAccessors(message, field);
-        annotateAccessors(messageBuilder, field);
-    }
-
-    private static JavaClassSource builderOf(JavaClassSource messageSource) {
-        String builderName = SimpleClassName.ofBuilder().value();
-        JavaSource<?> builderSource = messageSource.getNestedType(builderName);
-        return castToClass(builderSource);
-    }
-
-    /**
-     * Annotates {@code public} accessors for the specified field.
-     *
-     * @param javaSource
-     *        class source to modify
-     * @param field
-     *        the declaration of the field to be annotated
-     */
-    private void annotateAccessors(JavaClassSource javaSource, FieldDeclaration field) {
-        ImmutableSet<String> names =
-                Accessors.forField(field.name(), FieldType.of(field))
-                         .names();
-        javaSource.getMethods()
-                  .stream()
-                  .filter(MethodSource::isPublic)
-                  .filter(method -> names.contains(method.getName()))
-                  .forEach(this::addAnnotation);
-    }
-
-    /**
      * Tells whether the specified file descriptor contains at least
      * a message descriptor with at least a field, that should be annotated.
      *
-     * @param file the file descriptor to scan
+     * @param file
+     *         the file descriptor to scan
      * @return {@code true} if the file descriptor contains fields for annotation
      */
     private boolean shouldAnnotate(FileDescriptor file) {
@@ -239,7 +116,8 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
      * Tells whether the specified message descriptor contains at least a field,
      * that should be annotated.
      *
-     * @param definition the message descriptor to scan
+     * @param definition
+     *         the message descriptor to scan
      * @return {@code true} if the message descriptor contains fields for annotation
      */
     private boolean shouldAnnotate(Descriptor definition) {
@@ -252,14 +130,166 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
      * Ensures that the specified file descriptor has the expected value
      * for a {@code java_multiple_files} Protobuf option.
      *
-     * @param file the file descriptor to check
-     * @param expectedValue  the expected value for the {@code java_multiple_files}.
+     * @param file
+     *         the file descriptor to check
+     * @param expectedValue
+     *         the expected value for the {@code java_multiple_files}.
      */
     private static void checkMultipleFilesOption(FileDescriptor file, boolean expectedValue) {
-        boolean actualValue = file.getOptions().getJavaMultipleFiles();
+        boolean actualValue = file.getOptions()
+                                  .getJavaMultipleFiles();
         if (actualValue != expectedValue) {
             throw newIllegalStateException("`java_multiple_files` should be `%s`, but was `%s`.",
-                                                      expectedValue, actualValue);
+                                           expectedValue, actualValue);
+        }
+    }
+
+    /**
+     * Abstract base for annotating source visitors that handle fields.
+     */
+    private abstract static class AnnotatingFieldVisitor implements SourceVisitor<JavaClassSource> {
+
+        private final FieldAnnotator annotator;
+
+        private AnnotatingFieldVisitor(FieldAnnotator annotator) {
+            this.annotator = annotator;
+        }
+
+        final void annotate(JavaSource<?> source, FieldDescriptor field) {
+            annotateMessageField(castToClass(source), new FieldDeclaration(field));
+        }
+
+        final boolean shouldAnnotate(FieldDescriptor field) {
+            return annotator.shouldAnnotate(field);
+        }
+
+        /**
+         * Annotates the accessors for the specified field.
+         *
+         * @param message
+         *         the message, that contains field for annotation
+         * @param field
+         *         the field descriptor to get field name
+         */
+        private void annotateMessageField(JavaClassSource message, FieldDeclaration field) {
+            JavaClassSource messageBuilder = builderOf(message);
+            annotateAccessors(message, field);
+            annotateAccessors(messageBuilder, field);
+        }
+
+        private static JavaClassSource builderOf(JavaClassSource messageSource) {
+            String builderName = SimpleClassName.ofBuilder()
+                                                .value();
+            JavaSource<?> builderSource = messageSource.getNestedType(builderName);
+            return castToClass(builderSource);
+        }
+
+        /**
+         * Annotates {@code public} accessors for the specified field.
+         *
+         * @param javaSource
+         *         class source to modify
+         * @param field
+         *         the declaration of the field to be annotated
+         */
+        private void annotateAccessors(JavaClassSource javaSource, FieldDeclaration field) {
+            ImmutableSet<String> names =
+                    Accessors.forField(field.name(), FieldType.of(field))
+                             .names();
+            javaSource.getMethods()
+                      .stream()
+                      .filter(MethodSource::isPublic)
+                      .filter(method -> names.contains(method.getName()))
+                      .forEach(annotator::addAnnotation);
+        }
+
+        /**
+         * Casts a {@link JavaType} to a {@link JavaClassSource}.
+         *
+         * @param javaType
+         *         the type to cast
+         * @return a cast instance
+         * @throws IllegalStateException
+         *         if the specified source is not a class
+         */
+        private static JavaClassSource castToClass(JavaType<?> javaType) {
+            checkState(javaType.isClass(), "`%s` expected to be a class.",
+                       javaType.getQualifiedName());
+            return (JavaClassSource) javaType;
+        }
+    }
+
+    /**
+     * An annotation function for a {@link #message}.
+     */
+    private static final class MessageFieldAnnotation extends AnnotatingFieldVisitor {
+
+        /**
+         * A message descriptor for a file descriptor,
+         * that has {@code true} value for a {@code java_multiple_files} option.
+         */
+        private final Descriptor message;
+
+        private MessageFieldAnnotation(FieldAnnotator annotator, Descriptor message) {
+            super(annotator);
+            checkMultipleFilesOption(message.getFile(), true);
+            this.message = message;
+        }
+
+        /**
+         * Annotates the accessors, which should be annotated, within the specified input.
+         *
+         * @param input
+         *         the {@link AbstractJavaSource} for the {@link #message}
+         */
+        @Override
+        public void accept(AbstractJavaSource<JavaClassSource> input) {
+            checkNotNull(input);
+            for (FieldDescriptor field : message.getFields()) {
+                if (shouldAnnotate(field)) {
+                    annotate(input, field);
+                }
+            }
+        }
+    }
+
+    /**
+     * An annotation function for the {@link #file}.
+     */
+    private static final class FileFieldAnnotation extends AnnotatingFieldVisitor {
+
+        /**
+         * A file descriptor, that has {@code false} value for a {@code java_multiple_files} option.
+         */
+        private final FileDescriptor file;
+
+        private FileFieldAnnotation(FieldAnnotator annotator, FileDescriptor file) {
+            super(annotator);
+            checkMultipleFilesOption(file, false);
+            this.file = file;
+        }
+
+        /**
+         * Annotates the accessors, which should be annotated, within the specified input.
+         *
+         * @param input
+         *         the {@link AbstractJavaSource} for the {@link #file}
+         */
+        @Override
+        public void accept(AbstractJavaSource<JavaClassSource> input) {
+            checkNotNull(input);
+            for (Descriptor message : file.getMessageTypes()) {
+                processMessage(input, message);
+            }
+        }
+
+        private void processMessage(AbstractJavaSource<JavaClassSource> input, Descriptor message) {
+            for (FieldDescriptor field : message.getFields()) {
+                if (shouldAnnotate(field)) {
+                    JavaSource<?> nested = findNestedType(input, message.getName());
+                    annotate(nested, field);
+                }
+            }
         }
     }
 }
