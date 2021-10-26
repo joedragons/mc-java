@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * An extractor for the {@link Project} {@linkplain org.gradle.api.Task tasks} and their arguments.
  */
-class ProjectTasks {
+final class ProjectTasks {
 
     /** Prevents instantiation of this utility class. */
     private ProjectTasks() {
