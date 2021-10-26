@@ -149,9 +149,7 @@ public final class ApiOption {
      * @return {@code true} if the option is present in the declaration, {@code false} otherwise
      */
     boolean isPresentAt(ServiceDescriptor descriptor) {
-        checkState(serviceOption != null,
-                                 "Option %s does not support services.", messageOption.getDescriptor()
-                                                                        .getName());
+        checkState(serviceOption != null, "Option %s does not support services.", this);
         ServiceOptions options = descriptor.getOptions();
         return optionPresent(options, serviceOption);
     }
@@ -164,9 +162,7 @@ public final class ApiOption {
      * @return {@code true} if the option is present in the declaration, {@code false} otherwise
      */
     boolean isPresentAt(FieldDescriptor descriptor) {
-        checkState(fieldOption != null,
-                                 "Option %s does not support fields.", messageOption.getDescriptor()
-                                                                      .getName());
+        checkState(fieldOption != null, "Option %s does not support fields.", this);
         FieldOptions options = descriptor.getOptions();
         return optionPresent(options, fieldOption);
     }
