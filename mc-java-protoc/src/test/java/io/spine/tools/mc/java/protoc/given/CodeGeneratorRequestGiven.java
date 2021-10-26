@@ -44,7 +44,7 @@ import java.nio.file.Path;
 import java.util.Base64;
 
 import static com.google.common.base.Charsets.UTF_8;
-import static io.spine.tools.protoc.Names.className;
+import static io.spine.tools.java.code.Names.className;
 
 /**
  * A helper class for {@link com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest
@@ -62,8 +62,7 @@ public final class CodeGeneratorRequestGiven {
      * Spine options set.
      */
     public static PluginProtos.CodeGeneratorRequest.Builder requestBuilder() {
-        return PluginProtos.CodeGeneratorRequest
-                .newBuilder()
+        return PluginProtos.CodeGeneratorRequest.newBuilder()
                 .addProtoFile(descriptorProto())
                 .addProtoFile(spineOptionsProto())
                 .setCompilerVersion(compilerVersion());
@@ -72,13 +71,13 @@ public final class CodeGeneratorRequestGiven {
     /**
      * Creates an instance of the latest supported Protobuf version.
      */
-    public static PluginProtos.Version compilerVersion() {
+    private static PluginProtos.Version compilerVersion() {
         return PluginProtos.Version.newBuilder()
-                                   .setMajor(3)
-                                   .setMajor(6)
-                                   .setPatch(1)
-                                   .setSuffix("")
-                                   .build();
+                .setMajor(3)
+                .setMajor(6)
+                .setPatch(1)
+                .setSuffix("")
+                .build();
     }
 
     /**
@@ -96,8 +95,7 @@ public final class CodeGeneratorRequestGiven {
      * Creates a {@link GenerateNestedClasses} config with the given factory class.
      */
     public static GenerateNestedClasses generateNested(Class<?> cls) {
-        return GenerateNestedClasses
-                .newBuilder()
+        return GenerateNestedClasses.newBuilder()
                 .setFactory(nestedClassFactory(cls))
                 .build();
     }
@@ -106,8 +104,7 @@ public final class CodeGeneratorRequestGiven {
      * Creates a {@link NestedClassFactoryName} with the name of the given class.
      */
     private static NestedClassFactoryName nestedClassFactory(Class<?> cls) {
-        return NestedClassFactoryName
-                .newBuilder()
+        return NestedClassFactoryName.newBuilder()
                 .setClassName(className(cls))
                 .build();
     }
@@ -117,8 +114,7 @@ public final class CodeGeneratorRequestGiven {
      */
     public static GenerateMethods generateMethods(Class<?> factory) {
         MethodFactoryName factoryName = methodFactory(factory);
-        return GenerateMethods
-                .newBuilder()
+        return GenerateMethods.newBuilder()
                 .setFactory(factoryName)
                 .build();
     }
@@ -127,8 +123,7 @@ public final class CodeGeneratorRequestGiven {
      * Creates a {@link MethodFactoryName} with the name of the given class.
      */
     public static MethodFactoryName methodFactory(Class<?> cls) {
-        return MethodFactoryName
-                .newBuilder()
+        return MethodFactoryName.newBuilder()
                 .setClassName(className(cls))
                 .build();
     }
@@ -137,8 +132,7 @@ public final class CodeGeneratorRequestGiven {
      * Creates a {@link AddInterface} config with the given interface.
      */
     public static AddInterface addInterface(Class<?> iface) {
-        return AddInterface
-                .newBuilder()
+        return AddInterface.newBuilder()
                 .setName(className(iface))
                 .build();
     }
@@ -147,8 +141,7 @@ public final class CodeGeneratorRequestGiven {
      * Creates a {@link Pattern} wrapping the given file pattern.
      */
     public static Pattern pattern(FilePattern filePattern) {
-        return Pattern
-                .newBuilder()
+        return Pattern.newBuilder()
                 .setFile(filePattern)
                 .build();
     }

@@ -28,8 +28,8 @@ package io.spine.tools.mc.java.protoc.given;
 
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.Immutable;
-import io.spine.tools.protoc.Method;
-import io.spine.tools.protoc.MethodFactory;
+import io.spine.tools.java.code.Method;
+import io.spine.tools.java.code.MethodFactory;
 import io.spine.type.MessageType;
 
 import java.util.List;

@@ -30,8 +30,7 @@ import com.google.common.testing.NullPointerTester;
 import io.spine.option.OptionsProto;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.protoc.Entities;
-import io.spine.tools.protoc.ProtoOption;
+import io.spine.tools.proto.code.ProtoOption;
 import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
@@ -84,11 +83,12 @@ class ColumnGenTest {
 
     private static SpineProtocConfig newConfig() {
         SpineProtocConfig.Builder config = SpineProtocConfig.newBuilder();
-        Entities.Builder entities = config.getEntitiesBuilder();
-        entities.setGenerateQueries(true);
-        entities.addOption(ProtoOption
-                                   .newBuilder()
-                                   .setName(OptionsProto.entity.getDescriptor().getName()));
+        config.getEntitiesBuilder()
+              .setGenerateQueries(true)
+              .addOption(
+                      ProtoOption.newBuilder()
+                              .setName(OptionsProto.entity.getDescriptor().getName())
+              );
         return config.build();
     }
 }

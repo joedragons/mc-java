@@ -34,6 +34,7 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,14 +66,12 @@ public class CleaningPlugin extends SpinePlugin {
         debug.log(
                 "Pre-clean: deleting the directories (`%s`).", lazy(dirsToClean::toString)
         );
-        List<File> directories =
-                dirsToClean.stream()
-                           .map(File::new)
-                           .collect(Collectors.toList());
-        for (File directory : directories) {
-            debug.log("Deleting directory `%s`...", directory);
-            deleteRecursively(directory.toPath());
-        }
+        dirsToClean.stream()
+                   .map(Paths::get)
+                   .forEach(dir -> {
+                       debug.log("Deleting directory `%s`...", dir);
+                       deleteRecursively(dir);
+                   });
     }
 }
 
