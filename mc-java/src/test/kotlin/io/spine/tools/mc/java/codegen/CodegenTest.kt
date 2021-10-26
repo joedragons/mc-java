@@ -49,7 +49,6 @@ import io.spine.tools.protoc.Pattern
 import io.spine.tools.protoc.TypePattern
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -71,8 +70,7 @@ class `'java { }' block should` {
     }
 
     @Test
-    @DisplayName("apply changes immediately")
-    fun immediately() {
+    fun `apply changes immediately`() {
         val factoryName = "fake.Factory"
         extension.java { config ->
             config.forUuids {
@@ -446,8 +444,6 @@ class `'java { }' block should` {
             assertFlag().isTrue()
         }
 
-        private fun assertFlag() = assertThat(entities.generateQueries)
-
-        private val entities = extension.java.toProto().entities
+        private fun assertFlag() = assertThat(extension.java.toProto().entities.generateQueries)
     }
 }
