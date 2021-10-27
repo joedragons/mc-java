@@ -27,8 +27,6 @@
 rootProject.name = "mc-java"
 
 include(
-    "javadoc-filter",
-    "javadoc-style",
     "mc-java",
     "mc-java-annotation",
     "mc-java-base",

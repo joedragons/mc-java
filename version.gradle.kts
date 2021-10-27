@@ -26,5 +26,5 @@
 
 val mcVersion by extra("0.1.1")
 val mcJavaVersion by extra(mcVersion)
-val versionToPublish by extra(mcJavaVersion)
+val versionToPublish by extra("0.1.2")
 val spineBaseVersion by extra("2.0.0-SNAPSHOT.70")
