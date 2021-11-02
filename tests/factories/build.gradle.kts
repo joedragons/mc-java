@@ -31,9 +31,9 @@ import io.spine.internal.dependency.JavaPoet
     the `model-compiler-test` module.
 */
 
-val spineVersion: String by extra
+val spineBaseVersion: String by extra
 
 dependencies {
     implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+    implementation("io.spine.tools:spine-tool-base:$spineBaseVersion")
 }

@@ -25,28 +25,22 @@
  */
 
 import io.spine.internal.dependency.ErrorProne
-import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.JUnit
+import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.Scripts
-import io.spine.internal.gradle.spinePublishing
+import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.publish.PublishingRepos.gitHub
 
 buildscript {
 
     val baseRoot = "${rootDir}/.."
     val versionGradle = "${baseRoot}/version.gradle.kts"
-    val commonPath = io.spine.internal.gradle.Scripts.commonPath
-
     apply(from = versionGradle)
-    apply(from = "${baseRoot}/${commonPath}/dependencies.gradle")
 
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-        mavenCentral()
-    }
+    io.spine.internal.gradle.doApplyStandard(repositories)
 
-    val spineVersion: String by extra
+    val mcJavaVersion: String by extra
 
     dependencies {
         classpath(io.spine.internal.dependency.Guava.lib)
@@ -58,7 +52,7 @@ buildscript {
         classpath(io.spine.internal.dependency.ErrorProne.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
-        classpath("io.spine.tools:spine-mc-java:$spineVersion")
+        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
     }
 }
 
@@ -71,7 +65,7 @@ plugins {
     }
     @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
     io.spine.internal.dependency.ErrorProne.GradlePlugin.apply {
-        id(id) version version
+        id(id).version(version)
     }
 }
 
@@ -80,12 +74,12 @@ val baseRoot = "$rootDir/.."
 allprojects {
     apply(from = "$baseRoot/version.gradle.kts")
     apply(plugin = "java")
-    apply(plugin = "jacoco")
-    apply(plugin = "project-report")
 
     repositories {
-        mavenLocal()
-        mavenCentral()
+        applyStandard()
+        gitHub("base")
+        gitHub("tool-base")
+        gitHub("model-compiler")
     }
 }
 
@@ -106,7 +100,7 @@ subprojects {
         }
     }
 
-    val spineVersion: String by extra
+    val spineBaseVersion: String by extra
 
     /**
      * These dependencies are applied to all sub-projects and does not have to be included
@@ -116,8 +110,8 @@ subprojects {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
         ErrorProne.annotations.forEach { compileOnly(it) }
-        implementation("io.spine:spine-base:$spineVersion")
-        testImplementation("io.spine.tools:spine-testlib:$spineVersion")
+        implementation("io.spine:spine-base:$spineBaseVersion")
+        testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
     }
@@ -161,6 +155,3 @@ subprojects {
     // see https://github.com/SpineEventEngine/base/issues/657
     tasks.processTestResources.get().duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
-
-val scriptsPath = Scripts.commonPath
-apply(from = "${baseRoot}/${scriptsPath}/jacoco.gradle")
