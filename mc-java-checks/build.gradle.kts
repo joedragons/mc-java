@@ -38,6 +38,7 @@ dependencies {
     val spine = Spine(project)
 
     implementation(gradleApi())
+    implementation(ErrorProne.GradlePlugin.lib)
     implementation(spine.base)
     implementation(spine.modelCompiler)
 
