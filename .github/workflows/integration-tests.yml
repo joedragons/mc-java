@@ -1,0 +1,17 @@
+name: Integration Tests
+
+on:
+  workflow_run:
+    workflows: [ "Build under Ubuntu" ]
+    types:
+      - completed
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Run tests
+        shell: bash
+        run: |
+          cd tests
+          ./gradlew build --stacktrace
