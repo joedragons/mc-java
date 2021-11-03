@@ -28,7 +28,6 @@ package io.spine.tools.mc.java.checks.gradle;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.spine.logging.Logging;
-import io.spine.tools.gradle.JavaCompileTasks;
 import io.spine.tools.mc.checks.Severity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Action;
@@ -88,9 +87,7 @@ public final class McJavaChecksSeverity implements Logging {
                                  "plugin is not applied to the project `%s`.", project.getName());
             return;
         }
-        //TODO:2021-10-12:alexander.yevsyukov: Take it from ModelCompiler/checks
-        Severity defaultSeverity = Severity.WARN;
-        configureUseValidatingBuilder(defaultSeverity);
+        configureSeverities();
     }
 
     /**
@@ -105,27 +102,25 @@ public final class McJavaChecksSeverity implements Logging {
     }
 
     /**
-     * Configures the "UseValidatingBuilder" check severity for all
-     * {@code JavaCompile} tasks of the project.
-     *
-     * <p>Uses default severity set in the {@code modelCompiler} extension if set and not
-     * overridden by the more specific {@code modelChecks} extension.
+     * Configures default level of check severities.
      */
-    private void configureUseValidatingBuilder(@Nullable Severity defaultSeverity) {
+    private void configureSeverities() {
+        //TODO:2021-10-12:alexander.yevsyukov: Take it from ModelCompiler/checks
         Severity severity = getUseValidatingBuilderSeverity(project);
         if (severity == null) {
-            if (defaultSeverity == null) {
-                return;
-            } else {
-                severity = defaultSeverity;
-            }
+            severity = Severity.WARN;
         }
         _debug().log(
                 "Setting `UseValidatingBuilder` checker severity to `%s` for the project `%s`.",
                 severity.name(), project.getName()
         );
-        String severityArg = "-Xep:UseValidatingBuilder:" + severity.name();
-        JavaCompileTasks.of(project).addArgs(severityArg);
+
+        // String severityArg = "-Xep:UseValidatingBuilder:" + severity.name();
+        ErrorProneOptionsAccess
+                .of(project)
+                // Pass already present check to demo the API.
+                // Enumerate our custom checks doing the same later.
+                .addArgs("-Xep:ReferenceEquality:ERROR"/*, severityArg*/);
     }
 
     /**
@@ -136,4 +131,5 @@ public final class McJavaChecksSeverity implements Logging {
     void setHasErrorPronePlugin(boolean value) {
         this.hasErrorPronePlugin = value;
     }
+
 }
