@@ -238,10 +238,18 @@ LicenseReporter.mergeAllReports(project)
  * so the Gradle project in `tests` can depend on them.
  */
 val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
+
+/** A timeout for the case of stalled child processes under Windows. */
+private val maxTimeout = Duration.ofMinutes(30)
+
+/**
+ * The build task executed under `tests` subdirectory.
+ *
+ * The task depends on artifacts of this project published to `mavenLocal()`.
+ */
 val integrationTests by tasks.registering(RunBuild::class) {
     directory = "$rootDir/tests"
-    // Have a timeout for the case of stalled child processes under Windows.
-    timeout.set(Duration.ofMinutes(30))
+    timeout.set(maxTimeout)
 
     val pubTasks = projectsToPublish.map { p ->
         val subProject = rootProject.project(p)
