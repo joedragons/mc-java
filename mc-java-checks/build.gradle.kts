@@ -43,6 +43,7 @@ dependencies {
     implementation(spine.modelCompiler)
 
     testImplementation(ErrorProne.testHelpers)
+    testImplementation(gradleKotlinDsl())
     testImplementation(spine.testlib)
 }
 

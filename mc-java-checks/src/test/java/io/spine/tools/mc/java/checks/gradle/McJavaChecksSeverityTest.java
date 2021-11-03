@@ -26,18 +26,18 @@
 
 package io.spine.tools.mc.java.checks.gradle;
 
-import com.google.common.testing.NullPointerTester;
 import io.spine.tools.mc.gradle.McExtension;
 import io.spine.tools.mc.java.checks.gradle.given.ProjectConfigurations;
 import io.spine.tools.mc.java.checks.gradle.given.StubProject;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
 import static io.spine.tools.mc.checks.Severity.ERROR;
+import static io.spine.tools.mc.java.checks.gradle.McJavaChecksSeverity.ERROR_PRONE_PLUGIN_ID;
 
 /**
  * Tests {@link io.spine.tools.gradle.compiler.Severity}.
@@ -54,18 +54,14 @@ class McJavaChecksSeverityTest {
         configurer = McJavaChecksSeverity.initFor(project);
     }
 
-    @Test
-    @DisplayName(NOT_ACCEPT_NULLS)
-    void nullCheck() {
-        new NullPointerTester().testAllPublicStaticMethods(McJavaChecksSeverity.class);
-        new NullPointerTester().testAllPublicInstanceMethods(configurer);
-    }
-
     @SuppressWarnings({"CheckReturnValue", "ResultOfMethodCallIgnored"})
     // We use one extension and just create the other one.
     @Test
     @DisplayName("configure check severity")
+    @Disabled("Needs to be re-implemented when real checks are added")
     void configureCheckSeverity() {
+        project.getPlugins()
+               .apply(ERROR_PRONE_PLUGIN_ID);
         configureModelCompilerExtension();
         McJavaChecksExtension extension = configureSpineCheckExtension();
         extension.useValidatingBuilderSeverity = ERROR;
@@ -97,7 +93,7 @@ class McJavaChecksSeverityTest {
     }
 
     private void checkSeverityConfiguredToError() {
-        ProjectConfigurations.assertCompileTasksContain(project, "-Xep:UseValidatingBuilder:ERROR");
+        ProjectConfigurations.assertCompileTasksContain(project, "-Xep:ReferenceEquality:ERROR");
     }
 
     private void checkSeverityNotConfigured() {

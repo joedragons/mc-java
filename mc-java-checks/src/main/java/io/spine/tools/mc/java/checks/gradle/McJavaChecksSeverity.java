@@ -46,7 +46,7 @@ import static io.spine.tools.mc.java.checks.gradle.McJavaChecksExtension.getUseV
  */
 public final class McJavaChecksSeverity implements Logging {
 
-    private static final String ERROR_PRONE_PLUGIN_ID = "net.ltgt.errorprone";
+    static final String ERROR_PRONE_PLUGIN_ID = "net.ltgt.errorprone";
 
     private final Project project;
     private @Nullable Boolean hasErrorPronePlugin;
