@@ -102,10 +102,6 @@ subprojects {
 
     val spineBaseVersion: String by extra
 
-    /**
-     * These dependencies are applied to all sub-projects and does not have to be included
-     * explicitly.
-     */
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
