@@ -131,5 +131,4 @@ public final class McJavaChecksSeverity implements Logging {
     void setHasErrorPronePlugin(boolean value) {
         this.hasErrorPronePlugin = value;
     }
-
 }

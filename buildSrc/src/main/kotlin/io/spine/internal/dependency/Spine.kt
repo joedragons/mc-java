@@ -50,4 +50,6 @@ class Spine(p: Project) {
         get() = extra["spineBaseVersion"] as String
     private val Project.mcVersion: String
         get() = extra["mcVersion"] as String
+    private val Project.toolBaseVersion: String
+        get() = extra["toolBaseVersion"] as String
 }
