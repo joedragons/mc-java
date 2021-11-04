@@ -113,7 +113,6 @@ subprojects {
         from(Scripts.testArtifacts(project))
     }
 
-
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
