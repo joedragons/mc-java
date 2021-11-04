@@ -109,7 +109,6 @@ subprojects {
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
 
-        from(Scripts.javacArgs(project))
         from(Scripts.testOutput(project))
         from(Scripts.testArtifacts(project))
     }
