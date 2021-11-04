@@ -38,10 +38,12 @@ dependencies {
     val spine = Spine(project)
 
     implementation(gradleApi())
+    implementation(ErrorProne.GradlePlugin.lib)
     implementation(spine.base)
     implementation(spine.modelCompiler)
 
     testImplementation(ErrorProne.testHelpers)
+    testImplementation(gradleKotlinDsl())
     testImplementation(spine.testlib)
 }
 

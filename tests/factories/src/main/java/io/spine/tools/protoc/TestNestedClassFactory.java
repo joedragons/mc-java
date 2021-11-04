@@ -32,6 +32,8 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import io.spine.type.MessageType;
+import io.spine.tools.java.code.NestedClass;
+import io.spine.tools.java.code.NestedClassFactory;
 
 import java.util.List;
 

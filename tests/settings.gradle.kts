@@ -40,16 +40,12 @@ include("validation-gen")
  * See the `includeBuild(...)` block below for more info.
  */
 val links = mapOf(
-    "io.spine:spine-base" to ":base",
-    "io.spine.tools:spine-testlib" to ":testlib",
-    "io.spine.tools:spine-tool-base" to ":tool-base",
-    "io.spine.tools:spine-model-compiler" to ":model-compiler",
     "io.spine.tools:spine-mc-java" to ":mc-java",
     "io.spine.tools:spine-mc-java-checks" to ":mc-java-checks"
 )
 
 /*
- * Include the `base` build into the `tests` project build.
+ * Include the `mc-java` build into the `tests` project build.
  *
  * Integration tests are built separately in order to be able to test the current
  * version of the Gradle plugins.

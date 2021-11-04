@@ -95,7 +95,8 @@ public final class ExternalClassLoader<T> implements Logging {
             Class<?> factory = classLoader.loadClass(fqn);
             return factory;
         } catch (ClassNotFoundException e) {
-            _error().log("Unable to resolve class `%s`.", fqn);
+            _error().withCause(e)
+                    .log("Unable to resolve the class `%s`.", fqn);
             throw new ClassInstantiationException(fqn, e);
         }
     }

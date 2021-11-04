@@ -38,6 +38,7 @@ import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.IncrementGuard
+import io.spine.internal.gradle.RunBuild
 import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.applyStandard
@@ -46,12 +47,14 @@ import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
+import io.spine.internal.gradle.publish.PublishExtension
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
 import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
+import java.time.Duration
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -88,7 +91,12 @@ allprojects {
     group = "io.spine.tools"
     version = extra["versionToPublish"]!!
 
-    repositories.applyStandard()
+    repositories {
+        gitHub("base")
+        gitHub("tool-base")
+        gitHub("model-compiler")
+        applyStandard()
+    }
 }
 
 subprojects {
@@ -222,3 +230,34 @@ subprojects {
 JacocoConfig.applyTo(project)
 PomGenerator.applyTo(project)
 LicenseReporter.mergeAllReports(project)
+
+/**
+ * The [integrationTests] task runs a separate Gradle project in the `tests` directory.
+ *
+ * The task depends on publishing all the artifacts produced by `base` into Maven Local,
+ * so the Gradle project in `tests` can depend on them.
+ */
+val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
+
+/** A timeout for the case of stalled child processes under Windows. */
+private val maxTimeout = Duration.ofMinutes(30)
+
+/**
+ * The build task executed under `tests` subdirectory.
+ *
+ * The task depends on artifacts of this project published to `mavenLocal()`.
+ */
+val integrationTests by tasks.registering(RunBuild::class) {
+    directory = "$rootDir/tests"
+    timeout.set(maxTimeout)
+
+    val pubTasks = projectsToPublish.map { p ->
+        val subProject = rootProject.project(p)
+        subProject.tasks["publishToMavenLocal"]
+    }
+    dependsOn(pubTasks)
+}
+
+tasks.register("buildAll") {
+    dependsOn(tasks.build, integrationTests)
+}

@@ -24,29 +24,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.internal.dependency
 
-/*
- * This script configures Gradle PMD plugin.
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.extra
+
+/**
+ * Dependencies on Spine `base` modules.
+ *
+ * @constructor
+ * Creates a new instance of `Spine` taking the `spineBaseVersion` from the given project's
+ * extra properties.
  */
-pmd {
-    toolVersion = "${io.spine.internal.dependency.Pmd.version}"
-    consoleOutput = true
-    incrementalAnalysis = true
+class Spine(p: Project) {
 
-    // The build is going to fail in case of violations.
-    ignoreFailures = false
+    val base = "io.spine:spine-base:${p.spineVersion}"
+    val testlib = "io.spine.tools:spine-testlib:${p.spineVersion}"
 
-    // Disable the default rule set to use the custom rules (see below).
-    ruleSets = []
+    val toolBase = "io.spine.tools:spine-tool-base:${p.toolBaseVersion}"
+    val pluginBase = "io.spine.tools:spine-plugin-base:${p.toolBaseVersion}"
+    val pluginTestlib = "io.spine.tools:spine-plugin-testlib:${p.toolBaseVersion}"
 
-    // A set of custom rules.
-    ruleSetFiles = files("$rootDir/config/quality/pmd.xml")
+    val modelCompiler = "io.spine.tools:spine-model-compiler:${p.mcVersion}"
 
-    reportsDir = file("build/reports/pmd")
-
-    // Just analyze the main sources; do not analyze tests.
-    sourceSets = [sourceSets.main]
+    private val Project.spineVersion: String
+        get() = extra["spineBaseVersion"] as String
+    private val Project.mcVersion: String
+        get() = extra["mcVersion"] as String
+    private val Project.toolBaseVersion: String
+        get() = extra["toolBaseVersion"] as String
 }
-
-// Workaround for https://github.com/pmd/pmd/issues/1705.
-pmdMain.classpath += sourceSets.main.runtimeClasspath

@@ -28,12 +28,12 @@ import io.spine.internal.dependency.JavaPoet
 
 /* 
     This Smoke Tests module holds a `TestMethodFactory` that is used in
-    the `model-compiler-test` module.
+    the `model-compiler` module.
 */
 
-val spineVersion: String by extra
+val toolBaseVersion: String by extra
 
 dependencies {
     implementation(JavaPoet.lib)
-    implementation("io.spine.tools:spine-tool-base:$spineVersion")
+    implementation("io.spine.tools:spine-tool-base:$toolBaseVersion")
 }
