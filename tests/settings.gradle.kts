@@ -41,12 +41,7 @@ include("validation-gen")
  */
 val links = mapOf(
     "io.spine.tools:spine-mc-java" to ":mc-java",
-    //"io.spine.tools:spine-mc-annotation" to ":mc-java-annotation",
-    //"io.spine.tools:spine-mc-base" to ":mc-java-base",
-    "io.spine.tools:spine-mc-java-checks" to ":mc-java-checks",
-    //"io.spine.tools:spine-mc-java-protoc" to ":mc-java-protoc",
-    //"io.spine.tools:spine-mc-java-rejection" to ":mc-java-rejection",
-    //"io.spine.tools:spine-mc-java-validation" to ":mc-java-validation"
+    "io.spine.tools:spine-mc-java-checks" to ":mc-java-checks"
 )
 
 /*

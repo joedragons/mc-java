@@ -105,7 +105,6 @@ public final class McJavaChecksSeverity implements Logging {
      * Configures default level of check severities.
      */
     private void configureSeverities() {
-        //TODO:2021-10-12:alexander.yevsyukov: Take it from ModelCompiler/checks
         Severity severity = getUseValidatingBuilderSeverity(project);
         if (severity == null) {
             severity = Severity.WARN;
