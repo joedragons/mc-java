@@ -13,5 +13,7 @@ jobs:
       - name: Run tests
         shell: bash
         run: |
+          pwd
+          ls
           cd tests
           ./gradlew build --stacktrace
