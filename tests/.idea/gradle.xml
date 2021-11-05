@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/.." name="mc-java">
+                <projects>
+                  <project path="$PROJECT_DIR$/.." />
+                  <project path="$PROJECT_DIR$/../mc-java" />
+                  <project path="$PROJECT_DIR$/../mc-java-annotation" />
+                  <project path="$PROJECT_DIR$/../mc-java-base" />
+                  <project path="$PROJECT_DIR$/../mc-java-checks" />
+                  <project path="$PROJECT_DIR$/../mc-java-protoc" />
+                  <project path="$PROJECT_DIR$/../mc-java-rejection" />
+                  <project path="$PROJECT_DIR$/../mc-java-validation" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/.." />
+            <option value="$PROJECT_DIR$/../buildSrc" />
+            <option value="$PROJECT_DIR$/../mc-java" />
+            <option value="$PROJECT_DIR$/../mc-java-annotation" />
+            <option value="$PROJECT_DIR$/../mc-java-base" />
+            <option value="$PROJECT_DIR$/../mc-java-checks" />
+            <option value="$PROJECT_DIR$/../mc-java-protoc" />
+            <option value="$PROJECT_DIR$/../mc-java-rejection" />
+            <option value="$PROJECT_DIR$/../mc-java-validation" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/annotator" />
+            <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/entity-queries" />
+            <option value="$PROJECT_DIR$/factories" />
+            <option value="$PROJECT_DIR$/known-types" />
+            <option value="$PROJECT_DIR$/model-compiler" />
+            <option value="$PROJECT_DIR$/rejection" />
+            <option value="$PROJECT_DIR$/validating-options" />
+            <option value="$PROJECT_DIR$/validation" />
+            <option value="$PROJECT_DIR$/validation-gen" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

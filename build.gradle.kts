@@ -45,6 +45,8 @@ import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.checkstyle.CheckStyleConfig
 import io.spine.internal.gradle.excludeProtobufLite
 import io.spine.internal.gradle.forceVersions
+import io.spine.internal.gradle.javac.configureErrorProne
+import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
 import io.spine.internal.gradle.publish.PublishExtension
@@ -65,7 +67,7 @@ plugins {
         id(id).version(version)
     }
     io.spine.internal.dependency.ErrorProne.GradlePlugin.apply {
-        id(id).version(version)
+        id(id)
     }
     kotlin("jvm") version io.spine.internal.dependency.Kotlin.version
 }
@@ -107,11 +109,9 @@ subprojects {
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
 
-        from(Scripts.javacArgs(project))
         from(Scripts.testOutput(project))
         from(Scripts.testArtifacts(project))
     }
-
 
     dependencies {
         errorprone(ErrorProne.core)
@@ -151,6 +151,11 @@ subprojects {
         targetCompatibility = javaVersion
     }
 
+    tasks.withType<JavaCompile> {
+        configureJavac()
+        configureErrorProne()
+    }
+
     JavadocConfig.applyTo(project)
     CheckStyleConfig.applyTo(project)
 
@@ -175,7 +180,8 @@ subprojects {
         }
     }
 
-    val generatedResources = "$projectDir/generated/main/resources"
+    val generatedDir = "$projectDir/generated"
+    val generatedResources = "$generatedDir/main/resources"
 
     tasks.create<DefaultTask>(name = "prepareProtocConfigVersions") {
         description = "Prepares the versions.properties file."
@@ -223,6 +229,7 @@ subprojects {
     }
 
     protobuf {
+        generatedFilesBaseDir = generatedDir
         protoc { artifact = Protobuf.compiler }
     }
 }
