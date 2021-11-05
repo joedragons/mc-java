@@ -27,3 +27,10 @@ jobs:
         with:
           fail_ci_if_error: true
           verbose: true
+
+      - name: Upload build results
+        uses: actions/upload-artifact@v2
+        with:
+          name: mc-java-ci-build-results
+          path: ./*
+          retention-days: 1
