@@ -15,8 +15,13 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         with:
           - github_token: ${{ secrets.GITHUB_TOKEN }}
-          - name: mc-java-ci-build-results
+          - name: mc-java-ci-build-results.tar.gz
           - path: ./
+
+      - name: Unpack the downloaded file
+        shell: bash
+        run: tar -xzvf mc-java-ci-build-results.tar.gz
+
       - name: Run tests
         shell: bash
         run: |
