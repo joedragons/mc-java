@@ -14,9 +14,10 @@ jobs:
         # This custom action allows downloading the `actions/upload-artifact@v2` results.
         uses: dawidd6/action-download-artifact@v2
         with:
-          - github_token: ${{ secrets.GITHUB_TOKEN }}
-          - name: mc-java-ci-build-results.tar.gz
-          - path: ./
+          workflow: build-on-ubuntu.yml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          name: mc-java-ci-build-results
+          path: ./
 
       - name: Unpack the downloaded file
         shell: bash
