@@ -56,6 +56,8 @@ import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
+import io.spine.internal.gradle.test.configureLogging
+import io.spine.internal.gradle.test.registerTestTasks
 import java.time.Duration
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -109,7 +111,6 @@ subprojects {
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
 
-        from(Scripts.testOutput(project))
         from(Scripts.testArtifacts(project))
     }
 
@@ -174,9 +175,13 @@ subprojects {
         }
     }
 
-    tasks.test {
-        useJUnitPlatform {
-            includeEngines("junit-jupiter")
+    tasks {
+        registerTestTasks()
+        test {
+            useJUnitPlatform {
+                includeEngines("junit-jupiter")
+            }
+            configureLogging()
         }
     }
 
@@ -222,11 +227,6 @@ subprojects {
     apply<VersionWriter>()
     publishProtoArtifact(project)
     LicenseReporter.generateReportIn(project)
-
-    apply {
-        from(Scripts.slowTests(project))
-        from(Scripts.testOutput(project))
-    }
 
     protobuf {
         generatedFilesBaseDir = generatedDir
