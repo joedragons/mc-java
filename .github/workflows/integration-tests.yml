@@ -27,10 +27,10 @@ jobs:
         shell: bash
         run: tar -xzvf mc-java-ci-build-results.tar.gz
 
-#      - name: Run tests
-#        shell: bash
-#        run: |
-#          pwd
-#          ls
-#          cd tests
-#          ./gradlew build --stacktrace
+      - name: Run tests
+        shell: bash
+        run: |
+          pwd
+          ls
+          cd tests
+          ./gradlew build --stacktrace
