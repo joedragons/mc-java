@@ -66,7 +66,7 @@ class `'codegen { }' block should` {
             it.plugin("java")
             it.plugin(McJavaPlugin::class.java)
         }
-        extension = project.extensions.getByType(McJavaExtension::class.java)
+        extension = McJavaExtension.extension(project)
     }
 
     @Test
