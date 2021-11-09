@@ -206,7 +206,6 @@ public final class JavaCodegenConfig extends Config<SpineProtocConfig> {
         return builder.build();
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored") // calling builder
     private Classpath buildClasspath() {
         Classpath.Builder classpath = Classpath.newBuilder();
         Collection<JavaCompile> javaCompileViews =
