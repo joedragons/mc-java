@@ -386,6 +386,9 @@ public class McJavaExtension {
         }
     }
 
+    /**
+     * Obtains the instance of the extension from the given project.
+     */
     public static McJavaExtension extension(Project project) {
         McExtension mcExtension =
                 project.getExtensions()
