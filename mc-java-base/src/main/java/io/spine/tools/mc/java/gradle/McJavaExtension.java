@@ -49,7 +49,6 @@ import static com.google.common.collect.Lists.newLinkedList;
 import static io.spine.tools.gradle.Projects.getDefaultMainDescriptors;
 import static io.spine.tools.gradle.Projects.getDefaultTestDescriptors;
 import static io.spine.util.Exceptions.newIllegalStateException;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A configuration for the Spine Model Compiler for Java.
