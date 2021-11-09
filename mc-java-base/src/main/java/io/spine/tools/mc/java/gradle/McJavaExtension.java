@@ -367,7 +367,7 @@ public class McJavaExtension {
         return spineDirs;
     }
 
-    public static Optional<String> spineDir(Project project) {
+    private static Optional<String> spineDir(Project project) {
         File projectDir;
         try {
             projectDir = project.getProjectDir()
