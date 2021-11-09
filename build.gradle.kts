@@ -246,9 +246,6 @@ LicenseReporter.mergeAllReports(project)
  */
 val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
 
-/** A timeout for the case of stalled child processes under Windows. */
-private val maxTimeout = Duration.ofMinutes(30)
-
 /**
  * The build task executed under `tests` subdirectory.
  *
@@ -256,7 +253,9 @@ private val maxTimeout = Duration.ofMinutes(30)
  */
 val integrationTests by tasks.registering(RunBuild::class) {
     directory = "$rootDir/tests"
-    timeout.set(maxTimeout)
+
+    /** A timeout for the case of stalled child processes under Windows. */
+    timeout.set(Duration.ofMinutes(20))
 
     val pubTasks = projectsToPublish.map { p ->
         val subProject = rootProject.project(p)
