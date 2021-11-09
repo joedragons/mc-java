@@ -31,9 +31,11 @@ import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
+import io.spine.tools.mc.gradle.McExtension;
 import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.ExtensionAware;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +49,7 @@ import static com.google.common.collect.Lists.newLinkedList;
 import static io.spine.tools.gradle.Projects.getDefaultMainDescriptors;
 import static io.spine.tools.gradle.Projects.getDefaultTestDescriptors;
 import static io.spine.util.Exceptions.newIllegalStateException;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A configuration for the Spine Model Compiler for Java.
@@ -64,7 +67,7 @@ public class McJavaExtension {
     /**
      * The name of the extension, as it appears in a Gradle build script.
      */
-    static final String NAME = "modelCompiler";
+    static final String NAME = "java";
 
     /**
      * The absolute path to the main Protobuf descriptor set file.
@@ -156,15 +159,15 @@ public class McJavaExtension {
      *
      * @see #codegen(Action)
      */
-    public final JavaCodegenConfig codegen;
+    public JavaCodegenConfig codegen;
 
     public List<String> internalClassPatterns = new ArrayList<>();
 
     public List<String> internalMethodNames = new ArrayList<>();
 
-    private final Project project;
+    private Project project;
 
-    public McJavaExtension(Project project) {
+    public void injectProject(Project project) {
         this.project = checkNotNull(project);
         this.codegen = new JavaCodegenConfig(project);
     }
@@ -174,17 +177,6 @@ public class McJavaExtension {
      */
     public static String name() {
         return NAME;
-    }
-
-    /**
-     * Creates a new instance of the extension in the given project.
-     */
-    public static void createIn(Project project) {
-        String extensionName = name();
-        logger.atFine()
-              .log("Adding the extension `%s` to the project `%s`.", extensionName, project);
-        project.getExtensions()
-               .create(extensionName, McJavaExtension.class, project);
     }
 
     /**
@@ -391,9 +383,14 @@ public class McJavaExtension {
         }
     }
 
-    private static McJavaExtension extension(Project project) {
-        return (McJavaExtension)
+    public static McJavaExtension extension(Project project) {
+        McExtension mcExtension =
                 project.getExtensions()
-                       .getByName(name());
+                       .findByType(McExtension.class);
+        ExtensionAware extensionAware = (ExtensionAware) requireNonNull(mcExtension);
+        McJavaExtension mcJavaExtension =
+                extensionAware.getExtensions()
+                              .getByType(McJavaExtension.class);
+        return mcJavaExtension;
     }
 }

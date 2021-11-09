@@ -34,17 +34,25 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import java.util.stream.Stream;
+import io.spine.tools.mc.gradle.LanguagePlugin;
+import static kotlin.jvm.JvmClassMappingKt.getKotlinClass;
 
 /**
  * Spine Model Compiler for Java Gradle plugin.
  *
  * <p>Applies dependent plugins.
  */
-public class McJavaPlugin implements Plugin<Project>, Logging {
+public class McJavaPlugin extends LanguagePlugin implements Logging {
+
+    public McJavaPlugin() {
+        super(McJavaExtension.name(), getKotlinClass(McJavaExtension.class));
+    }
 
     @Override
     public void apply(Project project) {
-        McJavaExtension.createIn(project);
+        super.apply(project);
+        McJavaExtension extension = McJavaExtension.extension(project);
+        extension.injectProject(project);
         createAndApplyPluginsIn(project);
     }
 
