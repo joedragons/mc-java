@@ -154,9 +154,9 @@ public class McJavaExtension {
     /**
      * Code generation configuration.
      *
-     * @see #java(Action)
+     * @see #codegen(Action)
      */
-    public final JavaCodegenConfig java;
+    public final JavaCodegenConfig codegen;
 
     public List<String> internalClassPatterns = new ArrayList<>();
 
@@ -166,7 +166,7 @@ public class McJavaExtension {
 
     public McJavaExtension(Project project) {
         this.project = checkNotNull(project);
-        this.java = new JavaCodegenConfig(project);
+        this.codegen = new JavaCodegenConfig(project);
     }
 
     /**
@@ -190,8 +190,8 @@ public class McJavaExtension {
     /**
      * Configures the Model Compilation code generation by applying the given action.
      */
-    public void java(Action<JavaCodegenConfig> action) {
-        action.execute(java);
+    public void codegen(Action<JavaCodegenConfig> action) {
+        action.execute(codegen);
     }
 
     private static DefaultJavaPaths def(Project project) {

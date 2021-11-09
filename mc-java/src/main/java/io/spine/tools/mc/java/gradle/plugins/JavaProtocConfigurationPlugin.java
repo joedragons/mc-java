@@ -166,7 +166,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
     private static void writePluginConfig(Task protocTask, Path configPath) {
         Project project = protocTask.getProject();
         McJavaExtension extension = project.getExtensions().getByType(McJavaExtension.class);
-        SpineProtocConfig config = extension.java.toProto();
+        SpineProtocConfig config = extension.codegen.toProto();
 
         ensureFile(configPath);
         try (FileOutputStream fos = new FileOutputStream(configPath.toFile())) {
