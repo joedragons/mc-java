@@ -392,8 +392,8 @@ public class McJavaExtension {
     public static McJavaExtension extension(Project project) {
         McExtension mcExtension =
                 project.getExtensions()
-                       .findByType(McExtension.class);
-        ExtensionAware extensionAware = (ExtensionAware) requireNonNull(mcExtension);
+                       .getByType(McExtension.class);
+        ExtensionAware extensionAware = (ExtensionAware) mcExtension;
         McJavaExtension mcJavaExtension =
                 extensionAware.getExtensions()
                               .getByType(McJavaExtension.class);
