@@ -167,6 +167,9 @@ public class McJavaExtension {
 
     private Project project;
 
+    /**
+     * Injects the dependency to the given project.
+     */
     public void injectProject(Project project) {
         this.project = checkNotNull(project);
         this.codegen = new JavaCodegenConfig(project);
