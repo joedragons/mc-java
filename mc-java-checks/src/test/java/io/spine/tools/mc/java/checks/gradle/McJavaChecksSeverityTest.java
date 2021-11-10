@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.checks.gradle;
 
-import io.spine.tools.mc.gradle.McExtension;
+import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.checks.gradle.given.ProjectConfigurations;
 import io.spine.tools.mc.java.checks.gradle.given.StubProject;
 import org.gradle.api.Project;
@@ -86,9 +86,9 @@ class McJavaChecksSeverityTest {
         return extension;
     }
 
-    private McExtension configureModelCompilerExtension() {
+    private ModelCompilerOptions configureModelCompilerExtension() {
         ExtensionContainer extensions = project.getExtensions();
-        McExtension extension = extensions.create(McExtension.name, McExtension.class);
+        ModelCompilerOptions extension = extensions.create(ModelCompilerOptions.name, ModelCompilerOptions.class);
         return extension;
     }
 

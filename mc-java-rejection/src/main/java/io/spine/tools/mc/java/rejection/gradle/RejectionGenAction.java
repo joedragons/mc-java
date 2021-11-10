@@ -37,7 +37,7 @@ import io.spine.tools.code.Indent;
 import io.spine.tools.gradle.CodeGenerationAction;
 import io.spine.tools.java.code.TypeSpec;
 import io.spine.tools.java.code.TypeSpecWriter;
-import io.spine.tools.mc.java.gradle.McJavaExtension;
+import io.spine.tools.mc.java.gradle.McJavaOptions;
 import io.spine.tools.mc.java.rejection.gen.RThrowableSpec;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -55,11 +55,11 @@ import static com.google.common.flogger.LazyArgs.lazy;
  * rejection type which extends {@link io.spine.base.RejectionThrowable RejectionThrowable} and
  * encloses an instance of the corresponding proto message.
  *
- * <p>The {@link McJavaExtension#generatedMainRejectionsDir} and
- * {@link McJavaExtension#generatedTestRejectionsDir} options allow to customize the target root
+ * <p>The {@link McJavaOptions#generatedMainRejectionsDir} and
+ * {@link McJavaOptions#generatedTestRejectionsDir} options allow to customize the target root
  * directory for code generation.
  *
- * <p>The {@link McJavaExtension#indent} option sets the indentation of the generated source files.
+ * <p>The {@link McJavaOptions#indent} option sets the indentation of the generated source files.
  */
 final class RejectionGenAction extends CodeGenerationAction {
 
@@ -123,6 +123,6 @@ final class RejectionGenAction extends CodeGenerationAction {
 
     @Override
     protected Indent getIndent(Project project) {
-        return McJavaExtension.getIndent(project);
+        return McJavaOptions.getIndent(project);
     }
 }

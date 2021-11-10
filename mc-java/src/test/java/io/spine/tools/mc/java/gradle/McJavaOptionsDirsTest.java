@@ -47,21 +47,21 @@ import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`McJavaExtension` directories to clean should")
-class McJavaExtensionDirsTest {
+class McJavaOptionsDirsTest {
 
     private Project project = null;
     private File projectDir = null;
-    private McJavaExtension extension = null;
+    private McJavaOptions extension = null;
 
     @BeforeEach
     void setUp() {
-        projectDir = TempDir.forClass(McJavaExtensionDirsTest.class);
+        projectDir = TempDir.forClass(McJavaOptionsDirsTest.class);
         project = StubProject.createAt(projectDir);
         RepositoryHandler repositories = project.getRepositories();
         applyStandard(repositories);
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
-        extension = McJavaExtension.extension(project);
+        extension = McJavaOptions.extension(project);
     }
 
     @Nested
@@ -144,7 +144,7 @@ class McJavaExtensionDirsTest {
         }
 
         private List<String> actualDirs() {
-            return McJavaExtension.getDirsToClean(project);
+            return McJavaOptions.getDirsToClean(project);
         }
     }
 }

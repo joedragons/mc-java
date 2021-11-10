@@ -26,7 +26,7 @@
 
 /**
  * This package provides
- * the {@linkplain io.spine.tools.mc.java.gradle.McJavaExtension Gradle project extension}
+ * the {@linkplain io.spine.tools.mc.java.gradle.McJavaOptions Gradle project extension}
  * of Spine Model Compiler for Java ({@code mc-java}) and associated types.
  *
  * <p>The extension is the central place of the configuration of {@code mc-java}.

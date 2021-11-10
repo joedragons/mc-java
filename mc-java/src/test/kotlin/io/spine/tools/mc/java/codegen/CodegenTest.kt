@@ -40,7 +40,7 @@ import io.spine.option.OptionsProto
 import io.spine.query.EntityStateField
 import io.spine.tools.java.code.UuidMethodFactory
 import io.spine.tools.mc.java.applyStandard
-import io.spine.tools.mc.java.gradle.McJavaExtension
+import io.spine.tools.mc.java.gradle.McJavaOptions
 import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
 import io.spine.tools.proto.code.ProtoTypeName
 import io.spine.tools.protoc.GenerateFields
@@ -54,7 +54,7 @@ import org.junit.jupiter.api.Test
 
 class `'codegen { }' block should` {
 
-    private lateinit var extension: McJavaExtension
+    private lateinit var extension: McJavaOptions
 
     @BeforeEach
     fun prepareExtension() {
@@ -66,7 +66,7 @@ class `'codegen { }' block should` {
             it.plugin("java")
             it.plugin(McJavaPlugin::class.java)
         }
-        extension = McJavaExtension.extension(project)
+        extension = McJavaOptions.extension(project)
     }
 
     @Test

@@ -38,24 +38,22 @@ import java.io.File;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.mc.java.StandardRepos.applyStandard;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainRejectionsDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainResourcesDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedTestResourcesDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getMainDescriptorSetFile;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getTestDescriptorSetFile;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainRejectionsDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainResourcesDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestResourcesDir;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DisplayName("`McJavaExtension` should")
-class McJavaExtensionTest {
+class McJavaOptionsTest {
 
     private static Project project = null;
-    private static McJavaExtension extension = null;
+    private static McJavaOptions extension = null;
 
     @BeforeAll
     static void setUp() {
-        File projectDir = TempDir.forClass(McJavaExtensionTest.class);
+        File projectDir = TempDir.forClass(McJavaOptionsTest.class);
         project = StubProject.createAt(projectDir);
         RepositoryHandler repositories = project.getRepositories();
         applyStandard(repositories);
@@ -63,7 +61,7 @@ class McJavaExtensionTest {
         repositories.mavenCentral();
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
-        extension = McJavaExtension.extension(project);
+        extension = McJavaOptions.extension(project);
     }
 
     @Nested
@@ -111,54 +109,6 @@ class McJavaExtensionTest {
 
             assertThat(dir)
                     .isEqualTo(extension.generatedTestResourcesDir);
-        }
-    }
-
-    @Nested
-    @DisplayName("for `mainDescriptorSetPath` return")
-    class MainDescriptorSetPath {
-
-        @Test
-        @DisplayName("default value, if not set")
-        void defaultValue() {
-            File file = getMainDescriptorSetFile(project);
-
-            assertNotEmptyAndIsInProjectDir(file.toString());
-        }
-
-        @Test
-        @DisplayName("specified value, if set")
-        void specifiedValue() {
-            extension.mainDescriptorSetFile = newUuid();
-
-            File file = getMainDescriptorSetFile(project);
-
-            assertThat(file.toString())
-                    .isEqualTo(extension.mainDescriptorSetFile);
-        }
-    }
-
-    @Nested
-    @DisplayName("for `testDescriptorSetPath` return")
-    class TestDescriptorSetPath {
-
-        @Test
-        @DisplayName("default value, if not set")
-        void defaultValue() {
-            File file = getTestDescriptorSetFile(project);
-
-            assertNotEmptyAndIsInProjectDir(file.toString());
-        }
-
-        @Test
-        @DisplayName("specified value, if set")
-        void specifiedValue() {
-            extension.testDescriptorSetFile = newUuid();
-
-            File file = getTestDescriptorSetFile(project);
-
-            assertThat(file.toString())
-                    .isEqualTo(extension.testDescriptorSetFile);
         }
     }
 
