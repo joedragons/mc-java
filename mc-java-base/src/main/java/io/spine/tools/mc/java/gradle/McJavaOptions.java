@@ -31,7 +31,7 @@ import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.mc.gradle.McExtension;
+import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -46,8 +46,6 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newLinkedList;
-import static io.spine.tools.gradle.Projects.getDefaultMainDescriptors;
-import static io.spine.tools.gradle.Projects.getDefaultTestDescriptors;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
@@ -59,7 +57,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
         "ClassWithTooManyFields", "PMD.TooManyFields" /* Gradle extensions are flat like this. */,
         "RedundantSuppression" /* "ClassWithTooManyFields" is sometimes not recognized by IDEA. */
 })
-public class McJavaExtension {
+public class McJavaOptions {
 
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
@@ -67,16 +65,6 @@ public class McJavaExtension {
      * The name of the extension, as it appears in a Gradle build script.
      */
     static final String NAME = "java";
-
-    /**
-     * The absolute path to the main Protobuf descriptor set file.
-     */
-    public String mainDescriptorSetFile;
-
-    /**
-     * The absolute path to the test Protobuf descriptor set file.
-     */
-    public String testDescriptorSetFile;
 
     /**
      * The absolute path to the Protobuf source code under the {@code main} directory.
@@ -211,7 +199,7 @@ public class McJavaExtension {
     @SuppressWarnings("FloggerSplitLogStatement")
 
     public static String getMainProtoDir(Project project) {
-        McJavaExtension extension = extension(project);
+        McJavaOptions extension = extension(project);
         _debug().log("Extension is `%s`.", extension);
         String protoDir = extension.mainProtoDir;
         _debug().log("`modelCompiler.mainProtoSrcDir` is `%s`.", protoDir);
@@ -224,22 +212,6 @@ public class McJavaExtension {
         return pathOrDefault(extension(project).testProtoDir,
                              def(project).src()
                                          .testProto());
-    }
-
-    public static File getMainDescriptorSetFile(Project project) {
-        McJavaExtension extension = extension(project);
-        File result = getDefaultMainDescriptors(project);
-        String path = pathOrDefault(extension.mainDescriptorSetFile,
-                                    result);
-        return new File(path);
-    }
-
-    public static File getTestDescriptorSetFile(Project project) {
-        McJavaExtension extension = extension(project);
-        File result = getDefaultTestDescriptors(project);
-        String path = pathOrDefault(extension.testDescriptorSetFile,
-                                    result);
-        return new File(path);
     }
 
     public static String getGeneratedMainJavaDir(Project project) {
@@ -388,14 +360,14 @@ public class McJavaExtension {
     /**
      * Obtains the instance of the extension from the given project.
      */
-    public static McJavaExtension extension(Project project) {
-        McExtension mcExtension =
+    public static McJavaOptions extension(Project project) {
+        ModelCompilerOptions mcExtension =
                 project.getExtensions()
-                       .getByType(McExtension.class);
+                       .getByType(ModelCompilerOptions.class);
         ExtensionAware extensionAware = (ExtensionAware) mcExtension;
-        McJavaExtension mcJavaExtension =
+        McJavaOptions mcJavaExtension =
                 extensionAware.getExtensions()
-                              .getByType(McJavaExtension.class);
+                              .getByType(McJavaOptions.class);
         return mcJavaExtension;
     }
 }
