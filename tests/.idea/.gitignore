@@ -6,3 +6,16 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+/*.iml
+/*.xml
+/.name
+/artifacts
+/libraries
+/modules
+/shelf
+
+# Do not ignore the following IDEA settings
+!/misc.xml
+!/codeStyles/
+!/copyright/

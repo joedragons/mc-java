@@ -39,7 +39,6 @@ import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.RunBuild
-import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.checkstyle.CheckStyleConfig
@@ -56,6 +55,9 @@ import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
+import io.spine.internal.gradle.test.configureLogging
+import io.spine.internal.gradle.test.registerTestTasks
+import io.spine.internal.gradle.testing.exposeTestArtifacts
 import java.time.Duration
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -108,9 +110,6 @@ subprojects {
         plugin("net.ltgt.errorprone")
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
-
-        from(Scripts.testOutput(project))
-        from(Scripts.testArtifacts(project))
     }
 
     dependencies {
@@ -149,6 +148,7 @@ subprojects {
     java {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
+        exposeTestArtifacts()
     }
 
     tasks.withType<JavaCompile> {
@@ -174,9 +174,13 @@ subprojects {
         }
     }
 
-    tasks.test {
-        useJUnitPlatform {
-            includeEngines("junit-jupiter")
+    tasks {
+        registerTestTasks()
+        test {
+            useJUnitPlatform {
+                includeEngines("junit-jupiter")
+            }
+            configureLogging()
         }
     }
 
@@ -223,11 +227,6 @@ subprojects {
     publishProtoArtifact(project)
     LicenseReporter.generateReportIn(project)
 
-    apply {
-        from(Scripts.slowTests(project))
-        from(Scripts.testOutput(project))
-    }
-
     protobuf {
         generatedFilesBaseDir = generatedDir
         protoc { artifact = Protobuf.compiler }
@@ -246,9 +245,6 @@ LicenseReporter.mergeAllReports(project)
  */
 val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
 
-/** A timeout for the case of stalled child processes under Windows. */
-private val maxTimeout = Duration.ofMinutes(30)
-
 /**
  * The build task executed under `tests` subdirectory.
  *
@@ -256,7 +252,9 @@ private val maxTimeout = Duration.ofMinutes(30)
  */
 val integrationTests by tasks.registering(RunBuild::class) {
     directory = "$rootDir/tests"
-    timeout.set(maxTimeout)
+
+    /** A timeout for the case of stalled child processes under Windows. */
+    timeout.set(Duration.ofMinutes(20))
 
     val pubTasks = projectsToPublish.map { p ->
         val subProject = rootProject.project(p)

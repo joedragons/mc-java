@@ -51,6 +51,7 @@ class McJavaExtensionDirsTest {
 
     private Project project = null;
     private File projectDir = null;
+    private McJavaExtension extension = null;
 
     @BeforeEach
     void setUp() {
@@ -60,6 +61,7 @@ class McJavaExtensionDirsTest {
         applyStandard(repositories);
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
+        extension = McJavaExtension.extension(project);
     }
 
     @Nested
@@ -79,39 +81,47 @@ class McJavaExtensionDirsTest {
                 assertNotEmptyAndIsInProjectDir(actualDirs.get(0));
             }
 
+            private void assertNotEmptyAndIsInProjectDir(String path) {
+                assertThat(path.trim())
+                        .isNotEmpty();
+                assertThat(path)
+                        .startsWith(project.getProjectDir()
+                                           .getAbsolutePath());
+            }
+
             @Test
             @DisplayName("single value, if set")
             void singleValue() {
-                spineProtobuf().dirToClean = newUuid();
+                extension.dirToClean = newUuid();
 
                 List<String> actualDirs = actualDirs();
 
                 assertThat(actualDirs).hasSize(1);
                 assertThat(actualDirs.get(0))
-                        .isEqualTo(spineProtobuf().dirToClean);
+                        .isEqualTo(extension.dirToClean);
             }
 
             @Test
             @DisplayName("list, if array is set")
             void list() {
-                spineProtobuf().dirsToClean = newArrayList(newUuid(), newUuid());
+                extension.dirsToClean = newArrayList(newUuid(), newUuid());
 
                 List<String> actualDirs = actualDirs();
 
                 assertThat(actualDirs)
-                        .isEqualTo(spineProtobuf().dirsToClean);
+                        .isEqualTo(extension.dirsToClean);
             }
 
             @Test
             @DisplayName("list, if array and single are set")
             void listIfArrayAndSingle() {
-                spineProtobuf().dirsToClean = newArrayList(newUuid(), newUuid());
-                spineProtobuf().dirToClean = newUuid();
+                extension.dirsToClean = newArrayList(newUuid(), newUuid());
+                extension.dirToClean = newUuid();
 
                 List<String> actualDirs = actualDirs();
 
                 assertThat(actualDirs)
-                        .isEqualTo(spineProtobuf().dirsToClean);
+                        .isEqualTo(extension.dirsToClean);
             }
         }
 
@@ -136,18 +146,5 @@ class McJavaExtensionDirsTest {
         private List<String> actualDirs() {
             return McJavaExtension.getDirsToClean(project);
         }
-    }
-
-    private void assertNotEmptyAndIsInProjectDir(String path) {
-        assertThat(path.trim())
-                .isNotEmpty();
-        assertThat(path)
-                .startsWith(project.getProjectDir()
-                                   .getAbsolutePath());
-    }
-
-    private McJavaExtension spineProtobuf() {
-        return (McJavaExtension) project.getExtensions()
-                                        .getByName(McJavaExtension.name());
     }
 }

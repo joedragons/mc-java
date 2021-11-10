@@ -28,9 +28,11 @@ import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.javac.configureErrorProne
+import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
+import io.spine.internal.gradle.test.configureLogging
 
 buildscript {
 
@@ -65,7 +67,7 @@ plugins {
     }
     @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
     io.spine.internal.dependency.ErrorProne.GradlePlugin.apply {
-        id(id).version(version)
+        id(id)
     }
 }
 
@@ -80,24 +82,22 @@ allprojects {
         gitHub("base")
         gitHub("tool-base")
         gitHub("model-compiler")
+        mavenLocal()
     }
 }
 
 subprojects {
 
-    val commonPath = Scripts.commonPath
     apply {
         plugin(ErrorProne.GradlePlugin.id)
         plugin(Protobuf.GradlePlugin.id)
         plugin("io.spine.mc-java")
         plugin("idea")
-        from("${baseRoot}/${commonPath}/test-output.gradle")
     }
 
-    apply {
-        with(Scripts) {
-            from(javacArgs(project))
-        }
+    tasks.withType<JavaCompile> {
+        configureJavac()
+        configureErrorProne()
     }
 
     val spineBaseVersion: String by extra
@@ -145,6 +145,7 @@ subprojects {
         }
 
         include("**/*Test.class")
+        configureLogging()
     }
 
     //TODO:2021-07-22:alexander.yevsyukov: Turn to WARN and investigate duplicates.

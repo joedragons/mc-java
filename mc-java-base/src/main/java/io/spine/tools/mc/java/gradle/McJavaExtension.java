@@ -31,9 +31,11 @@ import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
+import io.spine.tools.mc.gradle.McExtension;
 import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.ExtensionAware;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +66,7 @@ public class McJavaExtension {
     /**
      * The name of the extension, as it appears in a Gradle build script.
      */
-    static final String NAME = "modelCompiler";
+    static final String NAME = "java";
 
     /**
      * The absolute path to the main Protobuf descriptor set file.
@@ -154,19 +156,22 @@ public class McJavaExtension {
     /**
      * Code generation configuration.
      *
-     * @see #java(Action)
+     * @see #codegen(Action)
      */
-    public final JavaCodegenConfig java;
+    public JavaCodegenConfig codegen;
 
     public List<String> internalClassPatterns = new ArrayList<>();
 
     public List<String> internalMethodNames = new ArrayList<>();
 
-    private final Project project;
+    private Project project;
 
-    public McJavaExtension(Project project) {
+    /**
+     * Injects the dependency to the given project.
+     */
+    public void injectProject(Project project) {
         this.project = checkNotNull(project);
-        this.java = new JavaCodegenConfig(project);
+        this.codegen = new JavaCodegenConfig(project);
     }
 
     /**
@@ -177,21 +182,10 @@ public class McJavaExtension {
     }
 
     /**
-     * Creates a new instance of the extension in the given project.
-     */
-    public static void createIn(Project project) {
-        String extensionName = name();
-        logger.atFine()
-              .log("Adding the extension `%s` to the project `%s`.", extensionName, project);
-        project.getExtensions()
-               .create(extensionName, McJavaExtension.class, project);
-    }
-
-    /**
      * Configures the Model Compilation code generation by applying the given action.
      */
-    public void java(Action<JavaCodegenConfig> action) {
-        action.execute(java);
+    public void codegen(Action<JavaCodegenConfig> action) {
+        action.execute(codegen);
     }
 
     private static DefaultJavaPaths def(Project project) {
@@ -372,7 +366,7 @@ public class McJavaExtension {
         return spineDirs;
     }
 
-    public static Optional<String> spineDir(Project project) {
+    private static Optional<String> spineDir(Project project) {
         File projectDir;
         try {
             projectDir = project.getProjectDir()
@@ -391,9 +385,17 @@ public class McJavaExtension {
         }
     }
 
-    private static McJavaExtension extension(Project project) {
-        return (McJavaExtension)
+    /**
+     * Obtains the instance of the extension from the given project.
+     */
+    public static McJavaExtension extension(Project project) {
+        McExtension mcExtension =
                 project.getExtensions()
-                       .getByName(name());
+                       .getByType(McExtension.class);
+        ExtensionAware extensionAware = (ExtensionAware) mcExtension;
+        McJavaExtension mcJavaExtension =
+                extensionAware.getExtensions()
+                              .getByType(McJavaExtension.class);
+        return mcJavaExtension;
     }
 }
