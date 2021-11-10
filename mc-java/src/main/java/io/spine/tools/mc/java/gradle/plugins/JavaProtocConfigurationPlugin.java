@@ -36,7 +36,6 @@ import io.spine.tools.gradle.SourceScope;
 import io.spine.tools.gradle.TaskName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.GeneratedRoot;
-import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
 import io.spine.tools.protoc.SpineProtocConfig;
 import org.gradle.api.NamedDomainObjectContainer;
@@ -59,10 +58,10 @@ import static io.spine.tools.gradle.Projects.sourceSet;
 import static io.spine.tools.gradle.ProtocPluginName.grpc;
 import static io.spine.tools.gradle.ProtocPluginName.spineProtoc;
 import static io.spine.tools.java.fs.DefaultJavaPaths.at;
-import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writePluginConfiguration;
@@ -138,15 +137,13 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     @Override
     protected File getMainDescriptorSet(Project project) {
-        ModelCompilerOptions options = getModelCompiler(project);
-        File result = options.getMainDescriptorSetFile().getAsFile().get();
+        File result = descriptorSetFileOf(project, true);
         return result;
     }
 
     @Override
     protected File getTestDescriptorSet(Project project) {
-        ModelCompilerOptions options = getModelCompiler(project);
-        File result = options.getTestDescriptorSetFile().getAsFile().get();
+        File result = descriptorSetFileOf(project, false);
         return result;
     }
 

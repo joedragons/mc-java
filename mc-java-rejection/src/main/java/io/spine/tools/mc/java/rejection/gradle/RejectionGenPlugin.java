@@ -37,7 +37,7 @@ import java.util.function.Supplier;
 
 import static io.spine.tools.gradle.JavaTaskName.compileJava;
 import static io.spine.tools.gradle.JavaTaskName.compileTestJava;
-import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainRejectionsDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestRejectionsDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getMainProtoDir;
@@ -108,17 +108,11 @@ public class RejectionGenPlugin extends ProtoPlugin {
 
     @Override
     protected Supplier<File> mainDescriptorFile(Project project) {
-        return () -> getModelCompiler(project)
-                .getMainDescriptorSetFile()
-                .getAsFile()
-                .get();
+        return () -> descriptorSetFileOf(project, true);
     }
 
     @Override
     protected Supplier<File> testDescriptorFile(Project project) {
-        return () -> getModelCompiler(project)
-                .getTestDescriptorSetFile()
-                .getAsFile()
-                .get();
+        return () -> descriptorSetFileOf(project, false);
     }
 }

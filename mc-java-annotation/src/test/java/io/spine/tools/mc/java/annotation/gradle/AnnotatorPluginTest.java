@@ -301,16 +301,23 @@ class AnnotatorPluginTest {
     }
 
     private static FileDescriptor descriptorOf(FileName testFile) {
-        Path mainDescriptor = DefaultJavaPaths
-                .at(testProjectDir)
-                .buildRoot()
-                .descriptors()
-                .mainDescriptors()
-                .resolve("io.spine.test_" + testProjectDir.getName() + "_3.14" + DESC_EXTENSION);
+        Path mainDescriptor = mainDescriptorPath();
         FileSet fileSet = FileSet.parse(mainDescriptor.toFile());
         Optional<FileDescriptor> file = fileSet.tryFind(testFile);
         checkState(file.isPresent(), "Unable to get file descriptor for `%s`.", testFile);
         FileDescriptor result = file.get();
         return result;
+    }
+
+    /**
+     * Compose the path to the main descriptor set file using the project Maven coordinates
+     * as defined in the test project under {@code resources/annotator-plugin-test}.
+     */
+    private static Path mainDescriptorPath() {
+        return DefaultJavaPaths.at(testProjectDir)
+                .buildRoot()
+                .descriptors()
+                .mainDescriptors()
+                .resolve("io.spine.test_" + testProjectDir.getName() + "_3.14" + DESC_EXTENSION);
     }
 }

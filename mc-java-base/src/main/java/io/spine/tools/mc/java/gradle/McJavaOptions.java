@@ -36,11 +36,14 @@ import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionAware;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static io.spine.tools.gradle.Projects.getDefaultMainDescriptors;
+import static io.spine.tools.gradle.Projects.getDefaultTestDescriptors;
 import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
 
 /**
@@ -142,6 +145,13 @@ public class McJavaOptions {
 
     private Project project;
 
+    public static File descriptorSetFileOf(Project project, boolean main) {
+        File result = main
+                      ? getDefaultMainDescriptors(project)
+                      : getDefaultTestDescriptors(project);
+        return result;
+    }
+
     /**
      * Injects the dependency to the given project.
      */
@@ -175,16 +185,6 @@ public class McJavaOptions {
     private static FluentLogger.Api _debug() {
         return logger.atFine();
     }
-
-    @SuppressWarnings({
-            "PMD.MethodNamingConventions",
-            "FloggerSplitLogStatement" // See: https://github.com/SpineEventEngine/base/issues/612
-    })
-    private static FluentLogger.Api _info() {
-        return logger.atInfo();
-    }
-
-    @SuppressWarnings("FloggerSplitLogStatement")
 
     public static String getMainProtoDir(Project project) {
         McJavaOptions extension = getMcJavaOptions(project);

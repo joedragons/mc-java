@@ -30,14 +30,12 @@ import io.spine.tools.gradle.ConfigurationName;
 import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.SpinePlugin;
 import io.spine.tools.gradle.TaskName;
-import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.type.FileDescriptorSuperset;
 import org.gradle.api.Action;
 import org.gradle.api.Buildable;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.file.RegularFileProperty;
 
 import java.io.File;
 
@@ -47,7 +45,7 @@ import static io.spine.tools.gradle.JavaTaskName.processResources;
 import static io.spine.tools.gradle.JavaTaskName.processTestResources;
 import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
 import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
-import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 
@@ -80,7 +78,7 @@ public class DescriptorSetMergerPlugin extends SpinePlugin {
         return task -> {
             Project project = task.getProject();
             Configuration configuration = configuration(project, configurationName(tests));
-            File descriptorSet = descriptorSet(project, tests);
+            File descriptorSet = descriptorSetFileOf(project, !tests);
             FileDescriptorSuperset superset = new FileDescriptorSuperset();
             configuration.forEach(superset::addFromDependency);
             if (descriptorSet.exists()) {
@@ -120,12 +118,4 @@ public class DescriptorSetMergerPlugin extends SpinePlugin {
                : processResources;
     }
 
-    private static File descriptorSet(Project project, boolean tests) {
-        ModelCompilerOptions extension = getModelCompiler(project);
-        RegularFileProperty fileProperty = tests
-                ? extension.getTestDescriptorSetFile()
-                : extension.getMainDescriptorSetFile();
-        File descriptor = fileProperty.getAsFile().get();
-        return descriptor;
-    }
 }
