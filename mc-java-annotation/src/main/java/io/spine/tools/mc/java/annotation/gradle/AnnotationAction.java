@@ -29,6 +29,7 @@ package io.spine.tools.mc.java.annotation.gradle;
 import com.google.common.collect.ImmutableSet;
 import io.spine.code.java.ClassName;
 import io.spine.logging.Logging;
+import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.annotation.mark.AnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.DefaultAnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.ModuleAnnotator;
@@ -37,25 +38,25 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.file.RegularFileProperty;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.internal;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.spi;
 import static io.spine.tools.mc.java.annotation.mark.ModuleAnnotator.translate;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getCodeGenAnnotations;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainGrpcDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainJavaDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedTestGrpcDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedTestJavaDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getInternalClassPatterns;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getInternalMethodNames;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getMainDescriptorSetFile;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getTestDescriptorSetFile;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getCodeGenAnnotations;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainGrpcDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainJavaDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestGrpcDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestJavaDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatterns;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
 
 /**
  * A task action which performs generated code annotation.
@@ -116,9 +117,13 @@ final class AnnotationAction implements Action<Task>, Logging {
     }
 
     private File descriptorSetFileOf(Project project) {
-        return mainCode
-               ? getMainDescriptorSetFile(project)
-               : getTestDescriptorSetFile(project);
+        ModelCompilerOptions extension = getModelCompiler(project);
+        RegularFileProperty fileProperty =
+                mainCode
+                ? extension.getMainDescriptorSetFile()
+                : extension.getTestDescriptorSetFile();
+
+        return fileProperty.getAsFile().get();
     }
 
     private String generatedJavaDir(Project project) {
