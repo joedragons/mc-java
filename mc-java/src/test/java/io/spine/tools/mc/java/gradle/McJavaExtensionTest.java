@@ -46,12 +46,12 @@ import static io.spine.tools.mc.java.gradle.McJavaExtension.getTestDescriptorSet
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`McJavaExtension` should")
 class McJavaExtensionTest {
 
     private static Project project = null;
+    private static McJavaExtension extension = null;
 
     @BeforeAll
     static void setUp() {
@@ -63,6 +63,7 @@ class McJavaExtensionTest {
         repositories.mavenCentral();
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
+        extension = McJavaExtension.extension(project);
     }
 
     @Nested
@@ -80,12 +81,12 @@ class McJavaExtensionTest {
         @Test
         @DisplayName("specified value, if set")
         void setValue() {
-            spineProtobuf().generatedMainResourcesDir = newUuid();
+            extension.generatedMainResourcesDir = newUuid();
 
             String dir = getGeneratedMainResourcesDir(project);
 
             assertThat(dir)
-                    .isEqualTo(spineProtobuf().generatedMainResourcesDir);
+                    .isEqualTo(extension.generatedMainResourcesDir);
         }
     }
 
@@ -104,12 +105,12 @@ class McJavaExtensionTest {
         @Test
         @DisplayName("specified value, if set")
         void specifiedValue() {
-            spineProtobuf().generatedTestResourcesDir = newUuid();
+            extension.generatedTestResourcesDir = newUuid();
 
             String dir = getGeneratedTestResourcesDir(project);
 
             assertThat(dir)
-                    .isEqualTo(spineProtobuf().generatedTestResourcesDir);
+                    .isEqualTo(extension.generatedTestResourcesDir);
         }
     }
 
@@ -128,12 +129,12 @@ class McJavaExtensionTest {
         @Test
         @DisplayName("specified value, if set")
         void specifiedValue() {
-            spineProtobuf().mainDescriptorSetFile = newUuid();
+            extension.mainDescriptorSetFile = newUuid();
 
             File file = getMainDescriptorSetFile(project);
 
             assertThat(file.toString())
-                    .isEqualTo(spineProtobuf().mainDescriptorSetFile);
+                    .isEqualTo(extension.mainDescriptorSetFile);
         }
     }
 
@@ -152,12 +153,12 @@ class McJavaExtensionTest {
         @Test
         @DisplayName("specified value, if set")
         void specifiedValue() {
-            spineProtobuf().testDescriptorSetFile = newUuid();
+            extension.testDescriptorSetFile = newUuid();
 
             File file = getTestDescriptorSetFile(project);
 
             assertThat(file.toString())
-                    .isEqualTo(spineProtobuf().testDescriptorSetFile);
+                    .isEqualTo(extension.testDescriptorSetFile);
         }
     }
 
@@ -176,24 +177,19 @@ class McJavaExtensionTest {
         @Test
         @DisplayName("specified value, if set")
         void specifiedValue() {
-            spineProtobuf().generatedMainRejectionsDir = newUuid();
+            extension.generatedMainRejectionsDir = newUuid();
 
             String dir = getGeneratedMainRejectionsDir(project);
 
             assertThat(dir)
-                    .isEqualTo(spineProtobuf().generatedMainRejectionsDir);
+                    .isEqualTo(extension.generatedMainRejectionsDir);
         }
     }
 
     private static void assertNotEmptyAndIsInProjectDir(String path) {
         assertFalse(path.trim()
                         .isEmpty());
-        assertTrue(path.startsWith(project.getProjectDir()
-                                          .getAbsolutePath()));
-    }
-
-    private static McJavaExtension spineProtobuf() {
-        return (McJavaExtension) project.getExtensions()
-                                        .getByName(McJavaExtension.name());
+        assertThat(path)
+                .startsWith(project.getProjectDir().getAbsolutePath());
     }
 }
