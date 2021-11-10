@@ -41,6 +41,7 @@ import io.spine.query.EntityStateField
 import io.spine.tools.java.code.UuidMethodFactory
 import io.spine.tools.mc.java.applyStandard
 import io.spine.tools.mc.java.gradle.McJavaOptions
+import io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions
 import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
 import io.spine.tools.proto.code.ProtoTypeName
 import io.spine.tools.protoc.GenerateFields
@@ -66,7 +67,7 @@ class `'codegen { }' block should` {
             it.plugin("java")
             it.plugin(McJavaPlugin::class.java)
         }
-        extension = McJavaOptions.extension(project)
+        extension = getMcJavaOptions(project)
     }
 
     @Test

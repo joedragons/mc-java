@@ -46,6 +46,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newLinkedList;
+import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
@@ -199,7 +200,7 @@ public class McJavaOptions {
     @SuppressWarnings("FloggerSplitLogStatement")
 
     public static String getMainProtoDir(Project project) {
-        McJavaOptions extension = extension(project);
+        McJavaOptions extension = getMcJavaOptions(project);
         _debug().log("Extension is `%s`.", extension);
         String protoDir = extension.mainProtoDir;
         _debug().log("`modelCompiler.mainProtoSrcDir` is `%s`.", protoDir);
@@ -209,55 +210,55 @@ public class McJavaOptions {
     }
 
     public static String getTestProtoDir(Project project) {
-        return pathOrDefault(extension(project).testProtoDir,
+        return pathOrDefault(getMcJavaOptions(project).testProtoDir,
                              def(project).src()
                                          .testProto());
     }
 
     public static String getGeneratedMainJavaDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainDir,
                              def(project).generated()
                                          .mainJava());
     }
 
     public static String getGeneratedMainGrpcDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainGrpcDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainGrpcDir,
                              def(project).generated()
                                          .mainGrpc());
     }
 
     public static String getGeneratedMainResourcesDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainResourcesDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainResourcesDir,
                              def(project).generated()
                                          .mainResources());
     }
 
     public static String getGeneratedTestJavaDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestDir,
                              def(project).generated()
                                          .testJava());
     }
 
     public static String getGeneratedTestResourcesDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestResourcesDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestResourcesDir,
                              def(project).generated()
                                          .testResources());
     }
 
     public static String getGeneratedTestGrpcDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestGrpcDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestGrpcDir,
                              def(project).generated()
                                          .testGrpc());
     }
 
     public static String getGeneratedMainRejectionsDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainRejectionsDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainRejectionsDir,
                              def(project).generated()
                                          .mainSpine());
     }
 
     public static String getGeneratedTestRejectionsDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestRejectionsDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestRejectionsDir,
                              def(project).generated()
                                          .testSpine());
     }
@@ -269,7 +270,7 @@ public class McJavaOptions {
     }
 
     public static Indent getIndent(Project project) {
-        Indent result = extension(project).indent;
+        Indent result = getMcJavaOptions(project).indent;
         _debug().log("The current indent is %d.", result.size());
         return result;
     }
@@ -283,8 +284,9 @@ public class McJavaOptions {
     public static List<String> getDirsToClean(Project project) {
         List<String> dirsToClean = newLinkedList(spineDirs(project));
         _debug().log("Finding the directories to clean.");
-        List<String> dirs = extension(project).dirsToClean;
-        String singleDir = extension(project).dirToClean;
+        McJavaOptions options = getMcJavaOptions(project);
+        List<String> dirs = options.dirsToClean;
+        String singleDir = options.dirToClean;
         if (dirs.size() > 0) {
             _info().log("Found %d directories to clean: `%s`.", dirs.size(), dirs);
             dirsToClean.addAll(dirs);
@@ -311,17 +313,17 @@ public class McJavaOptions {
     }
 
     public static CodeGenAnnotations getCodeGenAnnotations(Project project) {
-        CodeGenAnnotations annotations = extension(project).generateAnnotations;
+        CodeGenAnnotations annotations = getMcJavaOptions(project).generateAnnotations;
         return annotations;
     }
 
     public static ImmutableSet<String> getInternalClassPatterns(Project project) {
-        List<String> patterns = extension(project).internalClassPatterns;
+        List<String> patterns = getMcJavaOptions(project).internalClassPatterns;
         return ImmutableSet.copyOf(patterns);
     }
 
     public static ImmutableSet<String> getInternalMethodNames(Project project) {
-        List<String> patterns = extension(project).internalMethodNames;
+        List<String> patterns = getMcJavaOptions(project).internalMethodNames;
         return ImmutableSet.copyOf(patterns);
     }
 
@@ -360,11 +362,9 @@ public class McJavaOptions {
     /**
      * Obtains the instance of the extension from the given project.
      */
-    public static McJavaOptions extension(Project project) {
-        ModelCompilerOptions mcExtension =
-                project.getExtensions()
-                       .getByType(ModelCompilerOptions.class);
-        ExtensionAware extensionAware = (ExtensionAware) mcExtension;
+    public static McJavaOptions getMcJavaOptions(Project project) {
+        ModelCompilerOptions mcOptions = getModelCompiler(project);
+        ExtensionAware extensionAware = (ExtensionAware) mcOptions;
         McJavaOptions mcJavaExtension =
                 extensionAware.getExtensions()
                               .getByType(McJavaOptions.class);

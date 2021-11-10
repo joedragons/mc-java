@@ -41,6 +41,7 @@ import static io.spine.tools.mc.java.StandardRepos.applyStandard;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainRejectionsDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainResourcesDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestResourcesDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,7 +62,7 @@ class McJavaOptionsTest {
         repositories.mavenCentral();
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
-        extension = McJavaOptions.extension(project);
+        extension = getMcJavaOptions(project);
     }
 
     @Nested

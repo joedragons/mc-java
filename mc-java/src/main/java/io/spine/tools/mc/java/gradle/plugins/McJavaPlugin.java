@@ -35,6 +35,8 @@ import org.gradle.api.Project;
 
 import java.util.stream.Stream;
 import io.spine.tools.mc.gradle.LanguagePlugin;
+
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
 import static kotlin.jvm.JvmClassMappingKt.getKotlinClass;
 
 /**
@@ -51,7 +53,7 @@ public class McJavaPlugin extends LanguagePlugin implements Logging {
     @Override
     public void apply(Project project) {
         super.apply(project);
-        McJavaOptions extension = McJavaOptions.extension(project);
+        McJavaOptions extension = getMcJavaOptions(project);
         extension.injectProject(project);
         createAndApplyPluginsIn(project);
     }

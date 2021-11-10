@@ -63,6 +63,7 @@ import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writePluginConfiguration;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestDescriptorReference;
@@ -171,8 +172,8 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     private static void writePluginConfig(Task protocTask, Path configPath) {
         Project project = protocTask.getProject();
-        McJavaOptions extension = McJavaOptions.extension(project);
-        SpineProtocConfig config = extension.codegen.toProto();
+        McJavaOptions options = getMcJavaOptions(project);
+        SpineProtocConfig config = options.codegen.toProto();
 
         ensureFile(configPath);
         try (FileOutputStream fos = new FileOutputStream(configPath.toFile())) {
