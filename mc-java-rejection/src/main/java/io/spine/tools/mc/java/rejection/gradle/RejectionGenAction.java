@@ -64,10 +64,10 @@ import static com.google.common.flogger.LazyArgs.lazy;
 final class RejectionGenAction extends CodeGenerationAction {
 
     RejectionGenAction(Project project,
-                       Supplier<FileSet> files,
+                       Supplier<FileSet> protoFiles,
                        Supplier<String> targetDirPath,
                        Supplier<String> protoSrcDirPath) {
-        super(project, files, targetDirPath, protoSrcDirPath);
+        super(project, protoFiles, targetDirPath, protoSrcDirPath);
     }
 
     @Override
