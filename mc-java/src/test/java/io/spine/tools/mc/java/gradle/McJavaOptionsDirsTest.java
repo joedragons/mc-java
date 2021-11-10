@@ -45,6 +45,7 @@ import static io.spine.tools.mc.java.StandardRepos.applyStandard;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`McJavaExtension` directories to clean should")
@@ -52,7 +53,7 @@ class McJavaOptionsDirsTest {
 
     private Project project = null;
     private File projectDir = null;
-    private McJavaOptions extension = null;
+    private McJavaOptions options = null;
 
     @BeforeEach
     void setUp() {
@@ -62,90 +63,65 @@ class McJavaOptionsDirsTest {
         applyStandard(repositories);
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
-        extension = getMcJavaOptions(project);
+        options = getMcJavaOptions(project);
     }
 
     @Nested
-    @DisplayName("for `dirsToClean`")
-    class DirsToClean {
+    @DisplayName("return")
+    class Return {
 
-        @Nested
-        @DisplayName("return")
-        class Return {
-            
-            @Test
-            @DisplayName("default value, if not set")
-            void defaultValue() {
-                List<String> actualDirs = actualDirs();
+        @Test
+        @DisplayName("default value, if not set")
+        void defaultValue() {
+            List<String> actualDirs = actualDirs();
 
-                assertThat(actualDirs).hasSize(1);
-                assertNotEmptyAndIsInProjectDir(actualDirs.get(0));
-            }
+            assertThat(actualDirs).hasSize(1);
+            assertNotEmptyAndIsInProjectDir(actualDirs.get(0));
+        }
 
-            private void assertNotEmptyAndIsInProjectDir(String path) {
-                assertThat(path.trim())
-                        .isNotEmpty();
-                assertThat(path)
-                        .startsWith(project.getProjectDir()
-                                           .getAbsolutePath());
-            }
-
-            @Test
-            @DisplayName("single value, if set")
-            void singleValue() {
-                extension.dirToClean = newUuid();
-
-                List<String> actualDirs = actualDirs();
-
-                assertThat(actualDirs).hasSize(1);
-                assertThat(actualDirs.get(0))
-                        .isEqualTo(extension.dirToClean);
-            }
-
-            @Test
-            @DisplayName("list, if array is set")
-            void list() {
-                extension.dirsToClean = newArrayList(newUuid(), newUuid());
-
-                List<String> actualDirs = actualDirs();
-
-                assertThat(actualDirs)
-                        .isEqualTo(extension.dirsToClean);
-            }
-
-            @Test
-            @DisplayName("list, if array and single are set")
-            void listIfArrayAndSingle() {
-                extension.dirsToClean = newArrayList(newUuid(), newUuid());
-                extension.dirToClean = newUuid();
-
-                List<String> actualDirs = actualDirs();
-
-                assertThat(actualDirs)
-                        .isEqualTo(extension.dirsToClean);
-            }
+        private void assertNotEmptyAndIsInProjectDir(String path) {
+            assertThat(path.trim())
+                    .isNotEmpty();
+            assertThat(path)
+                    .startsWith(project.getProjectDir()
+                                       .getAbsolutePath());
         }
 
         @Test
-        @DisplayName("include `.spine` dir, if exists")
-        void includeSpineDir() throws IOException {
-            DefaultJavaPaths defaultProject = DefaultJavaPaths.at(projectDir);
-            File spineDir = defaultProject.tempArtifacts();
-            assertTrue(spineDir.mkdir());
-            String generatedDir =
-                    defaultProject.generated()
-                                  .path()
-                                  .toFile()
-                                  .getCanonicalPath();
+        @DisplayName("list, if array is set")
+        void list() {
+            options.dirsToClean = newArrayList(newUuid(), newUuid());
 
-            List<String> dirsToClean = actualDirs();
-
-            assertThat(dirsToClean)
-                 .containsAtLeast(spineDir.getCanonicalPath(), generatedDir);
+            List<String> actualDirs = actualDirs();
+            assertThat(actualDirs)
+                    .isEqualTo(options.dirsToClean);
         }
+    }
 
-        private List<String> actualDirs() {
-            return McJavaOptions.getDirsToClean(project);
-        }
+    @Test
+    @DisplayName("include `.spine` dir, if exists")
+    void includeSpineDir() throws IOException {
+        DefaultJavaPaths defaultProject = DefaultJavaPaths.at(projectDir);
+        File spineDir = defaultProject.tempArtifacts();
+        assertTrue(spineDir.mkdir());
+        String generatedDir =
+                defaultProject.generated()
+                              .path()
+                              .toFile()
+                              .getCanonicalPath();
+
+        List<String> dirsToClean = actualDirs();
+
+        assertThat(dirsToClean)
+                .containsAtLeast(spineDir.getCanonicalPath(), generatedDir);
+    }
+
+    private List<String> actualDirs() {
+        List<String> result =
+                DirsToClean.getFor(project)
+                           .stream()
+                           .map(File::toString)
+                           .collect(toList());
+        return result;
     }
 }

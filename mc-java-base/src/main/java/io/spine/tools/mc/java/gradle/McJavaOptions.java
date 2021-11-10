@@ -25,7 +25,6 @@
  */
 package io.spine.tools.mc.java.gradle;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
@@ -37,17 +36,12 @@ import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionAware;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Lists.newLinkedList;
 import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A configuration for the Spine Model Compiler for Java.
@@ -122,13 +116,6 @@ public class McJavaOptions {
     public String generatedTestRejectionsDir;
 
     /**
-     * The absolute path to directory to delete.
-     *
-     * <p>Either this property OR {@code dirsToClean} property is used.
-     */
-    public String dirToClean;
-
-    /**
      * The indent for the generated code in the validating builders.
      */
     public Indent indent = Indent.of4();
@@ -177,7 +164,7 @@ public class McJavaOptions {
         action.execute(codegen);
     }
 
-    private static DefaultJavaPaths def(Project project) {
+    static DefaultJavaPaths def(Project project) {
         return DefaultJavaPaths.at(project.getProjectDir());
     }
 
@@ -281,27 +268,6 @@ public class McJavaOptions {
         _debug().log("Indent has been set to %d.", indent);
     }
 
-    public static List<String> getDirsToClean(Project project) {
-        List<String> dirsToClean = newLinkedList(spineDirs(project));
-        _debug().log("Finding the directories to clean.");
-        McJavaOptions options = getMcJavaOptions(project);
-        List<String> dirs = options.dirsToClean;
-        String singleDir = options.dirToClean;
-        if (dirs.size() > 0) {
-            _info().log("Found %d directories to clean: `%s`.", dirs.size(), dirs);
-            dirsToClean.addAll(dirs);
-        } else if (singleDir != null && !singleDir.isEmpty()) {
-            _debug().log("Found directory to clean: `%s`.", singleDir);
-            dirsToClean.add(singleDir);
-        } else {
-            String defaultValue = def(project).generated()
-                                              .toString();
-            _debug().log("Default directory to clean: `%s`.", defaultValue);
-            dirsToClean.add(defaultValue);
-        }
-        return ImmutableList.copyOf(dirsToClean);
-    }
-
     @SuppressWarnings("unused") // Configures `generateAnnotations` closure.
     public void generateAnnotations(Closure<?> closure) {
         project.configure(generateAnnotations, closure);
@@ -325,38 +291,6 @@ public class McJavaOptions {
     public static ImmutableSet<String> getInternalMethodNames(Project project) {
         List<String> patterns = getMcJavaOptions(project).internalMethodNames;
         return ImmutableSet.copyOf(patterns);
-    }
-
-    private static Iterable<String> spineDirs(Project project) {
-        List<String> spineDirs = newLinkedList();
-        Optional<String> spineDir = spineDir(project);
-        Optional<String> rootSpineDir = spineDir(project.getRootProject());
-        if (spineDir.isPresent()) {
-            spineDirs.add(spineDir.get());
-            if (rootSpineDir.isPresent() && !spineDir.equals(rootSpineDir)) {
-                spineDirs.add(rootSpineDir.get());
-            }
-        }
-        return spineDirs;
-    }
-
-    private static Optional<String> spineDir(Project project) {
-        File projectDir;
-        try {
-            projectDir = project.getProjectDir()
-                                .getCanonicalFile();
-        } catch (IOException e) {
-            throw newIllegalStateException(
-                    e, "Unable to obtain project directory `%s`.", project.getProjectDir()
-            );
-        }
-        File spinePath = DefaultJavaPaths.at(projectDir)
-                                         .tempArtifacts();
-        if (spinePath.exists()) {
-            return Optional.of(spinePath.toString());
-        } else {
-            return Optional.empty();
-        }
     }
 
     /**

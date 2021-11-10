@@ -28,12 +28,12 @@ package io.spine.tools.mc.java.gradle.plugins;
 import com.google.common.flogger.FluentLogger;
 import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.SpinePlugin;
-import io.spine.tools.mc.java.gradle.McJavaOptions;
+import io.spine.tools.mc.java.gradle.DirsToClean;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.List;
 
 import static com.google.common.flogger.LazyArgs.lazy;
@@ -60,12 +60,12 @@ public class CleaningPlugin extends SpinePlugin {
 
     private void cleanIn(Project project) {
         FluentLogger.Api debug = _debug();
-        List<String> dirsToClean = McJavaOptions.getDirsToClean(project);
+        List<File> dirsToClean = DirsToClean.getFor(project);
         debug.log(
                 "Pre-clean: deleting the directories (`%s`).", lazy(dirsToClean::toString)
         );
         dirsToClean.stream()
-                   .map(Paths::get)
+                   .map(File::toPath)
                    .forEach(dir -> {
                        debug.log("Deleting directory `%s`...", dir);
                        deleteRecursively(dir);
