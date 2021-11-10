@@ -39,7 +39,6 @@ import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.RunBuild
-import io.spine.internal.gradle.Scripts
 import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.checkstyle.CheckStyleConfig
@@ -58,6 +57,7 @@ import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
 import io.spine.internal.gradle.test.configureLogging
 import io.spine.internal.gradle.test.registerTestTasks
+import io.spine.internal.gradle.testing.exposeTestArtifacts
 import java.time.Duration
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -110,8 +110,6 @@ subprojects {
         plugin("net.ltgt.errorprone")
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
-
-        from(Scripts.testArtifacts(project))
     }
 
     dependencies {
@@ -150,6 +148,7 @@ subprojects {
     java {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
+        exposeTestArtifacts()
     }
 
     tasks.withType<JavaCompile> {
