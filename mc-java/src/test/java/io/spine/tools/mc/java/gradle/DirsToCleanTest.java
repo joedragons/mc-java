@@ -48,8 +48,8 @@ import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("`McJavaExtension` directories to clean should")
-class McJavaOptionsDirsTest {
+@DisplayName("`DirsToClean` should")
+class DirsToCleanTest {
 
     private Project project = null;
     private File projectDir = null;
@@ -57,7 +57,7 @@ class McJavaOptionsDirsTest {
 
     @BeforeEach
     void setUp() {
-        projectDir = TempDir.forClass(McJavaOptionsDirsTest.class);
+        projectDir = TempDir.forClass(DirsToCleanTest.class);
         project = StubProject.createAt(projectDir);
         RepositoryHandler repositories = project.getRepositories();
         applyStandard(repositories);
