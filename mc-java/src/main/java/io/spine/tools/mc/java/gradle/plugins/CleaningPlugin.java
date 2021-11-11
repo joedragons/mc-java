@@ -28,7 +28,7 @@ package io.spine.tools.mc.java.gradle.plugins;
 import com.google.common.flogger.FluentLogger;
 import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.SpinePlugin;
-import io.spine.tools.mc.java.gradle.DirsToClean;
+import io.spine.tools.mc.java.gradle.TempArtifactDirs;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -60,7 +60,7 @@ public class CleaningPlugin extends SpinePlugin {
 
     private void cleanIn(Project project) {
         FluentLogger.Api debug = _debug();
-        List<File> dirsToClean = DirsToClean.getFor(project);
+        List<File> dirsToClean = TempArtifactDirs.getFor(project);
         debug.log(
                 "Pre-clean: deleting the directories (`%s`).", lazy(dirsToClean::toString)
         );

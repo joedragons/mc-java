@@ -49,7 +49,7 @@ import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`DirsToClean` should")
-class DirsToCleanTest {
+class TempArtifactDirsTest {
 
     private Project project = null;
     private File projectDir = null;
@@ -57,7 +57,7 @@ class DirsToCleanTest {
 
     @BeforeEach
     void setUp() {
-        projectDir = TempDir.forClass(DirsToCleanTest.class);
+        projectDir = TempDir.forClass(TempArtifactDirsTest.class);
         project = StubProject.createAt(projectDir);
         RepositoryHandler repositories = project.getRepositories();
         applyStandard(repositories);
@@ -90,11 +90,11 @@ class DirsToCleanTest {
         @Test
         @DisplayName("list, if array is set")
         void list() {
-            options.dirsToClean = newArrayList(newUuid(), newUuid());
+            options.tempArtifactDirs = newArrayList(newUuid(), newUuid());
 
             List<String> actualDirs = actualDirs();
             assertThat(actualDirs)
-                    .isEqualTo(options.dirsToClean);
+                    .isEqualTo(options.tempArtifactDirs);
         }
     }
 
@@ -118,10 +118,10 @@ class DirsToCleanTest {
 
     private List<String> actualDirs() {
         List<String> result =
-                DirsToClean.getFor(project)
-                           .stream()
-                           .map(File::toString)
-                           .collect(toList());
+                TempArtifactDirs.getFor(project)
+                                .stream()
+                                .map(File::toString)
+                                .collect(toList());
         return result;
     }
 }

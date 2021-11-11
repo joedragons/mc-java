@@ -45,16 +45,17 @@ import static java.util.stream.Collectors.toList;
 /**
  * Calculates directories to be cleaned for a given project.
  */
-public class DirsToClean {
+public class TempArtifactDirs {
 
     private static final FluentLogger log = FluentLogger.forEnclosingClass();
 
     /** Prevents instantiation of this utility class. */
-    private DirsToClean() {
+    private TempArtifactDirs() {
     }
 
     /**
-     * Obtains directories to be cleaned in the given project.
+     * Obtains directories to be removed in the given project when the {@code preClean} task
+     * is executed.
      */
     public static List<File> getFor(Project project) {
         ImmutableList.Builder<File> result = ImmutableList.builder();
@@ -75,7 +76,7 @@ public class DirsToClean {
 
     private static List<File> fromOptionsOf(Project project) {
         McJavaOptions options = getMcJavaOptions(project);
-        List<File> dirs = options.dirsToClean
+        List<File> dirs = options.tempArtifactDirs
                     .stream()
                     .map(File::new)
                     .collect(toList());

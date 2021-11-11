@@ -124,11 +124,9 @@ public class McJavaOptions {
     public Indent indent = Indent.of4();
 
     /**
-     * The absolute paths to directories to delete.
-     *
-     * <p>Either this property OR {@code dirToClean} property is used.
+     * The absolute paths to directories to delete on the {@code preClean} task.
      */
-    public List<String> dirsToClean = new ArrayList<>();
+    public List<String> tempArtifactDirs = new ArrayList<>();
 
     public final CodeGenAnnotations generateAnnotations = new CodeGenAnnotations();
 
