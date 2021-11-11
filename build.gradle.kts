@@ -248,7 +248,9 @@ val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.g
 /**
  * The build task executed under `tests` subdirectory.
  *
- * The task depends on artifacts of this project published to `mavenLocal()`.
+ * These tests depend on locally published artifacts.
+ * It is similar to the dependency on such artifacts that `:mc-java` module declares for
+ * its tests. So, we depend on the `test` task of this module for simplicity.
  */
 val integrationTests by tasks.registering(RunBuild::class) {
     directory = "$rootDir/tests"
@@ -256,11 +258,7 @@ val integrationTests by tasks.registering(RunBuild::class) {
     /** A timeout for the case of stalled child processes under Windows. */
     timeout.set(Duration.ofMinutes(20))
 
-    val pubTasks = projectsToPublish.map { p ->
-        val subProject = rootProject.project(p)
-        subProject.tasks["publishToMavenLocal"]
-    }
-    dependsOn(pubTasks)
+    dependsOn(project(":mc-java").tasks.test)
 }
 
 tasks.register("buildAll") {
