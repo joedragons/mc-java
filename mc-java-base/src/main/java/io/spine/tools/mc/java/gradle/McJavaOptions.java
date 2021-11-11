@@ -60,12 +60,6 @@ public class McJavaOptions {
     static final String NAME = "java";
 
     /**
-     * The absolute path to the main Java sources directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedMainDir;
-
-    /**
      * The absolute path to the main {@code gRPC} services directory,
      * generated basing on Protobuf definitions.
      */
@@ -75,12 +69,6 @@ public class McJavaOptions {
      * The absolute path to the main target generated resources directory.
      */
     public String generatedMainResourcesDir;
-
-    /**
-     * The absolute path to the test Java sources directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedTestDir;
 
     /**
      * The absolute path to the test target generated resources directory.
@@ -162,12 +150,6 @@ public class McJavaOptions {
         return logger.atFine();
     }
 
-    public static String getGeneratedMainJavaDir(Project project) {
-        return pathOrDefault(getMcJava(project).generatedMainDir,
-                             def(project).generated()
-                                         .mainJava());
-    }
-
     public static String getGeneratedMainGrpcDir(Project project) {
         return pathOrDefault(getMcJava(project).generatedMainGrpcDir,
                              def(project).generated()
@@ -178,12 +160,6 @@ public class McJavaOptions {
         return pathOrDefault(getMcJava(project).generatedMainResourcesDir,
                              def(project).generated()
                                          .mainResources());
-    }
-
-    public static String getGeneratedTestJavaDir(Project project) {
-        return pathOrDefault(getMcJava(project).generatedTestDir,
-                             def(project).generated()
-                                         .testJava());
     }
 
     public static String getGeneratedTestResourcesDir(Project project) {

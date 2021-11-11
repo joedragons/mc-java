@@ -47,5 +47,20 @@ private val Project.defaultPaths: DefaultJavaPaths
 /**
  * Obtains the directory containing proto source code of the specified source set.
  */
-public fun Project.protoDir(sourceSet: String): Path =
-    defaultPaths.src().directory().resolve(sourceSet)
+public fun Project.protoDir(sourceSet: String): Path {
+    requireValidName(sourceSet)
+    return defaultPaths.src().directory().resolve(sourceSet)
+}
+
+/**
+ * Obtains the directory containing generated Java source code for the specified source set.
+ */
+public fun Project.generatedJavaDir(sourceSet: String): Path {
+    requireValidName(sourceSet)
+    return defaultPaths.generated().directory().resolve(sourceSet)
+}
+
+private fun requireValidName(sourceSet: String) {
+    require(sourceSet.isNotEmpty())
+    require(sourceSet.isNotBlank())
+}

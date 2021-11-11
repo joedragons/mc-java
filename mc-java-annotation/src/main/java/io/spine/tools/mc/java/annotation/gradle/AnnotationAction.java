@@ -50,11 +50,10 @@ import static io.spine.tools.mc.java.annotation.mark.ApiOption.spi;
 import static io.spine.tools.mc.java.annotation.mark.ModuleAnnotator.translate;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getCodeGenAnnotations;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainGrpcDir;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainJavaDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestGrpcDir;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestJavaDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatterns;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
+import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
@@ -117,17 +116,11 @@ final class AnnotationAction implements Action<Task>, Logging {
     @NonNull
     private AnnotatorFactory createAnnotationFactory(Project project) {
         File descriptorSetFile = descrSetFile(project);
-        Path generatedJavaPath = Paths.get(generatedJavaDir(project));
+        Path generatedJavaPath = generatedJavaDir(project, sourceSet());
         Path generatedGrpcPath = Paths.get(generatedGrpcDir(project));
         AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory
                 .newInstance(descriptorSetFile, generatedJavaPath, generatedGrpcPath);
         return annotatorFactory;
-    }
-
-    private String generatedJavaDir(Project project) {
-        return mainCode
-               ? getGeneratedMainJavaDir(project)
-               : getGeneratedTestJavaDir(project);
     }
 
     private String generatedGrpcDir(Project project) {
