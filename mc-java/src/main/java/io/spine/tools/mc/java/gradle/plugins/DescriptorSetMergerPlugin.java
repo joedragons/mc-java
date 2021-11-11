@@ -45,9 +45,10 @@ import static io.spine.tools.gradle.JavaTaskName.processResources;
 import static io.spine.tools.gradle.JavaTaskName.processTestResources;
 import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
 import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
+import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 
 /**
  * A Gradle plugin which merges the descriptor file with all the descriptor files from
@@ -78,7 +79,7 @@ public class DescriptorSetMergerPlugin extends SpinePlugin {
         return task -> {
             Project project = task.getProject();
             Configuration configuration = configuration(project, configurationName(tests));
-            File descriptorSet = descriptorSetFileOf(project, !tests);
+            File descriptorSet = descriptorSetFile(project, MAIN_SOURCE_SET_NAME);
             FileDescriptorSuperset superset = new FileDescriptorSuperset();
             configuration.forEach(superset::addFromDependency);
             if (descriptorSet.exists()) {

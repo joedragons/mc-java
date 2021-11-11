@@ -30,22 +30,16 @@ import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
-import org.gradle.api.plugins.ExtensionAware;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
-import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
+import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 
 /**
  * A configuration for the Spine Model Compiler for Java.
@@ -64,16 +58,6 @@ public class McJavaOptions {
      * The name of the extension, as it appears in a Gradle build script.
      */
     static final String NAME = "java";
-
-    /**
-     * The absolute path to the Protobuf source code under the {@code main} directory.
-     */
-    public String mainProtoDir;
-
-    /**
-     * The absolute path to the test Protobuf source directory.
-     */
-    public String testProtoDir;
 
     /**
      * The absolute path to the main Java sources directory,
@@ -145,16 +129,6 @@ public class McJavaOptions {
     private Project project;
 
     /**
-     * Obtains a path of the descriptor set file of the given project for
-     * the specified source set.
-     */
-    public static File descriptorSetFileOf(Project project, boolean mainSourceSet) {
-        String sourceSet = mainSourceSet ? MAIN_SOURCE_SET_NAME : TEST_SOURCE_SET_NAME;
-        File result = descriptorSetFile(project, sourceSet);
-        return result;
-    }
-
-    /**
      * Injects the dependency to the given project.
      */
     public void injectProject(Project project) {
@@ -188,66 +162,50 @@ public class McJavaOptions {
         return logger.atFine();
     }
 
-    public static String getMainProtoDir(Project project) {
-        McJavaOptions extension = getMcJavaOptions(project);
-        _debug().log("Extension is `%s`.", extension);
-        String protoDir = extension.mainProtoDir;
-        _debug().log("`modelCompiler.mainProtoSrcDir` is `%s`.", protoDir);
-        return pathOrDefault(protoDir,
-                             def(project).src()
-                                         .mainProto());
-    }
-
-    public static String getTestProtoDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).testProtoDir,
-                             def(project).src()
-                                         .testProto());
-    }
-
     public static String getGeneratedMainJavaDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainDir,
+        return pathOrDefault(getMcJava(project).generatedMainDir,
                              def(project).generated()
                                          .mainJava());
     }
 
     public static String getGeneratedMainGrpcDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainGrpcDir,
+        return pathOrDefault(getMcJava(project).generatedMainGrpcDir,
                              def(project).generated()
                                          .mainGrpc());
     }
 
     public static String getGeneratedMainResourcesDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainResourcesDir,
+        return pathOrDefault(getMcJava(project).generatedMainResourcesDir,
                              def(project).generated()
                                          .mainResources());
     }
 
     public static String getGeneratedTestJavaDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestDir,
+        return pathOrDefault(getMcJava(project).generatedTestDir,
                              def(project).generated()
                                          .testJava());
     }
 
     public static String getGeneratedTestResourcesDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestResourcesDir,
+        return pathOrDefault(getMcJava(project).generatedTestResourcesDir,
                              def(project).generated()
                                          .testResources());
     }
 
     public static String getGeneratedTestGrpcDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestGrpcDir,
+        return pathOrDefault(getMcJava(project).generatedTestGrpcDir,
                              def(project).generated()
                                          .testGrpc());
     }
 
     public static String getGeneratedMainRejectionsDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainRejectionsDir,
+        return pathOrDefault(getMcJava(project).generatedMainRejectionsDir,
                              def(project).generated()
                                          .mainSpine());
     }
 
     public static String getGeneratedTestRejectionsDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestRejectionsDir,
+        return pathOrDefault(getMcJava(project).generatedTestRejectionsDir,
                              def(project).generated()
                                          .testSpine());
     }
@@ -259,7 +217,7 @@ public class McJavaOptions {
     }
 
     public static Indent getIndent(Project project) {
-        Indent result = getMcJavaOptions(project).indent;
+        Indent result = getMcJava(project).indent;
         _debug().log("The current indent is %d.", result.size());
         return result;
     }
@@ -281,29 +239,17 @@ public class McJavaOptions {
     }
 
     public static CodeGenAnnotations getCodeGenAnnotations(Project project) {
-        CodeGenAnnotations annotations = getMcJavaOptions(project).generateAnnotations;
+        CodeGenAnnotations annotations = getMcJava(project).generateAnnotations;
         return annotations;
     }
 
     public static ImmutableSet<String> getInternalClassPatterns(Project project) {
-        List<String> patterns = getMcJavaOptions(project).internalClassPatterns;
+        List<String> patterns = getMcJava(project).internalClassPatterns;
         return ImmutableSet.copyOf(patterns);
     }
 
     public static ImmutableSet<String> getInternalMethodNames(Project project) {
-        List<String> patterns = getMcJavaOptions(project).internalMethodNames;
+        List<String> patterns = getMcJava(project).internalMethodNames;
         return ImmutableSet.copyOf(patterns);
-    }
-
-    /**
-     * Obtains the instance of the extension from the given project.
-     */
-    public static McJavaOptions getMcJavaOptions(Project project) {
-        ModelCompilerOptions mcOptions = getModelCompiler(project);
-        ExtensionAware extensionAware = (ExtensionAware) mcOptions;
-        McJavaOptions mcJavaExtension =
-                extensionAware.getExtensions()
-                              .getByType(McJavaOptions.class);
-        return mcJavaExtension;
     }
 }

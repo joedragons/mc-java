@@ -24,16 +24,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Spine
+@file:JvmName("Projects")
 
-dependencies {
-    api(gradleApi())
-    api(gradleKotlinDsl())
+package io.spine.tools.mc.java.gradle
 
-    val spine = Spine(project)
-    api(spine.modelCompiler)
+import io.spine.tools.java.fs.DefaultJavaPaths
+import io.spine.tools.mc.gradle.modelCompiler
+import java.nio.file.Path
+import org.gradle.api.Project
+import org.gradle.api.plugins.ExtensionAware
+import org.gradle.kotlin.dsl.getByType
 
-    testImplementation(spine.testlib)
-    testImplementation(gradleTestKit())
-    testImplementation(spine.pluginTestlib)
-}
+/**
+ * Obtains options of Model Compiler for Java.
+ */
+public val Project.mcJava: McJavaOptions
+    get() = (modelCompiler as ExtensionAware).extensions.getByType()
+
+private val Project.defaultPaths: DefaultJavaPaths
+    get() = DefaultJavaPaths.at(projectDir.toPath())
+
+/**
+ * Obtains the directory containing proto source code of the specified source set.
+ */
+public fun Project.protoDir(sourceSet: String): Path =
+    defaultPaths.src().directory().resolve(sourceSet)

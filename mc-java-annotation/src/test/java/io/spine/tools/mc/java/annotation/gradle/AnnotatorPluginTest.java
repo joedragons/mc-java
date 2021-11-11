@@ -79,6 +79,7 @@ import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.POTENTIAL_ANNOTATION_DUP;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.SPI_SERVICE;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 
 @DisplayName("`AnnotatorPlugin` should")
 class AnnotatorPluginTest {
@@ -317,7 +318,7 @@ class AnnotatorPluginTest {
         return DefaultJavaPaths.at(testProjectDir)
                 .buildRoot()
                 .descriptors()
-                .mainDescriptors()
+                .forSourceSet(MAIN_SOURCE_SET_NAME)
                 .resolve("io.spine.test_" + testProjectDir.getName() + "_3.14" + DESC_EXTENSION);
     }
 }

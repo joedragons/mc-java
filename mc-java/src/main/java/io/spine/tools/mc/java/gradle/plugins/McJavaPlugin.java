@@ -26,6 +26,7 @@
 package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.logging.Logging;
+import io.spine.tools.mc.gradle.LanguagePlugin;
 import io.spine.tools.mc.java.annotation.gradle.AnnotatorPlugin;
 import io.spine.tools.mc.java.checks.gradle.McJavaChecksPlugin;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
@@ -34,9 +35,8 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 import java.util.stream.Stream;
-import io.spine.tools.mc.gradle.LanguagePlugin;
 
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
+import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static kotlin.jvm.JvmClassMappingKt.getKotlinClass;
 
 /**
@@ -53,7 +53,7 @@ public class McJavaPlugin extends LanguagePlugin implements Logging {
     @Override
     public void apply(Project project) {
         super.apply(project);
-        McJavaOptions extension = getMcJavaOptions(project);
+        McJavaOptions extension = getMcJava(project);
         extension.injectProject(project);
         createAndApplyPluginsIn(project);
     }

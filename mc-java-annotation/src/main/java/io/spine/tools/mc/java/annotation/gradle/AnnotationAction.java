@@ -42,12 +42,12 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.internal;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.spi;
 import static io.spine.tools.mc.java.annotation.mark.ModuleAnnotator.translate;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getCodeGenAnnotations;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainGrpcDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainJavaDir;
@@ -55,6 +55,8 @@ import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestGrpcDi
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestJavaDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatterns;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
+import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A task action which performs generated code annotation.
@@ -74,16 +76,24 @@ final class AnnotationAction implements Action<Task>, Logging {
         this.mainCode = mainCode;
     }
 
+    private String sourceSet() {
+        return mainCode ? MAIN_SOURCE_SET_NAME : TEST_SOURCE_SET_NAME;
+    }
+
     @Override
     public void execute(Task task) {
         Project project = task.getProject();
-        File descriptorSetFile = descriptorSetFileOf(project, mainCode);
+        File descriptorSetFile = descrSetFile(project);
         if (!descriptorSetFile.exists()) {
             logMissing(descriptorSetFile);
             return;
         }
         ModuleAnnotator annotator = createAnnotator(project);
         annotator.annotate();
+    }
+
+    private File descrSetFile(Project project) {
+        return descriptorSetFile(project, sourceSet());
     }
 
     private ModuleAnnotator createAnnotator(Project project) {
@@ -106,7 +116,7 @@ final class AnnotationAction implements Action<Task>, Logging {
 
     @NonNull
     private AnnotatorFactory createAnnotationFactory(Project project) {
-        File descriptorSetFile = descriptorSetFileOf(project, mainCode);
+        File descriptorSetFile = descrSetFile(project);
         Path generatedJavaPath = Paths.get(generatedJavaDir(project));
         Path generatedGrpcPath = Paths.get(generatedGrpcDir(project));
         AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory

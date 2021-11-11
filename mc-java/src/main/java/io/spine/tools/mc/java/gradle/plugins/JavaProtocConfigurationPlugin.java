@@ -32,7 +32,6 @@ import com.google.protobuf.gradle.GenerateProtoTask;
 import io.spine.code.proto.DescriptorReference;
 import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.ProtocConfigurationPlugin;
-import io.spine.tools.gradle.SourceScope;
 import io.spine.tools.gradle.TaskName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.GeneratedRoot;
@@ -54,20 +53,22 @@ import static io.spine.io.Ensure.ensureFile;
 import static io.spine.tools.gradle.BaseTaskName.clean;
 import static io.spine.tools.gradle.JavaTaskName.processResources;
 import static io.spine.tools.gradle.JavaTaskName.processTestResources;
-import static io.spine.tools.gradle.Projects.sourceSet;
 import static io.spine.tools.gradle.ProtocPluginName.grpc;
 import static io.spine.tools.gradle.ProtocPluginName.spineProtoc;
+import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.java.fs.DefaultJavaPaths.at;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writePluginConfiguration;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestPluginConfiguration;
+import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static io.spine.util.Exceptions.newIllegalStateException;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
+import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A Gradle plugin that performs additional {@code protoc} configurations relevant
@@ -108,7 +109,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         boolean tests = isTestsTask(protocTask);
         Project project = protocTask.getProject();
         TaskName writeRefName = writeRefNameTask(tests);
-        SourceScope scope = tests ? SourceScope.test : SourceScope.main;
+        String scope = tests ? TEST_SOURCE_SET_NAME : MAIN_SOURCE_SET_NAME;
         File descriptorFile = new File(protocTask.getDescriptorPath());
         Path resourceDirectory = descriptorFile.toPath()
                                                .getParent();
@@ -137,13 +138,13 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     @Override
     protected File getMainDescriptorSet(Project project) {
-        File result = descriptorSetFileOf(project, true);
+        File result = descriptorSetFile(project, MAIN_SOURCE_SET_NAME);
         return result;
     }
 
     @Override
     protected File getTestDescriptorSet(Project project) {
-        File result = descriptorSetFileOf(project, false);
+        File result = descriptorSetFile(project, TEST_SOURCE_SET_NAME);
         return result;
     }
 
@@ -169,7 +170,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     private static void writePluginConfig(Task protocTask, Path configPath) {
         Project project = protocTask.getProject();
-        McJavaOptions options = getMcJavaOptions(project);
+        McJavaOptions options = getMcJava(project);
         SpineProtocConfig config = options.codegen.toProto();
 
         ensureFile(configPath);

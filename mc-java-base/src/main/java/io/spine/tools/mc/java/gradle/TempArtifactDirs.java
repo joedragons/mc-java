@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.spine.tools.mc.java.gradle.McJavaOptions.def;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
+import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static java.util.stream.Collectors.toList;
 
@@ -75,7 +75,7 @@ public class TempArtifactDirs {
     }
 
     private static List<File> fromOptionsOf(Project project) {
-        McJavaOptions options = getMcJavaOptions(project);
+        McJavaOptions options = getMcJava(project);
         List<File> dirs = options.tempArtifactDirs
                     .stream()
                     .map(File::new)

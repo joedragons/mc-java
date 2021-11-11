@@ -42,7 +42,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.mc.java.StandardRepos.applyStandard;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
+import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.MC_JAVA_GRADLE_PLUGIN_ID;
 import static io.spine.tools.mc.java.gradle.given.ModelCompilerTestEnv.newUuid;
 import static java.util.stream.Collectors.toList;
@@ -63,7 +63,7 @@ class TempArtifactDirsTest {
         applyStandard(repositories);
         project.getPluginManager()
                .apply(MC_JAVA_GRADLE_PLUGIN_ID);
-        options = getMcJavaOptions(project);
+        options = getMcJava(project);
     }
 
     @Nested
