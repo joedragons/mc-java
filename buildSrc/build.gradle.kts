@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright 2021, TeamDev. All rights reserved.
  *
@@ -78,4 +80,21 @@ dependencies {
     api("com.github.jk1:gradle-license-report:$licenseReportVersion")
     implementation("org.ajoberstar.grgit:grgit-core:${grGitVersion}")
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:${errorProneVersion}")
+}
+
+val javaVersion = JavaVersion.VERSION_1_8
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = javaVersion.toString()
+        freeCompilerArgs = listOf(
+            "-Xskip-prerelease-check",
+            "-Xjvm-default=all",
+            "-Xopt-in=kotlin.contracts.ExperimentalContracts"
+        )
+    }
 }
