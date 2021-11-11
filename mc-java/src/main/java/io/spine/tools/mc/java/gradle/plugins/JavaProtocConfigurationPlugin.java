@@ -36,7 +36,7 @@ import io.spine.tools.gradle.SourceScope;
 import io.spine.tools.gradle.TaskName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.GeneratedRoot;
-import io.spine.tools.mc.java.gradle.McJavaExtension;
+import io.spine.tools.mc.java.gradle.McJavaOptions;
 import io.spine.tools.protoc.SpineProtocConfig;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Project;
@@ -61,6 +61,8 @@ import static io.spine.tools.java.fs.DefaultJavaPaths.at;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writePluginConfiguration;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestDescriptorReference;
@@ -134,8 +136,15 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
     }
 
     @Override
+    protected File getMainDescriptorSet(Project project) {
+        File result = descriptorSetFileOf(project, true);
+        return result;
+    }
+
+    @Override
     protected File getTestDescriptorSet(Project project) {
-        return McJavaExtension.getTestDescriptorSetFile(project);
+        File result = descriptorSetFileOf(project, false);
+        return result;
     }
 
     @Override
@@ -143,11 +152,6 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         DefaultJavaPaths javaProject = at(project.getProjectDir());
         GeneratedRoot result = javaProject.generated();
         return result.path();
-    }
-
-    @Override
-    protected File getMainDescriptorSet(Project project) {
-        return McJavaExtension.getMainDescriptorSetFile(project);
     }
 
     /**
@@ -165,8 +169,8 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     private static void writePluginConfig(Task protocTask, Path configPath) {
         Project project = protocTask.getProject();
-        McJavaExtension extension = McJavaExtension.extension(project);
-        SpineProtocConfig config = extension.codegen.toProto();
+        McJavaOptions options = getMcJavaOptions(project);
+        SpineProtocConfig config = options.codegen.toProto();
 
         ensureFile(configPath);
         try (FileOutputStream fos = new FileOutputStream(configPath.toFile())) {

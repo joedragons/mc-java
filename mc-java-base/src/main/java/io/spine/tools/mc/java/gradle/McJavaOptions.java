@@ -25,30 +25,26 @@
  */
 package io.spine.tools.mc.java.gradle;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.mc.gradle.McExtension;
+import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionAware;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.collect.Lists.newLinkedList;
 import static io.spine.tools.gradle.Projects.getDefaultMainDescriptors;
 import static io.spine.tools.gradle.Projects.getDefaultTestDescriptors;
-import static io.spine.util.Exceptions.newIllegalStateException;
+import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
 
 /**
  * A configuration for the Spine Model Compiler for Java.
@@ -59,7 +55,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
         "ClassWithTooManyFields", "PMD.TooManyFields" /* Gradle extensions are flat like this. */,
         "RedundantSuppression" /* "ClassWithTooManyFields" is sometimes not recognized by IDEA. */
 })
-public class McJavaExtension {
+public class McJavaOptions {
 
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
@@ -67,16 +63,6 @@ public class McJavaExtension {
      * The name of the extension, as it appears in a Gradle build script.
      */
     static final String NAME = "java";
-
-    /**
-     * The absolute path to the main Protobuf descriptor set file.
-     */
-    public String mainDescriptorSetFile;
-
-    /**
-     * The absolute path to the test Protobuf descriptor set file.
-     */
-    public String testDescriptorSetFile;
 
     /**
      * The absolute path to the Protobuf source code under the {@code main} directory.
@@ -133,23 +119,14 @@ public class McJavaExtension {
     public String generatedTestRejectionsDir;
 
     /**
-     * The absolute path to directory to delete.
-     *
-     * <p>Either this property OR {@code dirsToClean} property is used.
-     */
-    public String dirToClean;
-
-    /**
      * The indent for the generated code in the validating builders.
      */
     public Indent indent = Indent.of4();
 
     /**
-     * The absolute paths to directories to delete.
-     *
-     * <p>Either this property OR {@code dirToClean} property is used.
+     * The absolute paths to directories to delete on the {@code preClean} task.
      */
-    public List<String> dirsToClean = new ArrayList<>();
+    public List<String> tempArtifactDirs = new ArrayList<>();
 
     public final CodeGenAnnotations generateAnnotations = new CodeGenAnnotations();
 
@@ -165,6 +142,17 @@ public class McJavaExtension {
     public List<String> internalMethodNames = new ArrayList<>();
 
     private Project project;
+
+    /**
+     * Obtains a path of the descriptor set file of the given project for
+     * the specified source set.
+     */
+    public static File descriptorSetFileOf(Project project, boolean mainSourceSet) {
+        File result = mainSourceSet
+                      ? getDefaultMainDescriptors(project)
+                      : getDefaultTestDescriptors(project);
+        return result;
+    }
 
     /**
      * Injects the dependency to the given project.
@@ -188,7 +176,7 @@ public class McJavaExtension {
         action.execute(codegen);
     }
 
-    private static DefaultJavaPaths def(Project project) {
+    static DefaultJavaPaths def(Project project) {
         return DefaultJavaPaths.at(project.getProjectDir());
     }
 
@@ -200,18 +188,8 @@ public class McJavaExtension {
         return logger.atFine();
     }
 
-    @SuppressWarnings({
-            "PMD.MethodNamingConventions",
-            "FloggerSplitLogStatement" // See: https://github.com/SpineEventEngine/base/issues/612
-    })
-    private static FluentLogger.Api _info() {
-        return logger.atInfo();
-    }
-
-    @SuppressWarnings("FloggerSplitLogStatement")
-
     public static String getMainProtoDir(Project project) {
-        McJavaExtension extension = extension(project);
+        McJavaOptions extension = getMcJavaOptions(project);
         _debug().log("Extension is `%s`.", extension);
         String protoDir = extension.mainProtoDir;
         _debug().log("`modelCompiler.mainProtoSrcDir` is `%s`.", protoDir);
@@ -221,71 +199,55 @@ public class McJavaExtension {
     }
 
     public static String getTestProtoDir(Project project) {
-        return pathOrDefault(extension(project).testProtoDir,
+        return pathOrDefault(getMcJavaOptions(project).testProtoDir,
                              def(project).src()
                                          .testProto());
     }
 
-    public static File getMainDescriptorSetFile(Project project) {
-        McJavaExtension extension = extension(project);
-        File result = getDefaultMainDescriptors(project);
-        String path = pathOrDefault(extension.mainDescriptorSetFile,
-                                    result);
-        return new File(path);
-    }
-
-    public static File getTestDescriptorSetFile(Project project) {
-        McJavaExtension extension = extension(project);
-        File result = getDefaultTestDescriptors(project);
-        String path = pathOrDefault(extension.testDescriptorSetFile,
-                                    result);
-        return new File(path);
-    }
-
     public static String getGeneratedMainJavaDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainDir,
                              def(project).generated()
                                          .mainJava());
     }
 
     public static String getGeneratedMainGrpcDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainGrpcDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainGrpcDir,
                              def(project).generated()
                                          .mainGrpc());
     }
 
     public static String getGeneratedMainResourcesDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainResourcesDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainResourcesDir,
                              def(project).generated()
                                          .mainResources());
     }
 
     public static String getGeneratedTestJavaDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestDir,
                              def(project).generated()
                                          .testJava());
     }
 
     public static String getGeneratedTestResourcesDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestResourcesDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestResourcesDir,
                              def(project).generated()
                                          .testResources());
     }
 
     public static String getGeneratedTestGrpcDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestGrpcDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestGrpcDir,
                              def(project).generated()
                                          .testGrpc());
     }
 
     public static String getGeneratedMainRejectionsDir(Project project) {
-        return pathOrDefault(extension(project).generatedMainRejectionsDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedMainRejectionsDir,
                              def(project).generated()
                                          .mainSpine());
     }
 
     public static String getGeneratedTestRejectionsDir(Project project) {
-        return pathOrDefault(extension(project).generatedTestRejectionsDir,
+        return pathOrDefault(getMcJavaOptions(project).generatedTestRejectionsDir,
                              def(project).generated()
                                          .testSpine());
     }
@@ -297,7 +259,7 @@ public class McJavaExtension {
     }
 
     public static Indent getIndent(Project project) {
-        Indent result = extension(project).indent;
+        Indent result = getMcJavaOptions(project).indent;
         _debug().log("The current indent is %d.", result.size());
         return result;
     }
@@ -306,26 +268,6 @@ public class McJavaExtension {
     public void setIndent(int indent) {
         this.indent = Indent.of(indent);
         _debug().log("Indent has been set to %d.", indent);
-    }
-
-    public static List<String> getDirsToClean(Project project) {
-        List<String> dirsToClean = newLinkedList(spineDirs(project));
-        _debug().log("Finding the directories to clean.");
-        List<String> dirs = extension(project).dirsToClean;
-        String singleDir = extension(project).dirToClean;
-        if (dirs.size() > 0) {
-            _info().log("Found %d directories to clean: `%s`.", dirs.size(), dirs);
-            dirsToClean.addAll(dirs);
-        } else if (singleDir != null && !singleDir.isEmpty()) {
-            _debug().log("Found directory to clean: `%s`.", singleDir);
-            dirsToClean.add(singleDir);
-        } else {
-            String defaultValue = def(project).generated()
-                                              .toString();
-            _debug().log("Default directory to clean: `%s`.", defaultValue);
-            dirsToClean.add(defaultValue);
-        }
-        return ImmutableList.copyOf(dirsToClean);
     }
 
     @SuppressWarnings("unused") // Configures `generateAnnotations` closure.
@@ -339,63 +281,29 @@ public class McJavaExtension {
     }
 
     public static CodeGenAnnotations getCodeGenAnnotations(Project project) {
-        CodeGenAnnotations annotations = extension(project).generateAnnotations;
+        CodeGenAnnotations annotations = getMcJavaOptions(project).generateAnnotations;
         return annotations;
     }
 
     public static ImmutableSet<String> getInternalClassPatterns(Project project) {
-        List<String> patterns = extension(project).internalClassPatterns;
+        List<String> patterns = getMcJavaOptions(project).internalClassPatterns;
         return ImmutableSet.copyOf(patterns);
     }
 
     public static ImmutableSet<String> getInternalMethodNames(Project project) {
-        List<String> patterns = extension(project).internalMethodNames;
+        List<String> patterns = getMcJavaOptions(project).internalMethodNames;
         return ImmutableSet.copyOf(patterns);
-    }
-
-    private static Iterable<String> spineDirs(Project project) {
-        List<String> spineDirs = newLinkedList();
-        Optional<String> spineDir = spineDir(project);
-        Optional<String> rootSpineDir = spineDir(project.getRootProject());
-        if (spineDir.isPresent()) {
-            spineDirs.add(spineDir.get());
-            if (rootSpineDir.isPresent() && !spineDir.equals(rootSpineDir)) {
-                spineDirs.add(rootSpineDir.get());
-            }
-        }
-        return spineDirs;
-    }
-
-    private static Optional<String> spineDir(Project project) {
-        File projectDir;
-        try {
-            projectDir = project.getProjectDir()
-                                .getCanonicalFile();
-        } catch (IOException e) {
-            throw newIllegalStateException(
-                    e, "Unable to obtain project directory `%s`.", project.getProjectDir()
-            );
-        }
-        File spinePath = DefaultJavaPaths.at(projectDir)
-                                         .tempArtifacts();
-        if (spinePath.exists()) {
-            return Optional.of(spinePath.toString());
-        } else {
-            return Optional.empty();
-        }
     }
 
     /**
      * Obtains the instance of the extension from the given project.
      */
-    public static McJavaExtension extension(Project project) {
-        McExtension mcExtension =
-                project.getExtensions()
-                       .getByType(McExtension.class);
-        ExtensionAware extensionAware = (ExtensionAware) mcExtension;
-        McJavaExtension mcJavaExtension =
+    public static McJavaOptions getMcJavaOptions(Project project) {
+        ModelCompilerOptions mcOptions = getModelCompiler(project);
+        ExtensionAware extensionAware = (ExtensionAware) mcOptions;
+        McJavaOptions mcJavaExtension =
                 extensionAware.getExtensions()
-                              .getByType(McJavaExtension.class);
+                              .getByType(McJavaOptions.class);
         return mcJavaExtension;
     }
 }

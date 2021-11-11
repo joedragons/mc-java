@@ -43,12 +43,11 @@ import static io.spine.tools.gradle.ConfigurationName.runtimeClasspath;
 import static io.spine.tools.gradle.ConfigurationName.testRuntimeClasspath;
 import static io.spine.tools.gradle.JavaTaskName.processResources;
 import static io.spine.tools.gradle.JavaTaskName.processTestResources;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
 import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getMainDescriptorSetFile;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getTestDescriptorSetFile;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
+import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
+import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 
 /**
  * A Gradle plugin which merges the descriptor file with all the descriptor files from
@@ -79,7 +78,7 @@ public class DescriptorSetMergerPlugin extends SpinePlugin {
         return task -> {
             Project project = task.getProject();
             Configuration configuration = configuration(project, configurationName(tests));
-            File descriptorSet = descriptorSet(project, tests);
+            File descriptorSet = descriptorSetFileOf(project, !tests);
             FileDescriptorSuperset superset = new FileDescriptorSuperset();
             configuration.forEach(superset::addFromDependency);
             if (descriptorSet.exists()) {
@@ -119,10 +118,4 @@ public class DescriptorSetMergerPlugin extends SpinePlugin {
                : processResources;
     }
 
-    private static File descriptorSet(Project project, boolean tests) {
-        File descriptor = tests
-                          ? getTestDescriptorSetFile(project)
-                          : getMainDescriptorSetFile(project);
-        return descriptor;
-    }
 }

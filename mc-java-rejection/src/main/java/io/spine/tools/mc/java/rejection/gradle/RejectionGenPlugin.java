@@ -37,16 +37,15 @@ import java.util.function.Supplier;
 
 import static io.spine.tools.gradle.JavaTaskName.compileJava;
 import static io.spine.tools.gradle.JavaTaskName.compileTestJava;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainRejectionsDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestRejectionsDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getMainProtoDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getTestProtoDir;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateTestRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getMainDescriptorSetFile;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getMainProtoDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainRejectionsDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedTestRejectionsDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getTestDescriptorSetFile;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getTestProtoDir;
 
 /**
  * Plugin which generates Rejections declared in {@code rejections.proto} files.
@@ -109,11 +108,11 @@ public class RejectionGenPlugin extends ProtoPlugin {
 
     @Override
     protected Supplier<File> mainDescriptorFile(Project project) {
-        return () -> getMainDescriptorSetFile(project);
+        return () -> descriptorSetFileOf(project, true);
     }
 
     @Override
     protected Supplier<File> testDescriptorFile(Project project) {
-        return () -> getTestDescriptorSetFile(project);
+        return () -> descriptorSetFileOf(project, false);
     }
 }

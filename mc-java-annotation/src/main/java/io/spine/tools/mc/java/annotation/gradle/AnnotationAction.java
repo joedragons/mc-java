@@ -47,15 +47,14 @@ import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.internal;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.spi;
 import static io.spine.tools.mc.java.annotation.mark.ModuleAnnotator.translate;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getCodeGenAnnotations;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainGrpcDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedMainJavaDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedTestGrpcDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getGeneratedTestJavaDir;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getInternalClassPatterns;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getInternalMethodNames;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getMainDescriptorSetFile;
-import static io.spine.tools.mc.java.gradle.McJavaExtension.getTestDescriptorSetFile;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.descriptorSetFileOf;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getCodeGenAnnotations;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainGrpcDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainJavaDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestGrpcDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestJavaDir;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatterns;
+import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
 
 /**
  * A task action which performs generated code annotation.
@@ -78,7 +77,7 @@ final class AnnotationAction implements Action<Task>, Logging {
     @Override
     public void execute(Task task) {
         Project project = task.getProject();
-        File descriptorSetFile = descriptorSetFileOf(project);
+        File descriptorSetFile = descriptorSetFileOf(project, mainCode);
         if (!descriptorSetFile.exists()) {
             logMissing(descriptorSetFile);
             return;
@@ -107,18 +106,12 @@ final class AnnotationAction implements Action<Task>, Logging {
 
     @NonNull
     private AnnotatorFactory createAnnotationFactory(Project project) {
-        File descriptorSetFile = descriptorSetFileOf(project);
+        File descriptorSetFile = descriptorSetFileOf(project, mainCode);
         Path generatedJavaPath = Paths.get(generatedJavaDir(project));
         Path generatedGrpcPath = Paths.get(generatedGrpcDir(project));
         AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory
                 .newInstance(descriptorSetFile, generatedJavaPath, generatedGrpcPath);
         return annotatorFactory;
-    }
-
-    private File descriptorSetFileOf(Project project) {
-        return mainCode
-               ? getMainDescriptorSetFile(project)
-               : getTestDescriptorSetFile(project);
     }
 
     private String generatedJavaDir(Project project) {
