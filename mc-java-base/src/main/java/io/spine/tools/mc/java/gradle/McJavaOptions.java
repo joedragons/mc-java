@@ -145,8 +145,12 @@ public class McJavaOptions {
 
     private Project project;
 
-    public static File descriptorSetFileOf(Project project, boolean main) {
-        File result = main
+    /**
+     * Obtains a path of the descriptor set file of the given project for
+     * the specified source set.
+     */
+    public static File descriptorSetFileOf(Project project, boolean mainSourceSet) {
+        File result = mainSourceSet
                       ? getDefaultMainDescriptors(project)
                       : getDefaultTestDescriptors(project);
         return result;
