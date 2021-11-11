@@ -34,7 +34,6 @@ import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.WriteVersions
 import io.spine.internal.gradle.publish.PublishExtension
 
-var protocPluginDependency: Dependency? = null
 val spineBaseVersion: String by extra
 
 dependencies {

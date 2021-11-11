@@ -48,7 +48,6 @@ import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
-import io.spine.internal.gradle.publish.PublishExtension
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
 import io.spine.internal.gradle.publish.spinePublishing
@@ -236,14 +235,6 @@ subprojects {
 JacocoConfig.applyTo(project)
 PomGenerator.applyTo(project)
 LicenseReporter.mergeAllReports(project)
-
-/**
- * The [integrationTests] task runs a separate Gradle project in the `tests` directory.
- *
- * The task depends on publishing all the artifacts produced by `base` into Maven Local,
- * so the Gradle project in `tests` can depend on them.
- */
-val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
 
 /**
  * The build task executed under `tests` subdirectory.
