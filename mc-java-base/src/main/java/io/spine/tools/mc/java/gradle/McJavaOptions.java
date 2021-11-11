@@ -42,9 +42,10 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static io.spine.tools.gradle.Projects.getDefaultMainDescriptors;
-import static io.spine.tools.gradle.Projects.getDefaultTestDescriptors;
+import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
+import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A configuration for the Spine Model Compiler for Java.
@@ -148,9 +149,8 @@ public class McJavaOptions {
      * the specified source set.
      */
     public static File descriptorSetFileOf(Project project, boolean mainSourceSet) {
-        File result = mainSourceSet
-                      ? getDefaultMainDescriptors(project)
-                      : getDefaultTestDescriptors(project);
+        String sourceSet = mainSourceSet ? MAIN_SOURCE_SET_NAME : TEST_SOURCE_SET_NAME;
+        File result = descriptorSetFile(project, sourceSet);
         return result;
     }
 
