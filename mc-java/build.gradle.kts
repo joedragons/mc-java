@@ -71,22 +71,10 @@ protobuf {
 }
 
 /**
- * Collect `publishToMavenLocal` tasks for all sub-projects that are specified for
- * publishing in the root project.
- */
-val projectsToPublish: Set<String> = rootProject.the<PublishExtension>().projectsToPublish.get()
-val publishingTasks = projectsToPublish.map { p ->
-    val subProject = rootProject.project(p)
-    subProject.tasks.publishToMavenLocal
-}
-
-/**
  * Tests use the artifacts published to `mavenLocal`, so we need to publish them all first.
  */
 tasks.test {
-    dependsOn(
-        publishingTasks
-    )
+    dependsOn(rootProject.tasks["localPublish"])
 }
 
 tasks.withType<WriteVersions> {

@@ -48,6 +48,7 @@ import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
+import io.spine.internal.gradle.publish.PublishExtension
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
 import io.spine.internal.gradle.publish.spinePublishing
@@ -236,6 +237,20 @@ JacocoConfig.applyTo(project)
 PomGenerator.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 
+
+/**
+ * Collect `publishToMavenLocal` tasks for all sub-projects that are specified for
+ * publishing in the root project.
+ */
+val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
+val localPublish by tasks.registering {
+    val pubTasks = projectsToPublish.map { p ->
+        val subProject = project(p)
+        subProject.tasks["publishToMavenLocal"]
+    }
+    dependsOn(pubTasks)
+}
+
 /**
  * The build task executed under `tests` subdirectory.
  *
@@ -249,7 +264,7 @@ val integrationTests by tasks.registering(RunBuild::class) {
     /** A timeout for the case of stalled child processes under Windows. */
     timeout.set(Duration.ofMinutes(20))
 
-    dependsOn(project(":mc-java").tasks.test)
+    dependsOn(localPublish)
 }
 
 tasks.register("buildAll") {
