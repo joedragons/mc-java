@@ -33,7 +33,6 @@ import io.spine.tools.mc.java.annotation.mark.AnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.DefaultAnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.ModuleAnnotator;
 import io.spine.tools.mc.java.gradle.CodeGenAnnotations;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -42,7 +41,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static io.spine.io.IoPreconditions.checkExists;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
@@ -114,15 +112,10 @@ final class AnnotationAction implements Action<Task>, Logging {
                 .build();
     }
 
-    @NonNull
     private AnnotatorFactory createAnnotationFactory(Project project) {
         File descriptorSetFile = descrSetFile(project);
-        checkExists(descriptorSetFile);
         Path generatedJavaPath = generatedJavaDir(project, sourceSet());
-        checkExists(generatedJavaPath);
         Path generatedGrpcPath = Paths.get(generatedGrpcDir(project));
-        checkExists(generatedGrpcPath);
-        
         AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory.newInstance(
                 descriptorSetFile, generatedJavaPath, generatedGrpcPath
         );
