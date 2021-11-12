@@ -28,6 +28,8 @@
 
 package io.spine.tools.mc.java.gradle
 
+import io.spine.tools.fs.DirectoryName.grpc
+import io.spine.tools.fs.DirectoryName.java
 import io.spine.tools.java.fs.DefaultJavaPaths
 import io.spine.tools.mc.gradle.modelCompiler
 import java.nio.file.Path
@@ -64,7 +66,17 @@ public val Project.generatedDir: Path
 public fun Project.generatedJavaDir(sourceSet: String): Path {
     requireValidSourceSetName(sourceSet)
     val sourceSetDir = generatedDir.resolve(sourceSet)
-    val result = sourceSetDir.resolve("java")
+    val result = sourceSetDir.resolve(java.value())
+    return result
+}
+
+/**
+ * Obtains the directory with the generated gRPC code for the specified source set.
+ */
+public fun Project.generatedGrpcDir(sourceSet: String): Path {
+    requireValidSourceSetName(sourceSet)
+    val sourceSetDir = generatedDir.resolve(sourceSet)
+    val result = sourceSetDir.resolve(grpc.value())
     return result
 }
 

@@ -39,7 +39,6 @@ import org.gradle.api.Task;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
@@ -48,10 +47,9 @@ import static io.spine.tools.mc.java.annotation.mark.ApiOption.internal;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.spi;
 import static io.spine.tools.mc.java.annotation.mark.ModuleAnnotator.translate;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getCodeGenAnnotations;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainGrpcDir;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestGrpcDir;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatterns;
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
+import static io.spine.tools.mc.java.gradle.Projects.generatedGrpcDir;
 import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
@@ -114,18 +112,13 @@ final class AnnotationAction implements Action<Task>, Logging {
 
     private AnnotatorFactory createAnnotationFactory(Project project) {
         File descriptorSetFile = descrSetFile(project);
-        Path generatedJavaPath = generatedJavaDir(project, sourceSet());
-        Path generatedGrpcPath = Paths.get(generatedGrpcDir(project));
+        String sourceSet = sourceSet();
+        Path generatedJavaPath = generatedJavaDir(project, sourceSet);
+        Path generatedGrpcPath = generatedGrpcDir(project, sourceSet);
         AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory.newInstance(
                 descriptorSetFile, generatedJavaPath, generatedGrpcPath
         );
         return annotatorFactory;
-    }
-
-    private String generatedGrpcDir(Project project) {
-        return mainCode
-               ? getGeneratedMainGrpcDir(project)
-               : getGeneratedTestGrpcDir(project);
     }
 
     private void logMissing(File descriptorSetFile) {

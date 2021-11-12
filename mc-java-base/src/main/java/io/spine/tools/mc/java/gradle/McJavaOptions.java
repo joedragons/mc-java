@@ -60,12 +60,6 @@ public class McJavaOptions {
     static final String NAME = "java";
 
     /**
-     * The absolute path to the main {@code gRPC} services directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedMainGrpcDir;
-
-    /**
      * The absolute path to the main target generated resources directory.
      */
     public String generatedMainResourcesDir;
@@ -74,12 +68,6 @@ public class McJavaOptions {
      * The absolute path to the test target generated resources directory.
      */
     public String generatedTestResourcesDir;
-
-    /**
-     * The absolute path to the test {@code gRPC} services directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedTestGrpcDir;
 
     /**
      * The absolute path to the main target generated rejections root directory.
@@ -150,12 +138,6 @@ public class McJavaOptions {
         return logger.atFine();
     }
 
-    public static String getGeneratedMainGrpcDir(Project project) {
-        return pathOrDefault(getMcJava(project).generatedMainGrpcDir,
-                             def(project).generated()
-                                         .mainGrpc());
-    }
-
     public static String getGeneratedMainResourcesDir(Project project) {
         return pathOrDefault(getMcJava(project).generatedMainResourcesDir,
                              def(project).generated()
@@ -166,12 +148,6 @@ public class McJavaOptions {
         return pathOrDefault(getMcJava(project).generatedTestResourcesDir,
                              def(project).generated()
                                          .testResources());
-    }
-
-    public static String getGeneratedTestGrpcDir(Project project) {
-        return pathOrDefault(getMcJava(project).generatedTestGrpcDir,
-                             def(project).generated()
-                                         .testGrpc());
     }
 
     public static String getGeneratedMainRejectionsDir(Project project) {
