@@ -28,7 +28,6 @@
 
 package io.spine.tools.mc.java.gradle
 
-import io.spine.tools.fs.DirectoryName
 import io.spine.tools.fs.DirectoryName.grpc
 import io.spine.tools.fs.DirectoryName.java
 import io.spine.tools.java.fs.DefaultJavaPaths
