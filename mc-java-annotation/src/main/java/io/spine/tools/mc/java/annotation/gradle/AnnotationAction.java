@@ -42,6 +42,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static io.spine.io.IoPreconditions.checkExists;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
@@ -116,10 +117,15 @@ final class AnnotationAction implements Action<Task>, Logging {
     @NonNull
     private AnnotatorFactory createAnnotationFactory(Project project) {
         File descriptorSetFile = descrSetFile(project);
+        checkExists(descriptorSetFile);
         Path generatedJavaPath = generatedJavaDir(project, sourceSet());
+        checkExists(generatedJavaPath);
         Path generatedGrpcPath = Paths.get(generatedGrpcDir(project));
-        AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory
-                .newInstance(descriptorSetFile, generatedJavaPath, generatedGrpcPath);
+        checkExists(generatedGrpcPath);
+        
+        AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory.newInstance(
+                descriptorSetFile, generatedJavaPath, generatedGrpcPath
+        );
         return annotatorFactory;
     }
 
