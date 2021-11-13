@@ -51,7 +51,8 @@ private val Project.defaultPaths: DefaultJavaPaths
  */
 public fun Project.protoDir(sourceSet: String): Path {
     requireValidSourceSetName(sourceSet)
-    return defaultPaths.src().directory().resolve(sourceSet)
+    val sourceSetDir = defaultPaths.src().path().resolve(sourceSet)
+    return sourceSetDir.resolve("proto")
 }
 
 /**
