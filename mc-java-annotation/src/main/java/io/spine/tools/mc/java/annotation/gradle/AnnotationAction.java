@@ -36,6 +36,7 @@ import io.spine.tools.mc.java.gradle.CodeGenAnnotations;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.logging.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -59,7 +60,7 @@ import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
  */
 final class AnnotationAction implements Action<Task>, Logging {
 
-    private final boolean mainCode;
+    private final String sourceSet;
 
     /**
      * Creates a new action instance.
@@ -69,27 +70,19 @@ final class AnnotationAction implements Action<Task>, Logging {
      *         otherwise the action will annotate the code of tests
      */
     AnnotationAction(boolean mainCode) {
-        this.mainCode = mainCode;
-    }
-
-    private String sourceSet() {
-        return mainCode ? MAIN_SOURCE_SET_NAME : TEST_SOURCE_SET_NAME;
+        this.sourceSet = mainCode ? MAIN_SOURCE_SET_NAME : TEST_SOURCE_SET_NAME;
     }
 
     @Override
     public void execute(Task task) {
         Project project = task.getProject();
-        File descriptorSetFile = descrSetFile(project);
+        File descriptorSetFile = descriptorSetFile(project, sourceSet);
         if (!descriptorSetFile.exists()) {
-            logMissing(descriptorSetFile);
+            logMissing(project.getLogger(), descriptorSetFile);
             return;
         }
         ModuleAnnotator annotator = createAnnotator(project);
         annotator.annotate();
-    }
-
-    private File descrSetFile(Project project) {
-        return descriptorSetFile(project, sourceSet());
     }
 
     private ModuleAnnotator createAnnotator(Project project) {
@@ -111,8 +104,7 @@ final class AnnotationAction implements Action<Task>, Logging {
     }
 
     private AnnotatorFactory createAnnotationFactory(Project project) {
-        File descriptorSetFile = descrSetFile(project);
-        String sourceSet = sourceSet();
+        File descriptorSetFile = descriptorSetFile(project, sourceSet);
         Path generatedJavaPath = generatedJavaDir(project, sourceSet);
         Path generatedGrpcPath = generatedGrpcDir(project, sourceSet);
         AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory.newInstance(
@@ -121,10 +113,11 @@ final class AnnotationAction implements Action<Task>, Logging {
         return annotatorFactory;
     }
 
-    private void logMissing(File descriptorSetFile) {
-        _debug().log(
-                "Missing descriptor set file `%s`.%n" +
-                        "Please enable descriptor set generation.%n" +
+    private static void logMissing(Logger logger, File descriptorSetFile) {
+        String nl = System.lineSeparator();
+        logger.warn(
+                "Missing descriptor set file `{}`." + nl +
+                        "Please enable descriptor set generation." + nl +
                         "See: " +
                         "https://github.com/google/protobuf-gradle-plugin/blob/master/README.md" +
                         "#generate-descriptor-set-files",
