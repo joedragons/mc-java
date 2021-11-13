@@ -38,12 +38,11 @@ import java.util.function.Supplier;
 import static io.spine.tools.gradle.JavaTaskName.compileJava;
 import static io.spine.tools.gradle.JavaTaskName.compileTestJava;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainRejectionsDir;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestRejectionsDir;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateTestRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
+import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
 import static io.spine.tools.mc.java.gradle.Projects.protoDir;
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
@@ -70,7 +69,7 @@ public class RejectionGenPlugin extends ProtoPlugin {
         Action<Task> mainScopeAction =
                 createAction(project,
                              mainProtoFiles(project),
-                             () -> getGeneratedMainRejectionsDir(project),
+                             () -> generatedRejectionsDir(project, MAIN_SOURCE_SET_NAME).toString(),
                              () -> protoDir(project, MAIN_SOURCE_SET_NAME).toString());
         ProtoModule module = new ProtoModule(project);
         GradleTask mainTask =
@@ -83,7 +82,7 @@ public class RejectionGenPlugin extends ProtoPlugin {
         Action<Task> testScopeAction =
                 createAction(project,
                              testProtoFiles(project),
-                             () -> getGeneratedTestRejectionsDir(project),
+                             () -> generatedRejectionsDir(project,TEST_SOURCE_SET_NAME).toString(),
                              () -> protoDir(project, TEST_SOURCE_SET_NAME).toString());
 
         GradleTask testTask =

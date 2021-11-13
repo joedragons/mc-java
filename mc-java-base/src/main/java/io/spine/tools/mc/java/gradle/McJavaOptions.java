@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 
 /**
@@ -58,16 +57,6 @@ public class McJavaOptions {
      * The name of the extension, as it appears in a Gradle build script.
      */
     static final String NAME = "java";
-
-    /**
-     * The absolute path to the main target generated rejections root directory.
-     */
-    public String generatedMainRejectionsDir;
-
-    /**
-     * The absolute path to the test target generated rejections root directory.
-     */
-    public String generatedTestRejectionsDir;
 
     /**
      * The indent for the generated code in the validating builders.
@@ -126,24 +115,6 @@ public class McJavaOptions {
     })
     private static FluentLogger.Api _debug() {
         return logger.atFine();
-    }
-
-    public static String getGeneratedMainRejectionsDir(Project project) {
-        return pathOrDefault(getMcJava(project).generatedMainRejectionsDir,
-                             def(project).generated()
-                                         .mainSpine());
-    }
-
-    public static String getGeneratedTestRejectionsDir(Project project) {
-        return pathOrDefault(getMcJava(project).generatedTestRejectionsDir,
-                             def(project).generated()
-                                         .testSpine());
-    }
-
-    private static String pathOrDefault(String path, Object defaultValue) {
-        return isNullOrEmpty(path)
-               ? defaultValue.toString()
-               : path;
     }
 
     public static Indent getIndent(Project project) {

@@ -55,10 +55,6 @@ import static com.google.common.flogger.LazyArgs.lazy;
  * rejection type which extends {@link io.spine.base.RejectionThrowable RejectionThrowable} and
  * encloses an instance of the corresponding proto message.
  *
- * <p>The {@link McJavaOptions#generatedMainRejectionsDir} and
- * {@link McJavaOptions#generatedTestRejectionsDir} options allow to customize the target root
- * directory for code generation.
- *
  * <p>The {@link McJavaOptions#indent} option sets the indentation of the generated source files.
  */
 final class RejectionGenAction extends CodeGenerationAction {
