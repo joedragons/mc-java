@@ -237,7 +237,6 @@ JacocoConfig.applyTo(project)
 PomGenerator.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 
-
 /**
  * Collect `publishToMavenLocal` tasks for all sub-projects that are specified for
  * publishing in the root project.
