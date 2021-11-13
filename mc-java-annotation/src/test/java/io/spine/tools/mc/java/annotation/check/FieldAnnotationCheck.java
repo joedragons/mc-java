@@ -27,6 +27,7 @@
 package io.spine.tools.mc.java.annotation.check;
 
 import com.google.protobuf.Descriptors.FieldDescriptor;
+import io.spine.annotation.Internal;
 import io.spine.code.proto.FieldName;
 import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.TypeHolder;
@@ -34,9 +35,14 @@ import org.jboss.forge.roaster.model.VisibilityScoped;
 import org.jboss.forge.roaster.model.impl.AbstractJavaSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
+
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.code.java.SimpleClassName.ofBuilder;
+import static io.spine.tools.mc.java.annotation.check.Annotations.findInternalAnnotation;
+import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,11 +52,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public final class FieldAnnotationCheck extends SourceCheck {
 
-    private final FieldDescriptor fieldDescriptor;
+    private final FieldDescriptor field;
 
-    public FieldAnnotationCheck(FieldDescriptor fieldDescriptor, boolean shouldBeAnnotated) {
+    public FieldAnnotationCheck(FieldDescriptor field, boolean shouldBeAnnotated) {
         super(shouldBeAnnotated);
-        this.fieldDescriptor = checkNotNull(fieldDescriptor);
+        this.field = checkNotNull(field);
+    }
+
+    private static JavaClassSource builderOf(JavaSource<?> messageSource) {
+        TypeHolder<?> messageType = (TypeHolder<?>) messageSource;
+        JavaType<?> builderType = messageType.getNestedType(ofBuilder().value());
+        return (JavaClassSource) builderType;
     }
 
     @Override
@@ -63,25 +75,34 @@ public final class FieldAnnotationCheck extends SourceCheck {
     }
 
     private void checkAccessorsAnnotation(JavaClassSource message) {
-        String fieldName = FieldName.of(fieldDescriptor.toProto())
-                                    .toCamelCase();
+        String fieldNameCamelCase = FieldName.of(field.toProto()).toCamelCase();
         message.getMethods()
                .stream()
                .filter(VisibilityScoped::isPublic)
-               .filter(method -> method.getName().contains(fieldName))
-               .map(Annotations::findInternalAnnotation)
-               .forEach(annotation -> {
-                   if (shouldBeAnnotated()) {
-                       assertTrue(annotation.isPresent());
-                   } else {
-                       assertFalse(annotation.isPresent());
-                   }
-               });
+               .filter(method -> method.getName().contains(fieldNameCamelCase))
+               .forEach(this::assertMethodAnnotation);
     }
 
-    private static JavaClassSource builderOf(JavaSource<?> messageSource) {
-        TypeHolder<?> messageType = (TypeHolder<?>) messageSource;
-        JavaType<?> builderType = messageType.getNestedType(ofBuilder().value());
-        return (JavaClassSource) builderType;
+    private void assertMethodAnnotation(MethodSource<JavaClassSource> method) {
+        Optional<?> annotation = findInternalAnnotation(method);
+        String methodName = method.getName();
+        if (shouldBeAnnotated()) {
+            assertTrue(annotation.isPresent(), msg(true, methodName));
+        } else {
+            assertFalse(annotation.isPresent(), msg(false, methodName));
+        }
+    }
+
+    private String msg(boolean expected, String methodName) {
+        String annotationClass = Internal.class.getSimpleName();
+        String fullFieldName = field.getFullName();
+        return format(
+                "The method `%s()` generated for the field `%s` is expected to be" +
+                        "%s" +
+                        "annotated `@%s`.",
+                methodName, fullFieldName,
+                expected ? " " : " NOT ",
+                annotationClass
+        );
     }
 }

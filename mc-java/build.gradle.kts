@@ -32,8 +32,8 @@ import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.WriteVersions
+import io.spine.internal.gradle.publish.PublishExtension
 
-var protocPluginDependency: Dependency? = null
 val spineBaseVersion: String by extra
 
 dependencies {
@@ -70,16 +70,11 @@ protobuf {
     }
 }
 
-// Tests use the Protobuf plugin.
+/**
+ * Tests use the artifacts published to `mavenLocal`, so we need to publish them all first.
+ */
 tasks.test {
-    dependsOn(
-        project(":mc-java-base").tasks.publishToMavenLocal,
-        project(":mc-java-annotation").tasks.publishToMavenLocal,
-        project(":mc-java-checks").tasks.publishToMavenLocal,
-        project(":mc-java-protoc").tasks.publishToMavenLocal,
-        project(":mc-java-rejection").tasks.publishToMavenLocal,
-        tasks.publishToMavenLocal
-    )
+    dependsOn(rootProject.tasks["localPublish"])
 }
 
 tasks.withType<WriteVersions> {

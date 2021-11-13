@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.gradle.compiler.given;
+package io.spine.gradle.compiler;
 
 import io.spine.test.annotation.Alpha;
 import io.spine.test.annotation.Attempt;
@@ -39,14 +39,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test methods and assertions for the annotator plugin tests.
+ * Assertions for the annotator plugin tests.
  */
-public final class AnnotatorTestEnv {
+public final class Assertions {
 
     /**
      * Prevents the utility class instantiation.
      */
-    private AnnotatorTestEnv() {
+    private Assertions() {
     }
 
     public static void assertSpi(AnnotatedElement element) {

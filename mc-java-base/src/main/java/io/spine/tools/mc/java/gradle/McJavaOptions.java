@@ -30,21 +30,15 @@ import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
-import org.gradle.api.plugins.ExtensionAware;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static io.spine.tools.gradle.Projects.getDefaultMainDescriptors;
-import static io.spine.tools.gradle.Projects.getDefaultTestDescriptors;
-import static io.spine.tools.mc.gradle.ModelCompilerOptionsKt.getModelCompiler;
+import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 
 /**
  * A configuration for the Spine Model Compiler for Java.
@@ -63,60 +57,6 @@ public class McJavaOptions {
      * The name of the extension, as it appears in a Gradle build script.
      */
     static final String NAME = "java";
-
-    /**
-     * The absolute path to the Protobuf source code under the {@code main} directory.
-     */
-    public String mainProtoDir;
-
-    /**
-     * The absolute path to the test Protobuf source directory.
-     */
-    public String testProtoDir;
-
-    /**
-     * The absolute path to the main Java sources directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedMainDir;
-
-    /**
-     * The absolute path to the main {@code gRPC} services directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedMainGrpcDir;
-
-    /**
-     * The absolute path to the main target generated resources directory.
-     */
-    public String generatedMainResourcesDir;
-
-    /**
-     * The absolute path to the test Java sources directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedTestDir;
-
-    /**
-     * The absolute path to the test target generated resources directory.
-     */
-    public String generatedTestResourcesDir;
-
-    /**
-     * The absolute path to the test {@code gRPC} services directory,
-     * generated basing on Protobuf definitions.
-     */
-    public String generatedTestGrpcDir;
-
-    /**
-     * The absolute path to the main target generated rejections root directory.
-     */
-    public String generatedMainRejectionsDir;
-
-    /**
-     * The absolute path to the test target generated rejections root directory.
-     */
-    public String generatedTestRejectionsDir;
 
     /**
      * The indent for the generated code in the validating builders.
@@ -142,17 +82,6 @@ public class McJavaOptions {
     public List<String> internalMethodNames = new ArrayList<>();
 
     private Project project;
-
-    /**
-     * Obtains a path of the descriptor set file of the given project for
-     * the specified source set.
-     */
-    public static File descriptorSetFileOf(Project project, boolean mainSourceSet) {
-        File result = mainSourceSet
-                      ? getDefaultMainDescriptors(project)
-                      : getDefaultTestDescriptors(project);
-        return result;
-    }
 
     /**
      * Injects the dependency to the given project.
@@ -188,78 +117,8 @@ public class McJavaOptions {
         return logger.atFine();
     }
 
-    public static String getMainProtoDir(Project project) {
-        McJavaOptions extension = getMcJavaOptions(project);
-        _debug().log("Extension is `%s`.", extension);
-        String protoDir = extension.mainProtoDir;
-        _debug().log("`modelCompiler.mainProtoSrcDir` is `%s`.", protoDir);
-        return pathOrDefault(protoDir,
-                             def(project).src()
-                                         .mainProto());
-    }
-
-    public static String getTestProtoDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).testProtoDir,
-                             def(project).src()
-                                         .testProto());
-    }
-
-    public static String getGeneratedMainJavaDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainDir,
-                             def(project).generated()
-                                         .mainJava());
-    }
-
-    public static String getGeneratedMainGrpcDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainGrpcDir,
-                             def(project).generated()
-                                         .mainGrpc());
-    }
-
-    public static String getGeneratedMainResourcesDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainResourcesDir,
-                             def(project).generated()
-                                         .mainResources());
-    }
-
-    public static String getGeneratedTestJavaDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestDir,
-                             def(project).generated()
-                                         .testJava());
-    }
-
-    public static String getGeneratedTestResourcesDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestResourcesDir,
-                             def(project).generated()
-                                         .testResources());
-    }
-
-    public static String getGeneratedTestGrpcDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestGrpcDir,
-                             def(project).generated()
-                                         .testGrpc());
-    }
-
-    public static String getGeneratedMainRejectionsDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedMainRejectionsDir,
-                             def(project).generated()
-                                         .mainSpine());
-    }
-
-    public static String getGeneratedTestRejectionsDir(Project project) {
-        return pathOrDefault(getMcJavaOptions(project).generatedTestRejectionsDir,
-                             def(project).generated()
-                                         .testSpine());
-    }
-
-    private static String pathOrDefault(String path, Object defaultValue) {
-        return isNullOrEmpty(path)
-               ? defaultValue.toString()
-               : path;
-    }
-
     public static Indent getIndent(Project project) {
-        Indent result = getMcJavaOptions(project).indent;
+        Indent result = getMcJava(project).indent;
         _debug().log("The current indent is %d.", result.size());
         return result;
     }
@@ -281,29 +140,17 @@ public class McJavaOptions {
     }
 
     public static CodeGenAnnotations getCodeGenAnnotations(Project project) {
-        CodeGenAnnotations annotations = getMcJavaOptions(project).generateAnnotations;
+        CodeGenAnnotations annotations = getMcJava(project).generateAnnotations;
         return annotations;
     }
 
     public static ImmutableSet<String> getInternalClassPatterns(Project project) {
-        List<String> patterns = getMcJavaOptions(project).internalClassPatterns;
+        List<String> patterns = getMcJava(project).internalClassPatterns;
         return ImmutableSet.copyOf(patterns);
     }
 
     public static ImmutableSet<String> getInternalMethodNames(Project project) {
-        List<String> patterns = getMcJavaOptions(project).internalMethodNames;
+        List<String> patterns = getMcJava(project).internalMethodNames;
         return ImmutableSet.copyOf(patterns);
-    }
-
-    /**
-     * Obtains the instance of the extension from the given project.
-     */
-    public static McJavaOptions getMcJavaOptions(Project project) {
-        ModelCompilerOptions mcOptions = getModelCompiler(project);
-        ExtensionAware extensionAware = (ExtensionAware) mcOptions;
-        McJavaOptions mcJavaExtension =
-                extensionAware.getExtensions()
-                              .getByType(McJavaOptions.class);
-        return mcJavaExtension;
     }
 }

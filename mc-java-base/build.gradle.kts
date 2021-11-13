@@ -28,6 +28,7 @@ import io.spine.internal.dependency.Spine
 
 dependencies {
     api(gradleApi())
+    api(gradleKotlinDsl())
 
     val spine = Spine(project)
     api(spine.modelCompiler)

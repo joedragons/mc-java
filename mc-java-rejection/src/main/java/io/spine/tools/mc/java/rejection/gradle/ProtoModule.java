@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.rejection.gradle;
 
-import io.spine.tools.gradle.SourceScope;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.tasks.SourceSet;
@@ -34,11 +33,10 @@ import org.gradle.api.tasks.SourceSet;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.gradle.Projects.sourceSet;
-import static io.spine.tools.gradle.SourceScope.main;
-import static io.spine.tools.gradle.SourceScope.test;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedMainRejectionsDir;
-import static io.spine.tools.mc.java.gradle.McJavaOptions.getGeneratedTestRejectionsDir;
+import static io.spine.tools.gradle.project.Projects.sourceSet;
+import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
+import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A source code module with Protobuf.
@@ -73,7 +71,7 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection protoSource() {
-        return protoSource(main);
+        return protoSource(MAIN_SOURCE_SET_NAME);
     }
 
     /**
@@ -84,10 +82,10 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection testProtoSource() {
-        return protoSource(test);
+        return protoSource(TEST_SOURCE_SET_NAME);
     }
 
-    private FileCollection protoSource(SourceScope scope) {
+    private FileCollection protoSource(String scope) {
         SourceSet sourceSet = sourceSet(project, scope);
         Optional<FileCollection> files = protoSource(sourceSet);
         FileCollection emptyCollection = project.getLayout().files();
@@ -113,7 +111,7 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection compiledRejections() {
-        String targetDir = getGeneratedMainRejectionsDir(project);
+        String targetDir = generatedRejectionsDir(project, MAIN_SOURCE_SET_NAME).toString();
         FileCollection files = project.fileTree(targetDir);
         return files;
     }
@@ -126,7 +124,7 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection testCompiledRejections() {
-        String targetDir = getGeneratedTestRejectionsDir(project);
+        String targetDir = generatedRejectionsDir(project, TEST_SOURCE_SET_NAME).toString();
         FileCollection files = project.fileTree(targetDir);
         return files;
     }

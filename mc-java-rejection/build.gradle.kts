@@ -1,5 +1,3 @@
-import io.spine.internal.dependency.Roaster
-
 /*
  * Copyright 2021, TeamDev. All rights reserved.
  *
@@ -26,6 +24,8 @@ import io.spine.internal.dependency.Roaster
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.Roaster
+
 dependencies {
     implementation(Roaster.api) {
         exclude(group = "com.google.guava")
@@ -39,4 +39,11 @@ dependencies {
     val spine = io.spine.internal.dependency.Spine(project)
     testImplementation(spine.pluginTestlib)
     testImplementation(gradleTestKit())
+}
+
+/**
+ * Tests use the artifacts published to `mavenLocal`, so we need to publish them all first.
+ */
+tasks.test {
+    dependsOn(rootProject.tasks["localPublish"])
 }

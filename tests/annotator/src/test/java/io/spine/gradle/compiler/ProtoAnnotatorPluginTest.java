@@ -29,16 +29,16 @@ package io.spine.gradle.compiler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertBeta;
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertExperimental;
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertInternal;
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertNotBeta;
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertNotExperimental;
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertNotInternal;
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertNotSpi;
-import static io.spine.gradle.compiler.given.AnnotatorTestEnv.assertSpi;
+import static io.spine.gradle.compiler.Assertions.assertBeta;
+import static io.spine.gradle.compiler.Assertions.assertExperimental;
+import static io.spine.gradle.compiler.Assertions.assertInternal;
+import static io.spine.gradle.compiler.Assertions.assertNotBeta;
+import static io.spine.gradle.compiler.Assertions.assertNotExperimental;
+import static io.spine.gradle.compiler.Assertions.assertNotInternal;
+import static io.spine.gradle.compiler.Assertions.assertNotSpi;
+import static io.spine.gradle.compiler.Assertions.assertSpi;
 
-@DisplayName("`ProtoAnnotatorPlugin` should")
+@DisplayName("Annotator plugin should")
 class ProtoAnnotatorPluginTest {
 
     @Test

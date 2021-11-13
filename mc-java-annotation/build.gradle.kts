@@ -41,3 +41,10 @@ dependencies {
     testImplementation(spine.pluginTestlib)
     testImplementation(gradleTestKit())
 }
+
+/**
+ * Tests use the artifacts published to `mavenLocal`, so we need to publish them all first.
+ */
+tasks.test {
+    dependsOn(rootProject.tasks["localPublish"])
+}

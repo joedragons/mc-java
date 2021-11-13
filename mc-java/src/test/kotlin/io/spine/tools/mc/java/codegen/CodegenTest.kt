@@ -41,7 +41,7 @@ import io.spine.query.EntityStateField
 import io.spine.tools.java.code.UuidMethodFactory
 import io.spine.tools.mc.java.applyStandard
 import io.spine.tools.mc.java.gradle.McJavaOptions
-import io.spine.tools.mc.java.gradle.McJavaOptions.getMcJavaOptions
+import io.spine.tools.mc.java.gradle.mcJava
 import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
 import io.spine.tools.proto.code.ProtoTypeName
 import io.spine.tools.protoc.GenerateFields
@@ -55,7 +55,7 @@ import org.junit.jupiter.api.Test
 
 class `'codegen { }' block should` {
 
-    private lateinit var extension: McJavaOptions
+    private lateinit var options: McJavaOptions
 
     @BeforeEach
     fun prepareExtension() {
@@ -67,18 +67,18 @@ class `'codegen { }' block should` {
             it.plugin("java")
             it.plugin(McJavaPlugin::class.java)
         }
-        extension = getMcJavaOptions(project)
+        options = project.mcJava
     }
 
     @Test
     fun `apply changes immediately`() {
         val factoryName = "fake.Factory"
-        extension.codegen { config ->
+        options.codegen { config ->
             config.forUuids {
                 it.generateMethodsWith(factoryName)
             }
         }
-        val config = extension.codegen.toProto()
+        val config = options.codegen.toProto()
         assertThat(config.uuids.methodFactoryList)
             .hasSize(1)
         assertThat(
@@ -98,7 +98,7 @@ class `'codegen { }' block should` {
             val secondInterface = "test.iface.TestCommand"
             val fieldSuperclass = "test.cmd.Field"
             val suffix = "_my_commands.proto"
-            extension.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: JavaCodegenConfig ->
                 config.forCommands { commands: SignalConfig ->
                     commands.includeFiles(commands.by().suffix(suffix))
                     commands.markAs(firstInterface)
@@ -106,7 +106,7 @@ class `'codegen { }' block should` {
                     commands.markFieldsAs(fieldSuperclass)
                 }
             }
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             val commands = config.commands
             assertThat(commands.patternList)
                 .hasSize(1)
@@ -123,14 +123,14 @@ class `'codegen { }' block should` {
             val iface = "test.iface.Event"
             val fieldSuperclass = "test.event.Field"
             val prefix = "my_"
-            extension.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: JavaCodegenConfig ->
                 config.forEvents { events: SignalConfig ->
                     events.includeFiles(events.by().prefix(prefix))
                     events.markAs(iface)
                     events.markFieldsAs(fieldSuperclass)
                 }
             }
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             val events = config.events
             assertThat(events.patternList)
                 .hasSize(1)
@@ -147,14 +147,14 @@ class `'codegen { }' block should` {
             val iface = "test.iface.RejectionMessage"
             val fieldSuperclass = "test.rejection.Field"
             val regex = ".*rejection.*"
-            extension.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: JavaCodegenConfig ->
                 config.forEvents { events: SignalConfig ->
                     events.includeFiles(events.by().regex(regex))
                     events.markAs(iface)
                     events.markFieldsAs(fieldSuperclass)
                 }
             }
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             val events = config.events
             assertThat(events.patternList)
                 .hasSize(1)
@@ -170,7 +170,7 @@ class `'codegen { }' block should` {
         fun `rejections separately from events`() {
             val eventInterface = "test.iface.EventMsg"
             val rejectionInterface = "test.iface.RejectionMsg"
-            extension.codegen { config ->
+            options.codegen { config ->
                 config.forEvents {
                     it.markAs(eventInterface)
                 }
@@ -178,7 +178,7 @@ class `'codegen { }' block should` {
                     it.markAs(rejectionInterface)
                 }
             }
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             val eventInterfaces = config.events.addInterfaceList
             val rejectionInterfaces = config.rejections.addInterfaceList
             assertThat(eventInterfaces)
@@ -197,7 +197,7 @@ class `'codegen { }' block should` {
             val fieldSupertype = "custom.FieldSupertype"
             val suffix = "view.proto"
             val option = "view"
-            extension.codegen { config ->
+            options.codegen { config ->
                 config.forEntities {
                     it.options.add(option)
                     it.includeFiles(it.by().suffix(suffix))
@@ -206,7 +206,7 @@ class `'codegen { }' block should` {
                     it.markFieldsAs(fieldSupertype)
                 }
             }
-            val config = extension.codegen.toProto().entities
+            val config = options.codegen.toProto().entities
             assertThat(config.addInterfaceList.map { it.name.canonical })
                 .containsExactly(iface)
             assertThat(config.generateFields.superclass.canonical)
@@ -225,13 +225,13 @@ class `'codegen { }' block should` {
         fun `UUID messages`() {
             val iface = "custom.RandomizedId"
             val methodFactory = "custom.MethodFactory"
-            extension.codegen { config ->
+            options.codegen { config ->
                 config.forUuids {
                     it.markAs(iface)
                     it.generateMethodsWith(methodFactory)
                 }
             }
-            val config = extension.codegen.toProto().uuids
+            val config = options.codegen.toProto().uuids
             assertThat(config.addInterfaceList.map { it.name.canonical })
                 .containsExactly(iface)
             assertThat(config.methodFactoryList)
@@ -248,7 +248,7 @@ class `'codegen { }' block should` {
             val classFactory = "custom.NestedClassFactory"
             val fieldSuperclass = "acme.Searchable"
             val firstMessageType = "acme.small.yellow.Bird"
-            extension.codegen { config ->
+            options.codegen { config ->
                 config.forMessage(firstMessageType) {
                     it.markAs(firstInterface)
                     it.markFieldsAs(fieldSuperclass)
@@ -259,7 +259,7 @@ class `'codegen { }' block should` {
                     it.generateMethodsWith(methodFactory)
                 }
             }
-            val configs = extension.codegen.toProto().messagesList
+            val configs = options.codegen.toProto().messagesList
             assertThat(configs)
                 .hasSize(2)
             var (first, second) = configs
@@ -293,13 +293,13 @@ class `'codegen { }' block should` {
 
         @Test
         fun validation() {
-            extension.codegen { config ->
+            options.codegen { config ->
                 config.validation {
                     it.skipBuilders()
                     it.skipValidation()
                 }
             }
-            val validation = extension.codegen.toProto().validation
+            val validation = options.codegen.toProto().validation
             assertThat(validation.skipBuilders)
                 .isTrue()
             assertThat(validation.skipValidation)
@@ -312,7 +312,7 @@ class `'codegen { }' block should` {
 
         @Test
         fun commands() {
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             val commands = config.commands
             assertThat(commands.patternList)
                 .hasSize(1)
@@ -326,7 +326,7 @@ class `'codegen { }' block should` {
 
         @Test
         fun events() {
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             val events = config.events
             assertThat(events.patternList)
                 .hasSize(1)
@@ -340,7 +340,7 @@ class `'codegen { }' block should` {
 
         @Test
         fun rejections() {
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             val events = config.rejections
             assertThat(events.patternList)
                 .hasSize(1)
@@ -354,7 +354,7 @@ class `'codegen { }' block should` {
 
         @Test
         fun entities() {
-            val config = extension.codegen.toProto().entities
+            val config = options.codegen.toProto().entities
             assertThat(config.addInterfaceList.map { it.name.canonical })
                 .containsExactly(EntityState::class.qualifiedName)
             assertThat(config.generateFields.superclass.canonical)
@@ -369,7 +369,7 @@ class `'codegen { }' block should` {
 
         @Test
         fun `UUID messages`() {
-            val config = extension.codegen.toProto().uuids
+            val config = options.codegen.toProto().uuids
             assertThat(config.addInterfaceList.map { it.name.canonical })
                 .containsExactly(UuidValue::class.qualifiedName)
             assertThat(config.methodFactoryList)
@@ -380,15 +380,15 @@ class `'codegen { }' block should` {
 
         @Test
         fun `arbitrary message groups`() {
-            val config = extension.codegen.toProto()
+            val config = options.codegen.toProto()
             assertThat(config.messagesList)
                 .isEmpty()
 
             val type = "test.Message"
-            extension.codegen {
+            options.codegen {
                 it.forMessage(type) { /* Do nothing. */ }
             }
-            val updatedConfig = extension.codegen.toProto()
+            val updatedConfig = options.codegen.toProto()
             assertThat(updatedConfig.messagesList)
                 .hasSize(1)
             val typeName = ProtoTypeName.newBuilder().setValue(type)
@@ -406,7 +406,7 @@ class `'codegen { }' block should` {
 
         @Test
         fun validation() {
-            val validation = extension.codegen.toProto().validation
+            val validation = options.codegen.toProto().validation
             assertThat(validation.skipBuilders)
                 .isFalse()
             assertThat(validation.skipValidation)
@@ -424,7 +424,7 @@ class `'codegen { }' block should` {
 
         @Test
         fun `turning generation of queries off`() {
-            extension.codegen.forEntities {
+            options.codegen.forEntities {
                 it.skipQueries()
             }
             assertFlag().isFalse()
@@ -433,18 +433,18 @@ class `'codegen { }' block should` {
         @Test
         fun `turning generation of queries on`() {
             // Turn `off`, assuming that the default is `on`.
-            extension.codegen.forEntities {
+            options.codegen.forEntities {
                 it.skipQueries()
             }
 
             // Turn `on`.
-            extension.codegen.forEntities {
+            options.codegen.forEntities {
                 it.generateQueries()
             }
 
             assertFlag().isTrue()
         }
 
-        private fun assertFlag() = assertThat(extension.codegen.toProto().entities.generateQueries)
+        private fun assertFlag() = assertThat(options.codegen.toProto().entities.generateQueries)
     }
 }

@@ -28,7 +28,6 @@ package io.spine.tools.mc.java.annotation.check;
 
 import io.spine.annotation.Internal;
 import org.jboss.forge.roaster.model.impl.AbstractJavaSource;
-import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.lang.annotation.Annotation;
@@ -60,18 +59,19 @@ public final class MainDefinitionAnnotationCheck extends SourceCheck {
     @Override
     public void accept(AbstractJavaSource<JavaClassSource> source) {
         checkNotNull(source);
-        Optional<? extends AnnotationSource<?>> annotationSource =
-                findAnnotation(source, annotation);
+        Optional<?> annotation = findAnnotation(source, this.annotation);
+        String sourceName = source.getCanonicalName();
+        String annotationName = this.annotation.getName();
         if (shouldBeAnnotated()) {
-            assertTrue(annotationSource.isPresent(),
-                       format("`%s` should be annotated with `%s`.",
-                              source.getCanonicalName(),
-                              annotation.getName()));
+            assertTrue(
+                    annotation.isPresent(),
+                    format("`%s` should be annotated with `%s`.", sourceName, annotationName)
+            );
         } else {
-            assertFalse(annotationSource.isPresent(),
-                        format("`%s` should NOT be annotated with `%s`.",
-                               source.getCanonicalName(),
-                               annotation.getName()));
+            assertFalse(
+                    annotation.isPresent(),
+                    format("`%s` should NOT be annotated with `%s`.", sourceName, annotationName)
+            );
         }
     }
 }

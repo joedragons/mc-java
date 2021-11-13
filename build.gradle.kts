@@ -238,17 +238,24 @@ PomGenerator.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 
 /**
- * The [integrationTests] task runs a separate Gradle project in the `tests` directory.
- *
- * The task depends on publishing all the artifacts produced by `base` into Maven Local,
- * so the Gradle project in `tests` can depend on them.
+ * Collect `publishToMavenLocal` tasks for all sub-projects that are specified for
+ * publishing in the root project.
  */
 val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
+val localPublish by tasks.registering {
+    val pubTasks = projectsToPublish.map { p ->
+        val subProject = project(p)
+        subProject.tasks["publishToMavenLocal"]
+    }
+    dependsOn(pubTasks)
+}
 
 /**
  * The build task executed under `tests` subdirectory.
  *
- * The task depends on artifacts of this project published to `mavenLocal()`.
+ * These tests depend on locally published artifacts.
+ * It is similar to the dependency on such artifacts that `:mc-java` module declares for
+ * its tests. So, we depend on the `test` task of this module for simplicity.
  */
 val integrationTests by tasks.registering(RunBuild::class) {
     directory = "$rootDir/tests"
@@ -256,11 +263,7 @@ val integrationTests by tasks.registering(RunBuild::class) {
     /** A timeout for the case of stalled child processes under Windows. */
     timeout.set(Duration.ofMinutes(20))
 
-    val pubTasks = projectsToPublish.map { p ->
-        val subProject = rootProject.project(p)
-        subProject.tasks["publishToMavenLocal"]
-    }
-    dependsOn(pubTasks)
+    dependsOn(localPublish)
 }
 
 tasks.register("buildAll") {
