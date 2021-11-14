@@ -27,12 +27,12 @@
 package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.tools.gradle.ConfigurationName;
-import io.spine.tools.gradle.GradleTask;
-import io.spine.tools.gradle.SpinePlugin;
-import io.spine.tools.gradle.TaskName;
+import io.spine.tools.gradle.task.GradleTask;
+import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.type.FileDescriptorSuperset;
 import org.gradle.api.Action;
 import org.gradle.api.Buildable;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.Configuration;
@@ -41,10 +41,10 @@ import java.io.File;
 
 import static io.spine.tools.gradle.ConfigurationName.runtimeClasspath;
 import static io.spine.tools.gradle.ConfigurationName.testRuntimeClasspath;
-import static io.spine.tools.gradle.JavaTaskName.processResources;
-import static io.spine.tools.gradle.JavaTaskName.processTestResources;
-import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
-import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
+import static io.spine.tools.gradle.task.JavaTaskName.processResources;
+import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
+import static io.spine.tools.gradle.task.ProtobufTaskName.generateProto;
+import static io.spine.tools.gradle.task.ProtobufTaskName.generateTestProto;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
@@ -58,7 +58,7 @@ import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
  * <p>The merge result is used to {@linkplain
  * io.spine.tools.type.MoreKnownTypes#extendWith(java.io.File) extend the known type registry}.
  */
-public class DescriptorSetMergerPlugin extends SpinePlugin {
+public class DescriptorSetMergerPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
@@ -66,10 +66,10 @@ public class DescriptorSetMergerPlugin extends SpinePlugin {
         createTask(project, true);
     }
 
-    private void createTask(Project project, boolean tests) {
+    private static void createTask(Project project, boolean tests) {
         Configuration configuration = configuration(project, configurationName(tests));
         Buildable dependencies = configuration.getAllDependencies();
-        GradleTask task = newTask(taskName(tests), createMergingAction(tests))
+        GradleTask task = GradleTask.newBuilder(taskName(tests), createMergingAction(tests))
                 .insertAfterTask(generateProtoTaskName(tests))
                 .insertBeforeTask(processResourcesTaskName(tests))
                 .applyNowTo(project);

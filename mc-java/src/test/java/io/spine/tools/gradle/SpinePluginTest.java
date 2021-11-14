@@ -26,8 +26,11 @@
 
 package io.spine.tools.gradle;
 
+import io.spine.tools.gradle.task.GradleTask;
+import io.spine.tools.gradle.task.JavaTaskName;
 import io.spine.tools.gradle.testing.NoOp;
 import io.spine.tools.mc.java.gradle.McJavaTaskName;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
@@ -42,17 +45,17 @@ import java.io.IOException;
 import java.util.Collection;
 
 import static io.spine.testing.Assertions.assertIllegalState;
-import static io.spine.tools.gradle.BaseTaskName.clean;
-import static io.spine.tools.gradle.GradleTask.Builder;
-import static io.spine.tools.gradle.JavaTaskName.classes;
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.BaseTaskName.clean;
+import static io.spine.tools.gradle.task.GradleTask.Builder;
+import static io.spine.tools.gradle.task.JavaTaskName.classes;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.ProtobufTaskName.generateProto;
+import static io.spine.tools.gradle.task.ProtobufTaskName.generateTestProto;
+import static io.spine.tools.gradle.testing.GradleProject.javaPlugin;
+import static io.spine.tools.gradle.testing.NoOp.action;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.preClean;
 import static io.spine.tools.mc.java.gradle.plugins.ModelVerifierTaskName.verifyModel;
-import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
-import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
-import static io.spine.tools.gradle.testing.GradleProject.javaPlugin;
-import static io.spine.tools.gradle.testing.NoOp.action;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -88,10 +91,9 @@ class SpinePluginTest {
                                            .build();
         subProject.getPluginManager()
                   .apply(javaPlugin());
-        SpinePlugin plugin = TestPlugin.INSTANCE;
-        GradleTask task = plugin.newTask(annotateProto, NoOp.action())
-                                .insertAfterAllTasks(compileJava)
-                                .applyNowTo(subProject);
+        GradleTask task = GradleTask.newBuilder(annotateProto, NoOp.action())
+                .insertAfterAllTasks(compileJava)
+                .applyNowTo(subProject);
         TaskContainer subProjectTasks = subProject.getTasks();
         Task newTask = subProjectTasks.findByName(task.getName().name());
         assertNotNull(newTask);
@@ -104,8 +106,7 @@ class SpinePluginTest {
     @Test
     @DisplayName("create task and insert before other")
     void createTaskAndInsertBeforeOther() {
-        SpinePlugin plugin = TestPlugin.INSTANCE;
-        plugin.newTask(verifyModel, NoOp.action())
+        GradleTask.newBuilder(verifyModel, NoOp.action())
               .insertBeforeTask(classes)
               .applyNowTo(project);
         TaskContainer tasks = project.getTasks();
@@ -119,8 +120,7 @@ class SpinePluginTest {
     @Test
     @DisplayName("create task and insert after other")
     void createTaskAndInsertAfterOther() {
-        SpinePlugin plugin = TestPlugin.INSTANCE;
-        plugin.newTask(verifyModel, NoOp.action())
+        GradleTask.newBuilder(verifyModel, NoOp.action())
               .insertAfterTask(compileJava)
               .applyNowTo(project);
         TaskContainer tasks = project.getTasks();
@@ -135,8 +135,7 @@ class SpinePluginTest {
     @Test
     @DisplayName("ignore task dependency if no such task found")
     void ignoreTaskDependencyIfNoSuchTaskFound() {
-        SpinePlugin plugin = TestPlugin.INSTANCE;
-        plugin.newTask(generateTestProto, NoOp.action())
+        GradleTask.newBuilder(generateTestProto, NoOp.action())
               .insertAfterAllTasks(generateProto)
               .applyNowTo(project);
         TaskContainer tasks = project.getTasks();
@@ -149,17 +148,16 @@ class SpinePluginTest {
     @Test
     @DisplayName("not allow tasks without any connection to task graph")
     void notAllowTasksWithoutAnyConnectionToTaskGraph() {
-        Builder builder = TestPlugin.INSTANCE.newTask(verifyModel, action());
+        Builder builder = GradleTask.newBuilder(verifyModel, action());
         assertIllegalState(() -> builder.applyNowTo(project));
     }
 
     @Test
     @DisplayName("return build task description")
     void returnBuildTaskDescription() {
-        SpinePlugin plugin = TestPlugin.INSTANCE;
-        GradleTask desc = plugin.newTask(preClean, NoOp.action())
-                                .insertBeforeTask(clean)
-                                .applyNowTo(project);
+        GradleTask desc = GradleTask.newBuilder(preClean, NoOp.action())
+                .insertBeforeTask(clean)
+                .applyNowTo(project);
         assertEquals(preClean, desc.getName());
         assertEquals(project, desc.getProject());
     }
@@ -167,10 +165,9 @@ class SpinePluginTest {
     @Test
     @DisplayName("create task with given inputs")
     void createTaskWithGivenInputs() throws IOException {
-        SpinePlugin plugin = TestPlugin.INSTANCE;
         File input = new File(".").getAbsoluteFile();
         FileCollection files = project.getLayout().files(input);
-        plugin.newTask(preClean, NoOp.action())
+        GradleTask.newBuilder(preClean, NoOp.action())
               .insertBeforeTask(clean)
               .withInputFiles(files)
               .applyNowTo(project);
@@ -190,9 +187,9 @@ class SpinePluginTest {
      *
      * <p>Applying this plugin to a project causes no result.
      */
-    private static class TestPlugin extends SpinePlugin {
+    private static class TestPlugin implements Plugin<Project> {
 
-        private static final SpinePlugin INSTANCE = new TestPlugin();
+        private static final TestPlugin INSTANCE = new TestPlugin();
 
         /** Prevent direct instantiation. */
         private TestPlugin() {

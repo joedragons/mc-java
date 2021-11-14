@@ -33,8 +33,8 @@ import org.gradle.testfixtures.ProjectBuilder;
 
 import java.io.File;
 
-import static io.spine.tools.gradle.ProtobufTaskName.generateProto;
-import static io.spine.tools.gradle.ProtobufTaskName.generateTestProto;
+import static io.spine.tools.gradle.task.ProtobufTaskName.generateProto;
+import static io.spine.tools.gradle.task.ProtobufTaskName.generateTestProto;
 import static io.spine.tools.mc.java.StandardRepos.applyStandard;
 import static org.gradle.internal.impldep.com.google.common.base.Preconditions.checkNotNull;
 

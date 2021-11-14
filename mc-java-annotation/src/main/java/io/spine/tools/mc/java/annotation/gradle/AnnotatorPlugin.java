@@ -26,13 +26,14 @@
 
 package io.spine.tools.mc.java.annotation.gradle;
 
-import io.spine.tools.gradle.SpinePlugin;
+import io.spine.tools.gradle.task.GradleTask;
 import org.gradle.api.Action;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
-import static io.spine.tools.gradle.JavaTaskName.compileTestJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateTestProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
@@ -165,7 +166,7 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSe
  *
  * <p>If {@code java_multiple_files = true} result of annotation will be similar.
  */
-public final class AnnotatorPlugin extends SpinePlugin {
+public final class AnnotatorPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
@@ -173,17 +174,17 @@ public final class AnnotatorPlugin extends SpinePlugin {
         createTestTask(project);
     }
 
-    private void createMainTask(Project project) {
+    private static void createMainTask(Project project) {
         Action<Task> task = new AnnotationAction(true);
-        newTask(annotateProto, task)
+        GradleTask.newBuilder(annotateProto, task)
                 .insertAfterTask(mergeDescriptorSet)
                 .insertBeforeTask(compileJava)
                 .applyNowTo(project);
     }
 
-    private void createTestTask(Project project) {
+    private static void createTestTask(Project project) {
         Action<Task> testTask = new AnnotationAction(false);
-        newTask(annotateTestProto, testTask)
+        GradleTask.newBuilder(annotateTestProto, testTask)
                 .insertAfterTask(mergeTestDescriptorSet)
                 .insertBeforeTask(compileTestJava)
                 .applyNowTo(project);

@@ -26,8 +26,8 @@
 package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.proto.FileSet;
-import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.ProtoPlugin;
+import io.spine.tools.gradle.task.GradleTask;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -35,9 +35,9 @@ import org.gradle.api.Task;
 import java.io.File;
 import java.util.function.Supplier;
 
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
-import static io.spine.tools.gradle.JavaTaskName.compileTestJava;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateTestRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
@@ -73,7 +73,7 @@ public class RejectionGenPlugin extends ProtoPlugin {
                              () -> protoDir(project, MAIN_SOURCE_SET_NAME).toString());
         ProtoModule module = new ProtoModule(project);
         GradleTask mainTask =
-                newTask(generateRejections, mainScopeAction)
+                GradleTask.newBuilder(generateRejections, mainScopeAction)
                         .insertAfterTask(mergeDescriptorSet)
                         .insertBeforeTask(compileJava)
                         .withInputFiles(module.protoSource())
@@ -86,7 +86,7 @@ public class RejectionGenPlugin extends ProtoPlugin {
                              () -> protoDir(project, TEST_SOURCE_SET_NAME).toString());
 
         GradleTask testTask =
-                newTask(generateTestRejections, testScopeAction)
+                GradleTask.newBuilder(generateTestRejections, testScopeAction)
                         .insertAfterTask(mergeTestDescriptorSet)
                         .insertBeforeTask(compileTestJava)
                         .withInputFiles(module.protoSource())
@@ -95,8 +95,10 @@ public class RejectionGenPlugin extends ProtoPlugin {
                         .withOutputFiles(module.testCompiledRejections())
                         .applyNowTo(project);
 
-        _debug().log("Rejection generation phase initialized with tasks: `%s`, `%s`.",
-                     mainTask, testTask);
+        project.getLogger().debug(
+                "Rejection generation phase initialized with tasks: `{}`, `{}`.",
+                mainTask, testTask
+        );
     }
 
     private static Action<Task> createAction(Project project,
