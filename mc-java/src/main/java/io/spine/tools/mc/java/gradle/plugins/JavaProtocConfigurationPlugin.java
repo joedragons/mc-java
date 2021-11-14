@@ -68,8 +68,6 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestDescriptorRe
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestPluginConfiguration;
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static io.spine.util.Exceptions.newIllegalStateException;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A Gradle plugin that performs additional {@code protoc} configurations relevant
