@@ -27,6 +27,7 @@
 package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.tools.gradle.ConfigurationName;
+import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.type.FileDescriptorSuperset;
@@ -41,15 +42,13 @@ import java.io.File;
 
 import static io.spine.tools.gradle.ConfigurationName.runtimeClasspath;
 import static io.spine.tools.gradle.ConfigurationName.testRuntimeClasspath;
+import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
 import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
 import static io.spine.tools.gradle.task.ProtobufTaskName.generateProto;
 import static io.spine.tools.gradle.task.ProtobufTaskName.generateTestProto;
-import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A Gradle plugin which merges the descriptor file with all the descriptor files from
@@ -91,8 +90,8 @@ public class DescriptorSetMergerPlugin implements Plugin<Project> {
         };
     }
 
-    private static String sourceSet(boolean tests) {
-        return tests ? TEST_SOURCE_SET_NAME : MAIN_SOURCE_SET_NAME;
+    private static SourceSetName sourceSet(boolean tests) {
+        return tests ? SourceSetName.test : SourceSetName.main;
     }
 
     private static Configuration configuration(Project project, ConfigurationName name) {

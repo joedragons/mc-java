@@ -31,6 +31,7 @@ import com.google.protobuf.gradle.ExecutableLocator;
 import com.google.protobuf.gradle.GenerateProtoTask;
 import io.spine.code.proto.DescriptorReference;
 import io.spine.tools.gradle.ProtocConfigurationPlugin;
+import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
@@ -109,11 +110,11 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         boolean tests = isTestsTask(protocTask);
         Project project = protocTask.getProject();
         TaskName writeRefName = writeRefNameTask(tests);
-        String scope = tests ? TEST_SOURCE_SET_NAME : MAIN_SOURCE_SET_NAME;
+        SourceSetName sourceSetName = tests ? SourceSetName.test : SourceSetName.main;
         File descriptorFile = new File(protocTask.getDescriptorPath());
         Path resourceDirectory = descriptorFile.toPath()
                                                .getParent();
-        sourceSet(project, scope)
+        sourceSet(project, sourceSetName)
                 .getResources()
                 .srcDir(resourceDirectory);
         GradleTask writeRef = GradleTask.newBuilder(writeRefName,
@@ -138,13 +139,13 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     @Override
     protected File getMainDescriptorSet(Project project) {
-        File result = descriptorSetFile(project, MAIN_SOURCE_SET_NAME);
+        File result = descriptorSetFile(project, SourceSetName.main);
         return result;
     }
 
     @Override
     protected File getTestDescriptorSet(Project project) {
-        File result = descriptorSetFile(project, TEST_SOURCE_SET_NAME);
+        File result = descriptorSetFile(project, SourceSetName.test);
         return result;
     }
 

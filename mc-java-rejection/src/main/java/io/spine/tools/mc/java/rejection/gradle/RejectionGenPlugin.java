@@ -27,6 +27,7 @@ package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.proto.FileSet;
 import io.spine.tools.gradle.ProtoPlugin;
+import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -44,8 +45,6 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
 import static io.spine.tools.mc.java.gradle.Projects.protoDir;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * Plugin which generates Rejections declared in {@code rejections.proto} files.
@@ -69,8 +68,8 @@ public class RejectionGenPlugin extends ProtoPlugin {
         Action<Task> mainScopeAction =
                 createAction(project,
                              mainProtoFiles(project),
-                             () -> generatedRejectionsDir(project, MAIN_SOURCE_SET_NAME).toString(),
-                             () -> protoDir(project, MAIN_SOURCE_SET_NAME).toString());
+                             () -> generatedRejectionsDir(project, SourceSetName.main).toString(),
+                             () -> protoDir(project,  SourceSetName.main).toString());
         ProtoModule module = new ProtoModule(project);
         GradleTask mainTask =
                 GradleTask.newBuilder(generateRejections, mainScopeAction)
@@ -82,8 +81,8 @@ public class RejectionGenPlugin extends ProtoPlugin {
         Action<Task> testScopeAction =
                 createAction(project,
                              testProtoFiles(project),
-                             () -> generatedRejectionsDir(project,TEST_SOURCE_SET_NAME).toString(),
-                             () -> protoDir(project, TEST_SOURCE_SET_NAME).toString());
+                             () -> generatedRejectionsDir(project, SourceSetName.test).toString(),
+                             () -> protoDir(project, SourceSetName.test).toString());
 
         GradleTask testTask =
                 GradleTask.newBuilder(generateTestRejections, testScopeAction)
@@ -110,11 +109,11 @@ public class RejectionGenPlugin extends ProtoPlugin {
 
     @Override
     protected Supplier<File> mainDescriptorFile(Project project) {
-        return () -> descriptorSetFile(project, MAIN_SOURCE_SET_NAME);
+        return () -> descriptorSetFile(project, SourceSetName.main);
     }
 
     @Override
     protected Supplier<File> testDescriptorFile(Project project) {
-        return () -> descriptorSetFile(project, TEST_SOURCE_SET_NAME);
+        return () -> descriptorSetFile(project, SourceSetName.test);
     }
 }

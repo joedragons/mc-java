@@ -26,17 +26,17 @@
 
 package io.spine.tools.mc.java.rejection.gradle;
 
+import io.spine.tools.gradle.SourceSetName;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.tasks.SourceSet;
 
+import java.nio.file.Path;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A source code module with Protobuf.
@@ -48,11 +48,6 @@ import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
  * this module.
  */
 final class ProtoModule {
-
-    /**
-     * The name of the source set which defines where the Protobuf sources are located in a module.
-     */
-    private static final String PROTO_SOURCE_SET = "proto";
 
     private final Project project;
 
@@ -71,7 +66,7 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection protoSource() {
-        return protoSource(MAIN_SOURCE_SET_NAME);
+        return protoSource(SourceSetName.main.toString());
     }
 
     /**
@@ -82,19 +77,20 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection testProtoSource() {
-        return protoSource(TEST_SOURCE_SET_NAME);
+        return protoSource(SourceSetName.test.toString());
     }
 
-    private FileCollection protoSource(String scope) {
-        SourceSet sourceSet = sourceSet(project, scope);
+    private FileCollection protoSource(String sourceSetName) {
+        SourceSet sourceSet = sourceSet(project, sourceSetName);
         Optional<FileCollection> files = protoSource(sourceSet);
         FileCollection emptyCollection = project.getLayout().files();
         return files.orElse(emptyCollection);
     }
 
     private static Optional<FileCollection> protoSource(SourceSet sourceSet) {
-        Object rawExtension = sourceSet.getExtensions()
-                                       .findByName(PROTO_SOURCE_SET);
+        Object rawExtension =
+                sourceSet.getExtensions()
+                         .findByName(SourceSetName.proto.toString());
         if (rawExtension == null) {
             return Optional.empty();
         } else {
@@ -111,7 +107,7 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection compiledRejections() {
-        String targetDir = generatedRejectionsDir(project, MAIN_SOURCE_SET_NAME).toString();
+        Path targetDir = generatedRejectionsDir(project, SourceSetName.main);
         FileCollection files = project.fileTree(targetDir);
         return files;
     }
@@ -124,7 +120,7 @@ final class ProtoModule {
      *        directory is changing, the contents of the collection are mutated.
      */
     FileCollection testCompiledRejections() {
-        String targetDir = generatedRejectionsDir(project, TEST_SOURCE_SET_NAME).toString();
+        Path targetDir = generatedRejectionsDir(project, SourceSetName.test);
         FileCollection files = project.fileTree(targetDir);
         return files;
     }

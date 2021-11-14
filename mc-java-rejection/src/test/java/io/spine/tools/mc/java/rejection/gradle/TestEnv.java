@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 import static java.lang.String.format;
 
-final class RejectionTestEnv {
+final class TestEnv {
 
     private static final String CLASS_COMMENT =
             "The rejection definition to test Javadoc generation.";
@@ -54,7 +54,7 @@ final class RejectionTestEnv {
     private static final FileName REJECTION_FILE_NAME = FileName.forType(REJECTION_NAME);
 
     /** Prevents instantiation of this utility class. */
-    private RejectionTestEnv() {
+    private TestEnv() {
     }
 
     public static GradleProject newProjectWithRejectionsJavadoc(File projectFolder) {

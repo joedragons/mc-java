@@ -32,6 +32,7 @@ import io.spine.tools.fs.DirectoryName
 import io.spine.tools.fs.DirectoryName.grpc
 import io.spine.tools.fs.DirectoryName.java
 import io.spine.tools.fs.DirectoryName.spine
+import io.spine.tools.gradle.SourceSetName
 import io.spine.tools.java.fs.DefaultJavaPaths
 import io.spine.tools.mc.gradle.modelCompiler
 import java.nio.file.Path
@@ -51,9 +52,8 @@ private val Project.defaultPaths: DefaultJavaPaths
 /**
  * Obtains the directory containing proto source code of the specified source set.
  */
-public fun Project.protoDir(sourceSet: String): Path {
-    requireValidSourceSetName(sourceSet)
-    val sourceSetDir = defaultPaths.src().path().resolve(sourceSet)
+public fun Project.protoDir(ss: SourceSetName): Path {
+    val sourceSetDir = defaultPaths.src().path().resolve(ss.value)
     return sourceSetDir.resolve("proto")
 }
 
@@ -63,37 +63,25 @@ public fun Project.protoDir(sourceSet: String): Path {
 public val Project.generatedDir: Path
     get() = defaultPaths.generated().path()
 
-private fun Project.generated(sourceSet: String): Path {
-    return generatedDir.resolve(sourceSet)
+private fun Project.generated(ss: SourceSetName): Path {
+    return generatedDir.resolve(ss.value)
 }
 
 /**
  * Obtains the directory containing generated Java source code for the specified source set.
  */
-public fun Project.generatedJavaDir(sourceSet: String): Path {
-    requireValidSourceSetName(sourceSet)
-    return generated(sourceSet).resolve(java)
+public fun Project.generatedJavaDir(ss: SourceSetName): Path {
+    return generated(ss).resolve(java)
 }
 
 /**
  * Obtains the directory with the generated gRPC code for the specified source set.
  */
-public fun Project.generatedGrpcDir(sourceSet: String): Path {
-    requireValidSourceSetName(sourceSet)
-    return generated(sourceSet).resolve(grpc)
-}
+public fun Project.generatedGrpcDir(ss: SourceSetName): Path = generated(ss).resolve(grpc)
 
 /**
  * Obtains the directory with the rejections source code generated for the specified source set.
  */
-public fun Project.generatedRejectionsDir(sourceSet: String): Path {
-    requireValidSourceSetName(sourceSet)
-    return generated(sourceSet).resolve(spine)
-}
-
-private fun requireValidSourceSetName(sourceSet: String) {
-    require(sourceSet.isNotEmpty())
-    require(sourceSet.isNotBlank())
-}
+public fun Project.generatedRejectionsDir(ss: SourceSetName): Path = generated(ss).resolve(spine)
 
 private fun Path.resolve(dir: DirectoryName) = this.resolve(dir.value())
