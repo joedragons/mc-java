@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
 import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedBuilderClassComment;
 import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedClassComment;
 import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedFirstFieldComment;
