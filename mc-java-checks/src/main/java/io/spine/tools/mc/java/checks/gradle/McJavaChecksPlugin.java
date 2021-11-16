@@ -25,7 +25,7 @@
  */
 package io.spine.tools.mc.java.checks.gradle;
 
-import io.spine.tools.gradle.SpinePlugin;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
 /**
@@ -41,7 +41,7 @@ import org.gradle.api.Project;
  * For the older Gradle versions (pre {@code 4.6}), where there is no such configuration,
  * the plugin creates it.
  */
-public final class McJavaChecksPlugin extends SpinePlugin {
+public final class McJavaChecksPlugin implements Plugin<Project> {
 
     /**
      * Applies the plugin to the given {@code Project}.

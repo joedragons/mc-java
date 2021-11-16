@@ -25,20 +25,20 @@
  */
 package io.spine.tools.mc.java.gradle.plugins;
 
-import com.google.common.flogger.FluentLogger;
-import io.spine.tools.gradle.GradleTask;
-import io.spine.tools.gradle.SpinePlugin;
+import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.mc.java.gradle.TempArtifactDirs;
 import org.gradle.api.Action;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.logging.Logger;
 
 import java.io.File;
 import java.util.List;
 
 import static com.google.common.flogger.LazyArgs.lazy;
 import static io.spine.io.Delete.deleteRecursively;
-import static io.spine.tools.gradle.BaseTaskName.clean;
+import static io.spine.tools.gradle.task.BaseTaskName.clean;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.preClean;
 
 /**
@@ -46,28 +46,28 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.preClean;
  *
  * <p>Adds a custom `:preClean` task, which is executed before the `:clean` task.
  */
-public class CleaningPlugin extends SpinePlugin {
+public class CleaningPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
         Action<Task> preCleanAction = task -> cleanIn(project);
         GradleTask preCleanTask =
-                newTask(preClean, preCleanAction)
+                GradleTask.newBuilder(preClean, preCleanAction)
                         .insertBeforeTask(clean)
                         .applyNowTo(project);
-        _debug().log("Pre-clean phase initialized: `%s`.", preCleanTask);
+        project.getLogger().debug("Pre-clean phase initialized: `{}`.", preCleanTask);
     }
 
-    private void cleanIn(Project project) {
-        FluentLogger.Api debug = _debug();
+    private static void cleanIn(Project project) {
+        Logger logger = project.getLogger();
         List<File> dirsToClean = TempArtifactDirs.getFor(project);
-        debug.log(
-                "Pre-clean: deleting the directories (`%s`).", lazy(dirsToClean::toString)
+        logger.debug(
+                "Pre-clean: deleting the directories (`{}`).", lazy(dirsToClean::toString)
         );
         dirsToClean.stream()
                    .map(File::toPath)
                    .forEach(dir -> {
-                       debug.log("Deleting directory `%s`...", dir);
+                       logger.debug("Deleting directory `{}`...", dir);
                        deleteRecursively(dir);
                    });
     }

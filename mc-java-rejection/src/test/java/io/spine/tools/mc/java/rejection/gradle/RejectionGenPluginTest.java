@@ -44,13 +44,13 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
-import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedBuilderClassComment;
-import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedClassComment;
-import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedFirstFieldComment;
-import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.expectedSecondFieldComment;
-import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.newProjectWithRejectionsJavadoc;
-import static io.spine.tools.mc.java.rejection.gradle.RejectionTestEnv.rejectionsJavadocThrowableSource;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedBuilderClassComment;
+import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedClassComment;
+import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedFirstFieldComment;
+import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedSecondFieldComment;
+import static io.spine.tools.mc.java.rejection.gradle.TestEnv.newProjectWithRejectionsJavadoc;
+import static io.spine.tools.mc.java.rejection.gradle.TestEnv.rejectionsJavadocThrowableSource;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 @DisplayName("`RejectionGenPlugin` should")

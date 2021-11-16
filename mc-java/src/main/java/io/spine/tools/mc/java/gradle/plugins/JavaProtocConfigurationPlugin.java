@@ -30,9 +30,10 @@ import com.google.common.base.Charsets;
 import com.google.protobuf.gradle.ExecutableLocator;
 import com.google.protobuf.gradle.GenerateProtoTask;
 import io.spine.code.proto.DescriptorReference;
-import io.spine.tools.gradle.GradleTask;
 import io.spine.tools.gradle.ProtocConfigurationPlugin;
-import io.spine.tools.gradle.TaskName;
+import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.gradle.task.GradleTask;
+import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.GeneratedRoot;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
@@ -50,13 +51,13 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 import static io.spine.io.Ensure.ensureFile;
-import static io.spine.tools.gradle.BaseTaskName.clean;
-import static io.spine.tools.gradle.JavaTaskName.processResources;
-import static io.spine.tools.gradle.JavaTaskName.processTestResources;
 import static io.spine.tools.gradle.ProtocPluginName.grpc;
 import static io.spine.tools.gradle.ProtocPluginName.spineProtoc;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.gradle.project.Projects.sourceSet;
+import static io.spine.tools.gradle.task.BaseTaskName.clean;
+import static io.spine.tools.gradle.task.JavaTaskName.processResources;
+import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
 import static io.spine.tools.java.fs.DefaultJavaPaths.at;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
@@ -67,8 +68,6 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestDescriptorRe
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestPluginConfiguration;
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static io.spine.util.Exceptions.newIllegalStateException;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A Gradle plugin that performs additional {@code protoc} configurations relevant
@@ -105,18 +104,18 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
                           });
     }
 
-    private void customizeDescriptorSetGeneration(GenerateProtoTask protocTask) {
+    private static void customizeDescriptorSetGeneration(GenerateProtoTask protocTask) {
         boolean tests = isTestsTask(protocTask);
         Project project = protocTask.getProject();
         TaskName writeRefName = writeRefNameTask(tests);
-        String scope = tests ? TEST_SOURCE_SET_NAME : MAIN_SOURCE_SET_NAME;
+        SourceSetName sourceSetName = tests ? SourceSetName.test : SourceSetName.main;
         File descriptorFile = new File(protocTask.getDescriptorPath());
         Path resourceDirectory = descriptorFile.toPath()
                                                .getParent();
-        sourceSet(project, scope)
+        sourceSet(project, sourceSetName)
                 .getResources()
                 .srcDir(resourceDirectory);
-        GradleTask writeRef = newTask(writeRefName,
+        GradleTask writeRef = GradleTask.newBuilder(writeRefName,
                                       task -> writeRefFile(descriptorFile, resourceDirectory))
                 .insertBeforeTask(processResourceTaskName(tests))
                 .applyNowTo(project);
@@ -138,13 +137,13 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     @Override
     protected File getMainDescriptorSet(Project project) {
-        File result = descriptorSetFile(project, MAIN_SOURCE_SET_NAME);
+        File result = descriptorSetFile(project, SourceSetName.main);
         return result;
     }
 
     @Override
     protected File getTestDescriptorSet(Project project) {
-        File result = descriptorSetFile(project, TEST_SOURCE_SET_NAME);
+        File result = descriptorSetFile(project, SourceSetName.test);
         return result;
     }
 
@@ -159,8 +158,9 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
      * Creates a new {@code writeSpineProtocConfig} task that is expected to run after the
      * {@code clean} task.
      */
-    private Task newWriteSpineProtocConfigTask(GenerateProtoTask protocTask, Path configPath) {
-        return newTask(spineProtocConfigWriteTaskName(protocTask),
+    private static
+    Task newWriteSpineProtocConfigTask(GenerateProtoTask protocTask, Path configPath) {
+        return GradleTask.newBuilder(spineProtocConfigWriteTaskName(protocTask),
                        task -> writePluginConfig(protocTask, configPath))
                 .allowNoDependencies()
                 .applyNowTo(protocTask.getProject())

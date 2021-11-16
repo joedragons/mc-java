@@ -63,7 +63,7 @@ import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
 import static io.spine.code.proto.FileDescriptors.DESC_EXTENSION;
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
 import static io.spine.tools.java.fs.SourceFile.forMessage;
 import static io.spine.tools.java.fs.SourceFile.forOuterClassOf;
 import static io.spine.tools.java.fs.SourceFile.forService;

@@ -129,7 +129,7 @@ subprojects {
     }
 
     val spineBaseVersion: String by extra
-
+    val toolBaseVersion: String by extra
     with(configurations) {
         forceVersions()
         excludeProtobufLite()
@@ -137,7 +137,8 @@ subprojects {
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$spineBaseVersion",
-                    "io.spine.tools:spine-testlib:$spineBaseVersion"
+                    "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
             }
         }

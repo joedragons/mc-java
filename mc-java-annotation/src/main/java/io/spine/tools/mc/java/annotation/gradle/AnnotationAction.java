@@ -29,6 +29,7 @@ package io.spine.tools.mc.java.annotation.gradle;
 import com.google.common.collect.ImmutableSet;
 import io.spine.code.java.ClassName;
 import io.spine.logging.Logging;
+import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.mc.java.annotation.mark.AnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.DefaultAnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.ModuleAnnotator;
@@ -52,15 +53,13 @@ import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatter
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
 import static io.spine.tools.mc.java.gradle.Projects.generatedGrpcDir;
 import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 
 /**
  * A task action which performs generated code annotation.
  */
 final class AnnotationAction implements Action<Task>, Logging {
 
-    private final String sourceSet;
+    private final SourceSetName sourceSet;
 
     /**
      * Creates a new action instance.
@@ -70,7 +69,7 @@ final class AnnotationAction implements Action<Task>, Logging {
      *         otherwise the action will annotate the code of tests
      */
     AnnotationAction(boolean mainCode) {
-        this.sourceSet = mainCode ? MAIN_SOURCE_SET_NAME : TEST_SOURCE_SET_NAME;
+        this.sourceSet = mainCode ? SourceSetName.main : SourceSetName.test;
     }
 
     @Override

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.nio.file.Path;
 
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
 
 @DisplayName("Validation code generation should")
 class ValidatingCodeGenTest {

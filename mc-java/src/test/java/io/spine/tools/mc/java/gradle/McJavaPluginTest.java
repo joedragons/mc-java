@@ -25,7 +25,7 @@
  */
 package io.spine.tools.mc.java.gradle;
 
-import io.spine.tools.gradle.TaskName;
+import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.gradle.testing.TaskSubject;
 import io.spine.tools.mc.java.gradle.given.StubProject;
 import org.gradle.api.Project;
@@ -36,9 +36,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.tools.gradle.BaseTaskName.clean;
-import static io.spine.tools.gradle.JavaTaskName.compileJava;
-import static io.spine.tools.gradle.JavaTaskName.compileTestJava;
+import static io.spine.tools.gradle.task.BaseTaskName.clean;
+import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
 import static io.spine.tools.gradle.testing.GradleTruth.assertThat;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateTestProto;
