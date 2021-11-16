@@ -34,8 +34,6 @@ import io.spine.tools.gradle.ProtocConfigurationPlugin;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
-import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.java.fs.GeneratedRoot;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
 import io.spine.tools.protoc.SpineProtocConfig;
 import org.gradle.api.NamedDomainObjectContainer;
@@ -53,12 +51,10 @@ import java.util.Base64;
 import static io.spine.io.Ensure.ensureFile;
 import static io.spine.tools.gradle.ProtocPluginName.grpc;
 import static io.spine.tools.gradle.ProtocPluginName.spineProtoc;
-import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.gradle.task.BaseTaskName.clean;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
 import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
-import static io.spine.tools.java.fs.DefaultJavaPaths.at;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
@@ -133,25 +129,6 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     private static TaskName processResourceTaskName(boolean tests) {
         return tests ? processTestResources : processResources;
-    }
-
-    @Override
-    protected File getMainDescriptorSet(Project project) {
-        File result = descriptorSetFile(project, SourceSetName.main);
-        return result;
-    }
-
-    @Override
-    protected File getTestDescriptorSet(Project project) {
-        File result = descriptorSetFile(project, SourceSetName.test);
-        return result;
-    }
-
-    @Override
-    protected Path generatedFilesBaseDir(Project project) {
-        DefaultJavaPaths javaProject = at(project.getProjectDir());
-        GeneratedRoot result = javaProject.generated();
-        return result.path();
     }
 
     /**
