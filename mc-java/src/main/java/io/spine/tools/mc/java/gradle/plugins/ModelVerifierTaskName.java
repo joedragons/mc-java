@@ -32,7 +32,7 @@ import io.spine.tools.gradle.task.TaskName;
 /**
  * Names of Gradle tasks defined by the Spine Model Verifier plugin.
  */
-@Internal
+@SuppressWarnings("unused")
 public enum ModelVerifierTaskName implements TaskName {
 
     /**
