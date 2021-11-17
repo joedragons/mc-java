@@ -23,88 +23,118 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.spine.tools.mc.java.gradle
 
-package io.spine.tools.mc.java.gradle;
-
-import io.spine.annotation.Internal;
-import io.spine.tools.gradle.task.TaskName;
+import io.spine.tools.gradle.SourceSetName
+import io.spine.tools.gradle.SourceSetName.Companion.main
+import io.spine.tools.gradle.SourceSetName.Companion.test
+import io.spine.tools.gradle.task.TaskName
+import io.spine.tools.gradle.task.TaskWithSourceSetName
 
 /**
  * Names of Gradle tasks defined by the Spine Model Compiler plugin.
  */
-@Internal
-public enum McJavaTaskName implements TaskName {
+public class McJavaTaskName(value: String, ssn: SourceSetName) : TaskWithSourceSetName(value, ssn) {
 
-    /**
-     * Additional cleanup task added to the Gradle lifecycle.
-     */
-    preClean,
+    public companion object {
 
-    /**
-     * Generates source code of rejections in the {@code main} scope.
-     */
-    generateRejections,
+        /** Additional cleanup task added to the Gradle lifecycle. */
+        @JvmField
+        public val preClean: TaskName = PreCleanTaskName()
 
-    /**
-     * Generates source code of rejections in the {@code test} scope.
-     */
-    generateTestRejections,
+        /**
+         * Obtains the name of the task which annotates Java code according to
+         * visibility options defined in proto files.
+         */
+        public fun annotateProto(ssn: SourceSetName): TaskName =
+            McJavaTaskName("annotate${ssn.toInfix()}Proto", ssn)
 
-    /**
-     * Generates the helper types for declaring columns in the {@code main} scope.
-     */
-    generateColumnInterfaces,
+        /**
+         * Obtains the name of the task which generate rejections for the specified source set.
+         */
+        public fun generateRejections(ssn: SourceSetName): TaskName =
+            McJavaTaskName("generate${ssn.toInfix()}Rejections", ssn)
 
-    /**
-     * Generates the helper types for declaring columns in the {@code test} scope.
-     */
-    generateTestColumnInterfaces,
+        /**
+         * Obtains the name of the task which merges descriptor set files of the specified
+         * source set.
+         */
+        public fun mergeDescriptorSet(ssn: SourceSetName): TaskName =
+            McJavaTaskName("merge${ssn.toInfix()}DescriptorSet", ssn)
 
-    /**
-     * Annotates the Java sources generated from {@code .proto} files the {@code main} scope.
-     */
-    annotateProto,
+        /**
+         * Obtains the name of the task which creates Protobuf compiler plugin configuration for
+         * the code in the specified source set.
+         */
+        public fun writePluginConfiguration(ssn: SourceSetName): TaskName =
+            McJavaTaskName("write${ssn.toInfix()}PluginConfiguration", ssn)
 
-    /**
-     * Annotates the Java sources generated from {@code .proto} files the {@code test} scope.
-     */
-    annotateTestProto,
+        /**
+         * Ontains the name of the task which creates the `desc.ref` file containing the reference
+         * to the descriptor file(s) with the known types from the specified source set.
+         */
+        public fun writeDescriptorReferences(ssn: SourceSetName): TaskName =
+            McJavaTaskName("write${ssn.toInfix()}DescriptorReferences", ssn)
 
-    /**
-     * Merges all the known type descriptors of the module into one in the {@code main} scope.
-     */
-    mergeDescriptorSet,
+        /** Generates source code of rejections in the `main` source set. */
+        @JvmField
+        public val generateRejections: TaskName = generateRejections(main)
 
-    /**
-     * Merges all the known type descriptors of the module into one in the {@code test} scope.
-     */
-    mergeTestDescriptorSet,
+        /** Generates source code of rejections in the `test` scope. */
+        @JvmField
+        public val generateTestRejections: TaskName = generateRejections(test)
 
-    /**
-     * Creates the Protobuf compiler plugin configuration.
-     *
-     * <p>Works only with the {@code main} scope.
-     */
-    writePluginConfiguration,
+        /** Annotates the Java sources generated from `.proto` files the `main` scope. */
+        @JvmField
+        public val annotateProto: TaskName = annotateProto(main)
 
-    /**
-     * Creates the Protobuf compiler plugin test configuration.
-     */
-    writeTestPluginConfiguration,
+        /** Annotates the Java sources generated from `.proto` files the `test` scope. */
+        @JvmField
+        public val annotateTestProto: TaskName = annotateProto(test)
 
-    /**
-     * Creates the {@code desc.ref} file containing the reference to the descriptor file(s) with
-     * the known types.
-     *
-     * <p>Works only with the {@code main} scope descriptors.
-     */
-    writeDescriptorReference,
+        /**
+         * Merges all the known type descriptors of the module into one in the `main` source set.
+         */
+        @JvmField
+        public val mergeDescriptorSet: TaskName = mergeDescriptorSet(main)
 
-    /**
-     * Creates the {@code desc.ref} file containing the reference to the descriptor file(s) with
-     * the known types.
-     *
-     * <p>Works only with the {@code test} scope descriptors.
-     */
-    writeTestDescriptorReference
+        /**
+         * Merges all the known type descriptors of the module into one in the `test` source set.
+         */
+        @JvmField
+        public val mergeTestDescriptorSet: TaskName = mergeDescriptorSet(test)
+
+        /**
+         * Creates the Protobuf compiler plugin configuration for the code in the `main` source set.
+         */
+        @JvmField
+        public val writePluginConfiguration: TaskName = writePluginConfiguration(main)
+
+        /**
+         * Creates the Protobuf compiler plugin configuration for the code in the `test` source set.
+         */
+        @JvmField
+        public val writeTestPluginConfiguration: TaskName = writePluginConfiguration(test)
+
+        /**
+         * Creates the `desc.ref` file containing the reference to the descriptor file(s) with
+         * the known types from the `main` source set.
+         */
+        @JvmField
+        public val writeDescriptorReference: TaskName = writeDescriptorReferences(main)
+
+        /**
+         * Creates the `desc.ref` file containing the reference to the descriptor file(s) with
+         * the known types from the `test` source set.
+         */
+        @JvmField
+        public val writeTestDescriptorReference: TaskName = writeDescriptorReferences(test)
+    }
+}
+
+/**
+ * The `preClean` task which does not depend on a source set name.
+ */
+private data class PreCleanTaskName(private val value: String = "preClean") : TaskName {
+    override fun name(): String = value
 }

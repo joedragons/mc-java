@@ -55,6 +55,7 @@ import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.gradle.task.BaseTaskName.clean;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
 import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
+import static io.spine.tools.gradle.task.Tasks.getSourceSetName;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
@@ -104,15 +105,16 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         boolean tests = isTestsTask(protocTask);
         Project project = protocTask.getProject();
         TaskName writeRefName = writeRefNameTask(tests);
-        SourceSetName sourceSetName = tests ? SourceSetName.test : SourceSetName.main;
+        SourceSetName sourceSetName = getSourceSetName(protocTask);
         File descriptorFile = new File(protocTask.getDescriptorPath());
         Path resourceDirectory = descriptorFile.toPath()
                                                .getParent();
         sourceSet(project, sourceSetName)
                 .getResources()
                 .srcDir(resourceDirectory);
-        GradleTask writeRef = GradleTask.newBuilder(writeRefName,
-                                      task -> writeRefFile(descriptorFile, resourceDirectory))
+        GradleTask writeRef = GradleTask.newBuilder(
+                        writeRefName,
+                        task -> writeRefFile(descriptorFile, resourceDirectory))
                 .insertBeforeTask(processResourceTaskName(tests))
                 .applyNowTo(project);
         protocTask.finalizedBy(writeRef.getTask());
@@ -138,7 +140,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
     private static
     Task newWriteSpineProtocConfigTask(GenerateProtoTask protocTask, Path configPath) {
         return GradleTask.newBuilder(spineProtocConfigWriteTaskName(protocTask),
-                       task -> writePluginConfig(protocTask, configPath))
+                                     task -> writePluginConfig(protocTask, configPath))
                 .allowNoDependencies()
                 .applyNowTo(protocTask.getProject())
                 .getTask()
