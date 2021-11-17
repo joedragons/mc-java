@@ -84,7 +84,6 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
     protected void customizeTask(GenerateProtoTask protocTask) {
         Helper helper = new Helper(protocTask);
         helper.configure();
-
     }
 
     /**
@@ -131,64 +130,62 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         }
 
         private void addTaskDependency() {
-            Path spineProtocConfigPath = spineProtocConfigFile();
-            Task writeConfig = writePluginConfigTask(spineProtocConfigPath);
+            Task writeConfig = writePluginConfigTask();
             protocTask.dependsOn(writeConfig);
         }
 
         private void addPlugins() {
-            Path spineProtocConfigFile = spineProtocConfigFile();
             NamedDomainObjectContainer<PluginOptions> plugins = protocTask.getPlugins();
             plugins.create(grpc.name());
             plugins.create(spineProtoc.name(),
                             options -> {
                                 options.setOutputSubDir("java");
-                                String option = spineProtocConfigFile.toString();
-                                String encodedOption = base64Encoded(option);
-                                options.option(encodedOption);
+                                String filePath = spineProtocConfigFile().toString();
+                                String encodedPath = base64Encoded(filePath);
+                                options.option(encodedPath);
                             });
         }
 
         private Path spineProtocConfigFile() {
-            Path pluginTempDir = pluginTempDir();
-            boolean testTask = SourceSetName.test.equals(sourceSetName);
-            Path protocConfigPath = testTask
-                                    ? pluginTempDir.resolve("test-config.pb")
-                                    : pluginTempDir.resolve("config.pb");
-            return protocConfigPath;
+            String prefix = sourceSetName.toPrefix();
+            String fileName =  prefix.isEmpty()
+                    ? "config.pb"
+                    : prefix + "-config.pb";
+            Path configFile = pluginTempDir().resolve(fileName);
+            return configFile;
         }
 
         private Path pluginTempDir() {
             File buildDir = project.getBuildDir();
-            Path spinePluginTmpDir =
-                    Paths.get(buildDir.getAbsolutePath(), "tmp", SPINE_PROTOC_PLUGIN_NAME);
-            return spinePluginTmpDir;
+            Path result = Paths.get(buildDir.getAbsolutePath(), "tmp", SPINE_PROTOC_PLUGIN_NAME);
+            return result;
         }
 
         /**
          * Creates a new {@code writePluginConfiguration} task
          * that is expected to run after the {@code clean} task.
          */
-        private Task writePluginConfigTask(Path configPath) {
+        private Task writePluginConfigTask() {
             TaskName taskName = writePluginConfiguration(sourceSetName);
-            return GradleTask.newBuilder(taskName, task -> writePluginConfig(configPath))
+            return GradleTask.newBuilder(taskName, task -> writePluginConfig())
                     .allowNoDependencies()
                     .applyNowTo(project)
                     .getTask()
                     .mustRunAfter(clean.name());
         }
 
-        private void writePluginConfig(Path configPath) {
+        private void writePluginConfig() {
+            Path configFile = spineProtocConfigFile();
             McJavaOptions options = getMcJava(project);
             SpineProtocConfig config = options.codegen.toProto();
 
-            ensureFile(configPath);
-            try (FileOutputStream fos = new FileOutputStream(configPath.toFile())) {
+            ensureFile(configFile);
+            try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
                 config.writeTo(fos);
             } catch (FileNotFoundException e) {
-                throw errorOn("create", e, configPath);
+                throw errorOn("create", e, configFile);
             } catch (IOException e) {
-                throw errorOn("store", e, configPath);
+                throw errorOn("store", e, configFile);
             }
         }
 
@@ -199,12 +196,12 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         }
 
         private static
-        IllegalStateException errorOn(String action, IOException cause, Path configPath) {
+        IllegalStateException errorOn(String action, IOException cause, Path configFile) {
             return newIllegalStateException(
                     cause,
                     "Unable to %s Spine Protoc Plugin configuration file at: `%s`.",
                     action,
-                    configPath);
+                    configFile);
         }
 
         private static String base64Encoded(String value) {
