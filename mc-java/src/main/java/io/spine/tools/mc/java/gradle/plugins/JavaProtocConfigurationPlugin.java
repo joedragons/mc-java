@@ -29,6 +29,7 @@ package io.spine.tools.mc.java.gradle.plugins;
 import com.google.common.base.Charsets;
 import com.google.protobuf.gradle.ExecutableLocator;
 import com.google.protobuf.gradle.GenerateProtoTask;
+import com.google.protobuf.gradle.GenerateProtoTask.PluginOptions;
 import io.spine.code.proto.DescriptorReference;
 import io.spine.tools.gradle.ProtocConfigurationPlugin;
 import io.spine.tools.gradle.SourceSetName;
@@ -51,18 +52,14 @@ import java.util.Base64;
 import static io.spine.io.Ensure.ensureFile;
 import static io.spine.tools.gradle.ProtocPluginName.grpc;
 import static io.spine.tools.gradle.ProtocPluginName.spineProtoc;
-import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.gradle.task.BaseTaskName.clean;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
-import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
 import static io.spine.tools.gradle.task.Tasks.getSourceSetName;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writePluginConfiguration;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestDescriptorReference;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeTestPluginConfiguration;
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
@@ -85,114 +82,136 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     @Override
     protected void customizeTask(GenerateProtoTask protocTask) {
-        customizeDescriptorSetGeneration(protocTask);
-        Path spineProtocConfigPath = spineProtocConfigPath(protocTask);
-        Task writeConfig = newWriteSpineProtocConfigTask(protocTask, spineProtocConfigPath);
-        protocTask.dependsOn(writeConfig);
-        protocTask.getPlugins()
-                  .create(grpc.name());
-        protocTask.getPlugins()
-                  .create(spineProtoc.name(),
-                          options -> {
-                              options.setOutputSubDir("java");
-                              String option = spineProtocConfigPath.toString();
-                              String encodedOption = base64Encoded(option);
-                              options.option(encodedOption);
-                          });
-    }
+        Helper helper = new Helper(protocTask);
+        helper.configure();
 
-    private static void customizeDescriptorSetGeneration(GenerateProtoTask protocTask) {
-        boolean tests = isTestsTask(protocTask);
-        Project project = protocTask.getProject();
-        TaskName writeRefName = writeRefNameTask(tests);
-        SourceSetName sourceSetName = getSourceSetName(protocTask);
-        File descriptorFile = new File(protocTask.getDescriptorPath());
-        Path resourceDirectory = descriptorFile.toPath()
-                                               .getParent();
-        sourceSet(project, sourceSetName)
-                .getResources()
-                .srcDir(resourceDirectory);
-        GradleTask writeRef = GradleTask.newBuilder(
-                        writeRefName,
-                        task -> writeRefFile(descriptorFile, resourceDirectory))
-                .insertBeforeTask(processResourceTaskName(tests))
-                .applyNowTo(project);
-        protocTask.finalizedBy(writeRef.getTask());
-    }
-
-    private static void writeRefFile(File descriptorFile, Path resourceDirectory) {
-        DescriptorReference reference = DescriptorReference.toOneFile(descriptorFile);
-        reference.writeTo(resourceDirectory);
-    }
-
-    private static TaskName writeRefNameTask(boolean tests) {
-        return tests ? writeTestDescriptorReference : writeDescriptorReference;
-    }
-
-    private static TaskName processResourceTaskName(boolean tests) {
-        return tests ? processTestResources : processResources;
     }
 
     /**
-     * Creates a new {@code writeSpineProtocConfig} task that is expected to run after the
-     * {@code clean} task.
+     * A method object configuring an instance of {@code GenerateProtoTask}.
+     *
+     * @see #customizeTask(GenerateProtoTask)
      */
-    private static
-    Task newWriteSpineProtocConfigTask(GenerateProtoTask protocTask, Path configPath) {
-        return GradleTask.newBuilder(spineProtocConfigWriteTaskName(protocTask),
-                                     task -> writePluginConfig(protocTask, configPath))
-                .allowNoDependencies()
-                .applyNowTo(protocTask.getProject())
-                .getTask()
-                .mustRunAfter(clean.name());
-    }
+    private static class Helper {
 
-    private static void writePluginConfig(Task protocTask, Path configPath) {
-        Project project = protocTask.getProject();
-        McJavaOptions options = getMcJava(project);
-        SpineProtocConfig config = options.codegen.toProto();
+        private final Project project;
+        private final GenerateProtoTask protocTask;
+        private final SourceSetName sourceSetName;
+        private final File descriptorFile;
 
-        ensureFile(configPath);
-        try (FileOutputStream fos = new FileOutputStream(configPath.toFile())) {
-            config.writeTo(fos);
-        } catch (FileNotFoundException e) {
-            throw errorOn("create", e, configPath);
-        } catch (IOException e) {
-            throw errorOn("store", e, configPath);
+        private Helper(GenerateProtoTask task) {
+            this.project = task.getProject();
+            this.protocTask = task;
+            this.sourceSetName = getSourceSetName(protocTask);
+            this.descriptorFile = new File(protocTask.getDescriptorPath());
         }
-    }
 
-    private static
-    IllegalStateException errorOn(String action, IOException cause, Path configPath) {
-        return newIllegalStateException(
-                cause,
-                "Unable to %s Spine Protoc Plugin configuration file at: `%s`.",
-                action,
-                configPath);
-    }
+        private void configure() {
+            customizeDescriptorSetGeneration();
+            addTaskDependency();
+            addPlugins();
+        }
 
-    private static String base64Encoded(String value) {
-        Base64.Encoder encoder = Base64.getEncoder();
-        byte[] valueBytes = value.getBytes(Charsets.UTF_8);
-        String result = encoder.encodeToString(valueBytes);
-        return result;
-    }
+        private void customizeDescriptorSetGeneration() {
+            setResourceDirectory();
+            GradleTask writeRef = GradleTask.newBuilder(
+                            writeDescriptorReference(sourceSetName), task -> writeRefFile())
+                    .insertBeforeTask(processResources(sourceSetName))
+                    .applyNowTo(project);
+            protocTask.finalizedBy(writeRef.getTask());
+        }
 
-    private static TaskName spineProtocConfigWriteTaskName(GenerateProtoTask protoTask) {
-        return isTestsTask(protoTask)
-               ? writeTestPluginConfiguration
-               : writePluginConfiguration;
-    }
+        private void setResourceDirectory() {
+            Path resourceDirectory =
+                    descriptorFile.toPath()
+                                  .getParent();
+            protocTask.getSourceSet()
+                      .getResources()
+                      .srcDir(resourceDirectory);
+        }
 
-    private static Path spineProtocConfigPath(GenerateProtoTask protocTask) {
-        Project project = protocTask.getProject();
-        File buildDir = project.getBuildDir();
-        Path spinePluginTmpDir = Paths.get(buildDir.getAbsolutePath(),
-                                           "tmp",
-                                           SPINE_PROTOC_PLUGIN_NAME);
-        Path protocConfigPath = isTestsTask(protocTask) ?
-                                spinePluginTmpDir.resolve("test-config.pb") :
-                                spinePluginTmpDir.resolve("config.pb");
-        return protocConfigPath;
+        private void addTaskDependency() {
+            Path spineProtocConfigPath = spineProtocConfigFile();
+            Task writeConfig = writePluginConfigTask(spineProtocConfigPath);
+            protocTask.dependsOn(writeConfig);
+        }
+
+        private void addPlugins() {
+            Path spineProtocConfigFile = spineProtocConfigFile();
+            NamedDomainObjectContainer<PluginOptions> plugins = protocTask.getPlugins();
+            plugins.create(grpc.name());
+            plugins.create(spineProtoc.name(),
+                            options -> {
+                                options.setOutputSubDir("java");
+                                String option = spineProtocConfigFile.toString();
+                                String encodedOption = base64Encoded(option);
+                                options.option(encodedOption);
+                            });
+        }
+
+        private Path spineProtocConfigFile() {
+            Path pluginTempDir = pluginTempDir();
+            boolean testTask = SourceSetName.test.equals(sourceSetName);
+            Path protocConfigPath = testTask
+                                    ? pluginTempDir.resolve("test-config.pb")
+                                    : pluginTempDir.resolve("config.pb");
+            return protocConfigPath;
+        }
+
+        private Path pluginTempDir() {
+            File buildDir = project.getBuildDir();
+            Path spinePluginTmpDir =
+                    Paths.get(buildDir.getAbsolutePath(), "tmp", SPINE_PROTOC_PLUGIN_NAME);
+            return spinePluginTmpDir;
+        }
+
+        /**
+         * Creates a new {@code writePluginConfiguration} task
+         * that is expected to run after the {@code clean} task.
+         */
+        private Task writePluginConfigTask(Path configPath) {
+            TaskName taskName = writePluginConfiguration(sourceSetName);
+            return GradleTask.newBuilder(taskName, task -> writePluginConfig(configPath))
+                    .allowNoDependencies()
+                    .applyNowTo(project)
+                    .getTask()
+                    .mustRunAfter(clean.name());
+        }
+
+        private void writePluginConfig(Path configPath) {
+            McJavaOptions options = getMcJava(project);
+            SpineProtocConfig config = options.codegen.toProto();
+
+            ensureFile(configPath);
+            try (FileOutputStream fos = new FileOutputStream(configPath.toFile())) {
+                config.writeTo(fos);
+            } catch (FileNotFoundException e) {
+                throw errorOn("create", e, configPath);
+            } catch (IOException e) {
+                throw errorOn("store", e, configPath);
+            }
+        }
+
+        private void writeRefFile() {
+            Path resourceDirectory = descriptorFile.toPath().getParent();
+            DescriptorReference reference = DescriptorReference.toOneFile(descriptorFile);
+            reference.writeTo(resourceDirectory);
+        }
+
+        private static
+        IllegalStateException errorOn(String action, IOException cause, Path configPath) {
+            return newIllegalStateException(
+                    cause,
+                    "Unable to %s Spine Protoc Plugin configuration file at: `%s`.",
+                    action,
+                    configPath);
+        }
+
+        private static String base64Encoded(String value) {
+            Base64.Encoder encoder = Base64.getEncoder();
+            byte[] valueBytes = value.getBytes(Charsets.UTF_8);
+            String result = encoder.encodeToString(valueBytes);
+            return result;
+        }
     }
 }
