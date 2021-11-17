@@ -46,12 +46,14 @@ public class McJavaTaskName(value: String, ssn: SourceSetName) : TaskWithSourceS
          * Obtains the name of the task which annotates Java code according to
          * visibility options defined in proto files.
          */
+        @JvmStatic
         public fun annotateProto(ssn: SourceSetName): TaskName =
             McJavaTaskName("annotate${ssn.toInfix()}Proto", ssn)
 
         /**
          * Obtains the name of the task which generate rejections for the specified source set.
          */
+        @JvmStatic
         public fun generateRejections(ssn: SourceSetName): TaskName =
             McJavaTaskName("generate${ssn.toInfix()}Rejections", ssn)
 
@@ -59,6 +61,7 @@ public class McJavaTaskName(value: String, ssn: SourceSetName) : TaskWithSourceS
          * Obtains the name of the task which merges descriptor set files of the specified
          * source set.
          */
+        @JvmStatic
         public fun mergeDescriptorSet(ssn: SourceSetName): TaskName =
             McJavaTaskName("merge${ssn.toInfix()}DescriptorSet", ssn)
 
@@ -66,14 +69,16 @@ public class McJavaTaskName(value: String, ssn: SourceSetName) : TaskWithSourceS
          * Obtains the name of the task which creates Protobuf compiler plugin configuration for
          * the code in the specified source set.
          */
+        @JvmStatic
         public fun writePluginConfiguration(ssn: SourceSetName): TaskName =
             McJavaTaskName("write${ssn.toInfix()}PluginConfiguration", ssn)
 
         /**
-         * Ontains the name of the task which creates the `desc.ref` file containing the reference
+         * Obtains the name of the task which creates the `desc.ref` file containing the reference
          * to the descriptor file(s) with the known types from the specified source set.
          */
-        public fun writeDescriptorReferences(ssn: SourceSetName): TaskName =
+        @JvmStatic
+        public fun writeDescriptorReference(ssn: SourceSetName): TaskName =
             McJavaTaskName("write${ssn.toInfix()}DescriptorReferences", ssn)
 
         /** Generates source code of rejections in the `main` source set. */
@@ -103,32 +108,6 @@ public class McJavaTaskName(value: String, ssn: SourceSetName) : TaskWithSourceS
          */
         @JvmField
         public val mergeTestDescriptorSet: TaskName = mergeDescriptorSet(test)
-
-        /**
-         * Creates the Protobuf compiler plugin configuration for the code in the `main` source set.
-         */
-        @JvmField
-        public val writePluginConfiguration: TaskName = writePluginConfiguration(main)
-
-        /**
-         * Creates the Protobuf compiler plugin configuration for the code in the `test` source set.
-         */
-        @JvmField
-        public val writeTestPluginConfiguration: TaskName = writePluginConfiguration(test)
-
-        /**
-         * Creates the `desc.ref` file containing the reference to the descriptor file(s) with
-         * the known types from the `main` source set.
-         */
-        @JvmField
-        public val writeDescriptorReference: TaskName = writeDescriptorReferences(main)
-
-        /**
-         * Creates the `desc.ref` file containing the reference to the descriptor file(s) with
-         * the known types from the `test` source set.
-         */
-        @JvmField
-        public val writeTestDescriptorReference: TaskName = writeDescriptorReferences(test)
     }
 }
 
