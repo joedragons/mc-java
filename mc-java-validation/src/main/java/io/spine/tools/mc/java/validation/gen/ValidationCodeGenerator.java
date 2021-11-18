@@ -243,6 +243,9 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
         Function<FieldAccess, CodeBlock> nestedViolations = obtainViolations(field, violationsVar);
         Check check = fieldAccess -> isEmpty(violationsVar).negate();
         IfInvalidOption errorMessageOption = new IfInvalid().valueOrDefault(field.descriptor());
+        @SuppressWarnings("deprecation")
+            // Old validation uses the deprecated field.
+            // With the new validation lib, we will get rid of it.
         String errorMessage = errorMessage(errorMessageOption, errorMessageOption.getMsgFormat());
         CreateViolation violation = fieldAccess -> newViolation(field, constraint)
                 .setMessage(errorMessage)

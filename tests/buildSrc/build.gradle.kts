@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 /*
  * Copyright 2021, TeamDev. All rights reserved.
  *
@@ -50,7 +48,14 @@ repositories {
     mavenCentral()
 }
 
-val jacksonVersion = "2.11.0"
+/**
+ * The version of Jackson used by `buildSrc`.
+ *
+ * Please keep this value in sync. with `io.spine.internal.dependency.Jackson.version`.
+ * It's not a requirement, but would be good in terms of consistency.
+ */
+val jacksonVersion = "2.13.0"
+
 val googleAuthToolVersion = "2.1.2"
 val licenseReportVersion = "2.0"
 val grGitVersion = "3.1.1"
@@ -66,6 +71,8 @@ val guavaVersion = "30.1.1-jre"
 /**
  * The version of ErrorProne Gradle plugin.
  *
+ * Please keep in sync. with `io.spine.internal.dependency.ErrorProne.GradlePlugin.version`.
+ *
  * @see <a href="https://github.com/tbroyer/gradle-errorprone-plugin/releases">
  *     Error Prone Gradle Plugin Releases</a>
  */
@@ -80,21 +87,4 @@ dependencies {
     api("com.github.jk1:gradle-license-report:$licenseReportVersion")
     implementation("org.ajoberstar.grgit:grgit-core:${grGitVersion}")
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:${errorProneVersion}")
-}
-
-val javaVersion = JavaVersion.VERSION_1_8
-java {
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = javaVersion.toString()
-        freeCompilerArgs = listOf(
-            "-Xskip-prerelease-check",
-            "-Xjvm-default=all",
-            "-Xopt-in=kotlin.contracts.ExperimentalContracts"
-        )
-    }
 }
