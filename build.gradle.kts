@@ -72,6 +72,7 @@ plugins {
         id(id)
     }
     kotlin("jvm") version io.spine.internal.dependency.Kotlin.version
+    id("io.spine.proto-data") version "0.1.2"// apply false
 }
 
 spinePublishing {
@@ -110,11 +111,14 @@ subprojects {
         plugin("net.ltgt.errorprone")
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
+        plugin("io.spine.proto-data")
     }
 
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
+
+        protoData("io.spine.validation:java:2.0.0-SNAPSHOT.10-local")
 
         compileOnlyApi(FindBugs.annotations)
         compileOnlyApi(CheckerFramework.annotations)
@@ -126,6 +130,8 @@ subprojects {
         JUnit.api.forEach { testImplementation(it) }
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
+
+        testImplementation("io.spine.validation:runtime:2.0.0-SNAPSHOT.10-local")
     }
 
     val spineBaseVersion: String by extra
@@ -231,6 +237,24 @@ subprojects {
     protobuf {
         generatedFilesBaseDir = generatedDir
         protoc { artifact = Protobuf.compiler }
+    }
+
+    protoData {
+        renderers(
+            "io.spine.validation.java.PrintValidationInsertionPoints",
+            "io.spine.validation.java.JavaValidationRenderer",
+
+            // Suppress warnings in the generated code.
+            "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
+            "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
+        )
+        plugins(
+            "io.spine.validation.ValidationPlugin"
+        )
+        options(
+            "spine/options.proto",
+            "spine/time_options.proto"
+        )
     }
 }
 
