@@ -385,9 +385,9 @@
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : protoc. **Version** : 0.1.2.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -595,7 +595,7 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:18:52 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Nov 18 17:38:33 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -929,9 +929,9 @@ This report was generated on **Thu Nov 18 16:18:52 EET 2021** using [Gradle-Lice
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : protoc. **Version** : 0.1.2.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -1138,7 +1138,7 @@ This report was generated on **Thu Nov 18 16:18:52 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:18:52 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Nov 18 17:38:33 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1464,9 +1464,9 @@ This report was generated on **Thu Nov 18 16:18:52 EET 2021** using [Gradle-Lice
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : protoc. **Version** : 0.1.2.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -1673,7 +1673,7 @@ This report was generated on **Thu Nov 18 16:18:52 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:18:53 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Nov 18 17:38:34 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2080,9 +2080,9 @@ This report was generated on **Thu Nov 18 16:18:53 EET 2021** using [Gradle-Lice
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : protoc. **Version** : 0.1.2.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -2293,7 +2293,7 @@ This report was generated on **Thu Nov 18 16:18:53 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Nov 18 17:38:34 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2619,9 +2619,9 @@ This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-Lice
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : protoc. **Version** : 0.1.2.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -2828,7 +2828,7 @@ This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Nov 18 17:38:35 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3162,9 +3162,9 @@ This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-Lice
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : protoc. **Version** : 0.1.2.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -3371,7 +3371,7 @@ This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Nov 18 17:38:36 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3681,9 +3681,9 @@ This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-Lice
 1.  **Group** : io.spine.protodata. **Name** : codegen-java. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : compiler. **Version** : 0.1.2.**No license information found**
 1.  **Group** : io.spine.protodata. **Name** : protoc. **Version** : 0.1.2.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
-1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10-local.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : java. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : model. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
+1.  **Group** : io.spine.validation. **Name** : runtime. **Version** : 2.0.0-SNAPSHOT.10.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
      * **License:** [CDDL + GPLv2 with classpath exception](https://github.com/javaee/javax.annotation/blob/master/LICENSE)
@@ -3890,4 +3890,4 @@ This report was generated on **Thu Nov 18 16:18:54 EET 2021** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Thu Nov 18 16:18:55 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Thu Nov 18 17:38:36 EET 2021** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

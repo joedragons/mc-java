@@ -118,7 +118,7 @@ subprojects {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
 
-        protoData("io.spine.validation:java:2.0.0-SNAPSHOT.10-local")
+        protoData("io.spine.validation:java:2.0.0-SNAPSHOT.10")
 
         compileOnlyApi(FindBugs.annotations)
         compileOnlyApi(CheckerFramework.annotations)
@@ -131,7 +131,7 @@ subprojects {
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
 
-        testImplementation("io.spine.validation:runtime:2.0.0-SNAPSHOT.10-local")
+        testImplementation("io.spine.validation:runtime:2.0.0-SNAPSHOT.10")
     }
 
     val spineBaseVersion: String by extra
