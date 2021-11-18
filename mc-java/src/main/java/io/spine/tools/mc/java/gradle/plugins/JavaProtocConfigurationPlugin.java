@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.gradle.plugins;
 
-import com.google.common.base.Charsets;
 import com.google.protobuf.gradle.ExecutableLocator;
 import com.google.protobuf.gradle.GenerateProtoTask;
 import com.google.protobuf.gradle.GenerateProtoTask.PluginOptions;
@@ -47,7 +46,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 
 import static io.spine.io.Ensure.ensureFile;
 import static io.spine.tools.gradle.ProtocPluginName.grpc;
@@ -55,6 +53,7 @@ import static io.spine.tools.gradle.ProtocPluginName.spineProtoc;
 import static io.spine.tools.gradle.task.BaseTaskName.clean;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
 import static io.spine.tools.gradle.task.Tasks.getSourceSetName;
+import static io.spine.tools.mc.java.StandardTypes.toBase64Encoded;
 import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
 import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
@@ -92,6 +91,14 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
      * @see #customizeTask(GenerateProtoTask)
      */
     private static class Helper {
+
+        /**
+         * The suffix for the names of {@linkplain #spineProtocConfigFile() configuration files}
+         * passed to {@code io.spine.tools.mc.java.protoc.Plugin}.
+         *
+         * @see #spineProtocConfigFile()
+         */
+        private static final String CONFIG_PB = "config.pb";
 
         private final Project project;
         private final GenerateProtoTask protocTask;
@@ -140,17 +147,26 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
             plugins.create(spineProtoc.name(),
                             options -> {
                                 options.setOutputSubDir("java");
-                                String filePath = spineProtocConfigFile().toString();
-                                String encodedPath = base64Encoded(filePath);
+                                Path filePath = spineProtocConfigFile();
+                                String encodedPath = toBase64Encoded(filePath);
                                 options.option(encodedPath);
                             });
         }
 
+        /**
+         * Obtains a name of a configuration file which would be
+         * passed to {@code io.spine.tools.mc.java.protoc.Plugin} taking into account
+         * the name of the source set.
+         *
+         * <p>The name of the file does not really matter because it is passed
+         * as a single parameter of {@code com.google.protobuf.compiler.CodeGenerationRequest}.
+         * So, any valid file name would suffice. We add the name of the source set for clarity.
+         */
         private Path spineProtocConfigFile() {
             String prefix = sourceSetName.toPrefix();
-            String fileName =  prefix.isEmpty()
-                    ? "config.pb"
-                    : prefix + "-config.pb";
+            String fileName = prefix.isEmpty()
+                    ? CONFIG_PB
+                    : prefix + '-' + CONFIG_PB;
             Path configFile = pluginTempDir().resolve(fileName);
             return configFile;
         }
@@ -202,13 +218,6 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
                     "Unable to %s Spine Protoc Plugin configuration file at: `%s`.",
                     action,
                     configFile);
-        }
-
-        private static String base64Encoded(String value) {
-            Base64.Encoder encoder = Base64.getEncoder();
-            byte[] valueBytes = value.getBytes(Charsets.UTF_8);
-            String result = encoder.encodeToString(valueBytes);
-            return result;
         }
     }
 }
