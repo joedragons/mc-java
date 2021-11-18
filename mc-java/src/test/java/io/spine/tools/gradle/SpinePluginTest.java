@@ -30,7 +30,6 @@ import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.JavaTaskName;
 import io.spine.tools.gradle.testing.NoOp;
 import io.spine.tools.mc.java.gradle.McJavaTaskName;
-import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
@@ -180,24 +179,5 @@ class SpinePluginTest {
                                .iterator()
                                .next();
         assertEquals(input.getCanonicalFile(), singleInput.getCanonicalFile());
-    }
-
-    /**
-     * A NoOp implementation of {@link SpinePlugin} used for tests.
-     *
-     * <p>Applying this plugin to a project causes no result.
-     */
-    private static class TestPlugin implements Plugin<Project> {
-
-        private static final TestPlugin INSTANCE = new TestPlugin();
-
-        /** Prevent direct instantiation. */
-        private TestPlugin() {
-        }
-
-        @Override
-        public void apply(Project project) {
-            // NoOp for tests.
-        }
     }
 }
