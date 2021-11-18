@@ -33,12 +33,12 @@ import io.spine.tools.mc.java.protoc.CodeGenerationTasks;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.InsertionPoint;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.protoc.Entities;
 import io.spine.tools.protoc.GenerateFields;
 import io.spine.tools.protoc.Messages;
 import io.spine.tools.protoc.Pattern;
 import io.spine.tools.protoc.Signals;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.type.MessageType;
 import io.spine.type.Type;
 
@@ -71,9 +71,9 @@ public final class FieldGen extends CodeGenerator {
     /**
      * Creates a new instance based on the passed Protoc config.
      */
-    public static FieldGen instance(SpineProtocConfig spineProtocConfig) {
-        checkNotNull(spineProtocConfig);
-        Builder builder = new Builder(spineProtocConfig);
+    public static FieldGen instance(CodegenOptions config) {
+        checkNotNull(config);
+        Builder builder = new Builder(config);
         builder.addFromAll();
         return builder.build();
     }
@@ -93,13 +93,13 @@ public final class FieldGen extends CodeGenerator {
      */
     private static final class Builder {
 
-        private final SpineProtocConfig config;
+        private final CodegenOptions config;
         private final ImmutableList.Builder<CodeGenerationTask> tasks = ImmutableList.builder();
 
         /**
          * Prevents direct instantiation.
          */
-        private Builder(SpineProtocConfig config) {
+        private Builder(CodegenOptions config) {
             this.config = config;
         }
 

@@ -31,7 +31,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
 import io.spine.code.proto.OptionExtensionRegistry;
-import io.spine.tools.protoc.SpineProtocConfig;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.mc.java.protoc.column.ColumnGen;
 import io.spine.tools.mc.java.protoc.field.FieldGen;
 import io.spine.tools.mc.java.protoc.message.BuilderGen;
@@ -44,9 +44,7 @@ import io.spine.tools.mc.java.protoc.query.EntityQueryGen;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Base64;
 
-import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.mc.java.StandardTypes.decodeBase64;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -78,7 +76,7 @@ public final class Plugin {
      */
     public static void main(String[] args) {
         CodeGeneratorRequest request = readRequest();
-        SpineProtocConfig config = readConfig(request);
+        CodegenOptions config = readConfig(request);
         CompositeGenerator generator = CompositeGenerator.of(
                 InterfaceGen.instance(config),
                 MethodGen.instance(config),
@@ -106,10 +104,10 @@ public final class Plugin {
         }
     }
 
-    private static SpineProtocConfig readConfig(CodeGeneratorRequest request) {
+    private static CodegenOptions readConfig(CodeGeneratorRequest request) {
         String configFilePath = decodeBase64(request.getParameter());
         try (FileInputStream fis = new FileInputStream(configFilePath)) {
-            SpineProtocConfig config = SpineProtocConfig.parseFrom(fis, registry());
+            CodegenOptions config = CodegenOptions.parseFrom(fis, registry());
             return config;
         } catch (InvalidProtocolBufferException e) {
             throw newIllegalStateException(e, "Unable to decode Spine Protoc Plugin config.");

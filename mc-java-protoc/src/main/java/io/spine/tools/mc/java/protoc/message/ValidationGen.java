@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.compiler.PluginProtos;
 import io.spine.base.EventMessage;
 import io.spine.code.java.ClassName;
-import io.spine.tools.protoc.SpineProtocConfig;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.InsertionPoint;
@@ -62,7 +62,7 @@ public final class ValidationGen extends CodeGenerator {
      * Creates a new instance of the generator of the validation code in accordance to
      * the passed parameters of the Spine Protoc Plugin.
      */
-    public static CodeGenerator instance(SpineProtocConfig config) {
+    public static CodeGenerator instance(CodegenOptions config) {
         checkNotNull(config);
         Validation validation = config.getValidation();
         boolean skipBuilders = validation.getSkipBuilders();

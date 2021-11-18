@@ -37,8 +37,8 @@ import io.spine.tools.mc.java.protoc.given.TestInterface;
 import io.spine.tools.mc.java.protoc.given.TestMethodFactory;
 import io.spine.tools.mc.java.protoc.given.TestNestedClassFactory;
 import io.spine.tools.mc.java.protoc.given.UuidMethodFactory;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.protoc.Messages;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.protoc.Uuids;
 import io.spine.tools.protoc.plugin.EnhancedWithCodeGeneration;
 import io.spine.tools.protoc.plugin.TestGeneratorsProto;
@@ -99,7 +99,7 @@ final class PluginTest {
         Uuids uuids = Uuids.newBuilder()
                 .addMethodFactory(methodFactory(UuidMethodFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = configWithoutValidation()
                 .setUuids(uuids)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -124,7 +124,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = configWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -147,7 +147,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = configWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -169,7 +169,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = configWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -186,7 +186,7 @@ final class PluginTest {
     @DisplayName("mark generated message builders with the `ValidatingBuilder` interface")
     void markBuildersWithInterface() {
         FileDescriptor testGeneratorsDescriptor = TestGeneratorsProto.getDescriptor();
-        SpineProtocConfig config = SpineProtocConfig.getDefaultInstance();
+        CodegenOptions config = CodegenOptions.getDefaultInstance();
         String protocConfigPath = protocConfig(config, testPluginConfig);
         CodeGeneratorRequest request = requestBuilder()
                 .addProtoFile(testGeneratorsDescriptor.toProto())

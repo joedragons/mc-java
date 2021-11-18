@@ -32,8 +32,8 @@ import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
 import io.spine.tools.proto.code.ProtoOption;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.protoc.Entities;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.EnumType;
@@ -61,7 +61,7 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("generate code for entities if requested types where appropriate")
     void generateWhenRequired() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newConfig();
 
         CodeGenerator generator = EntityQueryGen.instance(config);
         assertThat(generator)
@@ -75,7 +75,7 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("ignore non-message types")
     void enums() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newConfig();
 
         CodeGenerator generator = EntityQueryGen.instance(config);
         assertThat(generator)
@@ -90,24 +90,24 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("do nothing if turned off")
     void off() {
-        SpineProtocConfig config = newConfig(false);
+        CodegenOptions config = newConfig(false);
 
         CodeGenerator generator = EntityQueryGen.instance(config);
         assertThat(generator)
                 .isInstanceOf(NoOpGenerator.class);
     }
 
-    private static SpineProtocConfig newConfig() {
+    private static CodegenOptions newConfig() {
         return newConfig(true);
     }
 
-    private static SpineProtocConfig newConfig(boolean generate) {
+    private static CodegenOptions newConfig(boolean generate) {
         Entities.Builder entities = Entities.newBuilder();
         entities.addOption(ProtoOption.newBuilder()
                 .setName(OptionsProto.entity.getDescriptor().getName())
         );
         entities.setGenerateQueries(generate);
-        return SpineProtocConfig.newBuilder()
+        return CodegenOptions.newBuilder()
                 .setEntities(entities)
                 .build();
     }

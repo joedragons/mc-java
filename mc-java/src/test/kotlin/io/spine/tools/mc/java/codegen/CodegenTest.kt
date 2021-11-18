@@ -98,7 +98,7 @@ class `'codegen { }' block should` {
             val secondInterface = "test.iface.TestCommand"
             val fieldSuperclass = "test.cmd.Field"
             val suffix = "_my_commands.proto"
-            options.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: CodegenOptionsConfig ->
                 config.forCommands { commands: SignalConfig ->
                     commands.includeFiles(commands.by().suffix(suffix))
                     commands.markAs(firstInterface)
@@ -123,7 +123,7 @@ class `'codegen { }' block should` {
             val iface = "test.iface.Event"
             val fieldSuperclass = "test.event.Field"
             val prefix = "my_"
-            options.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: CodegenOptionsConfig ->
                 config.forEvents { events: SignalConfig ->
                     events.includeFiles(events.by().prefix(prefix))
                     events.markAs(iface)
@@ -147,7 +147,7 @@ class `'codegen { }' block should` {
             val iface = "test.iface.RejectionMessage"
             val fieldSuperclass = "test.rejection.Field"
             val regex = ".*rejection.*"
-            options.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: CodegenOptionsConfig ->
                 config.forEvents { events: SignalConfig ->
                     events.includeFiles(events.by().regex(regex))
                     events.markAs(iface)

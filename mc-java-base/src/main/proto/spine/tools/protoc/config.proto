@@ -41,12 +41,14 @@ import "google/protobuf/empty.proto";
 import "spine/tools/java/java.proto";
 import "spine/tools/proto/proto.proto";
 
-// Configuration of the Spine Protoc Plugin.
+// Code generation options passed to Spine Protoc Plugin.
 //
-// The configuration is passed to the plugin as the single option.
-// The passed value is serialized and passed via a file.
+// The configuration is passed to the plugin as the single option containing
+// base64-encoded file name (in UTF-8 charset).
 //
-message SpineProtocConfig {
+// The referenced file contains the serialized version of this type.
+//
+message CodegenOptions {
 
     // The configuration related to validation code.
     Validation validation = 1;
@@ -83,7 +85,7 @@ message Validation {
     //
     bool skip_builders = 1;
 
-    // If `true`, validation code, based on the Spine validation runles, should not be generated.
+    // If `true`, validation code, based on the Spine validation rules, should not be generated.
     bool skip_validation = 2;
 }
 

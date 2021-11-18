@@ -36,7 +36,7 @@ import io.spine.tools.mc.java.protoc.InsertionPoint;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
 import io.spine.tools.java.code.NestedClass;
 import io.spine.tools.protoc.Entities;
-import io.spine.tools.protoc.SpineProtocConfig;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.type.MessageType;
 import io.spine.type.Type;
 
@@ -74,7 +74,7 @@ public final class ColumnGen extends CodeGenerator {
     /**
      * Creates a new instance based on the passed Protoc config.
      */
-    public static CodeGenerator instance(SpineProtocConfig config) {
+    public static CodeGenerator instance(CodegenOptions config) {
         checkNotNull(config);
         Entities entities = config.getEntities();
         boolean generate = entities.getGenerateQueries();

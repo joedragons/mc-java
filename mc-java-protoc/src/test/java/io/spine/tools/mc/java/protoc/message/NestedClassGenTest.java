@@ -31,11 +31,11 @@ import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.mc.java.codegen.FilePatterns;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.given.TestNestedClassFactory;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.protoc.GenerateNestedClasses;
 import io.spine.tools.protoc.Messages;
 import io.spine.tools.protoc.NestedClassFactoryName;
 import io.spine.tools.protoc.Pattern;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.EnumType;
@@ -62,7 +62,7 @@ class NestedClassGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newConfig();
 
         NestedClassGen generator = NestedClassGen.instance(config);
         MessageType type = new MessageType(TaskView.getDescriptor());
@@ -74,7 +74,7 @@ class NestedClassGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newConfig();
 
         NestedClassGen generator = NestedClassGen.instance(config);
         EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
@@ -83,7 +83,7 @@ class NestedClassGenTest {
         assertThat(output).isEmpty();
     }
 
-    private static SpineProtocConfig newConfig() {
+    private static CodegenOptions newConfig() {
         JavaClassName name = className(TestNestedClassFactory.class);
         NestedClassFactoryName factoryName = NestedClassFactoryName.newBuilder()
                 .setClassName(name)
@@ -98,7 +98,7 @@ class NestedClassGenTest {
                 .setPattern(pattern)
                 .addGenerateNestedClasses(generate)
                 .build();
-        SpineProtocConfig result = SpineProtocConfig
+        CodegenOptions result = CodegenOptions
                 .newBuilder()
                 .addMessages(messages)
                 .build();

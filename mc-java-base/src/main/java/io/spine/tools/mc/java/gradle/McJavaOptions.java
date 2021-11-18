@@ -30,7 +30,7 @@ import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.mc.java.codegen.JavaCodegenConfig;
+import io.spine.tools.mc.java.codegen.CodegenOptionsConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 
@@ -75,7 +75,7 @@ public class McJavaOptions {
      *
      * @see #codegen(Action)
      */
-    public JavaCodegenConfig codegen;
+    public CodegenOptionsConfig codegen;
 
     public List<String> internalClassPatterns = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public class McJavaOptions {
      */
     public void injectProject(Project project) {
         this.project = checkNotNull(project);
-        this.codegen = new JavaCodegenConfig(project);
+        this.codegen = new CodegenOptionsConfig(project);
     }
 
     /**
@@ -101,7 +101,7 @@ public class McJavaOptions {
     /**
      * Configures the Model Compilation code generation by applying the given action.
      */
-    public void codegen(Action<JavaCodegenConfig> action) {
+    public void codegen(Action<CodegenOptionsConfig> action) {
         action.execute(codegen);
     }
 

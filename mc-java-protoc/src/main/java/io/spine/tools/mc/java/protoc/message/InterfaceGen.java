@@ -34,12 +34,12 @@ import io.spine.tools.mc.java.protoc.CodeGenerationTasks;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.protoc.AddInterface;
+import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.protoc.Entities;
 import io.spine.tools.protoc.FilePattern;
 import io.spine.tools.protoc.Messages;
 import io.spine.tools.protoc.Pattern;
 import io.spine.tools.protoc.Signals;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.protoc.Uuids;
 import io.spine.type.MessageType;
 import io.spine.type.Type;
@@ -77,30 +77,30 @@ public final class InterfaceGen extends CodeGenerator {
     /**
      * Retrieves the single instance of the {@code InterfaceGenerator}.
      */
-    public static CodeGenerator instance(SpineProtocConfig spineProtocConfig) {
-        checkNotNull(spineProtocConfig);
+    public static CodeGenerator instance(CodegenOptions config) {
+        checkNotNull(config);
         ImmutableList.Builder<CodeGenerationTask> tasks = ImmutableList.builder();
 
-        if (spineProtocConfig.hasCommands()) {
-            tasks.addAll(tasksFor(spineProtocConfig.getCommands()));
+        if (config.hasCommands()) {
+            tasks.addAll(tasksFor(config.getCommands()));
         }
-        if (spineProtocConfig.hasEvents()) {
-            tasks.addAll(tasksFor(spineProtocConfig.getEvents()));
+        if (config.hasEvents()) {
+            tasks.addAll(tasksFor(config.getEvents()));
         }
-        if (spineProtocConfig.hasRejections()) {
-            tasks.addAll(tasksFor(spineProtocConfig.getRejections()));
+        if (config.hasRejections()) {
+            tasks.addAll(tasksFor(config.getRejections()));
         }
-        if (spineProtocConfig.hasUuids()) {
-            Uuids uuids = spineProtocConfig.getUuids();
+        if (config.hasUuids()) {
+            Uuids uuids = config.getUuids();
             List<AddInterface> addInterfaces = uuids.getAddInterfaceList();
             addInterfaces.stream()
                          .map(ImplementUuidValue::new)
                          .forEach(tasks::add);
         }
-        if (spineProtocConfig.hasEntities()) {
-            tasks.addAll(tasksFor(spineProtocConfig.getEntities()));
+        if (config.hasEntities()) {
+            tasks.addAll(tasksFor(config.getEntities()));
         }
-        for (Messages messages : spineProtocConfig.getMessagesList()) {
+        for (Messages messages : config.getMessagesList()) {
             Pattern pattern = messages.getPattern();
             messages.getAddInterfaceList()
                     .stream()

@@ -35,7 +35,7 @@ import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
-import io.spine.tools.protoc.SpineProtocConfig;
+import io.spine.tools.protoc.CodegenOptions;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -193,7 +193,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         private void writePluginConfig() {
             Path configFile = spineProtocConfigFile();
             McJavaOptions options = getMcJava(project);
-            SpineProtocConfig config = options.codegen.toProto();
+            CodegenOptions config = options.codegen.toProto();
 
             ensureFile(configFile);
             try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
