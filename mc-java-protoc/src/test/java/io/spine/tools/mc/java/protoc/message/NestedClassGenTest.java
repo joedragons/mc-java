@@ -28,7 +28,7 @@ package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.testing.NullPointerTester;
 import io.spine.tools.java.code.JavaClassName;
-import io.spine.tools.mc.java.codegen.FilePatterns;
+import io.spine.tools.mc.java.gradle.codegen.FilePatterns;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.given.TestNestedClassFactory;
 import io.spine.tools.protoc.CodegenOptions;

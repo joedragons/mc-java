@@ -30,7 +30,7 @@ import com.google.common.flogger.FluentLogger;
 import groovy.lang.Closure;
 import io.spine.tools.code.Indent;
 import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.mc.java.codegen.CodegenOptionsConfig;
+import io.spine.tools.mc.java.gradle.codegen.CodegenOptionsConfig;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 

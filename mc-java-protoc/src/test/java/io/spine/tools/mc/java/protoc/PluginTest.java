@@ -59,9 +59,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.mc.java.codegen.FilePatterns.filePrefix;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileRegex;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileSuffix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileRegex;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileSuffix;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.addInterface;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.configWithoutValidation;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.generateMethods;
