@@ -29,6 +29,9 @@ package io.spine.tools.mc.java.gradle.codegen;
 import io.spine.tools.mc.java.codegen.FilePattern;
 import org.checkerframework.checker.regex.qual.Regex;
 
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileRegex;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileSuffix;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
@@ -56,7 +59,7 @@ public final class PatternFactory {
      */
     public FilePattern suffix(String value) {
         checkNotEmptyOrBlank(value);
-        return FilePatterns.fileSuffix(value);
+        return fileSuffix(value);
     }
 
     /**
@@ -67,7 +70,7 @@ public final class PatternFactory {
      */
     public FilePattern prefix(String value) {
         checkNotEmptyOrBlank(value);
-        return FilePatterns.filePrefix(value);
+        return filePrefix(value);
     }
 
     /**
@@ -78,6 +81,6 @@ public final class PatternFactory {
      */
     public FilePattern regex(@Regex String value) {
         checkNotEmptyOrBlank(value);
-        return FilePatterns.fileRegex(value);
+        return fileRegex(value);
     }
 }
