@@ -58,7 +58,7 @@ class ColumnGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        CodegenOptions config = newConfig();
+        CodegenOptions config = newOptions();
 
         CodeGenerator generator = ColumnGen.instance(config);
         MessageType type = new MessageType(TaskView.getDescriptor());
@@ -71,7 +71,7 @@ class ColumnGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        CodegenOptions config = newConfig();
+        CodegenOptions config = newOptions();
 
         CodeGenerator generator = ColumnGen.instance(config);
         EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
@@ -81,7 +81,7 @@ class ColumnGenTest {
                 .isEmpty();
     }
 
-    private static CodegenOptions newConfig() {
+    private static CodegenOptions newOptions() {
         CodegenOptions.Builder config = CodegenOptions.newBuilder();
         config.getEntitiesBuilder()
               .setGenerateQueries(true)
