@@ -28,12 +28,12 @@ package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableList;
 import io.spine.tools.java.code.NestedClassFactory;
+import io.spine.tools.mc.java.codegen.FilePattern;
+import io.spine.tools.mc.java.codegen.NestedClassFactoryName;
+import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
 import io.spine.tools.mc.java.protoc.PatternMatcher;
-import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.NestedClassFactoryName;
-import io.spine.tools.protoc.Pattern;
 import io.spine.type.MessageType;
 
 import java.util.function.Predicate;
@@ -61,7 +61,7 @@ public final class GenerateNestedClasses extends NestedClassGenerationTask {
      * Generates nested classes for the given type.
      *
      * <p>No code is generated if the type file name does not match the supplied
-     * {@link io.spine.tools.protoc.FilePattern pattern}.
+     * {@link io.spine.tools.mc.java.codegen.FilePattern pattern}.
      */
     @Override
     public ImmutableList<CompilerOutput> generateFor(MessageType type) {

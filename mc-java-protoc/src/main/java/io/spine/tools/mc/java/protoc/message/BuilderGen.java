@@ -30,8 +30,8 @@ import com.google.common.collect.ImmutableSet;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
-import io.spine.tools.protoc.CodegenOptions;
-import io.spine.tools.protoc.Validation;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.Validation;
 import io.spine.type.MessageType;
 import io.spine.type.Type;
 

@@ -28,7 +28,7 @@ package io.spine.tools.mc.java.protoc.method;
 
 import com.google.protobuf.Descriptors;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.protoc.CodegenOptions;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.protoc.plugin.method.EnhancedMessage;
 import io.spine.tools.protoc.plugin.method.TestServiceProto;
 import io.spine.type.MessageType;

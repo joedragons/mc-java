@@ -29,7 +29,7 @@ package io.spine.tools.mc.java.gradle.codegen;
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.Message;
 import io.spine.tools.gradle.Multiple;
-import io.spine.tools.protoc.FilePattern;
+import io.spine.tools.mc.java.codegen.FilePattern;
 import org.gradle.api.Project;
 
 import java.util.Set;

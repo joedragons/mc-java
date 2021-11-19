@@ -46,10 +46,6 @@ import io.spine.tools.mc.java.gradle.codegen.SignalConfig
 import io.spine.tools.mc.java.gradle.mcJava
 import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
 import io.spine.tools.proto.code.ProtoTypeName
-import io.spine.tools.protoc.GenerateFields
-import io.spine.tools.protoc.Messages
-import io.spine.tools.protoc.Pattern
-import io.spine.tools.protoc.TypePattern
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested

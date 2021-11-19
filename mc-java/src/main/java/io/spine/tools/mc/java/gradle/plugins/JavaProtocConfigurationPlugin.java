@@ -35,7 +35,7 @@ import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
-import io.spine.tools.protoc.CodegenOptions;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Project;
 import org.gradle.api.Task;

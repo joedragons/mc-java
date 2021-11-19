@@ -28,10 +28,10 @@ package io.spine.tools.mc.java.protoc.column;
 
 import com.google.common.testing.NullPointerTester;
 import io.spine.option.OptionsProto;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.proto.code.ProtoOption;
-import io.spine.tools.protoc.CodegenOptions;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.EnumType;

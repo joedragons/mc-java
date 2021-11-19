@@ -35,8 +35,8 @@ import io.spine.tools.mc.java.protoc.ExternalClassLoader;
 import io.spine.tools.mc.java.protoc.InsertionPoint;
 import io.spine.tools.java.code.Classpath;
 import io.spine.tools.java.code.NestedClassFactory;
-import io.spine.tools.protoc.CodegenOptions;
-import io.spine.tools.protoc.Messages;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.Messages;
 import io.spine.type.MessageType;
 import io.spine.type.Type;
 

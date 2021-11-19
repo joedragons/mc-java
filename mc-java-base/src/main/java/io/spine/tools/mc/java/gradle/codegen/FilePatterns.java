@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.gradle.codegen;
 
-import io.spine.tools.protoc.FilePattern;
+import io.spine.tools.mc.java.codegen.FilePattern;
 import org.checkerframework.checker.regex.qual.Regex;
 
 import static com.google.common.base.Preconditions.checkNotNull;

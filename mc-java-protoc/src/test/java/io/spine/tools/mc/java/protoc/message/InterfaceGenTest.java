@@ -44,7 +44,7 @@ import io.spine.tools.java.fs.FileName;
 import io.spine.tools.java.fs.SourceFile;
 import io.spine.tools.mc.java.gradle.codegen.CodegenOptionsConfig;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
-import io.spine.tools.protoc.CodegenOptions;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.protoc.plugin.message.tests.EveryIsGeneratedProto;
 import io.spine.tools.protoc.plugin.message.tests.EveryIsInOneFileProto;
 import io.spine.tools.protoc.plugin.message.tests.EveryIsTestProto;

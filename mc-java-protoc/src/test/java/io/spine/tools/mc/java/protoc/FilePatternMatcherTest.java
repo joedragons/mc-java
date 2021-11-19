@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.protoc;
 
-import io.spine.tools.protoc.FilePattern;
+import io.spine.tools.mc.java.codegen.FilePattern;
 import io.spine.tools.protoc.plugin.FPMMessage;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;

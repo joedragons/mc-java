@@ -27,16 +27,18 @@
 package io.spine.tools.mc.java.protoc.method;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.tools.mc.java.gradle.codegen.UuidConfig;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
 import io.spine.tools.java.code.MethodFactory;
-import io.spine.tools.protoc.MethodFactoryName;
+import io.spine.tools.mc.java.codegen.MethodFactoryName;
 import io.spine.type.MessageType;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Generates methods for supplied UUID value type based on {@link UuidConfig uuid configuration}.
+ * Generates methods for supplied UUID value type based
+ * on {@linkplain UuidConfig uuid configuration}.
  */
 final class GenerateUuidMethods extends MethodGenerationTask {
 

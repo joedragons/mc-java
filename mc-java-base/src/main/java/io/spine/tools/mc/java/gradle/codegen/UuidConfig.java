@@ -30,8 +30,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.Message;
 import io.spine.tools.gradle.Multiple;
 import io.spine.tools.java.code.MethodFactory;
-import io.spine.tools.protoc.MethodFactoryName;
-import io.spine.tools.protoc.Uuids;
+import io.spine.tools.mc.java.codegen.MethodFactoryName;
+import io.spine.tools.mc.java.codegen.Uuids;
 import org.gradle.api.Project;
 
 import java.util.Set;

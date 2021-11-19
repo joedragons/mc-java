@@ -28,12 +28,12 @@ package io.spine.tools.mc.java.protoc.field;
 
 import com.google.common.testing.NullPointerTester;
 import io.spine.base.SubscribableField;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.GenerateFields;
+import io.spine.tools.mc.java.codegen.Messages;
+import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.tools.mc.java.gradle.codegen.FilePatterns;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.protoc.CodegenOptions;
-import io.spine.tools.protoc.GenerateFields;
-import io.spine.tools.protoc.Messages;
-import io.spine.tools.protoc.Pattern;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.EnumType;

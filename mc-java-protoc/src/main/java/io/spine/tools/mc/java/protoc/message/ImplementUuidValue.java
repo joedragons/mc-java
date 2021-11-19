@@ -27,8 +27,8 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.tools.mc.java.codegen.AddInterface;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.protoc.AddInterface;
 import io.spine.type.MessageType;
 
 import static com.google.common.base.Preconditions.checkNotNull;
