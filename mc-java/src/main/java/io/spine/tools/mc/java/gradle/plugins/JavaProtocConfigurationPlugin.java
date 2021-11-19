@@ -193,11 +193,11 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
         private void writePluginConfig() {
             Path configFile = spineProtocConfigFile();
             McJavaOptions options = getMcJava(project);
-            CodegenOptions config = options.codegen.toProto();
+            CodegenOptions codegenOptions = options.codegen.toProto();
 
             ensureFile(configFile);
             try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
-                config.writeTo(fos);
+                codegenOptions.writeTo(fos);
             } catch (FileNotFoundException e) {
                 throw errorOn("create", e, configFile);
             } catch (IOException e) {

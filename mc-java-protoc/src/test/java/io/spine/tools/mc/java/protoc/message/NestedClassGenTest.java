@@ -62,9 +62,9 @@ class NestedClassGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        CodegenOptions config = newConfig();
+        CodegenOptions options = newOptions();
 
-        NestedClassGen generator = NestedClassGen.instance(config);
+        NestedClassGen generator = NestedClassGen.instance(options);
         MessageType type = new MessageType(TaskView.getDescriptor());
         Collection<CompilerOutput> output = generator.generate(type);
 
@@ -74,7 +74,7 @@ class NestedClassGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        CodegenOptions config = newConfig();
+        CodegenOptions config = newOptions();
 
         NestedClassGen generator = NestedClassGen.instance(config);
         EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
@@ -83,7 +83,7 @@ class NestedClassGenTest {
         assertThat(output).isEmpty();
     }
 
-    private static CodegenOptions newConfig() {
+    private static CodegenOptions newOptions() {
         JavaClassName name = className(TestNestedClassFactory.class);
         NestedClassFactoryName factoryName = NestedClassFactoryName.newBuilder()
                 .setClassName(name)
@@ -98,8 +98,7 @@ class NestedClassGenTest {
                 .setPattern(pattern)
                 .addGenerateNestedClasses(generate)
                 .build();
-        CodegenOptions result = CodegenOptions
-                .newBuilder()
+        CodegenOptions result = CodegenOptions.newBuilder()
                 .addMessages(messages)
                 .build();
         return result;

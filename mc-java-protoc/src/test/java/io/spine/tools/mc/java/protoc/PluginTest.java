@@ -63,7 +63,7 @@ import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;
 import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileRegex;
 import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileSuffix;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.addInterface;
-import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.configWithoutValidation;
+import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.optionsWithoutValidation;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.generateMethods;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.generateNested;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.methodFactory;
@@ -99,7 +99,7 @@ final class PluginTest {
         Uuids uuids = Uuids.newBuilder()
                 .addMethodFactory(methodFactory(UuidMethodFactory.class))
                 .build();
-        CodegenOptions config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .setUuids(uuids)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -124,7 +124,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        CodegenOptions config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -147,7 +147,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        CodegenOptions config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -169,7 +169,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        CodegenOptions config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()

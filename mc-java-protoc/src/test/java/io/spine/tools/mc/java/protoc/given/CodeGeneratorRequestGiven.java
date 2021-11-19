@@ -83,7 +83,7 @@ public final class CodeGeneratorRequestGiven {
     /**
      * Creates a builder for {@code SpineProtocConfig} with all the validation features turned off.
      */
-    public static CodegenOptions.Builder configWithoutValidation() {
+    public static CodegenOptions.Builder optionsWithoutValidation() {
         CodegenOptions.Builder builder = CodegenOptions.newBuilder();
         builder.getValidationBuilder()
                .setSkipBuilders(true)

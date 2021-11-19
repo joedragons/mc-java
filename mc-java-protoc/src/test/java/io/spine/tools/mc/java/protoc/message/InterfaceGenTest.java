@@ -148,8 +148,8 @@ final class InterfaceGenTest {
     @BeforeAll
     static void setUpConfig() {
         Project project = ProjectBuilder.builder().build();
-        CodegenOptionsConfig codegen = new CodegenOptionsConfig(project);
-        config = codegen.toProto();
+        CodegenOptionsConfig options = new CodegenOptionsConfig(project);
+        config = options.toProto();
     }
 
     @BeforeEach

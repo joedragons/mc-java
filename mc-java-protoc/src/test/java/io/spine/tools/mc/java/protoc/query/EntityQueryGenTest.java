@@ -61,7 +61,7 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("generate code for entities if requested types where appropriate")
     void generateWhenRequired() {
-        CodegenOptions config = newConfig();
+        CodegenOptions config = newOptions();
 
         CodeGenerator generator = EntityQueryGen.instance(config);
         assertThat(generator)
@@ -75,7 +75,7 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("ignore non-message types")
     void enums() {
-        CodegenOptions config = newConfig();
+        CodegenOptions config = newOptions();
 
         CodeGenerator generator = EntityQueryGen.instance(config);
         assertThat(generator)
@@ -90,18 +90,18 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("do nothing if turned off")
     void off() {
-        CodegenOptions config = newConfig(false);
+        CodegenOptions config = newOptions(false);
 
         CodeGenerator generator = EntityQueryGen.instance(config);
         assertThat(generator)
                 .isInstanceOf(NoOpGenerator.class);
     }
 
-    private static CodegenOptions newConfig() {
-        return newConfig(true);
+    private static CodegenOptions newOptions() {
+        return newOptions(true);
     }
 
-    private static CodegenOptions newConfig(boolean generate) {
+    private static CodegenOptions newOptions(boolean generate) {
         Entities.Builder entities = Entities.newBuilder();
         entities.addOption(ProtoOption.newBuilder()
                 .setName(OptionsProto.entity.getDescriptor().getName())
