@@ -73,8 +73,9 @@ public final class MethodGen extends CodeGenerator {
                 new ExternalClassLoader<>(classpath, MethodFactory.class);
         ImmutableList.Builder<CodeGenerationTask> tasks = ImmutableList.builder();
         if (config.hasUuids()) {
-            List<MethodFactoryName> methodFactoryNames = config.getUuids()
-                                                               .getMethodFactoryList();
+            List<MethodFactoryName> methodFactoryNames =
+                    config.getUuids()
+                          .getMethodFactoryList();
             methodFactoryNames
                     .stream()
                     .map(name -> new GenerateUuidMethods(classLoader, name))
@@ -85,9 +86,8 @@ public final class MethodGen extends CodeGenerator {
             messages.getGenerateMethodsList()
                     .stream()
                     .map(generate -> new GenerateMethods(
-                               classLoader, generate.getFactory(), pattern
-                       )).forEach(tasks::add);
-
+                            classLoader, generate.getFactory(), pattern))
+                    .forEach(tasks::add);
         }
         return new MethodGen(tasks.build());
     }
