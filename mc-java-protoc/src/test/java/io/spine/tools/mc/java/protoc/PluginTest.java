@@ -33,13 +33,13 @@ import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
 import io.spine.code.proto.OptionExtensionRegistry;
 import io.spine.tools.java.fs.SourceFile;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.Messages;
+import io.spine.tools.mc.java.codegen.Uuids;
 import io.spine.tools.mc.java.protoc.given.TestInterface;
 import io.spine.tools.mc.java.protoc.given.TestMethodFactory;
 import io.spine.tools.mc.java.protoc.given.TestNestedClassFactory;
 import io.spine.tools.mc.java.protoc.given.UuidMethodFactory;
-import io.spine.tools.protoc.Messages;
-import io.spine.tools.protoc.SpineProtocConfig;
-import io.spine.tools.protoc.Uuids;
 import io.spine.tools.protoc.plugin.EnhancedWithCodeGeneration;
 import io.spine.tools.protoc.plugin.TestGeneratorsProto;
 import io.spine.tools.protoc.plugin.method.TestMethodProtos;
@@ -59,11 +59,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.mc.java.codegen.FilePatterns.filePrefix;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileRegex;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileSuffix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileRegex;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileSuffix;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.addInterface;
-import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.configWithoutValidation;
+import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.optionsWithoutValidation;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.generateMethods;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.generateNested;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.methodFactory;
@@ -99,7 +99,7 @@ final class PluginTest {
         Uuids uuids = Uuids.newBuilder()
                 .addMethodFactory(methodFactory(UuidMethodFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .setUuids(uuids)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -124,7 +124,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -147,7 +147,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -169,7 +169,7 @@ final class PluginTest {
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        SpineProtocConfig config = configWithoutValidation()
+        CodegenOptions config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
         CodeGeneratorRequest request = requestBuilder()
@@ -186,7 +186,7 @@ final class PluginTest {
     @DisplayName("mark generated message builders with the `ValidatingBuilder` interface")
     void markBuildersWithInterface() {
         FileDescriptor testGeneratorsDescriptor = TestGeneratorsProto.getDescriptor();
-        SpineProtocConfig config = SpineProtocConfig.getDefaultInstance();
+        CodegenOptions config = CodegenOptions.getDefaultInstance();
         String protocConfigPath = protocConfig(config, testPluginConfig);
         CodeGeneratorRequest request = requestBuilder()
                 .addProtoFile(testGeneratorsDescriptor.toProto())

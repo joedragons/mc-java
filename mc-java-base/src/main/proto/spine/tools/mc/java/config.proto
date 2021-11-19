@@ -25,12 +25,12 @@
  */
 syntax = "proto3";
 
-package spine.tools.protoc;
+package spine.tools.mc.java;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io";
-option java_package = "io.spine.tools.protoc";
+option java_package = "io.spine.tools.mc.java.codegen";
 option java_outer_classname = "ConfigProto";
 option java_multiple_files = true;
 
@@ -41,12 +41,14 @@ import "google/protobuf/empty.proto";
 import "spine/tools/java/java.proto";
 import "spine/tools/proto/proto.proto";
 
-// Configuration of the Spine Protoc Plugin.
+// Code generation options passed to Spine Protoc Plugin.
 //
-// The configuration is passed to the plugin as the single option.
-// The passed value is serialized and passed via a file.
+// The configuration is passed to the plugin as the single option containing
+// base64-encoded file name (in UTF-8 charset).
 //
-message SpineProtocConfig {
+// The referenced file contains the serialized version of this type.
+//
+message CodegenOptions {
 
     // The configuration related to validation code.
     Validation validation = 1;
@@ -70,11 +72,10 @@ message SpineProtocConfig {
     Uuids uuids = 7;
 
     // The classpath used to lookup types by their fully-qualified names.
-    java.Classpath classpath = 8;
+    tools.java.Classpath classpath = 8;
 }
 
 // Configuration related to validation code.
-//
 message Validation {
 
     // If `true`, validating builders should not be generated.
@@ -83,7 +84,7 @@ message Validation {
     //
     bool skip_builders = 1;
 
-    // If `true`, validation code, based on the Spine validation runles, should not be generated.
+    // If `true`, validation code, based on the Spine validation rules, should not be generated.
     bool skip_validation = 2;
 }
 
@@ -110,7 +111,6 @@ message Signals {
 }
 
 // Code generation config for entity state messages.
-//
 message Entities {
 
     // The patterns which define which messages are entity state messages.
@@ -162,7 +162,7 @@ message GenerateFields {
     //
     // It's recommended that the class extends `io.spine.base.SubscribableField`.
     //
-    java.JavaClassName superclass = 1;
+    tools.java.JavaClassName superclass = 1;
 }
 
 // Code generation config for an arbitrary group of messages.
@@ -204,7 +204,6 @@ message Uuids {
 }
 
 // A pattern which matches one or multiple messages.
-//
 message Pattern {
 
     oneof kind {
@@ -218,21 +217,18 @@ message Pattern {
 }
 
 // Configuration for adding a Java interface to a generated class.
-//
 message AddInterface {
 
-    java.JavaClassName name = 1;
+    tools.java.JavaClassName name = 1;
 }
 
 // Configuration for adding Java methods into a generated class.
-//
 message GenerateMethods {
 
     MethodFactoryName factory = 1;
 }
 
 // Configuration for adding nested classes into a generated class.
-//
 message GenerateNestedClasses {
 
     NestedClassFactoryName factory = 1;
@@ -244,7 +240,7 @@ message GenerateNestedClasses {
 //
 message NestedClassFactoryName {
 
-    java.JavaClassName class_name = 1;
+    tools.java.JavaClassName class_name = 1;
 }
 
 // A Java class name of a method factory.
@@ -253,11 +249,10 @@ message NestedClassFactoryName {
 //
 message MethodFactoryName {
 
-    java.JavaClassName class_name = 1;
+    tools.java.JavaClassName class_name = 1;
 }
 
 // File pattern used to filter messages residing in files.
-//
 message FilePattern {
 
     oneof value {

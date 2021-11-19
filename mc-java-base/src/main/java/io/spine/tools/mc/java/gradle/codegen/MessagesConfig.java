@@ -24,18 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.codegen;
+package io.spine.tools.mc.java.gradle.codegen;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import io.spine.tools.gradle.Multiple;
-import io.spine.tools.protoc.GenerateFields;
-import io.spine.tools.protoc.GenerateMethods;
-import io.spine.tools.protoc.GenerateNestedClasses;
-import io.spine.tools.protoc.Messages;
-import io.spine.tools.protoc.MethodFactoryName;
-import io.spine.tools.protoc.NestedClassFactoryName;
-import io.spine.tools.protoc.Pattern;
+import io.spine.tools.mc.java.codegen.GenerateFields;
+import io.spine.tools.mc.java.codegen.GenerateMethods;
+import io.spine.tools.mc.java.codegen.GenerateNestedClasses;
+import io.spine.tools.mc.java.codegen.Messages;
+import io.spine.tools.mc.java.codegen.MethodFactoryName;
+import io.spine.tools.mc.java.codegen.NestedClassFactoryName;
+import io.spine.tools.mc.java.codegen.Pattern;
 import org.gradle.api.Project;
 
 import java.util.Set;
@@ -47,7 +47,7 @@ import static java.util.stream.Collectors.toSet;
 /**
  * A codegen configuration for messages which match a certain pattern.
  *
- * @see JavaCodegenConfig#forMessages
+ * @see CodegenOptionsConfig#forMessages
  */
 public final class MessagesConfig extends ConfigWithFields<Messages> {
 

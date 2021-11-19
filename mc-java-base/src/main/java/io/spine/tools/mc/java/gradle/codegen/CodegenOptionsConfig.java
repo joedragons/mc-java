@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.codegen;
+package io.spine.tools.mc.java.gradle.codegen;
 
 import com.google.common.collect.ImmutableList;
 import io.spine.annotation.Internal;
@@ -39,11 +39,11 @@ import io.spine.query.EntityStateField;
 import io.spine.tools.java.code.Classpath;
 import io.spine.tools.java.code.UuidMethodFactory;
 import io.spine.tools.proto.code.ProtoTypeName;
-import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.Messages;
-import io.spine.tools.protoc.Pattern;
-import io.spine.tools.protoc.SpineProtocConfig;
-import io.spine.tools.protoc.TypePattern;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.FilePattern;
+import io.spine.tools.mc.java.codegen.Messages;
+import io.spine.tools.mc.java.codegen.Pattern;
+import io.spine.tools.mc.java.codegen.TypePattern;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
@@ -60,9 +60,10 @@ import static io.spine.base.MessageFile.EVENTS;
 import static io.spine.base.MessageFile.REJECTIONS;
 
 /**
- * A configuration for the Model Compiler code generation.
+ * A part of {@link io.spine.tools.mc.java.gradle.McJavaOptions McJavaOptions} responsible
+ * for code generation settings.
  */
-public final class JavaCodegenConfig extends Config<SpineProtocConfig> {
+public final class CodegenOptionsConfig extends Config<CodegenOptions> {
 
     private final SignalConfig commands;
     private final SignalConfig events;
@@ -74,7 +75,7 @@ public final class JavaCodegenConfig extends Config<SpineProtocConfig> {
     private final Project project;
 
     @Internal
-    public JavaCodegenConfig(Project project) {
+    public CodegenOptionsConfig(Project project) {
         super();
         this.project = checkNotNull(project);
         this.commands = new SignalConfig(project);
@@ -156,8 +157,7 @@ public final class JavaCodegenConfig extends Config<SpineProtocConfig> {
      * @see #by() for creating a file pattern for selecting messages
      */
     public void forMessages(FilePattern filePattern, Action<MessagesConfig> action) {
-        Pattern pattern = Pattern
-                .newBuilder()
+        Pattern pattern = Pattern.newBuilder()
                 .setFile(filePattern)
                 .build();
         MessagesConfig config = new MessagesConfig(project, pattern);
@@ -192,9 +192,9 @@ public final class JavaCodegenConfig extends Config<SpineProtocConfig> {
 
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored") // calling builder
-    public SpineProtocConfig toProto() {
+    public CodegenOptions toProto() {
         Classpath classpath = buildClasspath();
-        SpineProtocConfig.Builder builder = SpineProtocConfig.newBuilder()
+        CodegenOptions.Builder builder = CodegenOptions.newBuilder()
                 .setCommands(commands.toProto())
                 .setEvents(events.toProto())
                 .setRejections(rejections.toProto())

@@ -27,12 +27,12 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.tools.java.code.NestedClassFactory;
+import io.spine.tools.mc.java.codegen.NestedClassFactoryName;
 import io.spine.tools.mc.java.protoc.ClassMember;
 import io.spine.tools.mc.java.protoc.CodeGenerationTask;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
-import io.spine.tools.java.code.NestedClassFactory;
-import io.spine.tools.protoc.NestedClassFactoryName;
 import io.spine.type.MessageType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

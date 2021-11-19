@@ -41,13 +41,11 @@ import io.spine.query.EntityStateField
 import io.spine.tools.java.code.UuidMethodFactory
 import io.spine.tools.mc.java.applyStandard
 import io.spine.tools.mc.java.gradle.McJavaOptions
+import io.spine.tools.mc.java.gradle.codegen.CodegenOptionsConfig
+import io.spine.tools.mc.java.gradle.codegen.SignalConfig
 import io.spine.tools.mc.java.gradle.mcJava
 import io.spine.tools.mc.java.gradle.plugins.McJavaPlugin
 import io.spine.tools.proto.code.ProtoTypeName
-import io.spine.tools.protoc.GenerateFields
-import io.spine.tools.protoc.Messages
-import io.spine.tools.protoc.Pattern
-import io.spine.tools.protoc.TypePattern
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -98,7 +96,7 @@ class `'codegen { }' block should` {
             val secondInterface = "test.iface.TestCommand"
             val fieldSuperclass = "test.cmd.Field"
             val suffix = "_my_commands.proto"
-            options.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: CodegenOptionsConfig ->
                 config.forCommands { commands: SignalConfig ->
                     commands.includeFiles(commands.by().suffix(suffix))
                     commands.markAs(firstInterface)
@@ -123,7 +121,7 @@ class `'codegen { }' block should` {
             val iface = "test.iface.Event"
             val fieldSuperclass = "test.event.Field"
             val prefix = "my_"
-            options.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: CodegenOptionsConfig ->
                 config.forEvents { events: SignalConfig ->
                     events.includeFiles(events.by().prefix(prefix))
                     events.markAs(iface)
@@ -147,7 +145,7 @@ class `'codegen { }' block should` {
             val iface = "test.iface.RejectionMessage"
             val fieldSuperclass = "test.rejection.Field"
             val regex = ".*rejection.*"
-            options.codegen { config: JavaCodegenConfig ->
+            options.codegen { config: CodegenOptionsConfig ->
                 config.forEvents { events: SignalConfig ->
                     events.includeFiles(events.by().regex(regex))
                     events.markAs(iface)

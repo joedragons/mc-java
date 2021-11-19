@@ -32,9 +32,9 @@ import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
 import com.google.protobuf.compiler.PluginProtos.Version;
 import io.spine.test.protoc.BuilderTestProto;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
-import io.spine.tools.protoc.SpineProtocConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ class BuilderGenTest {
     @DisplayName("produce builder insertion points")
     void produceBuilderInsertionPoints() {
         CodeGenerator generator =
-                BuilderGen.instance(SpineProtocConfig.getDefaultInstance());
+                BuilderGen.instance(CodegenOptions.getDefaultInstance());
         FileDescriptor file = BuilderTestProto.getDescriptor();
         CodeGeneratorRequest request = CodeGeneratorRequest
                 .newBuilder()
@@ -66,7 +66,7 @@ class BuilderGenTest {
     @Test
     @DisplayName("do nothing if configured to skip validating builders")
     void ignoreIfConfigured() {
-        SpineProtocConfig.Builder config = SpineProtocConfig.newBuilder();
+        CodegenOptions.Builder config = CodegenOptions.newBuilder();
         config.getValidationBuilder().setSkipBuilders(true);
         CodeGenerator generator = BuilderGen.instance(config.build());
         assertThat(generator).isInstanceOf(NoOpGenerator.class);

@@ -24,43 +24,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.protoc;
+@file:JvmName("StandardTypes")
 
-import io.spine.tools.mc.java.codegen.FilePattern;
-import io.spine.type.MessageType;
+package io.spine.tools.mc.java
 
-import java.util.function.Predicate;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.nio.file.Path
+import java.util.*
+import kotlin.text.Charsets.UTF_8
 
 /**
- * {@link FilePattern} predicate that returns {@code true} if supplied Protobuf
- * {@link MessageType type} matches pattern's value.
+ * Converts this string to base64 encoded version using UTF-8 charset.
  */
-public final class FilePatternMatcher implements Predicate<MessageType> {
-
-    private final FilePattern pattern;
-
-    public FilePatternMatcher(FilePattern filePattern) {
-        checkNotNull(filePattern);
-        this.pattern = filePattern;
-    }
-
-    @Override
-    public boolean test(MessageType type) {
-        checkNotNull(type);
-        String protoFileName = type.declaringFileName()
-                                   .value();
-        switch (pattern.getValueCase()) {
-            case SUFFIX:
-                return protoFileName.endsWith(pattern.getSuffix());
-            case PREFIX:
-                return protoFileName.startsWith(pattern.getPrefix());
-            case REGEX:
-                return protoFileName.matches(pattern.getRegex());
-            case VALUE_NOT_SET:
-            default:
-                return false;
-        }
-    }
+public fun String.toBase64Encoded(): String {
+    val encoder = Base64.getEncoder()
+    val valueBytes: ByteArray = toByteArray(UTF_8)
+    return encoder.encodeToString(valueBytes)
 }
+
+/**
+ * Decodes base64-encoded value into a string with UTF-8 charset.
+ */
+public fun String.decodeBase64(): String {
+    val decoder = Base64.getDecoder()
+    val decodedBytes = decoder.decode(this)
+    return String(decodedBytes, UTF_8)
+}
+
+/**
+ * Converts this path to a base64-encoded string.
+ *
+ * @see [String.toBase64Encoded]
+ */
+public fun Path.toBase64Encoded(): String = toString().toBase64Encoded()

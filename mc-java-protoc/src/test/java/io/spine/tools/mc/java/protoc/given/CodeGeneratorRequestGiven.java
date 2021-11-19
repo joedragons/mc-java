@@ -29,14 +29,14 @@ package io.spine.tools.mc.java.protoc.given;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.compiler.PluginProtos;
 import io.spine.option.OptionsProto;
-import io.spine.tools.protoc.AddInterface;
-import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.GenerateMethods;
-import io.spine.tools.protoc.GenerateNestedClasses;
-import io.spine.tools.protoc.MethodFactoryName;
-import io.spine.tools.protoc.NestedClassFactoryName;
-import io.spine.tools.protoc.Pattern;
-import io.spine.tools.protoc.SpineProtocConfig;
+import io.spine.tools.mc.java.codegen.AddInterface;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.FilePattern;
+import io.spine.tools.mc.java.codegen.GenerateMethods;
+import io.spine.tools.mc.java.codegen.GenerateNestedClasses;
+import io.spine.tools.mc.java.codegen.MethodFactoryName;
+import io.spine.tools.mc.java.codegen.NestedClassFactoryName;
+import io.spine.tools.mc.java.codegen.Pattern;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -83,8 +83,8 @@ public final class CodeGeneratorRequestGiven {
     /**
      * Creates a builder for {@code SpineProtocConfig} with all the validation features turned off.
      */
-    public static SpineProtocConfig.Builder configWithoutValidation() {
-        SpineProtocConfig.Builder builder = SpineProtocConfig.newBuilder();
+    public static CodegenOptions.Builder optionsWithoutValidation() {
+        CodegenOptions.Builder builder = CodegenOptions.newBuilder();
         builder.getValidationBuilder()
                .setSkipBuilders(true)
                .setSkipValidation(true);
@@ -151,7 +151,7 @@ public final class CodeGeneratorRequestGiven {
      *
      * @return the path to the serialized config, encoded in Base64
      */
-    public static String protocConfig(SpineProtocConfig config, Path configFile) {
+    public static String protocConfig(CodegenOptions config, Path configFile) {
         try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
             config.writeTo(fos);
         } catch (IOException e) {

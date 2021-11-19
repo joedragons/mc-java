@@ -31,8 +31,8 @@ import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
 import io.spine.tools.mc.java.protoc.PatternMatcher;
 import io.spine.tools.java.code.MethodFactory;
-import io.spine.tools.protoc.MethodFactoryName;
-import io.spine.tools.protoc.Pattern;
+import io.spine.tools.mc.java.codegen.MethodFactoryName;
+import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.type.MessageType;
 
 import java.util.function.Predicate;

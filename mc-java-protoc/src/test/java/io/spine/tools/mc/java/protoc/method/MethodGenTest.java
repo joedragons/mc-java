@@ -28,7 +28,7 @@ package io.spine.tools.mc.java.protoc.method;
 
 import com.google.protobuf.Descriptors;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.protoc.SpineProtocConfig;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.protoc.plugin.method.EnhancedMessage;
 import io.spine.tools.protoc.plugin.method.TestServiceProto;
 import io.spine.type.MessageType;
@@ -47,7 +47,7 @@ final class MethodGenTest {
     @Test
     void ignoreNonMessageTypes() {
         MethodGen generator =
-                MethodGen.instance(SpineProtocConfig.getDefaultInstance());
+                MethodGen.instance(CodegenOptions.getDefaultInstance());
         Descriptors.ServiceDescriptor service = TestServiceProto.getDescriptor()
                                                                 .findServiceByName("MGTService");
         ServiceType type = ServiceType.of(service);
@@ -60,7 +60,7 @@ final class MethodGenTest {
     void generateMethodsForMessageTypes() {
         MessageType type = new MessageType(EnhancedMessage.getDescriptor());
         MethodGen generator =
-                MethodGen.instance(SpineProtocConfig.getDefaultInstance());
+                MethodGen.instance(CodegenOptions.getDefaultInstance());
         Collection<CompilerOutput> result = generator.generate(type);
         assertTrue(result.isEmpty());
     }

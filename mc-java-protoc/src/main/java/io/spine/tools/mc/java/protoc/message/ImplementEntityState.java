@@ -30,9 +30,9 @@ import com.google.common.collect.ImmutableList;
 import io.spine.code.java.ClassName;
 import io.spine.code.proto.FieldDeclaration;
 import io.spine.tools.java.code.JavaClassName;
+import io.spine.tools.mc.java.codegen.Entities;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.EntityMatcher;
-import io.spine.tools.protoc.Entities;
 import io.spine.type.MessageType;
 
 import java.util.function.Predicate;

@@ -24,10 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.codegen;
+package io.spine.tools.mc.java.gradle.codegen;
 
 import com.google.protobuf.Message;
-import io.spine.tools.protoc.GenerateFields;
+import io.spine.tools.mc.java.codegen.GenerateFields;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
