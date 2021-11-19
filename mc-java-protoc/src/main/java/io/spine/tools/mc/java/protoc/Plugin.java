@@ -31,15 +31,14 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
 import io.spine.code.proto.OptionExtensionRegistry;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.mc.java.protoc.column.ColumnGen;
 import io.spine.tools.mc.java.protoc.field.FieldGen;
 import io.spine.tools.mc.java.protoc.message.BuilderGen;
 import io.spine.tools.mc.java.protoc.message.InterfaceGen;
-import io.spine.tools.mc.java.protoc.message.ValidationGen;
 import io.spine.tools.mc.java.protoc.message.NestedClassGen;
 import io.spine.tools.mc.java.protoc.method.MethodGen;
 import io.spine.tools.mc.java.protoc.query.EntityQueryGen;
+import io.spine.tools.protoc.SpineProtocConfig;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -82,7 +81,6 @@ public final class Plugin {
                 InterfaceGen.instance(config),
                 MethodGen.instance(config),
                 BuilderGen.instance(config),
-                ValidationGen.instance(config),
                 NestedClassGen.instance(config),
                 ColumnGen.instance(config),
                 EntityQueryGen.instance(config),
