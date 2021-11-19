@@ -77,11 +77,11 @@ public class DescriptorSetMergerPlugin implements Plugin<Project> {
 
     private static Action<Task> createMergingAction(boolean tests) {
         return task -> {
+            FileDescriptorSuperset superset = new FileDescriptorSuperset();
             Project project = task.getProject();
             Configuration configuration = configuration(project, configurationName(tests));
-            File descriptorSet = descriptorSetFile(project, sourceSet(tests));
-            FileDescriptorSuperset superset = new FileDescriptorSuperset();
             configuration.forEach(superset::addFromDependency);
+            File descriptorSet = descriptorSetFile(project, sourceSet(tests));
             if (descriptorSet.exists()) {
                 superset.addFromDependency(descriptorSet);
             }
