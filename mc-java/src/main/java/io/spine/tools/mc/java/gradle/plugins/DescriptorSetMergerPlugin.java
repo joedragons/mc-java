@@ -66,7 +66,7 @@ public class DescriptorSetMergerPlugin implements Plugin<Project> {
     }
 
     private static void createTask(Project project, boolean tests) {
-        Configuration configuration = configuration(project, configurationName(tests));
+        Configuration configuration = configuration(project, runtimeClasspathConfName(tests));
         Buildable dependencies = configuration.getAllDependencies();
         GradleTask task = GradleTask.newBuilder(taskName(tests), createMergingAction(tests))
                 .insertAfterTask(generateProtoTaskName(tests))
@@ -76,22 +76,7 @@ public class DescriptorSetMergerPlugin implements Plugin<Project> {
     }
 
     private static Action<Task> createMergingAction(boolean tests) {
-        return task -> {
-            FileDescriptorSuperset superset = new FileDescriptorSuperset();
-            Project project = task.getProject();
-            Configuration configuration = configuration(project, configurationName(tests));
-            configuration.forEach(superset::addFromDependency);
-            File descriptorSet = descriptorSetFile(project, sourceSet(tests));
-            if (descriptorSet.exists()) {
-                superset.addFromDependency(descriptorSet);
-            }
-            superset.merge()
-                    .loadIntoKnownTypes();
-        };
-    }
-
-    private static SourceSetName sourceSet(boolean tests) {
-        return tests ? SourceSetName.test : SourceSetName.main;
+        return new MergingAction(tests);
     }
 
     private static Configuration configuration(Project project, ConfigurationName name) {
@@ -99,7 +84,7 @@ public class DescriptorSetMergerPlugin implements Plugin<Project> {
                       .getByName(name.value());
     }
 
-    private static ConfigurationName configurationName(boolean tests) {
+    private static ConfigurationName runtimeClasspathConfName(boolean tests) {
         return tests
                ? testRuntimeClasspath
                : runtimeClasspath;
@@ -123,4 +108,30 @@ public class DescriptorSetMergerPlugin implements Plugin<Project> {
                : processResources;
     }
 
+    private static class MergingAction implements Action<Task> {
+
+        private final boolean tests;
+
+        private MergingAction(boolean tests) {
+            this.tests = tests;
+        }
+
+        @Override
+        public void execute(Task task) {
+            FileDescriptorSuperset superset = new FileDescriptorSuperset();
+            Project project = task.getProject();
+            Configuration configuration = configuration(project, runtimeClasspathConfName(tests));
+            configuration.forEach(superset::addFromDependency);
+            File descriptorSet = descriptorSetFile(project, sourceSet());
+            if (descriptorSet.exists()) {
+                superset.addFromDependency(descriptorSet);
+            }
+            superset.merge()
+                    .loadIntoKnownTypes();
+        }
+
+        private SourceSetName sourceSet() {
+            return tests ? SourceSetName.test : SourceSetName.main;
+        }
+    }
 }
