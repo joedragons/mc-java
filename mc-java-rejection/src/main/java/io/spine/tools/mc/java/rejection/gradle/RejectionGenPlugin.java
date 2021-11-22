@@ -26,23 +26,22 @@
 package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.proto.FileSet;
-import io.spine.tools.gradle.ProtoPlugin;
+import io.spine.tools.gradle.ProtoFiles;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
+import io.spine.tools.gradle.task.TaskName;
 import org.gradle.api.Action;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 
-import java.io.File;
 import java.util.function.Supplier;
 
-import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.SourceSetName.main;
+import static io.spine.tools.gradle.SourceSetName.test;
 import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
-import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateTestRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
 import static io.spine.tools.mc.java.gradle.Projects.protoDir;
 
@@ -53,7 +52,7 @@ import static io.spine.tools.mc.java.gradle.Projects.protoDir;
  *
  * <p>Logs a warning if there are no protobuf descriptors generated.
  */
-public class RejectionGenPlugin extends ProtoPlugin {
+public final class RejectionGenPlugin implements Plugin<Project> {
 
     /**
      * Applies the plug-in to a project.
@@ -65,55 +64,57 @@ public class RejectionGenPlugin extends ProtoPlugin {
      */
     @Override
     public void apply(Project project) {
-        Action<Task> mainScopeAction =
-                createAction(project,
-                             mainProtoFiles(project),
-                             () -> generatedRejectionsDir(project, SourceSetName.main).toString(),
-                             () -> protoDir(project,  SourceSetName.main).toString());
-        ProtoModule module = new ProtoModule(project);
-        GradleTask mainTask =
-                GradleTask.newBuilder(generateRejections, mainScopeAction)
-                        .insertAfterTask(mergeDescriptorSet)
-                        .insertBeforeTask(compileJava)
-                        .withInputFiles(module.protoSource())
-                        .withOutputFiles(module.compiledRejections())
-                        .applyNowTo(project);
-        Action<Task> testScopeAction =
-                createAction(project,
-                             testProtoFiles(project),
-                             () -> generatedRejectionsDir(project, SourceSetName.test).toString(),
-                             () -> protoDir(project, SourceSetName.test).toString());
-
-        GradleTask testTask =
-                GradleTask.newBuilder(generateTestRejections, testScopeAction)
-                        .insertAfterTask(mergeTestDescriptorSet)
-                        .insertBeforeTask(compileTestJava)
-                        .withInputFiles(module.protoSource())
-                        .withInputFiles(module.testProtoSource())
-                        .withOutputFiles(module.compiledRejections())
-                        .withOutputFiles(module.testCompiledRejections())
-                        .applyNowTo(project);
-
+        Helper helper = new Helper(project);
+        helper.configure();
         project.getLogger().debug(
                 "Rejection generation phase initialized with tasks: `{}`, `{}`.",
-                mainTask, testTask
+                helper.mainTask, helper.testTask
         );
     }
 
-    private static Action<Task> createAction(Project project,
-                                             Supplier<FileSet> files,
-                                             Supplier<String> targetDirPath,
-                                             Supplier<String> protoSrcDir) {
-        return new RejectionGenAction(project, files, targetDirPath, protoSrcDir);
-    }
+    /**
+     * Creates tasks and applies them to the project.
+     */
+    private static final class Helper {
 
-    @Override
-    protected Supplier<File> mainDescriptorFile(Project project) {
-        return () -> descriptorSetFile(project, SourceSetName.main);
-    }
+        private final Project project;
+        private final ProtoModule module;
 
-    @Override
-    protected Supplier<File> testDescriptorFile(Project project) {
-        return () -> descriptorSetFile(project, SourceSetName.test);
+        private GradleTask mainTask;
+        private GradleTask testTask;
+
+        private Helper(Project project) {
+            this.project = project;
+            this.module = new ProtoModule(project);
+        }
+
+        private void configure() {
+            Action<Task> mainAction = createAction(main);
+            this.mainTask = createTask(mainAction, main);
+
+            Action<Task> testAction = createAction(test);
+            this.testTask = createTask(testAction, test);
+        }
+
+        private Action<Task> createAction(SourceSetName ssn) {
+            Supplier<FileSet> protoFiles = ProtoFiles.collect(project, ssn);
+            Supplier<String> rejectionsDir = () -> generatedRejectionsDir(project, ssn).toString();
+            Supplier<String> protoDir = () -> protoDir(project, ssn).toString();
+            return new RejectionGenAction(project, protoFiles, rejectionsDir, protoDir);
+        }
+
+        private GradleTask createTask(Action<Task> action, SourceSetName ssn) {
+            TaskName rejections = generateRejections(ssn);
+            TaskName mergeTask = mergeDescriptorSet(ssn);
+            TaskName compileTask = compileJava(ssn);
+            GradleTask task =
+                    GradleTask.newBuilder(rejections, action)
+                            .insertAfterTask(mergeTask)
+                            .insertBeforeTask(compileTask)
+                            .withInputFiles(module.protoSource())
+                            .withOutputFiles(module.compiledRejections())
+                            .applyNowTo(project);
+            return task;
+        }
     }
 }
