@@ -29,6 +29,8 @@ import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.excludeProtobufLite
+import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
@@ -110,6 +112,20 @@ subprojects {
         testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
+    }
+
+    val toolBaseVersion: String by extra
+    with(configurations) {
+        forceVersions()
+        excludeProtobufLite()
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
+                )
+            }
+        }
     }
 
     idea.module {

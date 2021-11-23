@@ -138,6 +138,7 @@ subprojects {
                 force(
                     "io.spine:spine-base:$spineBaseVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
             }
