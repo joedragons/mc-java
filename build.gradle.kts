@@ -271,3 +271,7 @@ val integrationTests by tasks.registering(RunBuild::class) {
 tasks.register("buildAll") {
     dependsOn(tasks.build, integrationTests)
 }
+
+val check: Task by tasks.getting {
+    dependsOn(integrationTests)
+}
