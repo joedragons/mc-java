@@ -97,8 +97,8 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         }
 
         private GradleTask createTask(SourceSetName ssn) {
-            Action<Task> mainAction = createAction(ssn);
-            return createTask(mainAction, ssn);
+            Action<Task> action = createAction(ssn);
+            return createTask(action, ssn);
         }
 
         private Action<Task> createAction(SourceSetName ssn) {
