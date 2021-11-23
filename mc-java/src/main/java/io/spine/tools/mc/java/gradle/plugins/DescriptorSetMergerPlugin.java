@@ -42,6 +42,7 @@ import java.io.File;
 import static io.spine.tools.gradle.JavaConfigurationName.runtimeClasspath;
 import static io.spine.tools.gradle.project.Projects.configuration;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
 import static io.spine.tools.gradle.task.ProtobufTaskName.generateProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
@@ -57,15 +58,14 @@ final class DescriptorSetMergerPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        createTask(project, SourceSetName.main);
-        createTask(project, SourceSetName.test);
+        getSourceSetNames(project).forEach(ssn -> createTask(project, ssn));
     }
 
     private static void createTask(Project project, SourceSetName ssn) {
         Configuration configuration = configuration(project, runtimeClasspath(ssn));
         Buildable dependencies = configuration.getAllDependencies();
-        TaskName mergeDescriptorSet = mergeDescriptorSet(ssn);
-        GradleTask task = GradleTask.newBuilder(mergeDescriptorSet, createMergingAction(ssn))
+        Action<Task> action = createMergingAction(ssn);
+        GradleTask task = GradleTask.newBuilder(mergeDescriptorSet(ssn), action)
                 .insertAfterTask(generateProto(ssn))
                 .insertBeforeTask(processResources(ssn))
                 .applyNowTo(project);
