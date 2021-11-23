@@ -36,6 +36,7 @@ import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
+import org.gradle.api.Action;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -120,8 +121,8 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
         private void customizeDescriptorSetGeneration() {
             setResourceDirectory();
-            GradleTask writeRef = GradleTask.newBuilder(
-                            writeDescriptorReference(sourceSetName), task -> writeRefFile())
+            TaskName taskName = writeDescriptorReference(sourceSetName);
+            GradleTask writeRef = GradleTask.newBuilder(taskName, writeRefFile())
                     .insertBeforeTask(processResources(sourceSetName))
                     .applyNowTo(project);
             protocTask.finalizedBy(writeRef.getTask());
@@ -134,6 +135,14 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
             protocTask.getSourceSet()
                       .getResources()
                       .srcDir(resourceDirectory);
+        }
+
+        private Action<Task> writeRefFile() {
+            return task -> {
+                Path resourceDirectory = descriptorFile.toPath().getParent();
+                DescriptorReference reference = DescriptorReference.toOneFile(descriptorFile);
+                reference.writeTo(resourceDirectory);
+            };
         }
 
         private void addTaskDependency() {
@@ -183,32 +192,28 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
          */
         private Task writePluginConfigTask() {
             TaskName taskName = writePluginConfiguration(sourceSetName);
-            return GradleTask.newBuilder(taskName, task -> writePluginConfig())
+            return GradleTask.newBuilder(taskName, writePluginConfig())
                     .allowNoDependencies()
                     .applyNowTo(project)
                     .getTask()
                     .mustRunAfter(clean.name());
         }
 
-        private void writePluginConfig() {
-            Path configFile = spineProtocConfigFile();
-            McJavaOptions options = getMcJava(project);
-            CodegenOptions codegenOptions = options.codegen.toProto();
+        private Action<Task> writePluginConfig() {
+            return task -> {
+                Path configFile = spineProtocConfigFile();
+                McJavaOptions options = getMcJava(project);
+                CodegenOptions codegenOptions = options.codegen.toProto();
 
-            ensureFile(configFile);
-            try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
-                codegenOptions.writeTo(fos);
-            } catch (FileNotFoundException e) {
-                throw errorOn("create", e, configFile);
-            } catch (IOException e) {
-                throw errorOn("store", e, configFile);
-            }
-        }
-
-        private void writeRefFile() {
-            Path resourceDirectory = descriptorFile.toPath().getParent();
-            DescriptorReference reference = DescriptorReference.toOneFile(descriptorFile);
-            reference.writeTo(resourceDirectory);
+                ensureFile(configFile);
+                try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
+                    codegenOptions.writeTo(fos);
+                } catch (FileNotFoundException e) {
+                    throw errorOn("create", e, configFile);
+                } catch (IOException e) {
+                    throw errorOn("store", e, configFile);
+                }
+            };
         }
 
         private static
