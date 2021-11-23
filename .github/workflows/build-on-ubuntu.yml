@@ -27,14 +27,3 @@ jobs:
         with:
           fail_ci_if_error: true
           verbose: true
-
-      - name: Pack build artifacts for upload
-        shell: bash
-        run: tar -czvf mc-java-ci-build-results.tar.gz ./*
-
-      - name: Upload build results
-        uses: actions/upload-artifact@v2
-        with:
-          name: mc-java-ci-build-results
-          path: mc-java-ci-build-results.tar.gz
-          retention-days: 1
