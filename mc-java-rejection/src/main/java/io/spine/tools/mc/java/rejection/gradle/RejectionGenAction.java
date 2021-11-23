@@ -83,8 +83,7 @@ final class RejectionGenAction extends CodeGenerationAction {
      */
     private ImmutableSet<RejectionsFile> findModuleRejections(FileSet allFiles) {
         ImmutableSet<RejectionsFile> allRejections = RejectionsFile.findAll(allFiles);
-        ImmutableSet<RejectionsFile> moduleRejections = allRejections
-                .stream()
+        ImmutableSet<RejectionsFile> moduleRejections = allRejections.stream()
                 .filter(new SourceProtoBelongsToModule(protoSrcDir()))
                 .collect(toImmutableSet());
         return moduleRejections;
