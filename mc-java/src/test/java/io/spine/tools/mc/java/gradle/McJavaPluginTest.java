@@ -30,6 +30,7 @@ import io.spine.tools.gradle.testing.TaskSubject;
 import io.spine.tools.mc.java.gradle.given.StubProject;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.plugins.PluginManager;
 import org.gradle.api.tasks.TaskContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,8 +61,10 @@ class McJavaPluginTest {
                 StubProject.createFor(getClass())
                            .withMavenRepositories()
                            .get();
-        project.getPluginManager()
-               .apply(MC_JAVA_GRADLE_PLUGIN_ID);
+        PluginManager plugins = project.getPluginManager();
+        plugins.apply("java");
+        plugins.apply("com.google.protobuf");
+        plugins.apply(MC_JAVA_GRADLE_PLUGIN_ID);
         tasks = project.getTasks();
     }
 

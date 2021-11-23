@@ -32,7 +32,6 @@ import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.WriteVersions
-import io.spine.internal.gradle.publish.PublishExtension
 
 val spineBaseVersion: String by extra
 
@@ -50,6 +49,8 @@ dependencies {
     implementation(project(":mc-java-annotation"))
     implementation(project(":mc-java-checks"))
     implementation(project(":mc-java-rejection"))
+
+    implementation("io.spine:proto-data:0.1.2")
 
     testImplementation(Spine(project).testlib)
     testImplementation(gradleTestKit())

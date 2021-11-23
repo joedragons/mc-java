@@ -72,7 +72,8 @@ public class McJavaPlugin extends LanguagePlugin implements Logging {
                   new RejectionGenPlugin(),
                   new AnnotatorPlugin(),
                   new JavaProtocConfigurationPlugin(),
-                  new McJavaChecksPlugin())
+                  new McJavaChecksPlugin(),
+                  new ProtoDataConfigPlugin())
               .forEach(plugin -> apply(plugin, project));
     }
 

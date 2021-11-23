@@ -279,10 +279,9 @@ class AnnotatorPluginTest {
     }
 
     private static void check(Path sourcePath, SourceCheck check) throws IOException {
-        Path filePath = DefaultJavaPaths.at(testProjectDir)
-                                        .generated()
-                                        .mainJava()
-                                        .resolve(sourcePath);
+        @SuppressWarnings("DuplicateStringLiteralInspection") // "java" is a commonly used word.
+        Path filePath = generatedJavaSource("java")
+                .resolve(sourcePath);
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
                 Roaster.parse(AbstractJavaSource.class, filePath.toFile());
@@ -291,14 +290,20 @@ class AnnotatorPluginTest {
 
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
-        Path fullPath = DefaultJavaPaths.at(testProjectDir)
-                                        .generated()
-                                        .mainGrpc()
-                                        .resolve(serviceFile);
+        Path filePath = generatedJavaSource("grpc")
+                .resolve(serviceFile.path());
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
-                Roaster.parse(AbstractJavaSource.class, fullPath.toFile());
+                Roaster.parse(AbstractJavaSource.class, filePath.toFile());
         check.accept(javaSource);
+    }
+
+    private static Path generatedJavaSource(String generator) {
+        return testProjectDir.toPath()
+                             .resolve("build")
+                             .resolve("generated-proto")
+                             .resolve("main")
+                             .resolve(generator);
     }
 
     private static FileDescriptor descriptorOf(FileName testFile) {
