@@ -42,6 +42,7 @@ import org.gradle.api.logging.Logger;
 import java.io.File;
 import java.nio.file.Path;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
@@ -63,13 +64,9 @@ final class AnnotationAction implements Action<Task>, Logging {
 
     /**
      * Creates a new action instance.
-     *
-     * @param mainCode
-     *         if {@code true} the production code will be annotated,
-     *         otherwise the action will annotate the code of tests
      */
-    AnnotationAction(boolean mainCode) {
-        this.sourceSet = mainCode ? SourceSetName.main : SourceSetName.test;
+    AnnotationAction(SourceSetName ssn) {
+        this.sourceSet = checkNotNull(ssn);
     }
 
     @Override
