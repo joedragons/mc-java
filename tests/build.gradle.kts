@@ -58,6 +58,21 @@ buildscript {
         }
         classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
     }
+
+    val spineBaseVersion: String by extra
+    val toolBaseVersion: String by extra
+    with(configurations) {
+        io.spine.internal.gradle.doForceVersions(this)
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
+                )
+            }
+        }
+    }
 }
 
 plugins {
@@ -124,6 +139,8 @@ subprojects {
         all {
             resolutionStrategy {
                 force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-testlib:$spineBaseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
