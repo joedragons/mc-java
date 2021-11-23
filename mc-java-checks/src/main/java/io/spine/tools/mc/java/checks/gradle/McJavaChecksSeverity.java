@@ -48,6 +48,9 @@ public final class McJavaChecksSeverity implements Logging {
 
     static final String ERROR_PRONE_PLUGIN_ID = "net.ltgt.errorprone";
 
+    @VisibleForTesting
+    static final String EQUALITY_ERROR = "-Xep:ReferenceEquality:ERROR";
+
     private final Project project;
     private @Nullable Boolean hasErrorPronePlugin;
 
@@ -119,7 +122,7 @@ public final class McJavaChecksSeverity implements Logging {
                 .of(project)
                 // Pass already present check to demo the API.
                 // Enumerate our custom checks doing the same later.
-                .addArgs("-Xep:ReferenceEquality:ERROR"/*, severityArg*/);
+                .addArgs(EQUALITY_ERROR/*, severityArg*/);
     }
 
     /**
