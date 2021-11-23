@@ -31,16 +31,16 @@ import io.spine.tools.gradle.ProtoFiles;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.SourceSetContainer;
 
 import java.util.function.Supplier;
 
-import static io.spine.tools.gradle.project.Projects.getSourceSets;
+import static com.google.common.collect.ImmutableList.toImmutableList;
+import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
 import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
@@ -59,7 +59,7 @@ public final class RejectionGenPlugin implements Plugin<Project> {
     /**
      * Applies the plug-in to a project.
      *
-     * <p>Adds {@code :generateRejections} and {@code :generateTestRejections} tasks.
+     * <p>Adds {@code :generateRejections} tasks for all source sets of the project.
      *
      * <p>Tasks depend on corresponding {@code :generateProto} tasks and are executed
      * before corresponding {@code :compileJava} tasks.
@@ -82,7 +82,8 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         private final Project project;
         private final ProtoModule module;
 
-        private ImmutableList<GradleTask> tasks;
+        /** Configured tasks are {@code null} until {@link #configure()} is called. */
+        private @MonotonicNonNull ImmutableList<GradleTask> tasks;
 
         private Helper(Project project) {
             this.project = project;
@@ -90,14 +91,9 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         }
 
         private void configure() {
-            SourceSetContainer sourceSets = getSourceSets(project);
-            ImmutableList.Builder<GradleTask> tasks = ImmutableList.builder();
-            for (SourceSet sourceSet : sourceSets) {
-                SourceSetName ssn = new SourceSetName(sourceSet.getName());
-                GradleTask task = createTask(ssn);
-                tasks.add(task);
-            }
-            this.tasks = tasks.build();
+            this.tasks = getSourceSetNames(project).stream()
+                    .map(this::createTask)
+                    .collect(toImmutableList());
         }
 
         private GradleTask createTask(SourceSetName ssn) {
@@ -116,13 +112,12 @@ public final class RejectionGenPlugin implements Plugin<Project> {
             TaskName rejections = generateRejections(ssn);
             TaskName mergeTask = mergeDescriptorSet(ssn);
             TaskName compileTask = compileJava(ssn);
-            GradleTask task =
-                    GradleTask.newBuilder(rejections, action)
-                            .insertAfterTask(mergeTask)
-                            .insertBeforeTask(compileTask)
-                            .withInputFiles(module.protoSource())
-                            .withOutputFiles(module.compiledRejections())
-                            .applyNowTo(project);
+            GradleTask task = GradleTask.newBuilder(rejections, action)
+                    .insertBeforeTask(compileTask)
+                    .insertAfterTask(mergeTask)
+                    .withInputFiles(module.protoSource())
+                    .withOutputFiles(module.compiledRejections())
+                    .applyNowTo(project);
             return task;
         }
     }
