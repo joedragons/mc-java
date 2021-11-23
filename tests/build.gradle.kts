@@ -86,6 +86,9 @@ allprojects {
         gitHub("model-compiler")
         mavenLocal()
     }
+
+    group = "io.spine.tools.tests"
+    version = extra["versionToPublish"]!!
 }
 
 subprojects {
