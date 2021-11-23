@@ -25,6 +25,7 @@
  */
 package io.spine.tools.mc.java.rejection.gradle;
 
+import com.google.common.collect.ImmutableList;
 import io.spine.code.proto.FileSet;
 import io.spine.tools.gradle.ProtoFiles;
 import io.spine.tools.gradle.SourceSetName;
@@ -34,11 +35,12 @@ import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.tasks.SourceSetContainer;
 
 import java.util.function.Supplier;
 
-import static io.spine.tools.gradle.SourceSetName.main;
-import static io.spine.tools.gradle.SourceSetName.test;
+import static io.spine.tools.gradle.project.Projects.getSourceSets;
 import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
@@ -67,8 +69,8 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         Helper helper = new Helper(project);
         helper.configure();
         project.getLogger().debug(
-                "Rejection generation phase initialized with tasks: `{}`, `{}`.",
-                helper.mainTask, helper.testTask
+                "Rejection generation phase initialized with tasks: `{}`.",
+                helper.tasks
         );
     }
 
@@ -80,8 +82,7 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         private final Project project;
         private final ProtoModule module;
 
-        private GradleTask mainTask;
-        private GradleTask testTask;
+        private ImmutableList<GradleTask> tasks;
 
         private Helper(Project project) {
             this.project = project;
@@ -89,11 +90,19 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         }
 
         private void configure() {
-            Action<Task> mainAction = createAction(main);
-            this.mainTask = createTask(mainAction, main);
+            SourceSetContainer sourceSets = getSourceSets(project);
+            ImmutableList.Builder<GradleTask> tasks = ImmutableList.builder();
+            for (SourceSet sourceSet : sourceSets) {
+                SourceSetName ssn = new SourceSetName(sourceSet.getName());
+                GradleTask task = createTask(ssn);
+                tasks.add(task);
+            }
+            this.tasks = tasks.build();
+        }
 
-            Action<Task> testAction = createAction(test);
-            this.testTask = createTask(testAction, test);
+        private GradleTask createTask(SourceSetName ssn) {
+            Action<Task> mainAction = createAction(ssn);
+            return createTask(mainAction, ssn);
         }
 
         private Action<Task> createAction(SourceSetName ssn) {
