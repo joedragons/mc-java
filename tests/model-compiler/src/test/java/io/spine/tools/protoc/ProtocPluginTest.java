@@ -44,8 +44,11 @@ import io.spine.test.protoc.University;
 import io.spine.test.protoc.Wrapped;
 import io.spine.test.tools.protoc.Movie;
 import io.spine.test.tools.protoc.WeatherForecast;
-import io.spine.tools.protoc.PIUserEvent;
-import io.spine.tools.protoc.UserInfo;
+
+// Custom interface generated according to proto annotations. See `mixed_test.proto` for details.
+import io.spine.tools.protoc.test.PIUserEvent;
+import io.spine.tools.protoc.test.UserInfo;
+
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
