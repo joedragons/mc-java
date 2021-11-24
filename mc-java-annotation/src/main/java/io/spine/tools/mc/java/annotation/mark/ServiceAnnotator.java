@@ -52,7 +52,7 @@ final class ServiceAnnotator extends OptionAnnotator<ServiceDescriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor fileDescriptor : descriptors()) {
+        for (FileDescriptor fileDescriptor : fileDescriptors()) {
             annotate(fileDescriptor);
         }
     }

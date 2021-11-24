@@ -65,7 +65,7 @@ final class MethodNameAnnotator extends Annotator {
     public void annotate() {
         if (!patterns.isEmpty()) {
             SourceVisitor<?> visitor = new AnnotateMethods();
-            descriptors().stream()
+            fileDescriptors().stream()
                     .map(TypeSet::from)
                     .map(TypeSet::allTypes)
                     .flatMap(ImmutableSet::stream)
