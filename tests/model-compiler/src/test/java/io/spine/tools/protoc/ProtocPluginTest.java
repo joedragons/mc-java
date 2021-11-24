@@ -56,7 +56,6 @@ import java.util.List;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SuppressWarnings("InnerClassMayBeStatic")
 @DisplayName("`ProtocPlugin` should")
@@ -140,9 +139,8 @@ final class ProtocPluginTest {
     void skipNonSpecifiedMessageTypes() {
         Class<?> cls = CustomerName.class;
         List<Class<?>> interfaces = ImmutableList.copyOf(cls.getInterfaces());
-        assertThat(interfaces).contains(
-                CustomerNameOrBuilder.class
-        );
+        assertThat(interfaces)
+                .contains(CustomerNameOrBuilder.class);
     }
 
     @Nested
