@@ -26,36 +26,54 @@
 
 package io.spine.test.tools.validate;
 
+import com.google.common.truth.Correspondence;
+import com.google.common.truth.IterableSubject;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
+import com.google.protobuf.Message;
 import io.spine.test.tools.validate.command.CreateProject;
 import io.spine.test.tools.validate.entity.Project;
 import io.spine.test.tools.validate.entity.Task;
 import io.spine.test.tools.validate.event.ProjectCreated;
-import io.spine.test.tools.validate.rejection.TestRejections;
+import io.spine.test.tools.validate.rejection.TestRejections.CannotCreateProject;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.MessageWithConstraints;
+import io.spine.validate.ValidationError;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.truth.Correspondence.transforming;
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static io.spine.base.Identifier.newUuid;
-import static java.util.stream.Collectors.toList;
+import static io.spine.test.tools.validate.IsValid.assertInvalid;
+import static io.spine.test.tools.validate.IsValid.assertValid;
+import static io.spine.test.tools.validate.UltimateChoice.CHICKEN;
+import static io.spine.test.tools.validate.UltimateChoice.FISH;
+import static io.spine.test.tools.validate.UltimateChoice.VEGETABLE;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("`(required)` constraint should be compiled so that")
 class RequiredConstraintTest {
 
+    private static final Correspondence<ConstraintViolation, String> fieldName = transforming(
+            violation -> violation.getFieldPath().getFieldName(0),
+            "field name"
+    );
+
     @Test
     @DisplayName("a number field can have any value")
     void ignoreNumbers() {
-        Singulars singulars = Singulars
-                .newBuilder()
-                .buildPartial();
-        checkNoViolation(singulars, "required_numbers_are_not_validated");
+        Singulars.Builder singulars = Singulars.newBuilder()
+                .setOneOrMoreBytes(ByteString.copyFromUtf8("qwerty"))
+                .setNotVegetable(CHICKEN)
+                .setNotEmptyString("   ")
+                .setNotDefault(Enclosed.newBuilder().setValue("  "));
+        assertValid(singulars);
     }
 
     @Nested
@@ -67,20 +85,20 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot be empty")
         void empty() {
-            Singulars singulars = Singulars
-                    .newBuilder()
-                    .buildPartial();
+            Singulars.Builder singulars = Singulars.newBuilder();
             checkViolation(singulars, FIELD);
         }
 
         @Test
         @DisplayName("must have a non-empty value")
         void acceptNonEmptyString() {
-            Singulars singulars = Singulars
+            Singulars.Builder singulars = Singulars
                     .newBuilder()
                     .setNotEmptyString(" ")
-                    .buildPartial();
-            checkNoViolation(singulars, FIELD);
+                    .setNotVegetable(FISH)
+                    .setNotDefault(Enclosed.newBuilder().setValue("  "))
+                    .setOneOrMoreBytes(ByteString.copyFromUtf8("foobar"));
+            assertValid(singulars);
         }
     }
 
@@ -93,27 +111,27 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot be empty")
         void empty() {
-            Singulars singulars = Singulars
-                    .newBuilder()
-                    .buildPartial();
+            Singulars.Builder singulars = Singulars.newBuilder();
             checkViolation(singulars, FIELD);
         }
 
         @Test
         @DisplayName("must have bytes, allowing all zeros")
         void nonEmpty() {
-            Singulars nonZeros = Singulars
-                    .newBuilder()
-                    .setOneOrMoreBytes(ByteString.copyFrom("non-empty", UTF_8))
-                    .buildPartial();
-            checkNoViolation(nonZeros, FIELD);
+            Singulars.Builder nonZeros = Singulars.newBuilder()
+                    .setNotDefault(Enclosed.newBuilder().setValue("non-default enclosed"))
+                    .setNotVegetable(CHICKEN)
+                    .setOneOrMoreBytes(ByteString.copyFromUtf8("non-empty"))
+                    .setNotEmptyString("str");
+            assertValid(nonZeros);
 
             byte[] zeros = {0};
-            Singulars withZeroes = Singulars
-                    .newBuilder()
+            Singulars.Builder withZeroes = Singulars.newBuilder()
                     .setOneOrMoreBytes(ByteString.copyFrom(zeros))
-                    .buildPartial();
-            checkNoViolation(withZeroes, FIELD);
+                    .setNotVegetable(CHICKEN)
+                    .setNotDefault(Enclosed.newBuilder().setValue("   "))
+                    .setNotEmptyString("  ");
+            assertValid(withZeroes);
         }
     }
 
@@ -126,21 +144,22 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot have a zero-index enum item value")
         void zeroValue() {
-            Singulars singulars = Singulars
+            Singulars.Builder singulars = Singulars
                     .newBuilder()
-                    .setNotVegetable(UltimateChoice.VEGETABLE)
-                    .buildPartial();
+                    .setNotVegetable(VEGETABLE);
             checkViolation(singulars, FIELD);
         }
 
         @Test
         @DisplayName("must have a non-zero index item value")
         void acceptNonDefaultEnum() {
-            Singulars singulars = Singulars
+            Singulars.Builder singulars = Singulars
                     .newBuilder()
-                    .setNotVegetable(UltimateChoice.CHICKEN)
-                    .buildPartial();
-            checkNoViolation(singulars, FIELD);
+                    .setOneOrMoreBytes(ByteString.copyFrom(new byte[]{0}))
+                    .setNotDefault(Enclosed.newBuilder().setValue("baz"))
+                    .setNotVegetable(CHICKEN)
+                    .setNotEmptyString("not empty");
+            assertValid(singulars);
         }
     }
 
@@ -153,21 +172,19 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot have a default message value")
         void defaultValue() {
-            Singulars singulars = Singulars
-                    .newBuilder()
-                    .buildPartial();
+            Singulars.Builder singulars = Singulars.newBuilder();
             checkViolation(singulars, FIELD);
         }
 
         @Test
         @DisplayName("must have a not-default message value")
         void nonDefaultMessage() {
-            Singulars singulars = Singulars
-                    .newBuilder()
-                    .setNotDefault(Enclosed.newBuilder()
-                                           .setValue(newUuid()))
-                    .buildPartial();
-            checkNoViolation(singulars, FIELD);
+            Singulars.Builder singulars = Singulars.newBuilder()
+                    .setNotVegetable(CHICKEN)
+                    .setOneOrMoreBytes(ByteString.copyFromUtf8("lalala"))
+                    .setNotDefault(Enclosed.newBuilder().setValue(newUuid()))
+                    .setNotEmptyString(" ");
+            assertValid(singulars);
         }
 
         @Test
@@ -175,15 +192,12 @@ class RequiredConstraintTest {
         void notAllowEmptyRequired() {
             final String fieldName = "impossible";
 
-            AlwaysInvalid unset = AlwaysInvalid
-                    .newBuilder()
-                    .build();
+            AlwaysInvalid.Builder unset = AlwaysInvalid.newBuilder();
             checkViolation(unset, fieldName);
 
-            AlwaysInvalid set = AlwaysInvalid
+            AlwaysInvalid.Builder set = AlwaysInvalid
                     .newBuilder()
-                    .setImpossible(Empty.getDefaultInstance())
-                    .build();
+                    .setImpossible(Empty.getDefaultInstance());
             checkViolation(set, fieldName);
         }
     }
@@ -192,8 +206,11 @@ class RequiredConstraintTest {
     @DisplayName("all violations on a single message are collected")
     void collectManyViolations() {
         Singulars instance = Singulars.getDefaultInstance();
-        List<ConstraintViolation> violations = instance.validate();
-        assertThat(violations).hasSize(4);
+        Optional<ValidationError> error = instance.validate();
+        assertThat(error)
+                .isPresent();
+        assertThat(error.get().getConstraintViolationList())
+                .hasSize(4);
     }
 
     @Nested
@@ -205,18 +222,20 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot be empty")
         void emptyRepeatedInt() {
-            Collections instance = Collections.getDefaultInstance();
+            Collections.Builder instance = Collections.newBuilder();
             checkViolation(instance, FIELD);
         }
 
         @Test
         @DisplayName("can have any items, including zero")
         void repeatedInt() {
-            Collections instance = Collections
+            Collections.Builder instance = Collections
                     .newBuilder()
                     .addNotEmptyListOfLongs(0L)
-                    .buildPartial();
-            checkNoViolation(instance, FIELD);
+                    .putContainsANonEmptyStringValue("", "")
+                    .addAtLeastOnePieceOfMeat(CHICKEN)
+                    .putNotEmptyMapOfInts(42, 0);
+            assertValid(instance);
         }
     }
 
@@ -229,18 +248,20 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot be empty")
         void empty() {
-            Collections instance = Collections.getDefaultInstance();
+            Collections.Builder instance = Collections.newBuilder();
             checkViolation(instance, FIELD);
         }
 
         @Test
         @DisplayName("can have entries with any values, including zero")
         void mapOfInts() {
-            Collections instance = Collections
+            Collections.Builder instance = Collections
                     .newBuilder()
                     .putNotEmptyMapOfInts(0, 0)
-                    .buildPartial();
-            checkNoViolation(instance, FIELD);
+                    .putContainsANonEmptyStringValue("  ", "")
+                    .addAtLeastOnePieceOfMeat(FISH)
+                    .addNotEmptyListOfLongs(981L);
+            assertValid(instance);
         }
     }
 
@@ -253,35 +274,35 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot be empty")
         void empty() {
-            Collections instance = Collections.getDefaultInstance();
+            Collections.Builder instance = Collections.newBuilder();
             checkViolation(instance, FIELD);
         }
 
         @Test
         @DisplayName("cannot have a single empty value entry")
         void nonEmptyValue() {
-            Collections empty = Collections
-                    .newBuilder()
-                    .putContainsANonEmptyStringValue("", "")
-                    .buildPartial();
-            checkViolation(empty, FIELD);
+            Collections.Builder empty = Collections.newBuilder()
+                    .putContainsANonEmptyStringValue("", "");
+            assertInvalid(empty);
 
-            Collections nonEmpty = Collections
-                    .newBuilder()
+            Collections.Builder nonEmpty = Collections.newBuilder()
                     .putContainsANonEmptyStringValue("", "")
                     .putContainsANonEmptyStringValue("foo", "bar")
-                    .buildPartial();
-            checkNoViolation(nonEmpty, FIELD);
+                    .putNotEmptyMapOfInts(0, 0)
+                    .addAtLeastOnePieceOfMeat(FISH)
+                    .addNotEmptyListOfLongs(42L);
+            assertValid(nonEmpty);
         }
 
         @Test
         @DisplayName("must have at least one non-empty entry")
         void mapOfStrings() {
-            Collections instance = Collections
-                    .newBuilder()
+            Collections.Builder instance = Collections.newBuilder()
+                    .addNotEmptyListOfLongs(42L)
                     .putContainsANonEmptyStringValue("", " ")
-                    .buildPartial();
-            checkNoViolation(instance, FIELD);
+                    .putNotEmptyMapOfInts(0, 0)
+                    .addAtLeastOnePieceOfMeat(CHICKEN);
+            assertValid(instance);
         }
     }
 
@@ -294,30 +315,32 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot be empty")
         void emptyRepeatedEnum() {
-            Collections instance = Collections.getDefaultInstance();
+            Collections.Builder instance = Collections.newBuilder();
             checkViolation(instance, FIELD);
         }
 
         @Test
         @DisplayName("cannot have all items with zero-index enum item value")
         void repeatedDefaultEnum() {
-            Collections allZero = Collections
-                    .newBuilder()
-                    .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-                    .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-                    .buildPartial();
+            Collections.Builder allZero = Collections.newBuilder()
+                    .putNotEmptyMapOfInts(42, 314)
+                    .addAtLeastOnePieceOfMeat(VEGETABLE)
+                    .addAtLeastOnePieceOfMeat(VEGETABLE)
+                    .putContainsANonEmptyStringValue("  ", "   ")
+                    .addNotEmptyListOfLongs(42L);
             checkViolation(allZero, FIELD);
         }
 
         @Test
         @DisplayName("must have at least one value with non-zero emum item value")
         void repeatedEnum() {
-            Collections instance = Collections
-                    .newBuilder()
-                    .addAtLeastOnePieceOfMeat(UltimateChoice.FISH)
-                    .addAtLeastOnePieceOfMeat(UltimateChoice.VEGETABLE)
-                    .buildPartial();
-            checkNoViolation(instance, FIELD);
+            Collections.Builder instance = Collections.newBuilder()
+                    .putContainsANonEmptyStringValue("", "")
+                    .addNotEmptyListOfLongs(24L)
+                    .putNotEmptyMapOfInts(0, 42)
+                    .addAtLeastOnePieceOfMeat(FISH)
+                    .addAtLeastOnePieceOfMeat(VEGETABLE);
+            assertValid(instance);
         }
     }
 
@@ -332,19 +355,15 @@ class RequiredConstraintTest {
             @Test
             @DisplayName("cannot be empty")
             void notSet() {
-                CreateProject msg = CreateProject
-                        .newBuilder()
-                        .buildPartial();
+                CreateProject.Builder msg = CreateProject.newBuilder();
                 checkViolation(msg, "id");
             }
 
             @Test
             @DisplayName("must have a non-empty value")
             void set() {
-                CreateProject msg = CreateProject
-                        .newBuilder()
-                        .setId(newUuid())
-                        .build();
+                CreateProject.Builder msg = CreateProject.newBuilder()
+                        .setId(newUuid());
                 assertValid(msg);
             }
         }
@@ -356,9 +375,7 @@ class RequiredConstraintTest {
             @Test
             @DisplayName("can be empty")
             void notSet() {
-                ProjectCreated msg = ProjectCreated
-                        .newBuilder()
-                        .build();
+                ProjectCreated.Builder msg = ProjectCreated.newBuilder();
                 assertValid(msg);
             }
         }
@@ -370,9 +387,7 @@ class RequiredConstraintTest {
             @Test
             @DisplayName("can be empty")
             void notSet() {
-                TestRejections.CannotCreateProject msg = TestRejections.CannotCreateProject
-                        .newBuilder()
-                        .build();
+                CannotCreateProject.Builder msg = CannotCreateProject.newBuilder();
                 assertValid(msg);
             }
         }
@@ -384,64 +399,54 @@ class RequiredConstraintTest {
             @Test
             @DisplayName("cannot be empty")
             void notSet() {
-                Project msg = Project
-                        .newBuilder()
-                        .buildPartial();
+                Project.Builder msg = Project.newBuilder();
                 checkViolation(msg, "id");
             }
 
             @Test
             @DisplayName("must have a non-empty value")
             void set() {
-                Project msg = Project
-                        .newBuilder()
-                        .setId(newUuid())
-                        .build();
+                Project.Builder msg = Project.newBuilder()
+                        .setId(newUuid());
                 assertValid(msg);
             }
 
             @Test
             @DisplayName("allowing to omit, if set as not `required` explicitly")
             void notRequired() {
-                Task msg = Task
-                        .newBuilder()
-                        .build();
+                Task.Builder msg = Task.newBuilder();
                 assertValid(msg);
             }
         }
-
-        private void assertValid(MessageWithConstraints msg) {
-            assertThat(msg.validate()).isEmpty();
-        }
     }
 
-    private static void checkViolation(MessageWithConstraints message, String field) {
+    private static void checkViolation(Message.Builder message, String field) {
         checkViolation(message, field, "must be set");
     }
 
-    private static void checkViolation(MessageWithConstraints message,
+    private static void checkViolation(Message.Builder message,
                                        String field,
                                        String errorMessagePart) {
-        List<ConstraintViolation> violations = message.validate();
-        List<ConstraintViolation> stringViolations = violationAtField(violations, field);
-        assertThat(stringViolations).hasSize(1);
-        ConstraintViolation violation = stringViolations.get(0);
-        assertThat(violation.getMsgFormat()).contains(errorMessagePart);
+        List<ConstraintViolation> violations = assertInvalid(message);
+        IterableSubject assertViolations = assertThat(violations);
+        assertViolations
+                .comparingElementsUsing(fieldName)
+                .contains(field);
+        ConstraintViolation violation = violationAtField(violations, field);
+        assertThat(violation.getMsgFormat())
+                .contains(errorMessagePart);
     }
 
-    private static void checkNoViolation(MessageWithConstraints message, String field) {
-        List<ConstraintViolation> violations = message.validate();
-        List<ConstraintViolation> stringViolations = violationAtField(violations, field);
-        assertThat(stringViolations).isEmpty();
-    }
-
-    private static List<ConstraintViolation>
+    private static ConstraintViolation
     violationAtField(List<ConstraintViolation> violations, String fieldName) {
         return violations
                 .stream()
                 .filter(violation -> violation.getFieldPath()
                                               .getFieldName(0)
                                               .equals(fieldName))
-                .collect(toList());
+                .findFirst()
+                .orElseGet(() -> fail(format(
+                        "No violation for field `%s`. Violations: %s", fieldName, violations
+                )));
     }
 }

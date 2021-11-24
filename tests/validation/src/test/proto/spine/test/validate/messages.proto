@@ -42,8 +42,8 @@ message AnExternalConstraint {
     // Redefines regex for invalid message, so it can be valid if has one more character.
     // The field index intentionally doesn't match the index in `AlwaysInvalid`
     // to test that the field is matched by name only and index doesn't considered.
-    string always_invalid_a = 2 [(pattern).regex = "^.{1,}$"];
-    string always_invalid_b = 1 [(pattern).regex = "^.{1,}$"];
+    string always_invalid_a = 2 [(pattern).regex = "^.{1,}"];
+    string always_invalid_b = 1 [(pattern).regex = "^.{1,}"];
 }
 
 message ConstraintTargetAggregate {
@@ -70,8 +70,8 @@ message AlwaysInvalid {
 
     // A required string should not be empty, but the declared regex "^$" match
     // only an empty string, so the field is always invalid.
-    string always_invalid_a = 1 [(required) = true, (pattern).regex = "^$"];
+    string always_invalid_a = 1 [(required) = true, (pattern).regex = "^"];
 
     // The second field with the same constraints as in the first field.
-    string always_invalid_b = 2 [(required) = true, (pattern).regex = "^$"];
+    string always_invalid_b = 2 [(required) = true, (pattern).regex = "^"];
 }

@@ -26,14 +26,16 @@
 
 package io.spine.test.tools.validate;
 
-import io.spine.test.tools.validate.PersonName;
 import io.spine.validate.ConstraintViolation;
+import io.spine.validate.ValidationError;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static io.spine.base.Identifier.newUuid;
 import static io.spine.base.Identifier.pack;
 
@@ -46,11 +48,16 @@ class ValidateConstraintTest {
         DeliveryReceiver wrongAddress = DeliveryReceiver
                 .newBuilder()
                 .setName(PersonName.newBuilder()
-                                   .setGivenName("Adam"))
+                                   .setGivenName("Adam")
+                                   .buildPartial())
                 .setAddress(Address.newBuilder()
-                                   .setSecondLine("Wall St. 1"))
+                                   .setSecondLine("Wall St. 1")
+                                   .buildPartial())
                 .buildPartial();
-        List<ConstraintViolation> violations = wrongAddress.validate();
+        Optional<ValidationError> error = wrongAddress.validate();
+        assertThat(error)
+                .isPresent();
+        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         ConstraintViolation wrapperViolation = violations.get(0);
@@ -76,18 +83,27 @@ class ValidateConstraintTest {
         DeliveryReceiver msg = DeliveryReceiver
                 .newBuilder()
                 .setName(PersonName.newBuilder()
-                                   .setGivenName("Eve"))
+                                 .setGivenName("Eve"))
                 .setAddress(Address.newBuilder()
-                                   .setFirstLine("Strand 42")
-                                   .setTown(Town.newBuilder()
-                                                .setCity("London")
-                                                .setCountry("UK")))
+                                    .setFirstLine("Strand 42")
+                                    .setTown(Town.newBuilder()
+                                                     .setCity("London")
+                                                     .setCountry("UK")
+                                                     .buildPartial()))
                 .addContact(PhoneNumber.getDefaultInstance())
-                .addContact(PhoneNumber.newBuilder().setDigits("not a number"))
-                .addContact(PhoneNumber.newBuilder().setDigits("definitely not a number"))
+                .addContact(PhoneNumber.newBuilder()
+                                    .setDigits("not a number")
+                                    .buildPartial())
+                .addContact(PhoneNumber.newBuilder()
+                                    .setDigits("definitely not a number")
+                                    .buildPartial())
                 .buildPartial();
-        List<ConstraintViolation> violations = msg.validate();
-        assertThat(violations).hasSize(2);
+        Optional<ValidationError> error = msg.validate();
+        assertThat(error)
+                .isPresent();
+        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
+        assertThat(violations)
+                .hasSize(2);
         for (ConstraintViolation invalidPhone : violations) {
             assertThat(invalidPhone.getFieldPath().getFieldName(0))
                     .isEqualTo("contact");
@@ -106,8 +122,8 @@ class ValidateConstraintTest {
                                       .newBuilder()
                                       .setValue(pack(newUuid())))
                 .build();
-        List<ConstraintViolation> violations = tree.validate();
-        assertThat(violations).isEmpty();
+        Optional<ValidationError> error = tree.validate();
+        assertThat(error).isEmpty();
     }
 
     @Test
@@ -122,7 +138,9 @@ class ValidateConstraintTest {
                                    .setTown(Town.newBuilder()
                                                 .setCity("Kharkiv")
                                                 .setCountry("Ukraine")))
-                .addEmail(EmailAddress.newBuilder().setValue("definitely not an email"))
+                .addEmail(EmailAddress.newBuilder()
+                                  .setValue("definitely not an email")
+                                  .buildPartial())
                 .build();
         assertThat(receiver.validate())
                 .isEmpty();

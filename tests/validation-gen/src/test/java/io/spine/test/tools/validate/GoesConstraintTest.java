@@ -26,17 +26,23 @@
 
 package io.spine.test.tools.validate;
 
-import com.google.common.collect.ImmutableList;
 import io.spine.base.FieldPath;
 import io.spine.type.TypeName;
 import io.spine.validate.ConstraintViolation;
+import io.spine.validate.ValidationError;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Optional;
+
+import static com.google.common.truth.Truth8.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static io.spine.base.Time.currentTime;
 
 @DisplayName("`(goes)` option should be compiled so that")
+@Disabled
 class GoesConstraintTest {
 
     @Test
@@ -47,7 +53,10 @@ class GoesConstraintTest {
                 .newBuilder()
                 .setWhenArchived(currentTime())
                 .buildPartial();
-        ImmutableList<ConstraintViolation> violations = paper.validate();
+        Optional<ValidationError> error = paper.validate();
+        assertThat(error)
+                .isPresent();
+        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0))

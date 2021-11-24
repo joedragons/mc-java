@@ -26,72 +26,71 @@
 
 package io.spine.test.tools.validate;
 
-import com.google.common.collect.ImmutableList;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Message;
 import io.spine.type.TypeName;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.MessageWithConstraints;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.google.common.base.Charsets.UTF_16;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static io.spine.test.tools.validate.IsValid.assertValid;
 
 @DisplayName("`(required_field)` option should be compiled so that")
+@Disabled
 class RequiredFieldConstraintTest {
 
     @Test
     @DisplayName("not set fields produce a violation")
     void notSet() {
-        Due invalidMessage = Due.newBuilder()
-                                .buildPartial();
+        Due.Builder invalidMessage = Due.newBuilder();
         assertInvalid(invalidMessage, "date | never");
     }
 
     @Test
     @DisplayName("a complete group of fields must be set")
     void notComplete() {
-        Combination invalidMessage = Combination
+        Combination.Builder invalidMessage = Combination
                 .newBuilder()
                 .setA1("a1")
-                .setB2(ByteString.copyFrom("b2", UTF_16))
-                .buildPartial();
+                .setB2(ByteString.copyFrom("b2", UTF_16));
         assertInvalid(invalidMessage, "a1 & a2 | b1 & b2");
-
     }
 
     @Test
     @DisplayName("if at least one alternative is set, no violation")
     void valid() {
-        Combination invalidMessage = Combination
+        Combination.Builder message = Combination
                 .newBuilder()
                 .setA1("a1")
-                .addA2("a2")
-                .build();
-        assertThat(invalidMessage.validate()).isEmpty();
+                .addA2("a2");
+        assertValid(message);
     }
 
     @Test
     @DisplayName("if all the alternatives are set, no violation")
     void all() {
-        Combination invalidMessage = Combination
+        Combination.Builder message = Combination
                 .newBuilder()
                 .setA1("a1")
                 .addA2("a2")
                 .putB1(42, 314)
-                .setB2(ByteString.copyFromUtf8("b2"))
-                .build();
-        assertThat(invalidMessage.validate()).isEmpty();
+                .setB2(ByteString.copyFromUtf8("b2"));
+        assertValid(message);
     }
 
-    private static void assertInvalid(MessageWithConstraints message, String violationParam) {
-        ImmutableList<ConstraintViolation> violations = message.validate();
+    private static void assertInvalid(Message.Builder message, String violationParam) {
+        List<ConstraintViolation> violations = IsValid.assertInvalid(message);
+        TypeName typeName = TypeName.of(message.buildPartial());
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
                 .containsExactly(ConstraintViolation
                                          .newBuilder()
-                                         .setTypeName(TypeName.of(message)
-                                                              .value())
+                                         .setTypeName(typeName.value())
                                          .addParam(violationParam)
                                          .build());
     }

@@ -26,24 +26,33 @@
 
 package io.spine.test.tools.validate;
 
-import com.google.common.collect.ImmutableList;
 import io.spine.validate.ConstraintViolation;
+import io.spine.validate.ValidationError;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Optional;
+
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 
 @DisplayName("Generated code should")
 class ExternalConstraintTest {
 
     @Test
     @DisplayName("call external validation")
+    @Disabled
     void validateExternal() {
         User user = User.newBuilder()
                         .addContact(Email.newBuilder()
                                          .setValue("not an email"))
                         .buildPartial();
-        ImmutableList<ConstraintViolation> violations = user.validate();
+        Optional<ValidationError> error = user.validate();
+        assertThat(error)
+                .isPresent();
+        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0)
@@ -62,7 +71,10 @@ class ExternalConstraintTest {
         User user = User.newBuilder()
                         .addShippingAddress(address)
                         .buildPartial();
-        ImmutableList<ConstraintViolation> violations = user.validate();
+        Optional<ValidationError> error = user.validate();
+        assertThat(error)
+                .isPresent();
+        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0)

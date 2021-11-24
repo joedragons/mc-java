@@ -24,12 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Contains smoke tests for generated validating builders.
- */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.test.validate;
+package io.spine.test.tools.validate;
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.protobuf.Message;
+import io.spine.validate.ConstraintViolation;
+import io.spine.validate.ValidationException;
+
+import java.util.List;
+
+import static com.google.common.truth.Truth.assertThat;
+import static io.spine.json.Json.toJson;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.fail;
+
+final class IsValid {
+
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private IsValid() {
+    }
+
+    static void assertValid(Message.Builder builder) {
+        Message msg = builder.build();
+        assertThat(msg)
+                .isNotNull();
+    }
+
+    @CanIgnoreReturnValue
+    static List<ConstraintViolation> assertInvalid(Message.Builder builder) {
+        try {
+            Message msg = builder.build();
+            return fail(format("Expected an invalid message but got: %s", toJson(msg)));
+        } catch (ValidationException e) {
+            return e.getConstraintViolations();
+        }
+    }
+}

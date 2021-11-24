@@ -51,6 +51,7 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
         );
 
         DependencyHandler dependencies = target.getDependencies();
-        dependencies.add("protoData", "io.spine.validation:java:2.0.0-SNAPSHOT.10");
+        dependencies.add("protoData", "io.spine.validation:java:2.0.0-SNAPSHOT.11");
+        dependencies.add("implementation", "io.spine.validation:runtime:2.0.0-SNAPSHOT.11");
     }
 }
