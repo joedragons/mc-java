@@ -34,7 +34,6 @@ import org.checkerframework.checker.regex.qual.Regex;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
