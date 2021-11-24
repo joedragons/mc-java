@@ -54,7 +54,6 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
  */
 public abstract class Annotator {
 
-
     private final ImmutableList<FileDescriptor> descriptors;
 
     /**
