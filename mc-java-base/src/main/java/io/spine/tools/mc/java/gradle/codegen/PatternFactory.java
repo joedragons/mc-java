@@ -24,49 +24,63 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.codegen;
+package io.spine.tools.mc.java.gradle.codegen;
 
-import io.spine.tools.protoc.FilePattern;
+import io.spine.tools.mc.java.codegen.FilePattern;
 import org.checkerframework.checker.regex.qual.Regex;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileRegex;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileSuffix;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
- * An utility for working with {@link FilePattern}.
+ * A factory of file patterns.
  */
-public final class FilePatterns {
+public final class PatternFactory {
 
-    /** Prevents instantiation of this utility class. */
-    private FilePatterns() {
+    private static final PatternFactory instance = new PatternFactory();
+
+    static PatternFactory instance() {
+        return instance;
     }
 
     /**
-     * Creates a new {@link FilePattern} with a {@code suffix} field filled.
+     * Prevents direct instantiation.
      */
-    public static FilePattern fileSuffix(@Regex String suffix) {
-        checkNotNull(suffix);
-        return FilePattern.newBuilder()
-                          .setSuffix(suffix)
-                          .build();
+    private PatternFactory() {
     }
 
     /**
-     * Creates a new {@link FilePattern} with a {@code prefix} field filled.
+     * Creates a new suffix pattern.
+     *
+     * @param value
+     *         the suffix value
      */
-    public static FilePattern filePrefix(@Regex String prefix) {
-        checkNotNull(prefix);
-        return FilePattern.newBuilder()
-                          .setPrefix(prefix)
-                          .build();
+    public FilePattern suffix(String value) {
+        checkNotEmptyOrBlank(value);
+        return fileSuffix(value);
     }
 
     /**
-     * Creates a new {@link FilePattern} with a {@code regex} field filled.
+     * Creates a new prefix pattern.
+     *
+     * @param value
+     *         the prefix value
      */
-    public static FilePattern fileRegex(@Regex String regex) {
-        checkNotNull(regex);
-        return FilePattern.newBuilder()
-                          .setRegex(regex)
-                          .build();
+    public FilePattern prefix(String value) {
+        checkNotEmptyOrBlank(value);
+        return filePrefix(value);
+    }
+
+    /**
+     * Creates a new regular expression pattern.
+     *
+     * @param value
+     *         the regex value
+     */
+    public FilePattern regex(@Regex String value) {
+        checkNotEmptyOrBlank(value);
+        return fileRegex(value);
     }
 }

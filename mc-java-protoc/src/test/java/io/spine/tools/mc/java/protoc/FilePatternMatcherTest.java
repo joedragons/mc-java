@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.protoc;
 
-import io.spine.tools.protoc.FilePattern;
+import io.spine.tools.mc.java.codegen.FilePattern;
 import io.spine.tools.protoc.plugin.FPMMessage;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
@@ -34,9 +34,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.testing.Assertions.assertNpe;
-import static io.spine.tools.mc.java.codegen.FilePatterns.filePrefix;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileRegex;
-import static io.spine.tools.mc.java.codegen.FilePatterns.fileSuffix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileRegex;
+import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileSuffix;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

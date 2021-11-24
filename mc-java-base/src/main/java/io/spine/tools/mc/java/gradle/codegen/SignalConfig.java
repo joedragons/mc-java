@@ -24,13 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.codegen;
+package io.spine.tools.mc.java.gradle.codegen;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.base.MessageFile;
 import io.spine.base.SignalMessage;
-import io.spine.tools.protoc.FilePattern;
-import io.spine.tools.protoc.Signals;
+import io.spine.tools.mc.java.codegen.FilePattern;
+import io.spine.tools.mc.java.codegen.Signals;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 

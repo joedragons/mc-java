@@ -28,10 +28,10 @@ package io.spine.tools.mc.java.protoc.column;
 
 import com.google.common.testing.NullPointerTester;
 import io.spine.option.OptionsProto;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.proto.code.ProtoOption;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.EnumType;
@@ -58,7 +58,7 @@ class ColumnGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newOptions();
 
         CodeGenerator generator = ColumnGen.instance(config);
         MessageType type = new MessageType(TaskView.getDescriptor());
@@ -71,7 +71,7 @@ class ColumnGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newOptions();
 
         CodeGenerator generator = ColumnGen.instance(config);
         EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
@@ -81,8 +81,8 @@ class ColumnGenTest {
                 .isEmpty();
     }
 
-    private static SpineProtocConfig newConfig() {
-        SpineProtocConfig.Builder config = SpineProtocConfig.newBuilder();
+    private static CodegenOptions newOptions() {
+        CodegenOptions.Builder config = CodegenOptions.newBuilder();
         config.getEntitiesBuilder()
               .setGenerateQueries(true)
               .addOption(

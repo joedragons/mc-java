@@ -30,8 +30,8 @@ import com.google.common.collect.ImmutableSet;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
-import io.spine.tools.protoc.SpineProtocConfig;
-import io.spine.tools.protoc.Validation;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.Validation;
 import io.spine.type.MessageType;
 import io.spine.type.Type;
 
@@ -53,7 +53,7 @@ public final class BuilderGen extends CodeGenerator {
     /**
      * Creates a new instance of the generator.
      */
-    public static CodeGenerator instance(SpineProtocConfig config) {
+    public static CodeGenerator instance(CodegenOptions config) {
         Validation validation = config.getValidation();
         return validation.getSkipBuilders()
                ? NoOpGenerator.instance()

@@ -24,15 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.codegen;
+package io.spine.tools.mc.java.gradle.codegen;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.Message;
 import io.spine.annotation.Internal;
 import io.spine.tools.proto.code.ProtoOption;
-import io.spine.tools.protoc.Entities;
-import io.spine.tools.protoc.FilePattern;
+import io.spine.tools.mc.java.codegen.Entities;
+import io.spine.tools.mc.java.codegen.FilePattern;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
@@ -51,7 +51,7 @@ import static java.util.stream.Collectors.toList;
  * may lead to runtime errors or unexpected behaviour in the Spine Event Engine framework.
  * Proceed with caution.
  *
- * @see JavaCodegenConfig#forEntities(Action)
+ * @see CodegenOptionsConfig#forEntities(Action)
  */
 public final class EntityConfig extends MessageGroupConfig<Entities> {
 

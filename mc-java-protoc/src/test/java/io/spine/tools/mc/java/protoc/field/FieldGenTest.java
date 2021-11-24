@@ -28,12 +28,12 @@ package io.spine.tools.mc.java.protoc.field;
 
 import com.google.common.testing.NullPointerTester;
 import io.spine.base.SubscribableField;
-import io.spine.tools.mc.java.codegen.FilePatterns;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
+import io.spine.tools.mc.java.codegen.GenerateFields;
+import io.spine.tools.mc.java.codegen.Messages;
+import io.spine.tools.mc.java.codegen.Pattern;
+import io.spine.tools.mc.java.gradle.codegen.FilePatterns;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.protoc.GenerateFields;
-import io.spine.tools.protoc.Messages;
-import io.spine.tools.protoc.Pattern;
-import io.spine.tools.protoc.SpineProtocConfig;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.EnumType;
@@ -60,7 +60,7 @@ class FieldGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newConfig();
 
         FieldGen generator = FieldGen.instance(config);
         MessageType type = new MessageType(TaskView.getDescriptor());
@@ -73,7 +73,7 @@ class FieldGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        SpineProtocConfig config = newConfig();
+        CodegenOptions config = newConfig();
 
         FieldGen generator = FieldGen.instance(config);
         EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
@@ -83,7 +83,7 @@ class FieldGenTest {
                 .isEmpty();
     }
 
-    private static SpineProtocConfig newConfig() {
+    private static CodegenOptions newConfig() {
         Messages.Builder messages = Messages.newBuilder();
         messages.setPattern(
                 Pattern.newBuilder().setFile(FilePatterns.fileSuffix("test_fields.proto")));
@@ -91,7 +91,7 @@ class FieldGenTest {
                 .setSuperclass(className(SubscribableField.class))
                 .build();
         messages.setGenerateFields(generateFields);
-        return SpineProtocConfig.newBuilder()
+        return CodegenOptions.newBuilder()
                 .addMessages(messages)
                 .build();
     }

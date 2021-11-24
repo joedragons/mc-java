@@ -25,8 +25,8 @@
  */
 
 val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.76")
-val mcVersion by extra("2.0.0-SNAPSHOT.79")
+val toolBaseVersion by extra("2.0.0-SNAPSHOT.77")
+val mcVersion by extra("2.0.0-SNAPSHOT.80")
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.79")
+val mcJavaVersion by extra("2.0.0-SNAPSHOT.81")
 val versionToPublish by extra(mcJavaVersion)

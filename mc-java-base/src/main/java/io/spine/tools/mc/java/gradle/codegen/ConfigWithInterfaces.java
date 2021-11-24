@@ -24,12 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.codegen;
+package io.spine.tools.mc.java.gradle.codegen;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.Message;
 import io.spine.tools.gradle.Multiple;
-import io.spine.tools.protoc.AddInterface;
+import io.spine.tools.mc.java.codegen.AddInterface;
 import org.gradle.api.Project;
 import org.gradle.api.provider.SetProperty;
 
