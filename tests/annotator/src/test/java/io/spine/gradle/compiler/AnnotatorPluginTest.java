@@ -38,8 +38,8 @@ import static io.spine.gradle.compiler.Assertions.assertNotInternal;
 import static io.spine.gradle.compiler.Assertions.assertNotSpi;
 import static io.spine.gradle.compiler.Assertions.assertSpi;
 
-@DisplayName("Annotator plugin should")
-class ProtoAnnotatorPluginTest {
+@DisplayName("`AnnotatorPlugin` should")
+class AnnotatorPluginTest {
 
     @Test
     @DisplayName("annotate SPI elements with provided annotation")

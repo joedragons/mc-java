@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.80")
-val mcVersion by extra("2.0.0-SNAPSHOT.83")
+package io.spine.tools.mc.java.annotation.mark;
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.82")
-val versionToPublish by extra(mcJavaVersion)
+import io.spine.code.java.ClassName;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+/**
+ * A builder of {@link Job} instances.
+ *
+ * <p>To receive an instance of the builder, call {@code ModuleAnnotator.translate(...)}.
+ * The builder completes the {@code Job} construction DSL with the {@link #as(ClassName)}
+ * method.
+ */
+public final class JobBuilder {
+
+    private final ApiOption targetOption;
+
+    JobBuilder(ApiOption targetOption) {
+        this.targetOption = checkNotNull(targetOption);
+    }
+
+    /**
+     * Builds an instance of {@code Job}.
+     */
+    public Job as(ClassName annotation) {
+        checkNotNull(annotation);
+        return new OptionJob(targetOption, annotation);
+    }
+}

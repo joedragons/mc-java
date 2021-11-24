@@ -138,6 +138,7 @@ subprojects {
                 force(
                     "io.spine:spine-base:$spineBaseVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
             }
@@ -269,4 +270,8 @@ val integrationTests by tasks.registering(RunBuild::class) {
 
 tasks.register("buildAll") {
     dependsOn(tasks.build, integrationTests)
+}
+
+val check: Task by tasks.getting {
+    dependsOn(integrationTests)
 }

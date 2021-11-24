@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.80")
-val mcVersion by extra("2.0.0-SNAPSHOT.83")
+package io.spine.tools.mc.java.annotation.mark;
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.82")
-val versionToPublish by extra(mcJavaVersion)
+import io.spine.code.java.ClassName;
+
+/**
+ * An annotation {@link Job} which covers generated Java classes which have a
+ * certain naming.
+ *
+ * <p>For example, all classes ending with {@code OrBuilder}.
+ */
+final class PatternJob extends AnnotationJob {
+
+    private final ClassNamePattern pattern;
+
+    PatternJob(ClassNamePattern pattern, ClassName annotation) {
+        super(annotation);
+        this.pattern = pattern;
+    }
+
+    @Override
+    public void execute(AnnotatorFactory factory) {
+        ClassName annotation = annotation();
+        ClassNamePattern pattern = this.pattern;
+        _debug().log("Annotating classes matching `%s` with `%s`.", pattern, annotation);
+        factory.createPatternAnnotator(annotation, pattern)
+               .annotate();
+        _debug().log("Pattern `%s` processed.", pattern);
+    }
+}

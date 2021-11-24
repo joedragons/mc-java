@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.80")
-val mcVersion by extra("2.0.0-SNAPSHOT.83")
+package io.spine.tools.mc.java.annotation.mark;
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.82")
-val versionToPublish by extra(mcJavaVersion)
+import io.spine.logging.Logging;
+
+/**
+ * An source code annotation job.
+ *
+ * <p>Typically, represents a piece of routine source code annotation work to perform.
+ */
+public interface Job extends Logging {
+
+    /**
+     * Executes this job.
+     *
+     * @param factory
+     *         a factory of {@link Annotator} instances to use to create annotators suitable for
+     *         the job
+     */
+    void execute(AnnotatorFactory factory);
+}

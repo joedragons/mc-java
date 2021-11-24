@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.75")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.80")
-val mcVersion by extra("2.0.0-SNAPSHOT.83")
+package io.spine.tools.mc.java.annotation.mark;
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.82")
-val versionToPublish by extra(mcJavaVersion)
+import io.spine.code.java.ClassName;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+abstract class AnnotationJob implements Job {
+
+    private final ClassName annotation;
+
+    AnnotationJob(ClassName annotation) {
+        this.annotation = checkNotNull(annotation);
+    }
+
+    protected final ClassName annotation() {
+        return annotation;
+    }
+}

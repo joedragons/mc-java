@@ -39,6 +39,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP;
+import static io.spine.tools.gradle.JavaConfigurationName.annotationProcessor;
+import static io.spine.tools.gradle.project.Projects.configuration;
 import static io.spine.tools.mc.java.checks.Artifacts.MC_JAVA_CHECKS_ARTIFACT;
 
 /**
@@ -87,7 +89,7 @@ class McJavaChecksDependencyTest {
     }
 
     private static boolean hasMcJavaChecksDependencyIn(Project project) {
-        Configuration config = AnnotationProcessorConfiguration.in(project);
+        Configuration config = configuration(project, annotationProcessor);
         DependencySet dependencies = config.getDependencies();
         for (Dependency d : dependencies) {
             if (MC_JAVA_CHECKS_ARTIFACT.equals(d.getName())

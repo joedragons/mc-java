@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.gradle.plugins;
 
-import io.spine.annotation.Internal;
 import io.spine.tools.gradle.task.TaskName;
 
 /**

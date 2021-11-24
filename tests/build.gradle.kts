@@ -29,6 +29,8 @@ import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyStandard
+import io.spine.internal.gradle.excludeProtobufLite
+import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
@@ -55,6 +57,21 @@ buildscript {
             exclude(group = "com.google.guava")
         }
         classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
+    }
+
+    val spineBaseVersion: String by extra
+    val toolBaseVersion: String by extra
+    with(configurations) {
+        io.spine.internal.gradle.doForceVersions(this)
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
+                )
+            }
+        }
     }
 }
 
@@ -84,6 +101,9 @@ allprojects {
         gitHub("model-compiler")
         mavenLocal()
     }
+
+    group = "io.spine.tools.tests"
+    version = extra["versionToPublish"]!!
 }
 
 subprojects {
@@ -110,6 +130,22 @@ subprojects {
         testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
+    }
+
+    val toolBaseVersion: String by extra
+    with(configurations) {
+        forceVersions()
+        excludeProtobufLite()
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
+                )
+            }
+        }
     }
 
     idea.module {

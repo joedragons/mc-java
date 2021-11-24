@@ -39,7 +39,7 @@ import java.nio.ByteBuffer;
 import static io.spine.gradle.compiler.Assertions.assertInternal;
 import static io.spine.gradle.compiler.Assertions.assertNotInternal;
 
-@DisplayName("`ProtoAnnotatorPlugin` should pick up `internalMethodNames` and")
+@DisplayName("`AnnotatorPlugin` should pick up `internalMethodNames` and")
 class MethodNameAnnotatorTest {
 
     @SuppressWarnings("DuplicateStringLiteralInspection") // Clashes with usages in codegen.

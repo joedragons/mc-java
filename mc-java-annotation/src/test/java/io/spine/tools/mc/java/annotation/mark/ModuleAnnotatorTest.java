@@ -31,7 +31,6 @@ import io.spine.annotation.Internal;
 import io.spine.code.java.ClassName;
 import io.spine.tools.mc.java.annotation.given.FakeAnnotator;
 import org.checkerframework.checker.regex.qual.Regex;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -90,7 +89,7 @@ class ModuleAnnotatorTest {
 
     private static void checkAnnotateByOption(ApiOption option) {
         FakeAnnotator.Factory factory = new FakeAnnotator.Factory();
-        ModuleAnnotator.Job optionJob = translate(option).as(ANNOTATION);
+        Job optionJob = translate(option).as(ANNOTATION);
         ModuleAnnotator annotator = ModuleAnnotator.newBuilder()
                 .add(optionJob)
                 .setAnnotatorFactory(factory)

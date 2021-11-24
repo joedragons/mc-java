@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.gradle.plugins;
 
-import io.spine.tools.gradle.ConfigurationName;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
@@ -40,15 +39,13 @@ import org.gradle.api.artifacts.Configuration;
 
 import java.io.File;
 
-import static io.spine.tools.gradle.ConfigurationName.runtimeClasspath;
-import static io.spine.tools.gradle.ConfigurationName.testRuntimeClasspath;
+import static io.spine.tools.gradle.JavaConfigurationName.runtimeClasspath;
+import static io.spine.tools.gradle.project.Projects.configuration;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
-import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
 import static io.spine.tools.gradle.task.ProtobufTaskName.generateProto;
-import static io.spine.tools.gradle.task.ProtobufTaskName.generateTestProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 
 /**
  * A Gradle plugin which merges the descriptor file with all the descriptor files from
@@ -57,81 +54,36 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSe
  * <p>The merge result is used to {@linkplain
  * io.spine.tools.type.MoreKnownTypes#extendWith(java.io.File) extend the known type registry}.
  */
-public class DescriptorSetMergerPlugin implements Plugin<Project> {
+final class DescriptorSetMergerPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        createTask(project, false);
-        createTask(project, true);
+        getSourceSetNames(project).forEach(ssn -> createTask(project, ssn));
     }
 
-    private static void createTask(Project project, boolean tests) {
-        Configuration configuration = configuration(project, runtimeClasspathConfName(tests));
+    private static void createTask(Project project, SourceSetName ssn) {
+        Configuration configuration = configuration(project, runtimeClasspath(ssn));
         Buildable dependencies = configuration.getAllDependencies();
-        GradleTask task = GradleTask.newBuilder(taskName(tests), createMergingAction(tests))
-                .insertAfterTask(generateProtoTaskName(tests))
-                .insertBeforeTask(processResourcesTaskName(tests))
+        Action<Task> action = createMergingAction(ssn);
+        GradleTask task = GradleTask.newBuilder(mergeDescriptorSet(ssn), action)
+                .insertAfterTask(generateProto(ssn))
+                .insertBeforeTask(processResources(ssn))
                 .applyNowTo(project);
         task.getTask().dependsOn(dependencies);
     }
 
-    private static Action<Task> createMergingAction(boolean tests) {
-        return new MergingAction(tests);
-    }
-
-    private static Configuration configuration(Project project, ConfigurationName name) {
-        return project.getConfigurations()
-                      .getByName(name.value());
-    }
-
-    private static ConfigurationName runtimeClasspathConfName(boolean tests) {
-        return tests
-               ? testRuntimeClasspath
-               : runtimeClasspath;
-    }
-
-    private static TaskName taskName(boolean tests) {
-        return tests
-               ? mergeTestDescriptorSet
-               : mergeDescriptorSet;
-    }
-
-    private static TaskName generateProtoTaskName(boolean tests) {
-        return tests
-               ? generateTestProto
-               : generateProto;
-    }
-
-    private static TaskName processResourcesTaskName(boolean tests) {
-        return tests
-               ? processTestResources
-               : processResources;
-    }
-
-    private static class MergingAction implements Action<Task> {
-
-        private final boolean tests;
-
-        private MergingAction(boolean tests) {
-            this.tests = tests;
-        }
-
-        @Override
-        public void execute(Task task) {
+    private static Action<Task> createMergingAction(SourceSetName ssn) {
+        return task -> {
             FileDescriptorSuperset superset = new FileDescriptorSuperset();
             Project project = task.getProject();
-            Configuration configuration = configuration(project, runtimeClasspathConfName(tests));
+            Configuration configuration = configuration(project, runtimeClasspath(ssn));
             configuration.forEach(superset::addFromDependency);
-            File descriptorSet = descriptorSetFile(project, sourceSet());
+            File descriptorSet = descriptorSetFile(project, ssn);
             if (descriptorSet.exists()) {
                 superset.addFromDependency(descriptorSet);
             }
             superset.merge()
                     .loadIntoKnownTypes();
-        }
-
-        private SourceSetName sourceSet() {
-            return tests ? SourceSetName.test : SourceSetName.main;
-        }
+        };
     }
 }
