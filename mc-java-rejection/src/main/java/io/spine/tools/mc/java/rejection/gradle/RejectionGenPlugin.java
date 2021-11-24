@@ -70,13 +70,10 @@ public class RejectionGenPlugin extends ProtoPlugin {
                              mainProtoFiles(project),
                              () -> generatedRejectionsDir(project, SourceSetName.main).toString(),
                              () -> protoDir(project,  SourceSetName.main).toString());
-        ProtoModule module = new ProtoModule(project);
         GradleTask mainTask =
                 GradleTask.newBuilder(generateRejections, mainScopeAction)
                         .insertAfterTask(mergeDescriptorSet)
                         .insertBeforeTask(compileJava)
-                        .withInputFiles(module.protoSource())
-                        .withOutputFiles(module.compiledRejections())
                         .applyNowTo(project);
         Action<Task> testScopeAction =
                 createAction(project,
@@ -88,10 +85,6 @@ public class RejectionGenPlugin extends ProtoPlugin {
                 GradleTask.newBuilder(generateTestRejections, testScopeAction)
                         .insertAfterTask(mergeTestDescriptorSet)
                         .insertBeforeTask(compileTestJava)
-                        .withInputFiles(module.protoSource())
-                        .withInputFiles(module.testProtoSource())
-                        .withOutputFiles(module.compiledRejections())
-                        .withOutputFiles(module.testCompiledRejections())
                         .applyNowTo(project);
 
         project.getLogger().debug(
