@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
 import static java.nio.file.Files.exists;
@@ -54,24 +55,24 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
  */
 public abstract class Annotator {
 
-    private final ImmutableList<FileDescriptor> descriptors;
-
-    /**
-     * The name of the Java class of the annotation to apply.
-     */
+    /** The name of the Java class of the annotation to apply. */
     private final ClassName annotation;
 
-    /**
-     * An absolute path to the Java sources to annotate.
-     */
-    private final Path genProtoDir;
+    /** Descriptor of files to process. */
+    private final ImmutableList<FileDescriptor> fileDescriptors;
+
+    /** Absolute path to the Java sources to annotate. */
+    private final Path genJavaDir;
 
     protected Annotator(ClassName annotation,
-                        ImmutableList<FileDescriptor> descriptors,
-                        Path genProtoDir) {
+                        ImmutableList<FileDescriptor> fileDescriptors,
+                        Path genJavaDir) {
         this.annotation = checkNotNull(annotation);
-        this.descriptors = checkNotNull(descriptors);
-        this.genProtoDir = checkNotNull(genProtoDir);
+        checkNotNull(fileDescriptors);
+        checkArgument(!fileDescriptors().isEmpty(),
+                      "Empty list of file descriptors passed to `%s`.", getClass().getName());
+        this.fileDescriptors = fileDescriptors;
+        this.genJavaDir = checkNotNull(genJavaDir);
     }
 
     /**
@@ -97,7 +98,7 @@ public abstract class Annotator {
      */
     protected <T extends JavaSource<T>>
     void rewriteSource(SourceFile relativeSourcePath, SourceVisitor<T> visitor) {
-        rewriteSource(genProtoDir, relativeSourcePath, visitor);
+        rewriteSource(genJavaDir, relativeSourcePath, visitor);
     }
 
     /**
@@ -163,8 +164,8 @@ public abstract class Annotator {
     /**
      * Obtains the list of file descriptors from which the annotated Java code is generated.
      */
-    protected final ImmutableList<FileDescriptor> descriptors() {
-        return descriptors;
+    protected final ImmutableList<FileDescriptor> fileDescriptors() {
+        return fileDescriptors;
     }
 
     /**
