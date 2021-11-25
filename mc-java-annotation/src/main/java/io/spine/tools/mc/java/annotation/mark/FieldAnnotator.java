@@ -69,7 +69,7 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor file : descriptors()) {
+        for (FileDescriptor file : fileDescriptors()) {
             annotate(file);
         }
     }

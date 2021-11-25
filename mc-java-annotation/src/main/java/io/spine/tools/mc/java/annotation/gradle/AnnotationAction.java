@@ -29,7 +29,6 @@ package io.spine.tools.mc.java.annotation.gradle;
 import com.google.common.collect.ImmutableSet;
 import io.spine.code.java.ClassName;
 import io.spine.logging.Logging;
-import io.spine.tools.StandardTypes;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.mc.java.annotation.mark.AnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.DefaultAnnotatorFactory;
@@ -59,6 +58,7 @@ import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatter
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
 import static io.spine.tools.mc.java.gradle.Projects.generatedGrpcDir;
 import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
+import static io.spine.tools.proto.fs.Directory.*;
 
 /**
  * A task action which performs generated code annotation.
@@ -95,12 +95,12 @@ final class AnnotationAction implements Action<Task>, Logging {
         if (protoSet == null) {
             return false;
         }
-        Set<File> files =
+        Set<File> dirs =
                 protoSet.getSourceDirectories()
                         .getFiles();
-        boolean containsProtoFiles = files.stream()
-                .anyMatch(StandardTypes::isProtoSource);
-        return containsProtoFiles;
+        boolean hasProtoDir = dirs.stream()
+                .anyMatch(dir -> dir.getPath().endsWith(rootName()));
+        return hasProtoDir;
     }
 
     private ModuleAnnotator createAnnotator(Project project) {

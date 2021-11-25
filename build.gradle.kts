@@ -266,6 +266,7 @@ val integrationTests by tasks.registering(RunBuild::class) {
     timeout.set(Duration.ofMinutes(20))
 
     dependsOn(localPublish)
+    shouldRunAfter(tasks.test)
 }
 
 tasks.register("buildAll") {

@@ -27,6 +27,8 @@
 package io.spine.tools.mc.java.annotation.mark;
 
 import com.google.common.collect.ImmutableList;
+import com.google.protobuf.DescriptorProtos.DescriptorProto;
+import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.Descriptors.GenericDescriptor;
@@ -70,8 +72,10 @@ public abstract class OptionAnnotator<D extends GenericDescriptor> extends Annot
      * Annotates the Java sources generated from the specified file descriptor.
      */
     protected final void annotate(FileDescriptor fileDescriptor) {
-        if (fileDescriptor.getOptions()
-                          .getJavaMultipleFiles()) {
+        boolean multipleFiles =
+                fileDescriptor.getOptions()
+                              .getJavaMultipleFiles();
+        if (multipleFiles) {
             annotateMultipleFiles(fileDescriptor);
         } else {
             annotateOneFile(fileDescriptor);
@@ -115,10 +119,19 @@ public abstract class OptionAnnotator<D extends GenericDescriptor> extends Annot
      * Annotates message class and MessageOrBuilder interface that correspond to the passed type.
      */
     protected final void annotateMessageTypes(Descriptor type, FileDescriptor file) {
-        SourceFile messageClass = SourceFile.forMessage(type.toProto(), file.toProto());
-        annotate(messageClass);
+        DescriptorProto typeProto = type.toProto();
+        FileDescriptorProto fileProto = file.toProto();
+        annotateMessage(typeProto, fileProto);
+        annotateInterface(typeProto, fileProto);
+    }
 
-        SourceFile messageOrBuilderInterface = SourceFile.forMessageOrBuilder(type.toProto(), file.toProto());
+    private void annotateMessage(DescriptorProto type, FileDescriptorProto file) {
+        SourceFile messageClass = SourceFile.forMessage(type, file);
+        annotate(messageClass);
+    }
+
+    private void annotateInterface(DescriptorProto type, FileDescriptorProto file) {
+        SourceFile messageOrBuilderInterface = SourceFile.forMessageOrBuilder(type, file);
         annotate(messageOrBuilderInterface);
     }
 }

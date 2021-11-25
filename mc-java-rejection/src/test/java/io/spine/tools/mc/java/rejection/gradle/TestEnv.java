@@ -57,7 +57,7 @@ final class TestEnv {
     private TestEnv() {
     }
 
-    public static GradleProject newProjectWithRejectionsJavadoc(File projectFolder) {
+    static GradleProject newProjectWithRejectionsJavadoc(File projectFolder) {
         return GradleProject.newBuilder()
                             .setProjectName("rejections-javadoc")
                             .setProjectFolder(projectFolder)
@@ -65,7 +65,7 @@ final class TestEnv {
                             .build();
     }
 
-    public static String rejectionsJavadocThrowableSource() {
+    static String rejectionsJavadocThrowableSource() {
         Path fileName = DefaultJavaPaths.at(Paths.get("/"))
                                         .generated()
                                         .mainSpine()

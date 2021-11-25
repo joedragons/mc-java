@@ -34,6 +34,7 @@ import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.Descriptors.ServiceDescriptor;
 import io.spine.tools.java.fs.SourceFile;
 import io.spine.code.java.ClassName;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.nio.file.Path;
 
@@ -47,7 +48,7 @@ import static io.spine.tools.java.fs.SourceFile.forService;
  * <p>Annotates generated top-level definitions from a {@code .proto} file,
  * if a specified {@linkplain FileOptions file option} value is {@code true}.
  */
-class FileAnnotator extends OptionAnnotator<FileDescriptor> {
+final class FileAnnotator extends OptionAnnotator<FileDescriptor> {
 
     private final Path genGrpcDir;
 
@@ -63,7 +64,7 @@ class FileAnnotator extends OptionAnnotator<FileDescriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor file : descriptors()) {
+        for (FileDescriptor file : fileDescriptors()) {
             if (shouldAnnotate(file)) {
                 annotate(file);
             }
@@ -139,9 +140,10 @@ class FileAnnotator extends OptionAnnotator<FileDescriptor> {
      * @param file the file descriptor to get service descriptors
      */
     private void annotateServices(FileDescriptor file) {
+        SourceVisitor<JavaClassSource> annotation = new TypeDeclarationAnnotation();
         for (ServiceDescriptor serviceDescriptor : file.getServices()) {
             SourceFile serviceClass = forService(serviceDescriptor.toProto(), file.toProto());
-            rewriteSource(genGrpcDir, serviceClass, new TypeDeclarationAnnotation());
+            rewriteSource(genGrpcDir, serviceClass, annotation);
         }
     }
 }

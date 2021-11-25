@@ -62,7 +62,7 @@ final class PatternAnnotator extends Annotator {
 
     @Override
     public void annotate() {
-        descriptors().stream()
+        fileDescriptors().stream()
                      .flatMap(PatternAnnotator::allClasses)
                      .filter(pattern::matches)
                      .forEach(this::annotate);

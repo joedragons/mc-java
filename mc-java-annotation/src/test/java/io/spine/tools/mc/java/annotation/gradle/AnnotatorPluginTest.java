@@ -95,6 +95,7 @@ class AnnotatorPluginTest {
                 .setProjectName(PROJECT_NAME)
                 .setProjectFolder(testProjectDir)
                 .addProtoFiles(GivenProtoFile.names())
+                .enableDebug()
                 .build();
         project.executeTask(annotateProto);
     }
