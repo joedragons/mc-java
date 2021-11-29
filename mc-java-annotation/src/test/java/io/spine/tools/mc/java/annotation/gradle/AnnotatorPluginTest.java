@@ -76,7 +76,6 @@ import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.INTERNAL_ME
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.INTERNAL_MESSAGE_MULTIPLE;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL_OPTIONS;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL_OPTIONS_MULTIPLE;
-import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.POTENTIAL_ANNOTATION_DUP;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.SPI_SERVICE;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
@@ -91,12 +90,9 @@ class AnnotatorPluginTest {
     @BeforeAll
     static void compileProject() {
         testProjectDir = TempDir.forClass(AnnotatorPluginTest.class);
-        GradleProject project = GradleProject.newBuilder()
-                .setProjectName(PROJECT_NAME)
-                .setProjectFolder(testProjectDir)
-                .addProtoFiles(GivenProtoFile.names())
-                .enableDebug()
-                .build();
+        GradleProject project = GradleProject.setupAt(testProjectDir)
+                .fromResources(PROJECT_NAME)
+                .create();
         project.executeTask(annotateProto);
     }
 
@@ -210,11 +206,9 @@ class AnnotatorPluginTest {
     @DisplayName("compile generated source with potential annotation duplication")
     void compilingSources() {
         File tempDir = TempDir.forClass(AnnotatorPluginTest.class);
-        GradleProject project = GradleProject.newBuilder()
-                .setProjectName(PROJECT_NAME)
-                .setProjectFolder(tempDir)
-                .addProtoFile(POTENTIAL_ANNOTATION_DUP.fileName().value())
-                .build();
+        GradleProject project = GradleProject.setupAt(tempDir)
+                .fromResources(PROJECT_NAME)
+                .create();
         project.executeTask(compileJava);
     }
 

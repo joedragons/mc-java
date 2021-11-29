@@ -51,14 +51,10 @@ class RejectionGenPluginTest {
     static void generateRejections() {
         testProjectDir = TempDir.forClass(RejectionGenPluginTest.class);
 
-        GradleProject project = GradleProject.newBuilder()
-                .setProjectName("rejections-gen-plugin-test")
-                .setProjectFolder(testProjectDir)
-                .addProtoFiles("main_rejections.proto",
-                               "outer_class_by_file_name_rejections.proto",
-                               "outer_class_set_rejections.proto",
-                               "deps/deps.proto")
-                .build();
+        GradleProject project = GradleProject.setupAt(testProjectDir)
+                .fromResources("rejections-gen-plugin-test")
+                .copyBuildSrc()
+                .create();
         project.executeTask(compileJava);
     }
 
@@ -93,20 +89,37 @@ class RejectionGenPluginTest {
         return targetRoot;
     }
 
-    @Test
+    @Nested
     @DisplayName("use the package specified in proto file options")
-    void packageName() {
-        // As defined in `resources/.../main_rejections.proto`.
-        Path packageDir = targetMainDir().resolve("io/spine/sample/rejections");
-        assertExists(packageDir);
+    class PackageDir {
 
-        // As defined in `resources/.../main_rejections.proto`.
-        assertJavaFileExists(packageDir, "Rejection1");
-        assertJavaFileExists(packageDir, "Rejection2");
-        assertJavaFileExists(packageDir, "Rejection3");
-        assertJavaFileExists(packageDir, "Rejection4");
-        assertJavaFileExists(packageDir, "RejectionWithRepeatedField");
-        assertJavaFileExists(packageDir, "RejectionWithMapField");
+        @Test
+        @DisplayName("for 'main' source set")
+        void mainPackageName() {
+            // As defined in `resources/.../main_rejections.proto`.
+            Path packageDir = targetMainDir().resolve("io/spine/sample/rejections");
+            assertExists(packageDir);
+
+            // As defined in `resources/.../main_rejections.proto`.
+            assertJavaFileExists(packageDir, "Rejection1");
+            assertJavaFileExists(packageDir, "Rejection2");
+            assertJavaFileExists(packageDir, "Rejection3");
+            assertJavaFileExists(packageDir, "Rejection4");
+            assertJavaFileExists(packageDir, "RejectionWithRepeatedField");
+            assertJavaFileExists(packageDir, "RejectionWithMapField");
+        }
+
+        @Test
+        @DisplayName("for 'test' source set")
+        void testPackageName() {
+            // As defined in `resources/.../test_rejections.proto`.
+            Path packageDir = targetTestDir().resolve("io/spine/sample/rejections");
+            assertExists(packageDir);
+
+            // As defined in `resources/.../main_rejections.proto`.
+            assertJavaFileExists(packageDir, "TestRejection1");
+            assertJavaFileExists(packageDir, "TestRejection2");
+        }
     }
 
     private static void assertExists(Path path) {
