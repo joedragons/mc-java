@@ -38,20 +38,21 @@ import java.io.File;
 import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.truth.Truth.assertThat;
 import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static java.lang.String.format;
 import static java.nio.file.Files.exists;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`RejectionGenPlugin` should")
 class RejectionGenPluginTest {
 
-    private static @MonotonicNonNull File testProjectDir = null;
+    private static @MonotonicNonNull File projectDir = null;
 
     @BeforeAll
     static void generateRejections() {
-        testProjectDir = TempDir.forClass(RejectionGenPluginTest.class);
+        projectDir = TempDir.forClass(RejectionGenPluginTest.class);
 
-        GradleProject project = GradleProject.setupAt(testProjectDir)
+        GradleProject project = GradleProject.setupAt(projectDir)
                 .fromResources("rejections-gen-plugin-test")
                 .copyBuildSrc()
                 .create();
@@ -76,8 +77,8 @@ class RejectionGenPluginTest {
     }
 
     private static Path generatedRoot() {
-        checkNotNull(testProjectDir);
-        return testProjectDir.toPath().resolve("generated/");
+        checkNotNull(projectDir);
+        return projectDir.toPath().resolve("generated/");
     }
     private static Path targetMainDir() {
         Path targetRoot = generatedRoot().resolve("main/spine/");
@@ -116,15 +117,14 @@ class RejectionGenPluginTest {
             Path packageDir = targetTestDir().resolve("io/spine/sample/rejections");
             assertExists(packageDir);
 
-            // As defined in `resources/.../main_rejections.proto`.
+            // As defined in `resources/.../test_rejections.proto`.
             assertJavaFileExists(packageDir, "TestRejection1");
             assertJavaFileExists(packageDir, "TestRejection2");
         }
     }
 
     private static void assertExists(Path path) {
-        assertThat(exists(path))
-                .isTrue();
+        assertTrue(exists(path), () -> format("The path `%s` is expected to exist.", path));
     }
 
     private static void assertJavaFileExists(Path packageDir, String typeName) {
