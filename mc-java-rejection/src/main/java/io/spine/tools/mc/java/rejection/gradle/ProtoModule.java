@@ -26,15 +26,17 @@
 
 package io.spine.tools.mc.java.rejection.gradle;
 
+import io.spine.tools.gradle.ProtobufDependencies;
 import io.spine.tools.gradle.SourceSetName;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
 import org.gradle.api.tasks.SourceSet;
 
 import java.nio.file.Path;
-import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.tools.gradle.ProtobufDependencies.sourceSetExtensionName;
 import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
 
@@ -59,68 +61,38 @@ final class ProtoModule {
     }
 
     /**
-     * Obtains a {@linkplain FileCollection collection of files} containing all the production
-     * Protobuf sources defined in this module.
+     * Obtains files with the Protobuf sources defined in this module for the given source set.
      *
+     * @param ssn
+     *         the name of the source set for which to obtain the source code of rejections
      * @apiNote The returned collection is a live view on the files, i.e. as the generated
-     *        directory is changing, the contents of the collection are mutated.
+     *         directory is changing, the contents of the collection are mutated.
      */
-    FileCollection protoSource() {
-        return protoSource(SourceSetName.main.toString());
+    FileCollection protoSource(SourceSetName ssn) {
+        @Nullable FileCollection protoFiles = protoFiles(ssn);
+        return protoFiles != null
+               ? protoFiles
+               : project.getLayout().files() /* Empty collection */;
     }
 
-    /**
-     * Obtains a {@linkplain FileCollection collection of files} containing all the test Protobuf
-     * sources defined in this module.
-     *
-     * @apiNote The returned collection is a live view on the files, i.e. as the generated
-     *        directory is changing, the contents of the collection are mutated.
-     */
-    FileCollection testProtoSource() {
-        return protoSource(SourceSetName.test.toString());
-    }
-
-    private FileCollection protoSource(String sourceSetName) {
-        SourceSet sourceSet = sourceSet(project, sourceSetName);
-        Optional<FileCollection> files = protoSource(sourceSet);
-        FileCollection emptyCollection = project.getLayout().files();
-        return files.orElse(emptyCollection);
-    }
-
-    private static Optional<FileCollection> protoSource(SourceSet sourceSet) {
-        Object rawExtension =
+    private @Nullable FileCollection protoFiles(SourceSetName ssn) {
+        SourceSet sourceSet = sourceSet(project, ssn);
+        @Nullable Object extension =
                 sourceSet.getExtensions()
-                         .findByName(SourceSetName.proto.toString());
-        if (rawExtension == null) {
-            return Optional.empty();
-        } else {
-            FileCollection protoSet = (FileCollection) rawExtension;
-            return Optional.of(protoSet);
-        }
+                         .findByName(sourceSetExtensionName());
+        return (FileCollection) extension;
     }
 
     /**
-     * Obtains a {@linkplain FileCollection collection of files} containing all the production
-     * {@linkplain io.spine.base.RejectionThrowable rejections} generated in this module.
+     * Obtains rejection files generated in this module for the given source set.
      *
+     * @param ssn
+     *         the name of the source set for which to obtain the source code of rejections
      * @apiNote The returned collection is a live view on the files, i.e. as the generated
-     *        directory is changing, the contents of the collection are mutated.
+     *         directory is changing, the contents of the collection is updated.
      */
-    FileCollection compiledRejections() {
-        Path targetDir = generatedRejectionsDir(project, SourceSetName.main);
-        FileCollection files = project.fileTree(targetDir);
-        return files;
-    }
-
-    /**
-     * Obtains a {@linkplain FileCollection collection of files} containing all the test
-     * {@linkplain io.spine.base.RejectionThrowable rejections} generated in this module.
-     *
-     * @apiNote The returned collection is a live view on the files, i.e. as the generated
-     *        directory is changing, the contents of the collection are mutated.
-     */
-    FileCollection testCompiledRejections() {
-        Path targetDir = generatedRejectionsDir(project, SourceSetName.test);
+    FileCollection generatedRejections(SourceSetName ssn) {
+        Path targetDir = generatedRejectionsDir(project, ssn);
         FileCollection files = project.fileTree(targetDir);
         return files;
     }
