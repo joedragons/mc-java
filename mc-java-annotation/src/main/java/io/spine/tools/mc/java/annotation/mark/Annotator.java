@@ -40,7 +40,6 @@ import org.jboss.forge.roaster.model.source.JavaSource;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.illegalStateWithCauseOf;
@@ -70,11 +69,6 @@ public abstract class Annotator {
         this.annotation = checkNotNull(annotation);
         checkNotNull(fileDescriptors);
         this.fileDescriptors = fileDescriptors;
-
-        DebugOut.write("**** File descriptors " +
-                               fileDescriptors.stream().map(FileDescriptor::getFullName).collect(
-                                       Collectors.<String>toList()));
-
         this.genJavaDir = checkNotNull(genJavaDir);
     }
 
