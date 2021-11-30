@@ -55,6 +55,7 @@ class RejectionGenPluginTest {
         GradleProject project = GradleProject.setupAt(projectDir)
                 .fromResources("rejections-gen-plugin-test")
                 .copyBuildSrc()
+                .enableRunnerDebug()
                 .create();
         project.executeTask(compileJava);
     }
