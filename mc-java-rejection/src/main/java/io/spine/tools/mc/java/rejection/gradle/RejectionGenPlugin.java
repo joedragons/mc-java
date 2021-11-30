@@ -69,7 +69,7 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         Helper helper = new Helper(project);
         helper.configure();
         project.getLogger().info(
-                "Rejection generation phase initialized with tasks: `{}`.",
+                "Rejection generation plugin initialized with tasks: `{}`.",
                 helper.tasks
         );
     }
