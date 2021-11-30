@@ -36,6 +36,7 @@ import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.file.FileCollection;
 
 import java.util.function.Supplier;
 
@@ -112,11 +113,13 @@ public final class RejectionGenPlugin implements Plugin<Project> {
             TaskName rejections = generateRejections(ssn);
             TaskName mergeTask = mergeDescriptorSet(ssn);
             TaskName compileTask = compileJava(ssn);
+            FileCollection inputFiles = module.protoSource(ssn);
+            FileCollection outputFiles = module.generatedRejections(ssn);
             GradleTask task = GradleTask.newBuilder(rejections, action)
                     .insertBeforeTask(compileTask)
                     .insertAfterTask(mergeTask)
-                    .withInputFiles(module.protoSource())
-                    .withOutputFiles(module.compiledRejections())
+                    .withInputFiles(inputFiles)
+                    .withOutputFiles(outputFiles)
                     .applyNowTo(project);
             return task;
         }
