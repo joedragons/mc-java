@@ -321,7 +321,7 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`RejectionMessage`")
         void generateRejectionMessageInsertionPoints() {
-            String filePath = protoFile("test_rejections.proto");
+            String filePath = protoFile("main_rejections.proto");
 
             FileDescriptorProto fileDescr =
                     Rejections.getDescriptor()

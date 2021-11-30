@@ -58,11 +58,10 @@ final class TestEnv {
     }
 
     static GradleProject newProjectWithRejectionsJavadoc(File projectFolder) {
-        return GradleProject.newBuilder()
-                            .setProjectName("rejections-javadoc")
-                            .setProjectFolder(projectFolder)
-                            .createProto("javadoc_rejections.proto", rejectionWithJavadoc())
-                            .build();
+        return GradleProject.setupAt(projectFolder)
+                            .addFile("src/main/proto/javadoc_rejections.proto",
+                                     rejectionWithJavadoc())
+                .create();
     }
 
     static String rejectionsJavadocThrowableSource() {

@@ -31,6 +31,7 @@ import io.spine.tools.gradle.testing.GradleProject;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -50,46 +51,75 @@ class RejectionGenPluginTest {
     static void generateRejections() {
         testProjectDir = TempDir.forClass(RejectionGenPluginTest.class);
 
-        GradleProject project = GradleProject.newBuilder()
-                .setProjectName("rejections-gen-plugin-test")
-                .setProjectFolder(testProjectDir)
-                .addProtoFiles("test_rejections.proto",
-                               "outer_class_by_file_name_rejections.proto",
-                               "outer_class_set_rejections.proto",
-                               "deps/deps.proto")
-                .build();
+        GradleProject project = GradleProject.setupAt(testProjectDir)
+                .fromResources("rejections-gen-plugin-test")
+                .copyBuildSrc()
+                .create();
         project.executeTask(compileJava);
     }
 
-    @Test
-    @DisplayName("place generated code under the `spine` directory")
-    void spineDir() {
-        Path spineDir = targetDir();
-        assertExists(spineDir);
+    @Nested
+    @DisplayName("place generated code under the `spine` directory for")
+    class GeneratedRoot {
+
+        @Test
+        @DisplayName("`main` source set")
+        void mainDir() {
+            assertExists(targetMainDir());
+        }
+
+        @Test
+        @DisplayName("`test` source set")
+        void testDir() {
+            assertExists(targetTestDir());
+        }
     }
 
-    private static Path targetDir() {
+    private static Path generatedRoot() {
         checkNotNull(testProjectDir);
-        Path targetRoot =
-                testProjectDir.toPath()
-                              .resolve("generated/main/spine/");
+        return testProjectDir.toPath().resolve("generated/");
+    }
+    private static Path targetMainDir() {
+        Path targetRoot = generatedRoot().resolve("main/spine/");
         return targetRoot;
     }
 
-    @Test
-    @DisplayName("use the package specified in proto file options")
-    void packageName() {
-        // As defined in `resources/.../test_rejections.proto`.
-        Path packageDir = targetDir().resolve("io/spine/sample/rejections");
-        assertExists(packageDir);
+    private static Path targetTestDir() {
+        Path targetRoot = generatedRoot().resolve("test/spine/");
+        return targetRoot;
+    }
 
-        // As defined in `resources/.../test_rejections.proto`.
-        assertJavaFileExists(packageDir, "Rejection1");
-        assertJavaFileExists(packageDir, "Rejection2");
-        assertJavaFileExists(packageDir, "Rejection3");
-        assertJavaFileExists(packageDir, "Rejection4");
-        assertJavaFileExists(packageDir, "RejectionWithRepeatedField");
-        assertJavaFileExists(packageDir, "RejectionWithMapField");
+    @Nested
+    @DisplayName("use the package specified in proto file options")
+    class PackageDir {
+
+        @Test
+        @DisplayName("for 'main' source set")
+        void mainPackageName() {
+            // As defined in `resources/.../main_rejections.proto`.
+            Path packageDir = targetMainDir().resolve("io/spine/sample/rejections");
+            assertExists(packageDir);
+
+            // As defined in `resources/.../main_rejections.proto`.
+            assertJavaFileExists(packageDir, "Rejection1");
+            assertJavaFileExists(packageDir, "Rejection2");
+            assertJavaFileExists(packageDir, "Rejection3");
+            assertJavaFileExists(packageDir, "Rejection4");
+            assertJavaFileExists(packageDir, "RejectionWithRepeatedField");
+            assertJavaFileExists(packageDir, "RejectionWithMapField");
+        }
+
+        @Test
+        @DisplayName("for 'test' source set")
+        void testPackageName() {
+            // As defined in `resources/.../test_rejections.proto`.
+            Path packageDir = targetTestDir().resolve("io/spine/sample/rejections");
+            assertExists(packageDir);
+
+            // As defined in `resources/.../main_rejections.proto`.
+            assertJavaFileExists(packageDir, "TestRejection1");
+            assertJavaFileExists(packageDir, "TestRejection2");
+        }
     }
 
     private static void assertExists(Path path) {

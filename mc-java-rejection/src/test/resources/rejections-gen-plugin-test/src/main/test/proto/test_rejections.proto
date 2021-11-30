@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,22 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-val spineBaseVersion by extra("2.0.0-SNAPSHOT.77")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.81")
-val mcVersion by extra("2.0.0-SNAPSHOT.83")
+package spine.sample.rejections;
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.82")
-val versionToPublish by extra(mcJavaVersion)
+option java_package = "io.spine.sample.rejections";
+option java_multiple_files = false;
+// Do not specify `java_outer_classname` option as we're not generating multiple
+// Java classes for rejections.
+
+import "google/protobuf/any.proto";
+
+message TestRejection1 {
+    string id = 1;
+}
+
+message TestRejection2 {
+    string id = 1;
+    google.protobuf.Any guts = 2;
+}

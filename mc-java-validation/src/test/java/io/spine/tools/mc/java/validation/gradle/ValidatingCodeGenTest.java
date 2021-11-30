@@ -20,7 +20,6 @@
 
 package io.spine.tools.mc.java.validation.gradle;
 
-import com.google.common.collect.ImmutableList;
 import io.spine.tools.gradle.testing.GradleProject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,22 +40,12 @@ class ValidatingCodeGenTest {
      */
     private static final String PROJECT_NAME = "validation-gen-plugin-test";
 
-    /**
-     * Names of resource files under the resources "root".
-     */
-    private static final ImmutableList<String> PROTO_FILES = ImmutableList.of(
-            "identifiers.proto",
-            "attributes.proto",
-            "changes.proto",
-            "test_commands.proto"
-    );
-
-    private File testProjectDir;
+    private File projectDir;
     private GradleProject project;
 
     @BeforeEach
-    void createProject(@TempDir Path tempDirPath) {
-        testProjectDir = tempDirPath.toFile();
+    void createProject(@TempDir Path tempDir) {
+        projectDir = tempDir.toFile();
         project = newProject();
     }
 
@@ -67,12 +56,9 @@ class ValidatingCodeGenTest {
     }
 
     private GradleProject newProject() {
-        GradleProject project = GradleProject.newBuilder()
-                .setProjectName(PROJECT_NAME)
-                .setProjectFolder(testProjectDir)
-                .addProtoFiles(PROTO_FILES)
-                .enableDebug()
-                .build();
+        GradleProject project = GradleProject.setupAt(projectDir)
+                .fromResources(PROJECT_NAME)
+                .create();
         return project;
     }
 }
