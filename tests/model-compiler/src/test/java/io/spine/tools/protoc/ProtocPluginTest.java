@@ -44,8 +44,8 @@ import io.spine.test.protoc.University;
 import io.spine.test.protoc.Wrapped;
 import io.spine.test.tools.protoc.Movie;
 import io.spine.test.tools.protoc.WeatherForecast;
-import io.spine.tools.mc.java.codegen.test.PIUserEvent;
-import io.spine.tools.mc.java.codegen.test.UserInfo;
+import io.spine.tools.protoc.test.PIUserEvent;
+import io.spine.tools.protoc.test.UserInfo;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -56,6 +56,7 @@ import java.util.List;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SuppressWarnings("InnerClassMayBeStatic")
 @DisplayName("`ProtocPlugin` should")
