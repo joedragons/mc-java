@@ -42,6 +42,7 @@ import io.spine.tools.mc.java.rejection.gen.RThrowableSpec;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -94,7 +95,8 @@ final class RejectionGenAction extends CodeGenerationAction {
         if (rejections.isEmpty()) {
             return;
         }
-        logGeneratingForFile(source);
+        Path outputDir = targetDir().toPath();
+        logGeneratingForFile(outputDir, source);
         for (RejectionType rejectionType : rejections) {
             // The name of the generated `ThrowableMessage` will be the same
             // as for the Protobuf message.
@@ -102,17 +104,21 @@ final class RejectionGenAction extends CodeGenerationAction {
 
             TypeSpec spec = new RThrowableSpec(rejectionType);
             TypeSpecWriter writer = new TypeSpecWriter(spec, indent());
-            writer.write(targetDir().toPath());
+            writer.write(outputDir);
         }
     }
 
-    private void logGeneratingForFile(RejectionsFile source) {
+    private void logGeneratingForFile(Path outputDir, RejectionsFile source) {
         _debug().log(
-                "Generating rejections from the file: `%s` " +
-                        "`javaPackage`: `%s`, `javaOuterClassName`: `%s`.",
+                "Generating rejections from the file: `%s`" +
+                        " `javaPackage`: `%s`," +
+                        " `javaOuterClassName`: `%s`." +
+                        " Output directory: `%s`.",
                 source.path(),
                 lazy(() -> PackageName.resolve(source.descriptor().toProto())),
-                lazy(() -> SimpleClassName.outerOf(source.descriptor()))
+                lazy(() -> SimpleClassName.outerOf(source.descriptor())),
+                outputDir
+
         );
     }
 
