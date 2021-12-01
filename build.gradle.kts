@@ -234,10 +234,19 @@ PomGenerator.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 
 /**
- * Collect `publishToMavenLocal` tasks for all sub-projects that are specified for
+ * Collect `publishToMavenLocal` tasks for all subprojects that are specified for
  * publishing in the root project.
  */
 val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
+
+val testAll by tasks.registering {
+    val testTasks = projectsToPublish.map { p ->
+        val subProject = project(p)
+        subProject.tasks["test"]
+    }
+    dependsOn(testTasks)
+}
+
 val localPublish by tasks.registering {
     val pubTasks = projectsToPublish.map { p ->
         val subProject = project(p)
@@ -258,9 +267,8 @@ val integrationTests by tasks.registering(RunBuild::class) {
 
     /** A timeout for the case of stalled child processes under Windows. */
     timeout.set(Duration.ofMinutes(20))
-
+    dependsOn(testAll)
     dependsOn(localPublish)
-    shouldRunAfter(tasks.test)
 }
 
 tasks.register("buildAll") {
