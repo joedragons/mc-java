@@ -38,7 +38,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -55,9 +55,10 @@ class RejectionGenPluginTest {
         GradleProject project = GradleProject.setupAt(projectDir)
                 .fromResources("rejections-gen-plugin-test")
                 .copyBuildSrc()
-                .enableRunnerDebug()
                 .create();
-        project.executeTask(compileJava);
+        // Executing the `compileTestJava` task should generate rejection types from both
+        // `test` and `main` source sets.
+        project.executeTask(compileTestJava);
     }
 
     @Nested
