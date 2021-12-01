@@ -47,6 +47,8 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.kotlin.applyJvmToolchain
+import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
 import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
 import io.spine.internal.gradle.publish.PublishExtension
 import io.spine.internal.gradle.publish.PublishingRepos
@@ -71,7 +73,7 @@ plugins {
     io.spine.internal.dependency.ErrorProne.GradlePlugin.apply {
         id(id)
     }
-    kotlin("jvm") version io.spine.internal.dependency.Kotlin.version
+    kotlin("jvm")
 }
 
 spinePublishing {
@@ -145,11 +147,7 @@ subprojects {
         }
     }
 
-    val javaVersion = JavaVersion.VERSION_1_8
-
     java {
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
         exposeTestArtifacts()
     }
 
@@ -161,19 +159,15 @@ subprojects {
     JavadocConfig.applyTo(project)
     CheckStyleConfig.applyTo(project)
 
+    val javaVersion = 11
     kotlin {
+        applyJvmToolchain(javaVersion)
         explicitApi()
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = javaVersion.toString()
-            freeCompilerArgs = listOf(
-                "-Xskip-prerelease-check",
-                "-Xjvm-default=all",
-                "-Xopt-in=kotlin.contracts.ExperimentalContracts"
-            )
-        }
+        kotlinOptions.jvmTarget = javaVersion.toString()
+        setFreeCompilerArgs()
     }
 
     tasks {
