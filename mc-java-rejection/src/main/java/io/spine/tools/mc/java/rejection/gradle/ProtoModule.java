@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.rejection.gradle;
 
-import io.spine.tools.gradle.ProtobufDependencies;
 import io.spine.tools.gradle.SourceSetName;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
@@ -39,6 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.gradle.ProtobufDependencies.sourceSetExtensionName;
 import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
+import static io.spine.tools.mc.java.gradle.Projects.protoFiles;
 
 /**
  * A source code module with Protobuf.
@@ -69,19 +69,19 @@ final class ProtoModule {
      *         directory is changing, the contents of the collection are mutated.
      */
     FileCollection protoSource(SourceSetName ssn) {
-        @Nullable FileCollection protoFiles = protoFiles(ssn);
+        @Nullable FileCollection protoFiles = protoFiles(project, ssn);
         return protoFiles != null
                ? protoFiles
                : project.getLayout().files() /* Empty collection */;
     }
 
-    private @Nullable FileCollection protoFiles(SourceSetName ssn) {
-        SourceSet sourceSet = sourceSet(project, ssn);
-        @Nullable Object extension =
-                sourceSet.getExtensions()
-                         .findByName(sourceSetExtensionName());
-        return (FileCollection) extension;
-    }
+//    private @Nullable FileCollection protoFiles(SourceSetName ssn) {
+//        SourceSet sourceSet = sourceSet(project, ssn);
+//        @Nullable Object extension =
+//                sourceSet.getExtensions()
+//                         .findByName(sourceSetExtensionName);
+//        return (FileCollection) extension;
+//    }
 
     /**
      * Obtains rejection files generated in this module for the given source set.
