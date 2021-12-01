@@ -159,14 +159,14 @@ subprojects {
     JavadocConfig.applyTo(project)
     CheckStyleConfig.applyTo(project)
 
-    val javaVersion = 11
+    val javaVersion = 8
     kotlin {
         applyJvmToolchain(javaVersion)
         explicitApi()
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions.jvmTarget = javaVersion.toString()
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
         setFreeCompilerArgs()
     }
 

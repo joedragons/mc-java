@@ -115,6 +115,12 @@ subprojects {
         plugin("idea")
     }
 
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(8))
+        }
+    }
+
     tasks.withType<JavaCompile> {
         configureJavac()
         configureErrorProne()
