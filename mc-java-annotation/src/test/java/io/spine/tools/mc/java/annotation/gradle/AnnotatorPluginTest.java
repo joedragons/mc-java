@@ -209,6 +209,7 @@ class AnnotatorPluginTest {
         File tempDir = TempDir.forClass(AnnotatorPluginTest.class);
         GradleProject project = GradleProject.setupAt(tempDir)
                 .fromResources(RESOURCE_DIR)
+                .copyBuildSrc()
                 .create();
         project.executeTask(compileJava);
     }
