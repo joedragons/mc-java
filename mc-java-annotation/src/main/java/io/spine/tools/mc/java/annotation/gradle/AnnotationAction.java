@@ -143,7 +143,7 @@ final class AnnotationAction implements Action<Task>, Logging {
                         "#generate-descriptor-set-files",
                 descriptorSetFile.getPath(),
                 sourceSetName,
-                sourceSetExtensionName()
+                sourceSetExtensionName
         );
     }
 }
