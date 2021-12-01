@@ -28,7 +28,7 @@ import io.spine.internal.gradle.Repos
 import org.gradle.api.file.SourceDirectorySet
 import java.net.URI
 
-// Common build file for the tests with same configuration
+import io.spine.internal.dependency.Grpc
 
 buildscript {
 
@@ -83,6 +83,8 @@ repositories {
 val spineBaseVersion: String by extra
 dependencies {
     implementation("io.spine:spine-base:$spineBaseVersion")
+    implementation(Grpc.stub)
+    implementation(Grpc.protobuf)
 }
 
 sourceSets {
