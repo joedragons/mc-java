@@ -26,8 +26,6 @@
 package io.spine.tools.mc.java.rejection.gradle;
 
 import com.google.common.collect.ImmutableList;
-import io.spine.code.proto.FileSet;
-import io.spine.tools.gradle.ProtoFiles;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.gradle.task.TaskName;
@@ -38,15 +36,11 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.file.FileCollection;
 
-import java.util.function.Supplier;
-
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
 import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
-import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
-import static io.spine.tools.mc.java.gradle.Projects.protoDir;
 
 /**
  * Plugin which generates Rejections declared in {@code rejections.proto} files.
@@ -98,15 +92,8 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         }
 
         private GradleTask createTask(SourceSetName ssn) {
-            Action<Task> action = createAction(ssn);
+            Action<Task> action = RejectionGenAction.create(project, ssn);
             return createTask(action, ssn);
-        }
-
-        private Action<Task> createAction(SourceSetName ssn) {
-            Supplier<FileSet> protoFiles = ProtoFiles.collect(project, ssn);
-            Supplier<String> rejectionsDir = () -> generatedRejectionsDir(project, ssn).toString();
-            Supplier<String> protoDir = () -> protoDir(project, ssn).toString();
-            return new RejectionGenAction(project, protoFiles, rejectionsDir, protoDir);
         }
 
         private GradleTask createTask(Action<Task> action, SourceSetName ssn) {
