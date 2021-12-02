@@ -21,7 +21,7 @@
 package io.spine.tools.mc.java.validation.gradle;
 
 import io.spine.tools.gradle.testing.GradleProject;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -34,31 +34,21 @@ import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
 @DisplayName("Validation code generation should")
 class ValidatingCodeGenTest {
 
-    /**
-     * The name of the directory under {@code test/resource} which will be used for creating
-     * the test project.
-     */
-    private static final String PROJECT_NAME = "validation-gen-plugin-test";
+    private static GradleProject project = null;
 
-    private File projectDir;
-    private GradleProject project;
-
-    @BeforeEach
-    void createProject(@TempDir Path tempDir) {
-        projectDir = tempDir.toFile();
-        project = newProject();
+    @BeforeAll
+    static void createProject(@TempDir Path tempDir) {
+        File projectDir = tempDir.toFile();
+        project = GradleProject
+                .setupAt(projectDir)
+                .fromResources("validation-gen-plugin-test")
+                .copyBuildSrc()
+                .create();
     }
 
     @Test
     @DisplayName("generate valid Java code")
     void generatingJavaCode() {
         project.executeTask(compileJava);
-    }
-
-    private GradleProject newProject() {
-        GradleProject project = GradleProject.setupAt(projectDir)
-                .fromResources(PROJECT_NAME)
-                .create();
-        return project;
     }
 }
