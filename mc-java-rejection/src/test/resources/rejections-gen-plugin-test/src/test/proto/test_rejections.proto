@@ -29,6 +29,7 @@ package spine.sample.rejections;
 
 option java_package = "io.spine.sample.rejections";
 option java_multiple_files = false;
+
 // Do not specify `java_outer_classname` option as we're not generating multiple
 // Java classes for rejections.
 
