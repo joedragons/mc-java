@@ -58,7 +58,7 @@ import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatter
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
 import static io.spine.tools.mc.java.gradle.Projects.generatedGrpcDir;
 import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
-import static io.spine.tools.proto.fs.Directory.*;
+import static io.spine.tools.proto.fs.Directory.rootName;
 
 /**
  * A task action which performs generated code annotation.
