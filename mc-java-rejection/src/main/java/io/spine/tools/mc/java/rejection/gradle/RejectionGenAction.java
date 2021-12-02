@@ -81,18 +81,18 @@ final class RejectionGenAction extends CodeGenerationAction {
      * files in the given sources set of the project.
      */
     static Action<Task> create(Project project, SourceSetName ssn) {
+        Supplier<String> protoSrcDir = () -> protoDir(project, ssn).toString();
         Supplier<FileSet> protoFiles = ProtoFiles.collect(project, ssn);
-        Supplier<String> rejectionsDir = () -> generatedRejectionsDir(project, ssn).toString();
-        Supplier<String> protoDir = () -> protoDir(project, ssn).toString();
-        return new RejectionGenAction(project, protoFiles, rejectionsDir, protoDir, ssn);
+        Supplier<String> targetDir = () -> generatedRejectionsDir(project, ssn).toString();
+        return new RejectionGenAction(project, ssn, protoSrcDir, protoFiles, targetDir);
     }
 
     private RejectionGenAction(Project project,
+                               SourceSetName ssn,
+                               Supplier<String> protoSrcDir,
                                Supplier<FileSet> protoFiles,
-                               Supplier<String> targetDirPath,
-                               Supplier<String> protoSrcDirPath,
-                               SourceSetName ssn) {
-        super(project, protoFiles, targetDirPath, protoSrcDirPath);
+                               Supplier<String> targetDir) {
+        super(project, protoFiles, targetDir, protoSrcDir);
         this.ssn = checkNotNull(ssn);
     }
 
