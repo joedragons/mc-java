@@ -72,7 +72,7 @@ plugins {
         id(id)
     }
     kotlin("jvm") version io.spine.internal.dependency.Kotlin.version
-    id("io.spine.proto-data") version "0.1.2"// apply false
+    id("io.spine.proto-data") version "0.1.2"
 }
 
 spinePublishing {
@@ -118,7 +118,7 @@ subprojects {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
 
-        protoData("io.spine.validation:java:2.0.0-SNAPSHOT.10")
+        protoData("io.spine.validation:java:2.0.0-SNAPSHOT.11")
 
         compileOnlyApi(FindBugs.annotations)
         compileOnlyApi(CheckerFramework.annotations)
@@ -131,7 +131,7 @@ subprojects {
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
 
-        testImplementation("io.spine.validation:runtime:2.0.0-SNAPSHOT.10")
+        testImplementation("io.spine.validation:runtime:2.0.0-SNAPSHOT.11")
     }
 
     val spineBaseVersion: String by extra
@@ -234,10 +234,7 @@ subprojects {
     publishProtoArtifact(project)
     LicenseReporter.generateReportIn(project)
 
-    protobuf {
-        generatedFilesBaseDir = generatedDir
-        protoc { artifact = Protobuf.compiler }
-    }
+    protobuf { protoc { artifact = Protobuf.compiler } }
 
     protoData {
         renderers(
