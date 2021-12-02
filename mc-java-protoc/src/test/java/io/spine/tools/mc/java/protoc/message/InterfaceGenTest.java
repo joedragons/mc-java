@@ -109,7 +109,6 @@ final class InterfaceGenTest {
     /**
      * The pattern for the detecting {@linkplain #JAVA_PACKAGE test data package}.
      */
-    @SuppressWarnings("DynamicRegexReplaceableByCompiledPattern")
     private static final String PACKAGE_PATTERN =
             "^\\s*" + JAVA_PACKAGE.value().replace(".", "\\.");
 
@@ -321,7 +320,7 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`RejectionMessage`")
         void generateRejectionMessageInsertionPoints() {
-            String filePath = protoFile("main_rejections.proto");
+            String filePath = protoFile("test_rejections.proto");
 
             FileDescriptorProto fileDescr =
                     Rejections.getDescriptor()
