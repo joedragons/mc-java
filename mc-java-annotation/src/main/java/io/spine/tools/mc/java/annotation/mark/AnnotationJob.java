@@ -31,7 +31,8 @@ import io.spine.code.java.ClassName;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Abstract base for code annotation jobs which holds the class name of the annotation to be allied.
+ * Abstract base for code annotation jobs which holds the class name of
+ * the annotation to be applied.
  */
 abstract class AnnotationJob implements Job {
 
