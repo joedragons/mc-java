@@ -29,9 +29,8 @@ package io.spine.tools.mc.java.annotation.mark;
 import io.spine.logging.Logging;
 
 /**
- * An source code annotation job.
- *
- * <p>Typically, represents a piece of routine source code annotation work to perform.
+ * A source code annotation job obtains required {@link Annotator} instances from
+ * {@link AnnotatorFactory} passed to the {@link #execute(AnnotatorFactory)} method.
  */
 public interface Job extends Logging {
 
@@ -39,8 +38,8 @@ public interface Job extends Logging {
      * Executes this job.
      *
      * @param factory
-     *         a factory of {@link Annotator} instances to use to create annotators suitable for
-     *         the job
+     *         a factory of {@link Annotator} instances to use to create annotators
+     *         suitable for the job
      */
     void execute(AnnotatorFactory factory);
 }
