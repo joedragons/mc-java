@@ -29,53 +29,72 @@ package io.spine.tools.mc.java.rejection.gradle;
 import io.spine.code.java.SimpleClassName;
 import io.spine.protobuf.Messages;
 import io.spine.testing.TempDir;
+import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.testing.GradleProject;
 import io.spine.tools.java.code.BuilderSpec;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocCapableSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
+import org.jboss.forge.roaster.model.source.JavaSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
+import static io.spine.tools.mc.java.gradle.McJavaTaskName.generateRejections;
 import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedBuilderClassComment;
 import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedClassComment;
 import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedFirstFieldComment;
 import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedSecondFieldComment;
-import static io.spine.tools.mc.java.rejection.gradle.TestEnv.newProjectWithRejectionsJavadoc;
+import static io.spine.tools.mc.java.rejection.gradle.TestEnv.rejectionWithJavadoc;
 import static io.spine.tools.mc.java.rejection.gradle.TestEnv.rejectionsJavadocThrowableSource;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
-@DisplayName("Rejection Javadoc ")
-public class RejectionJavadocTest {
+@DisplayName("Rejection code generator should")
+class RejectionJavadocTest {
 
-    private File testProjectDir;
+    private static JavaClassSource generatedSource = null;
 
-    @BeforeEach
-    void setUp() {
-        testProjectDir = TempDir.forClass(getClass());
+    @BeforeAll
+    static void generateSources() throws IOException {
+        File projectDir = TempDir.forClass(RejectionJavadocTest.class);
+        // Contains `build.gradle.kts`
+        GradleProject project = GradleProject
+                .setupAt(projectDir)
+                .copyBuildSrc()
+                .fromResources("rejection-javadoc-test") // Contains `build.gradle.kts`
+                .addFile("src/main/proto/javadoc_rejections.proto", rejectionWithJavadoc())
+                .create();
+        project.executeTask(generateRejections(SourceSetName.main));
+        File generatedFile = new File(
+                projectDir.getAbsolutePath() + rejectionsJavadocThrowableSource()
+        );
+        generatedSource = Roaster.parse(JavaClassSource.class, generatedFile);
     }
 
+    @Nested
+    @DisplayName("generate Javadoc for")
+    class GenerateJavadoc {
 
-    @Test
-    @DisplayName("generate rejection Javadoc")
-    void generateRejectionJavadoc() throws IOException {
-        GradleProject project = newProjectWithRejectionsJavadoc(testProjectDir);
-        project.executeTask(compileJava);
-        String projectAbsolutePath = testProjectDir.getAbsolutePath();
-        File generatedFile = new File(projectAbsolutePath + rejectionsJavadocThrowableSource());
-        JavaClassSource generatedSource = Roaster.parse(JavaClassSource.class, generatedFile);
-        assertRejectionJavadoc(generatedSource);
-        assertBuilderJavadoc(
-                (JavaClassSource) generatedSource.getNestedType(SimpleClassName.ofBuilder().value())
-        );
+        @Test
+        @DisplayName("rejection type")
+        void forRejection() {
+            assertRejectionJavadoc(generatedSource);
+        }
+
+        @Test
+        @DisplayName("`Builder` of rejection")
+        void forBuilder() {
+            String builderTypeName = SimpleClassName.ofBuilder().value();
+            JavaSource<?> builderType = generatedSource.getNestedType(builderTypeName);
+            assertBuilderJavadoc((JavaClassSource) builderType);
+        }
     }
 
     private static void assertRejectionJavadoc(JavaClassSource rejection) {
