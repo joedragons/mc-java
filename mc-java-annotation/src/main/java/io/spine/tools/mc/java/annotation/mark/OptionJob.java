@@ -28,6 +28,7 @@ package io.spine.tools.mc.java.annotation.mark;
 
 import com.google.common.flogger.FluentLogger;
 import io.spine.code.java.ClassName;
+import io.spine.logging.Logging;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * An annotation {@link Job} which covers Java sources generated from Protobuf
  * marked with a certain {@link ApiOption}.
  */
-final class OptionJob extends AnnotationJob {
+final class OptionJob extends AnnotationJob implements Logging {
 
     private final ApiOption protobufOption;
 

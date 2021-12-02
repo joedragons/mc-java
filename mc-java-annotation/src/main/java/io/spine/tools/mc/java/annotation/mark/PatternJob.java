@@ -27,6 +27,7 @@
 package io.spine.tools.mc.java.annotation.mark;
 
 import io.spine.code.java.ClassName;
+import io.spine.logging.Logging;
 
 /**
  * An annotation {@link Job} which covers generated Java classes which have a
@@ -34,7 +35,7 @@ import io.spine.code.java.ClassName;
  *
  * <p>For example, all classes ending with {@code OrBuilder}.
  */
-final class PatternJob extends AnnotationJob {
+final class PatternJob extends AnnotationJob implements Logging {
 
     private final ClassNamePattern pattern;
 

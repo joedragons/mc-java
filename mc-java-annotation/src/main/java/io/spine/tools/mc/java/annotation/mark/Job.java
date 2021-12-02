@@ -32,7 +32,7 @@ import io.spine.logging.Logging;
  * A source code annotation job obtains required {@link Annotator} instances from
  * {@link AnnotatorFactory} passed to the {@link #execute(AnnotatorFactory)} method.
  */
-public interface Job extends Logging {
+public interface Job {
 
     /**
      * Executes this job.

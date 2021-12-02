@@ -28,13 +28,14 @@ package io.spine.tools.mc.java.annotation.mark;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.code.java.ClassName;
+import io.spine.logging.Logging;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * An annotation {@link Job} which annotates methods matching certain naming patterns.
  */
-final class MethodNameJob extends AnnotationJob {
+final class MethodNameJob extends AnnotationJob implements Logging {
 
     private final ImmutableSet<MethodPattern> patterns;
 
