@@ -29,9 +29,10 @@ package io.spine.tools.mc.java.annotation.mark;
 import com.google.common.collect.ImmutableSet;
 import io.spine.code.java.ClassName;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * An annotation {@link Job} which annotates methods matching certain naming
- * patterns.
+ * An annotation {@link Job} which annotates methods matching certain naming patterns.
  */
 final class MethodNameJob extends AnnotationJob {
 
@@ -39,14 +40,13 @@ final class MethodNameJob extends AnnotationJob {
 
     MethodNameJob(ImmutableSet<MethodPattern> patterns, ClassName annotation) {
         super(annotation);
-        this.patterns = patterns;
+        this.patterns = checkNotNull(patterns);
     }
 
     @Override
     public void execute(AnnotatorFactory factory) {
         ClassName annotation = annotation();
-        _debug().log("Annotating methods matching patterns `%s` with `%s`.",
-                     patterns, annotation);
+        _debug().log("Annotating methods matching patterns `%s` with `%s`.", patterns, annotation);
         factory.createMethodAnnotator(annotation, patterns)
                .annotate();
     }
