@@ -61,7 +61,7 @@ import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
 import static io.spine.tools.proto.fs.Directory.rootName;
 
 /**
- * A task action which performs generated code annotation.
+ * A task action which annotates the generated code.
  */
 final class AnnotationAction implements Action<Task>, Logging {
 
