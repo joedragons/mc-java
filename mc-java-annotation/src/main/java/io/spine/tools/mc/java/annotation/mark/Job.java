@@ -23,53 +23,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-syntax = "proto3";
 
-package spine.sample.rejections;
+package io.spine.tools.mc.java.annotation.mark;
 
-option java_package="io.spine.sample.rejections";
-option java_multiple_files = false;
-// Do not specify java_outer_classname option as we're not generating multiple Java classes for rejections.
+import io.spine.logging.Logging;
 
-import "deps/deps.proto";
-import "google/protobuf/any.proto";
+/**
+ * A source code annotation job obtains required {@link Annotator} instances from
+ * {@link AnnotatorFactory} passed to the {@link #execute(AnnotatorFactory)} method.
+ */
+public interface Job {
 
-message Rejection1 {
-    spine.sample.rejections.deps.Rejection1Dep id = 1;
-}
-
-message Rejection2 {
-    spine.sample.rejections.deps.Rejection2DepEnum id = 1;
-}
-
-message Rejection3 {
-    Rejection3Inner innerMessage = 2;
-
-    message Rejection3Inner {
-        string id = 1;
-    }
-}
-
-message Rejection4 {
-    string id = 1;
-    google.protobuf.Any any_id = 2;
-    bool boolean_id = 3;
-    Rejection4Inner inner_id = 4;
-    Rejection4InnerEnum inner_enum_id = 5;
-
-    message Rejection4Inner {
-        string id = 1;
-    }
-
-    enum Rejection4InnerEnum {
-        OK = 0;
-    }
-}
-
-message RejectionWithRepeatedField {
-    repeated int32 values = 1;
-}
-
-message RejectionWithMapField {
-    map<int32, int32> map = 1;
+    /**
+     * Executes this job.
+     *
+     * @param factory
+     *         a factory of {@link Annotator} instances to use to create annotators
+     *         suitable for the job
+     */
+    void execute(AnnotatorFactory factory);
 }

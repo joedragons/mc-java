@@ -37,6 +37,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.tools.mc.checks.Severity.ERROR;
+import static io.spine.tools.mc.java.checks.gradle.McJavaChecksSeverity.EQUALITY_ERROR;
 import static io.spine.tools.mc.java.checks.gradle.McJavaChecksSeverity.ERROR_PRONE_PLUGIN_ID;
 
 /**
@@ -93,7 +94,7 @@ class McJavaChecksSeverityTest {
     }
 
     private void checkSeverityConfiguredToError() {
-        ProjectConfigurations.assertCompileTasksContain(project, "-Xep:ReferenceEquality:ERROR");
+        ProjectConfigurations.assertCompileTasksContain(project, EQUALITY_ERROR);
     }
 
     private void checkSeverityNotConfigured() {

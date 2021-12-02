@@ -76,7 +76,6 @@ import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.INTERNAL_ME
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.INTERNAL_MESSAGE_MULTIPLE;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL_OPTIONS;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL_OPTIONS_MULTIPLE;
-import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.POTENTIAL_ANNOTATION_DUP;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.SPI_SERVICE;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
@@ -84,18 +83,17 @@ import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 @DisplayName("`AnnotatorPlugin` should")
 class AnnotatorPluginTest {
 
-    private static final String PROJECT_NAME = "annotator-plugin-test";
+    private static final String RESOURCE_DIR = "annotator-plugin-test";
 
-    private static File testProjectDir = null;
+    private static File projectDir = null;
 
     @BeforeAll
     static void compileProject() {
-        testProjectDir = TempDir.forClass(AnnotatorPluginTest.class);
-        GradleProject project = GradleProject.newBuilder()
-                .setProjectName(PROJECT_NAME)
-                .setProjectFolder(testProjectDir)
-                .addProtoFiles(GivenProtoFile.names())
-                .build();
+        projectDir = TempDir.forClass(AnnotatorPluginTest.class);
+        GradleProject project = GradleProject.setupAt(projectDir)
+                .fromResources(RESOURCE_DIR)
+                .copyBuildSrc()
+                .create();
         project.executeTask(annotateProto);
     }
 
@@ -209,11 +207,10 @@ class AnnotatorPluginTest {
     @DisplayName("compile generated source with potential annotation duplication")
     void compilingSources() {
         File tempDir = TempDir.forClass(AnnotatorPluginTest.class);
-        GradleProject project = GradleProject.newBuilder()
-                .setProjectName(PROJECT_NAME)
-                .setProjectFolder(tempDir)
-                .addProtoFile(POTENTIAL_ANNOTATION_DUP.fileName().value())
-                .build();
+        GradleProject project = GradleProject.setupAt(tempDir)
+                .fromResources(RESOURCE_DIR)
+                .copyBuildSrc()
+                .create();
         project.executeTask(compileJava);
     }
 
@@ -279,7 +276,7 @@ class AnnotatorPluginTest {
     }
 
     private static void check(Path sourcePath, SourceCheck check) throws IOException {
-        Path filePath = DefaultJavaPaths.at(testProjectDir)
+        Path filePath = DefaultJavaPaths.at(projectDir)
                                         .generated()
                                         .mainJava()
                                         .resolve(sourcePath);
@@ -291,7 +288,7 @@ class AnnotatorPluginTest {
 
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
-        Path fullPath = DefaultJavaPaths.at(testProjectDir)
+        Path fullPath = DefaultJavaPaths.at(projectDir)
                                         .generated()
                                         .mainGrpc()
                                         .resolve(serviceFile);
@@ -315,10 +312,10 @@ class AnnotatorPluginTest {
      * as defined in the test project under {@code resources/annotator-plugin-test}.
      */
     private static Path mainDescriptorPath() {
-        return DefaultJavaPaths.at(testProjectDir)
+        return DefaultJavaPaths.at(projectDir)
                 .buildRoot()
                 .descriptors()
                 .forSourceSet(MAIN_SOURCE_SET_NAME)
-                .resolve("io.spine.test_" + testProjectDir.getName() + "_3.14" + DESC_EXTENSION);
+                .resolve("io.spine.test_" + projectDir.getName() + "_3.14" + DESC_EXTENSION);
     }
 }

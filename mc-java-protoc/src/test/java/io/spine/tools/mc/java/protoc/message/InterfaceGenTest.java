@@ -109,7 +109,6 @@ final class InterfaceGenTest {
     /**
      * The pattern for the detecting {@linkplain #JAVA_PACKAGE test data package}.
      */
-    @SuppressWarnings("DynamicRegexReplaceableByCompiledPattern")
     private static final String PACKAGE_PATTERN =
             "^\\s*" + JAVA_PACKAGE.value().replace(".", "\\.");
 

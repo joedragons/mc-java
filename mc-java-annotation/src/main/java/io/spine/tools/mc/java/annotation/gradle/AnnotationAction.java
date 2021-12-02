@@ -37,12 +37,17 @@ import io.spine.tools.mc.java.gradle.CodeGenAnnotations;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.logging.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.tools.gradle.ProtobufDependencies.sourceSetExtensionName;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.project.Projects.protoDirectorySet;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.internal;
@@ -53,35 +58,49 @@ import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatter
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
 import static io.spine.tools.mc.java.gradle.Projects.generatedGrpcDir;
 import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
+import static io.spine.tools.proto.fs.Directory.rootName;
 
 /**
- * A task action which performs generated code annotation.
+ * A task action which annotates the generated code.
  */
 final class AnnotationAction implements Action<Task>, Logging {
 
-    private final SourceSetName sourceSet;
+    private final SourceSetName sourceSetName;
 
     /**
      * Creates a new action instance.
-     *
-     * @param mainCode
-     *         if {@code true} the production code will be annotated,
-     *         otherwise the action will annotate the code of tests
      */
-    AnnotationAction(boolean mainCode) {
-        this.sourceSet = mainCode ? SourceSetName.main : SourceSetName.test;
+    AnnotationAction(SourceSetName ssn) {
+        this.sourceSetName = checkNotNull(ssn);
     }
 
     @Override
     public void execute(Task task) {
         Project project = task.getProject();
-        File descriptorSetFile = descriptorSetFile(project, sourceSet);
+        if (!containsProtoCode(project)) {
+            return;
+        }
+        File descriptorSetFile = descriptorSetFile(project, sourceSetName);
         if (!descriptorSetFile.exists()) {
             logMissing(project.getLogger(), descriptorSetFile);
             return;
         }
         ModuleAnnotator annotator = createAnnotator(project);
         annotator.annotate();
+    }
+
+    /** Verifies of the source set of the given project contains Protobuf source code. */
+    private boolean containsProtoCode(Project project) {
+        SourceDirectorySet protoSet = protoDirectorySet(project, sourceSetName);
+        if (protoSet == null) {
+            return false;
+        }
+        Set<File> dirs =
+                protoSet.getSourceDirectories()
+                        .getFiles();
+        boolean hasProtoDir = dirs.stream()
+                .anyMatch(dir -> dir.getPath().endsWith(rootName()));
+        return hasProtoDir;
     }
 
     private ModuleAnnotator createAnnotator(Project project) {
@@ -103,24 +122,28 @@ final class AnnotationAction implements Action<Task>, Logging {
     }
 
     private AnnotatorFactory createAnnotationFactory(Project project) {
-        File descriptorSetFile = descriptorSetFile(project, sourceSet);
-        Path generatedJavaPath = generatedJavaDir(project, sourceSet);
-        Path generatedGrpcPath = generatedGrpcDir(project, sourceSet);
+        SourceSetName ssn = sourceSetName;
+        File descriptorSetFile = descriptorSetFile(project, ssn);
+        Path generatedJavaPath = generatedJavaDir(project, ssn);
+        Path generatedGrpcPath = generatedGrpcDir(project, ssn);
         AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory.newInstance(
                 descriptorSetFile, generatedJavaPath, generatedGrpcPath
         );
         return annotatorFactory;
     }
 
-    private static void logMissing(Logger logger, File descriptorSetFile) {
+    private void logMissing(Logger logger, File descriptorSetFile) {
         String nl = System.lineSeparator();
         logger.warn(
-                "Missing descriptor set file `{}`." + nl +
+                "Missing descriptor set file `{}`" +
+                        " produced for the source set `{}` which has `{}` extension." + nl +
                         "Please enable descriptor set generation." + nl +
                         "See: " +
                         "https://github.com/google/protobuf-gradle-plugin/blob/master/README.md" +
                         "#generate-descriptor-set-files",
-                descriptorSetFile.getPath()
+                descriptorSetFile.getPath(),
+                sourceSetName,
+                sourceSetExtensionName
         );
     }
 }

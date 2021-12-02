@@ -24,19 +24,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.tools.mc.java.annotation.mark;
 
-@Suppress("unused")
-object Jackson {
-    private const val version = "2.13.0"
-    // https://github.com/FasterXML/jackson-core
-    const val core = "com.fasterxml.jackson.core:jackson-core:${version}"
-    // https://github.com/FasterXML/jackson-databind
-    const val databind = "com.fasterxml.jackson.core:jackson-databind:${version}"
-    // https://github.com/FasterXML/jackson-dataformat-xml/releases
-    const val dataformatXml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${version}"
-    // https://github.com/FasterXML/jackson-dataformats-text/releases
-    const val dataformatYaml = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${version}"
-    // https://github.com/FasterXML/jackson-module-kotlin/releases
-    const val moduleKotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${version}"
+import io.spine.code.java.ClassName;
+import io.spine.logging.Logging;
+
+/**
+ * An annotation {@link Job} which covers generated Java classes which have a
+ * certain naming.
+ *
+ * <p>For example, all classes ending with {@code OrBuilder}.
+ */
+final class PatternJob extends AnnotationJob implements Logging {
+
+    private final ClassNamePattern pattern;
+
+    PatternJob(ClassNamePattern pattern, ClassName annotation) {
+        super(annotation);
+        this.pattern = pattern;
+    }
+
+    @Override
+    public void execute(AnnotatorFactory factory) {
+        ClassName annotation = annotation();
+        ClassNamePattern pattern = this.pattern;
+        _debug().log("Annotating classes matching `%s` with `%s`.", pattern, annotation);
+        factory.createPatternAnnotator(annotation, pattern)
+               .annotate();
+        _debug().log("Pattern `%s` processed.", pattern);
+    }
 }

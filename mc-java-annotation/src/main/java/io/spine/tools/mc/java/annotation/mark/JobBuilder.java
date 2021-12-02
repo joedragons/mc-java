@@ -24,19 +24,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.tools.mc.java.annotation.mark;
 
-@Suppress("unused")
-object Jackson {
-    private const val version = "2.13.0"
-    // https://github.com/FasterXML/jackson-core
-    const val core = "com.fasterxml.jackson.core:jackson-core:${version}"
-    // https://github.com/FasterXML/jackson-databind
-    const val databind = "com.fasterxml.jackson.core:jackson-databind:${version}"
-    // https://github.com/FasterXML/jackson-dataformat-xml/releases
-    const val dataformatXml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${version}"
-    // https://github.com/FasterXML/jackson-dataformats-text/releases
-    const val dataformatYaml = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${version}"
-    // https://github.com/FasterXML/jackson-module-kotlin/releases
-    const val moduleKotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${version}"
+import io.spine.code.java.ClassName;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+/**
+ * A builder of {@link Job} instances.
+ *
+ * <p>To receive an instance of the builder, call {@code ModuleAnnotator.translate(...)}.
+ * The builder completes the {@code Job} construction DSL with the {@link #as(ClassName)}
+ * method.
+ */
+public final class JobBuilder {
+
+    private final ApiOption targetOption;
+
+    JobBuilder(ApiOption targetOption) {
+        this.targetOption = checkNotNull(targetOption);
+    }
+
+    /**
+     * Builds an instance of {@code Job}.
+     */
+    public Job as(ClassName annotation) {
+        checkNotNull(annotation);
+        return new OptionJob(targetOption, annotation);
+    }
 }

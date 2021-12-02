@@ -26,18 +26,17 @@
 
 package io.spine.tools.mc.java.annotation.gradle;
 
+import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 
+import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
 import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
-import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateTestProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 
 /**
  * A plugin that annotates generated Java sources from {@code .proto} files.
@@ -170,23 +169,14 @@ public final class AnnotatorPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        createMainTask(project);
-        createTestTask(project);
+        getSourceSetNames(project).forEach(ssn -> createTask(project, ssn));
     }
 
-    private static void createMainTask(Project project) {
-        Action<Task> task = new AnnotationAction(true);
-        GradleTask.newBuilder(annotateProto, task)
-                .insertAfterTask(mergeDescriptorSet)
-                .insertBeforeTask(compileJava)
-                .applyNowTo(project);
-    }
-
-    private static void createTestTask(Project project) {
-        Action<Task> testTask = new AnnotationAction(false);
-        GradleTask.newBuilder(annotateTestProto, testTask)
-                .insertAfterTask(mergeTestDescriptorSet)
-                .insertBeforeTask(compileTestJava)
+    private static void createTask(Project project, SourceSetName ssn) {
+        Action<Task> action = new AnnotationAction(ssn);
+        GradleTask.newBuilder(annotateProto(ssn), action)
+                .insertAfterTask(mergeDescriptorSet(ssn))
+                .insertBeforeTask(compileJava(ssn))
                 .applyNowTo(project);
     }
 }

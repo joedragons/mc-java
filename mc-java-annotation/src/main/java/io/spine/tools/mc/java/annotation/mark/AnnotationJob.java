@@ -24,19 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.tools.mc.java.annotation.mark;
 
-@Suppress("unused")
-object Jackson {
-    private const val version = "2.13.0"
-    // https://github.com/FasterXML/jackson-core
-    const val core = "com.fasterxml.jackson.core:jackson-core:${version}"
-    // https://github.com/FasterXML/jackson-databind
-    const val databind = "com.fasterxml.jackson.core:jackson-databind:${version}"
-    // https://github.com/FasterXML/jackson-dataformat-xml/releases
-    const val dataformatXml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${version}"
-    // https://github.com/FasterXML/jackson-dataformats-text/releases
-    const val dataformatYaml = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${version}"
-    // https://github.com/FasterXML/jackson-module-kotlin/releases
-    const val moduleKotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${version}"
+import io.spine.code.java.ClassName;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+/**
+ * Abstract base for code annotation jobs which holds the class name of
+ * the annotation to be applied.
+ */
+abstract class AnnotationJob implements Job {
+
+    private final ClassName annotation;
+
+    AnnotationJob(ClassName annotation) {
+        this.annotation = checkNotNull(annotation);
+    }
+
+    /** Obtains the name of the annotation class. */
+    protected final ClassName annotation() {
+        return annotation;
+    }
 }

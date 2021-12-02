@@ -84,11 +84,3 @@ val spineBaseVersion: String by extra
 dependencies {
     implementation("io.spine:spine-base:$spineBaseVersion")
 }
-
-sourceSets {
-    main {
-        java.srcDirs("$projectDir/generated/main/java", "$projectDir/generated/main/spine")
-        resources.srcDir("$projectDir/generated/main/resources")
-        (extensions.getByName("proto") as SourceDirectorySet).srcDir("$projectDir/src/main/proto")
-    }
-}

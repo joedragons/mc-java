@@ -63,6 +63,13 @@ public final class McJavaChecksDependency implements Logging {
         this.dependency = checksDependency();
     }
 
+    private static DefaultExternalModuleDependency checksDependency() {
+        String version = Artifacts.mcJavaChecksVersion();
+        return new DefaultExternalModuleDependency(
+                SPINE_TOOLS_GROUP, Artifacts.MC_JAVA_CHECKS_ARTIFACT, version
+        );
+    }
+
     /**
      * Adds the dependency of the Spine Model Checks to the given configuration.
      *
@@ -103,18 +110,11 @@ public final class McJavaChecksDependency implements Logging {
         dependencies.add(dependency);
     }
 
-    private static DefaultExternalModuleDependency checksDependency() {
-        String version = Artifacts.mcJavaChecksVersion();
-        return new DefaultExternalModuleDependency(
-                SPINE_TOOLS_GROUP, Artifacts.MC_JAVA_CHECKS_ARTIFACT, version
-        );
-    }
-
     /**
      * Assists with checking if the dependency can be resolved, and if not, helps with
      * logging error diagnostics.
      */
-    private class ResolutionHelper {
+    private final class ResolutionHelper {
 
         private final ResolutionResult resolutionResult;
         private @Nullable UnresolvedDependencyResult unresolved;

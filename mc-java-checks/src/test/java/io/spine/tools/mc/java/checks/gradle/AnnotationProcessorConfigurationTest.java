@@ -36,7 +36,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.gradle.ConfigurationName.annotationProcessor;
+import static io.spine.tools.gradle.JavaConfigurationName.annotationProcessor;
 
 @DisplayName("`AnnotationProcessorConfiguration` should")
 class AnnotationProcessorConfigurationTest

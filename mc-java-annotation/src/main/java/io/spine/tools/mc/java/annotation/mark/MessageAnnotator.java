@@ -57,7 +57,7 @@ final class MessageAnnotator extends OptionAnnotator<Descriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor file : descriptors()) {
+        for (FileDescriptor file : fileDescriptors()) {
             annotate(file);
         }
     }

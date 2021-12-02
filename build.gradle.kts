@@ -47,6 +47,8 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
+import io.spine.internal.gradle.kotlin.applyJvmToolchain
+import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
 import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
 import io.spine.internal.gradle.publish.PublishExtension
 import io.spine.internal.gradle.publish.PublishingRepos
@@ -71,7 +73,7 @@ plugins {
     io.spine.internal.dependency.ErrorProne.GradlePlugin.apply {
         id(id)
     }
-    kotlin("jvm") version io.spine.internal.dependency.Kotlin.version
+    kotlin("jvm")
 }
 
 spinePublishing {
@@ -138,17 +140,14 @@ subprojects {
                 force(
                     "io.spine:spine-base:$spineBaseVersion",
                     "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
             }
         }
     }
 
-    val javaVersion = JavaVersion.VERSION_1_8
-
     java {
-        sourceCompatibility = javaVersion
-        targetCompatibility = javaVersion
         exposeTestArtifacts()
     }
 
@@ -160,19 +159,15 @@ subprojects {
     JavadocConfig.applyTo(project)
     CheckStyleConfig.applyTo(project)
 
+    val javaVersion = 8
     kotlin {
+        applyJvmToolchain(javaVersion)
         explicitApi()
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = javaVersion.toString()
-            freeCompilerArgs = listOf(
-                "-Xskip-prerelease-check",
-                "-Xjvm-default=all",
-                "-Xopt-in=kotlin.contracts.ExperimentalContracts"
-            )
-        }
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
+        setFreeCompilerArgs()
     }
 
     tasks {
@@ -239,10 +234,19 @@ PomGenerator.applyTo(project)
 LicenseReporter.mergeAllReports(project)
 
 /**
- * Collect `publishToMavenLocal` tasks for all sub-projects that are specified for
+ * Collect `publishToMavenLocal` tasks for all subprojects that are specified for
  * publishing in the root project.
  */
 val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
+
+val testAll by tasks.registering {
+    val testTasks = projectsToPublish.map { p ->
+        val subProject = project(p)
+        subProject.tasks["test"]
+    }
+    dependsOn(testTasks)
+}
+
 val localPublish by tasks.registering {
     val pubTasks = projectsToPublish.map { p ->
         val subProject = project(p)
@@ -263,10 +267,14 @@ val integrationTests by tasks.registering(RunBuild::class) {
 
     /** A timeout for the case of stalled child processes under Windows. */
     timeout.set(Duration.ofMinutes(20))
-
+    dependsOn(testAll)
     dependsOn(localPublish)
 }
 
 tasks.register("buildAll") {
     dependsOn(tasks.build, integrationTests)
+}
+
+val check: Task by tasks.getting {
+    dependsOn(integrationTests)
 }

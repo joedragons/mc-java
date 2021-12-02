@@ -31,9 +31,7 @@ import io.spine.tools.java.fs.Directory;
 import io.spine.tools.java.fs.FileName;
 import io.spine.code.java.PackageName;
 import io.spine.code.proto.FieldName;
-import io.spine.tools.gradle.testing.GradleProject;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -57,24 +55,17 @@ final class TestEnv {
     private TestEnv() {
     }
 
-    public static GradleProject newProjectWithRejectionsJavadoc(File projectFolder) {
-        return GradleProject.newBuilder()
-                            .setProjectName("rejections-javadoc")
-                            .setProjectFolder(projectFolder)
-                            .createProto("javadoc_rejections.proto", rejectionWithJavadoc())
-                            .build();
-    }
-
-    public static String rejectionsJavadocThrowableSource() {
-        Path fileName = DefaultJavaPaths.at(Paths.get("/"))
-                                        .generated()
-                                        .mainSpine()
-                                        .resolve(Directory.of(JAVA_PACKAGE))
-                                        .resolve(REJECTION_FILE_NAME.value());
+    static String rejectionsJavadocThrowableSource() {
+        Path fileName =
+                DefaultJavaPaths.at(Paths.get("/"))
+                                .generated()
+                                .mainSpine()
+                                .resolve(Directory.of(JAVA_PACKAGE))
+                                .resolve(REJECTION_FILE_NAME.value());
         return fileName.toString();
     }
 
-    private static Iterable<String> rejectionWithJavadoc() {
+    static Iterable<String> rejectionWithJavadoc() {
         return Arrays.asList(
                 "syntax = \"proto3\";",
                 "package spine.sample.rejections;",

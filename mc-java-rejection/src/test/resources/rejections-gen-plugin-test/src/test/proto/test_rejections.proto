@@ -23,20 +23,23 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+syntax = "proto3";
 
-package io.spine.internal.dependency
+package spine.sample.rejections;
 
-@Suppress("unused")
-object Jackson {
-    private const val version = "2.13.0"
-    // https://github.com/FasterXML/jackson-core
-    const val core = "com.fasterxml.jackson.core:jackson-core:${version}"
-    // https://github.com/FasterXML/jackson-databind
-    const val databind = "com.fasterxml.jackson.core:jackson-databind:${version}"
-    // https://github.com/FasterXML/jackson-dataformat-xml/releases
-    const val dataformatXml = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${version}"
-    // https://github.com/FasterXML/jackson-dataformats-text/releases
-    const val dataformatYaml = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${version}"
-    // https://github.com/FasterXML/jackson-module-kotlin/releases
-    const val moduleKotlin = "com.fasterxml.jackson.module:jackson-module-kotlin:${version}"
+option java_package = "io.spine.sample.rejections";
+option java_multiple_files = false;
+
+// Do not specify `java_outer_classname` option as we're not generating multiple
+// Java classes for rejections.
+
+import "google/protobuf/any.proto";
+
+message TestRejection1 {
+    string id = 1;
+}
+
+message TestRejection2 {
+    string id = 1;
+    google.protobuf.Any guts = 2;
 }

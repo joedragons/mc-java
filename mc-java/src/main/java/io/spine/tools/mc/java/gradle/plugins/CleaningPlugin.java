@@ -46,7 +46,7 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.preClean;
  *
  * <p>Adds a custom `:preClean` task, which is executed before the `:clean` task.
  */
-public class CleaningPlugin implements Plugin<Project> {
+public final class CleaningPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
