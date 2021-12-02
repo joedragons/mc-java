@@ -168,7 +168,6 @@ final class RejectionGenAction extends CodeGenerationAction {
                 lazy(() -> PackageName.resolve(source.descriptor().toProto())),
                 lazy(() -> SimpleClassName.outerOf(source.descriptor())),
                 outputDir
-
         );
     }
 
