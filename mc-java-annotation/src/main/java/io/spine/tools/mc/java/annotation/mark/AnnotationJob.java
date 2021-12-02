@@ -30,6 +30,9 @@ import io.spine.code.java.ClassName;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * Abstract base for code annotation jobs which holds the class name of the annotation to be allied.
+ */
 abstract class AnnotationJob implements Job {
 
     private final ClassName annotation;
@@ -38,6 +41,7 @@ abstract class AnnotationJob implements Job {
         this.annotation = checkNotNull(annotation);
     }
 
+    /** Obtains the name of the annotation class. */
     protected final ClassName annotation() {
         return annotation;
     }
