@@ -64,7 +64,7 @@ final class ProtoModule {
      * Obtains files with the Protobuf sources defined in this module for the given source set.
      *
      * @param ssn
-     *         the name of the source set for which to obtain the source code of rejections
+     *         the name of the source set for which to obtain the proto source code
      * @apiNote The returned collection is a live view on the files, i.e. as the generated
      *         directory is changing, the contents of the collection are mutated.
      */
@@ -79,7 +79,7 @@ final class ProtoModule {
      * Obtains rejection files generated in this module for the given source set.
      *
      * @param ssn
-     *         the name of the source set for which to obtain the source code of rejections
+     *         the name of the source set for which to obtain the proto source code
      * @apiNote The returned collection is a live view on the files, i.e. as the generated
      *         directory is changing, the contents of the collection is updated.
      */
