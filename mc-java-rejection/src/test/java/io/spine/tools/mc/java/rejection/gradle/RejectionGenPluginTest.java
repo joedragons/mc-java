@@ -82,8 +82,9 @@ class RejectionGenPluginTest {
     void generateRejectionJavadoc() throws IOException {
         GradleProject project = newProjectWithRejectionsJavadoc(testProjectDir);
         project.executeTask(compileJava);
-        String projectAbsolutePath = testProjectDir.getAbsolutePath();
-        File generatedFile = new File(projectAbsolutePath + rejectionsJavadocThrowableSource());
+        File generatedFile = testProjectDir.toPath()
+                                           .resolve(rejectionsJavadocThrowableSource())
+                                           .toFile();
         JavaClassSource generatedSource = Roaster.parse(JavaClassSource.class, generatedFile);
         assertRejectionJavadoc(generatedSource);
         assertBuilderJavadoc(

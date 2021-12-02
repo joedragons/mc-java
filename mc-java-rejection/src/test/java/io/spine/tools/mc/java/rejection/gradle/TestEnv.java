@@ -64,15 +64,12 @@ final class TestEnv {
                             .build();
     }
 
-    public static String rejectionsJavadocThrowableSource() {
-        Path fileName = Paths.get("/")
-                             .resolve("build")
-                             .resolve("generated-proto")
-                             .resolve("main")
-                             .resolve("spine")
-                             .resolve(Directory.of(JAVA_PACKAGE).path())
-                             .resolve(REJECTION_FILE_NAME.value());
-        return fileName.toString();
+    public static Path rejectionsJavadocThrowableSource() {
+        return Paths.get("generated")
+                    .resolve("main")
+                    .resolve("spine")
+                    .resolve(Directory.of(JAVA_PACKAGE).path())
+                    .resolve(REJECTION_FILE_NAME.value());
     }
 
     private static Iterable<String> rejectionWithJavadoc() {
