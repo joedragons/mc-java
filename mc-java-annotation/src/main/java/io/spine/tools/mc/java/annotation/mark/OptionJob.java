@@ -29,6 +29,8 @@ package io.spine.tools.mc.java.annotation.mark;
 import com.google.common.flogger.FluentLogger;
 import io.spine.code.java.ClassName;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * An annotation {@link Job} which covers Java sources generated from Protobuf
  * marked with a certain {@link ApiOption}.
@@ -39,7 +41,7 @@ final class OptionJob extends AnnotationJob {
 
     OptionJob(ApiOption protobufOption, ClassName annotation) {
         super(annotation);
-        this.protobufOption = protobufOption;
+        this.protobufOption = checkNotNull(protobufOption);
     }
 
     @SuppressWarnings("FloggerSplitLogStatement")
