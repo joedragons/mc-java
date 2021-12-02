@@ -75,14 +75,6 @@ final class ProtoModule {
                : project.getLayout().files() /* Empty collection */;
     }
 
-//    private @Nullable FileCollection protoFiles(SourceSetName ssn) {
-//        SourceSet sourceSet = sourceSet(project, ssn);
-//        @Nullable Object extension =
-//                sourceSet.getExtensions()
-//                         .findByName(sourceSetExtensionName);
-//        return (FileCollection) extension;
-//    }
-
     /**
      * Obtains rejection files generated in this module for the given source set.
      *
