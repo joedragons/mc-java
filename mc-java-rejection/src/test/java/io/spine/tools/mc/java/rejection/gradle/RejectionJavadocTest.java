@@ -64,7 +64,6 @@ class RejectionJavadocTest {
     @BeforeAll
     static void generateSources() throws IOException {
         File projectDir = TempDir.forClass(RejectionJavadocTest.class);
-        // Contains `build.gradle.kts`
         GradleProject project = GradleProject
                 .setupAt(projectDir)
                 .copyBuildSrc()
