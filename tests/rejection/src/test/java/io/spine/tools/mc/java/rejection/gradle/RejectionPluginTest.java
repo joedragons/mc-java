@@ -24,11 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.gradle.compiler;
+package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.base.Identifier;
 import io.spine.tools.rejections.CannotUpdateUsername;
-import io.spine.tools.rejections.Rejections;
 import io.spine.validate.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,11 +41,11 @@ class RejectionPluginTest {
     @Test
     @DisplayName("generate a rejection, which extends `ThrowableMessage`")
     void generate() {
-        String username = Identifier.newUuid();
-        CannotUpdateUsername rejection = CannotUpdateUsername.newBuilder()
+        var username = Identifier.newUuid();
+        var rejection = CannotUpdateUsername.newBuilder()
                 .setUsername(username)
                 .build();
-        Rejections.CannotUpdateUsername rejectionMessage = rejection.messageThrown();
+        var rejectionMessage = rejection.messageThrown();
         assertThat(rejectionMessage.getUsername())
                 .isEqualTo(username);
     }
