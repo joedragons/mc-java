@@ -31,7 +31,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.ExtensionAware;
 import org.gradle.api.tasks.TaskCollection;
-import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.compile.CompileOptions;
 import org.gradle.api.tasks.compile.JavaCompile;
 
@@ -46,7 +45,7 @@ final class ErrorProneOptionsAccess {
     private final TaskCollection<JavaCompile> tasks;
 
     private ErrorProneOptionsAccess(Project project) {
-        TaskContainer allTasks = project.getTasks();
+        var allTasks = project.getTasks();
         this.tasks = allTasks.withType(JavaCompile.class);
     }
 
@@ -64,8 +63,8 @@ final class ErrorProneOptionsAccess {
      */
     void addArgs(String... arguments) {
         checkNotNull(arguments);
-        for (JavaCompile task : tasks) {
-            ErrorProneOptions errorprone = errorProneOptionsOf(task);
+        for (var task : tasks) {
+            var errorprone = errorProneOptionsOf(task);
             errorprone.getErrorproneArgs()
                       .addAll(arguments);
         }
@@ -74,10 +73,9 @@ final class ErrorProneOptionsAccess {
     @NonNull
     private static ErrorProneOptions errorProneOptionsOf(JavaCompile task) {
         @SuppressWarnings("CastToIncompatibleInterface") // as provided by Gradle API.
-        ExtensionAware options = (ExtensionAware) task.getOptions();
-        ErrorProneOptions result =
-                options.getExtensions()
-                       .getByType(ErrorProneOptions.class);
+        var options = (ExtensionAware) task.getOptions();
+        var result = options.getExtensions()
+                            .getByType(ErrorProneOptions.class);
         return result;
     }
 }

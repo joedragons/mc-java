@@ -30,9 +30,6 @@ import io.spine.testing.SlowTest;
 import io.spine.testing.logging.mute.MuteLogging;
 import io.spine.tools.mc.java.checks.gradle.given.StubProject;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.Dependency;
-import org.gradle.api.artifacts.DependencySet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,9 +62,9 @@ class McJavaChecksDependencyTest {
     @Test
     @DisplayName("add Spine Java Checks dependency to annotation processor config of a project")
     void addToProject() {
-        Project project = stubProject.withMavenRepositories().get();
+        var project = stubProject.withMavenRepositories().get();
 
-        boolean applied = McJavaChecksDependency.addTo(project);
+        var applied = McJavaChecksDependency.addTo(project);
         assertThat(applied)
                 .isTrue();
 
@@ -79,9 +76,9 @@ class McJavaChecksDependencyTest {
     @DisplayName("not add Spine Java Checks dependency if it is not resolvable")
     @MuteLogging("Do not show the warning for missing dependency. It's assumed by this test.")
     void notAddIfNotResolvable() {
-        Project project = stubProject.get();
+        var project = stubProject.get();
 
-        boolean applied = McJavaChecksDependency.addTo(project);
+        var applied = McJavaChecksDependency.addTo(project);
         assertThat(applied).isFalse();
 
         assertThat(hasMcJavaChecksDependencyIn(project))
@@ -89,9 +86,9 @@ class McJavaChecksDependencyTest {
     }
 
     private static boolean hasMcJavaChecksDependencyIn(Project project) {
-        Configuration config = configuration(project, annotationProcessor);
-        DependencySet dependencies = config.getDependencies();
-        for (Dependency d : dependencies) {
+        var config = configuration(project, annotationProcessor);
+        var dependencies = config.getDependencies();
+        for (var d : dependencies) {
             if (MC_JAVA_CHECKS_ARTIFACT.equals(d.getName())
                     && SPINE_TOOLS_GROUP.equals(d.getGroup())) {
                 return true;

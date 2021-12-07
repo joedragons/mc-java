@@ -26,12 +26,9 @@
 
 package io.spine.tools.mc.java.checks.gradle.given;
 
-import org.gradle.BuildListener;
 import org.gradle.api.Project;
 import org.gradle.api.internal.GradleInternal;
 import org.gradle.api.tasks.TaskCollection;
-import org.gradle.api.tasks.TaskContainer;
-import org.gradle.api.tasks.compile.CompileOptions;
 import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.util.List;
@@ -50,27 +47,29 @@ class ProjectTasks {
      *
      * <p>Evaluates the project in a process to trigger all tasks' arguments modifications.
      *
-     * @param project the project to obtain tasks from
+     * @param project
+     *         the project to obtain tasks from
      * @return the project {@link JavaCompile} tasks
      */
     static TaskCollection<JavaCompile> acquireJavaCompileTasks(Project project) {
-        GradleInternal gradle = (GradleInternal) project.getGradle();
-        BuildListener buildListenerBroadcaster = gradle.getBuildListenerBroadcaster();
+        var gradle = (GradleInternal) project.getGradle();
+        var buildListenerBroadcaster = gradle.getBuildListenerBroadcaster();
         buildListenerBroadcaster.projectsEvaluated(project.getGradle());
-        TaskContainer tasks = project.getTasks();
-        TaskCollection<JavaCompile> javaCompileTasks = tasks.withType(JavaCompile.class);
+        var tasks = project.getTasks();
+        var javaCompileTasks = tasks.withType(JavaCompile.class);
         return javaCompileTasks;
     }
 
     /**
      * Returns compiler arguments from the given {@code JavaCompile} task.
      *
-     * @param task the task to obtain the arguments from
+     * @param task
+     *         the task to obtain the arguments from
      * @return the {@code List} of the compiler arguments
      */
     static List<String> obtainCompilerArgs(JavaCompile task) {
-        CompileOptions options = task.getOptions();
-        List<String> compilerArgs = options.getCompilerArgs();
+        var options = task.getOptions();
+        var compilerArgs = options.getCompilerArgs();
         return compilerArgs;
     }
 }
