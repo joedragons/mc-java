@@ -24,11 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc;
+package io.spine.tools.mc.java.protoc;
 
-import com.google.errorprone.annotations.Immutable;
-import io.spine.type.SerializableMessage;
+/**
+ * This is a handcrafted interface to be implemented in a message class.
+ */
+@SuppressWarnings("InterfaceNeverImplemented")
+    // Implemented in generated code. When project is not built, analyzer fails to acknowledge that.
+public interface UserRejection {
 
-@Immutable
-public interface PrefixedMessage extends SerializableMessage {
+    @SuppressWarnings("override")
+        // Cannot mark generated methods with `@Override` right now.
+    String getId();
 }

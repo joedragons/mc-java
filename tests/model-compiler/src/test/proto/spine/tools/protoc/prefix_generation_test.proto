@@ -32,7 +32,7 @@ import "spine/options.proto";
 option (type_url_prefix) = "type.spine.io";
 option java_multiple_files = true;
 option java_outer_classname = "PrefixGenerationTestProto";
-option java_package = "io.spine.tools.protoc";
+option java_package = "io.spine.test.tools.mc.java.protoc";
 
 message MessageEnhancedWithPrefixGenerations {
     string value = 1;

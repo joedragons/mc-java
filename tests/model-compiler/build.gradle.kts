@@ -38,26 +38,26 @@ modelCompiler {
     java {
         codegen {
             val methodFactory = "io.spine.tools.protoc.TestMethodFactory"
-            val nestedClassFactory = "io.spine.tools.protoc.TestNestedClassFactory"
+            val nestedClassFactory = "io.spine.tools.mc.java.TestNestedClassFactory"
 
             forMessages(by().suffix("documents.proto")) {
-                markAs("io.spine.tools.protoc.DocumentMessage")
+                markAs("io.spine.tools.mc.java.DocumentMessage")
             }
 
             forMessages(by().prefix("spine/tools/protoc/prefix_generation")) {
-                markAs("io.spine.tools.protoc.PrefixedMessage")
+                markAs("io.spine.tools.mc.java.PrefixedMessage")
                 generateMethodsWith(methodFactory)
                 generateNestedClassesWith(nestedClassFactory)
             }
 
             forMessages(by().suffix("suffix_generation_test.proto")) {
-                markAs("io.spine.tools.protoc.SuffixedMessage")
+                markAs("io.spine.tools.mc.java.SuffixedMessage")
                 generateMethodsWith(methodFactory)
                 generateNestedClassesWith(nestedClassFactory)
             }
 
             forMessages(by().regex(".*regex.*test.*")) {
-                markAs("io.spine.tools.protoc.RegexedMessage")
+                markAs("io.spine.tools.mc.java.RegexedMessage")
                 generateMethodsWith(methodFactory)
                 generateNestedClassesWith(nestedClassFactory)
             }

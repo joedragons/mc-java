@@ -24,9 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc;
+package io.spine.tools.mc.java.protoc;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.truth.Truth;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
 import io.spine.base.CommandMessage;
@@ -44,12 +45,33 @@ import io.spine.test.protoc.University;
 import io.spine.test.protoc.Wrapped;
 import io.spine.test.tools.protoc.Movie;
 import io.spine.test.tools.protoc.WeatherForecast;
-
-// Custom interface generated according to proto annotations. See `mixed_test.proto` for details.
+import io.spine.tools.protoc.CreateUser;
+import io.spine.tools.protoc.CustomerName;
+import io.spine.tools.protoc.CustomerNameOrBuilder;
+import io.spine.tools.protoc.MFGTMessage;
+import io.spine.tools.protoc.MessageEnhancedWithPrefixGenerations;
+import io.spine.tools.protoc.MessageEnhancedWithRegexGenerations;
+import io.spine.tools.protoc.MessageEnhancedWithSuffixGenerations;
+import io.spine.tools.protoc.MovieTitleChanged;
+import io.spine.tools.protoc.NotifyUser;
+import io.spine.tools.protoc.PICreateCustomer;
+import io.spine.tools.protoc.PICreateUser;
+import io.spine.tools.protoc.PICustomerCommand;
+import io.spine.tools.protoc.PICustomerCreated;
+import io.spine.tools.protoc.PICustomerEmailReceived;
+import io.spine.tools.protoc.PICustomerEvent;
+import io.spine.tools.protoc.PICustomerNotified;
+import io.spine.tools.protoc.PIUserCreated;
+import io.spine.tools.protoc.PIUserNameUpdated;
+import io.spine.tools.protoc.Rejections;
+import io.spine.tools.protoc.TypicalIdentifier;
+import io.spine.tools.protoc.UserCreated;
+import io.spine.tools.protoc.UserName;
+import io.spine.tools.protoc.UserNotified;
 import io.spine.tools.protoc.test.PIUserEvent;
 import io.spine.tools.protoc.test.UserInfo;
-
 import io.spine.type.MessageType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -81,10 +103,10 @@ final class ProtocPluginTest {
     @Test
     @DisplayName("implement marker interface in the generated messages")
     void implementMarkerInterfacesInGeneratedMessages() {
-        assertThat(PICustomerNotified.getDefaultInstance())
-                .isInstanceOf(PICustomerEvent.class);
-        assertThat(PICustomerEmailReceived.getDefaultInstance())
-                .isInstanceOf(PICustomerEvent.class);
+        Truth.assertThat(PICustomerNotified.getDefaultInstance())
+             .isInstanceOf(PICustomerEvent.class);
+        Truth.assertThat(PICustomerEmailReceived.getDefaultInstance())
+             .isInstanceOf(PICustomerEvent.class);
     }
 
     @Test
@@ -96,23 +118,23 @@ final class ProtocPluginTest {
     @Test
     @DisplayName("implement interface in the generated messages with `IS` option")
     void implementInterfaceInGeneratedMessagesWithIsOption() {
-        PICustomerCreated event = PICustomerCreated.getDefaultInstance();
+        var event = PICustomerCreated.getDefaultInstance();
         assertThat(event).isInstanceOf(PICustomerEvent.class);
-        
-        PICreateCustomer cmd = PICreateCustomer.getDefaultInstance();
+
+        var cmd = PICreateCustomer.getDefaultInstance();
         assertThat(cmd).isInstanceOf(PICustomerCommand.class);
     }
 
     @Test
     @DisplayName("use `IS` and `EVERY IS` together")
     void isAndEveryIsTogether() {
-        assertThat(PIUserCreated.getDefaultInstance())
-                .isInstanceOf(PIUserEvent.class);
-        assertThat(PIUserNameUpdated.getDefaultInstance())
-                .isInstanceOf(PIUserEvent.class);
+        Truth.assertThat(PIUserCreated.getDefaultInstance())
+             .isInstanceOf(PIUserEvent.class);
+        Truth.assertThat(PIUserNameUpdated.getDefaultInstance())
+             .isInstanceOf(PIUserEvent.class);
 
-        assertThat(UserName.getDefaultInstance())
-                /*
+        Truth.assertThat(UserName.getDefaultInstance())
+             /*
                    This assertion verifies if the `UserName` implements a custom
                    event interface. It happens because `UserName` is declared in the same file with
                    events (see `mixed_test.proto`) and the following option is applied:
@@ -124,7 +146,7 @@ final class ProtocPluginTest {
                    is misleading because a normal production code shouldn't have
                    such an arrangement.
                 */
-                .isInstanceOf(PIUserEvent.class);
+             .isInstanceOf(PIUserEvent.class);
 
         assertThat(UserName.getDefaultInstance())
                 .isInstanceOf(UserInfo.class);
@@ -133,7 +155,7 @@ final class ProtocPluginTest {
     @Test
     @DisplayName("resolve packages from src proto if the packages are not specified")
     void resolvingPackages() throws ClassNotFoundException {
-        Class<?> cls = checkMarkerInterface(USER_COMMAND_FQN);
+        var cls = checkMarkerInterface(USER_COMMAND_FQN);
         assertThat(PICreateUser.class)
                 .isAssignableTo(cls);
     }
@@ -156,26 +178,26 @@ final class ProtocPluginTest {
         @Test
         @DisplayName("command messages")
         void markCommandMessages() {
-            assertThat(CreateUser.getDefaultInstance())
-                    .isInstanceOf(CommandMessage.class);
-            assertThat(NotifyUser.getDefaultInstance())
-                    .isInstanceOf(CommandMessage.class);
+            Truth.assertThat(CreateUser.getDefaultInstance())
+                 .isInstanceOf(CommandMessage.class);
+            Truth.assertThat(NotifyUser.getDefaultInstance())
+                 .isInstanceOf(CommandMessage.class);
         }
 
         @Test
         @DisplayName("event messages")
         void markMessages() {
-            assertThat(UserCreated.getDefaultInstance())
-                    .isInstanceOf(EventMessage.class);
-            assertThat(UserNotified.getDefaultInstance())
-                    .isInstanceOf(EventMessage.class);
+            Truth.assertThat(UserCreated.getDefaultInstance())
+                 .isInstanceOf(EventMessage.class);
+            Truth.assertThat(UserNotified.getDefaultInstance())
+                 .isInstanceOf(EventMessage.class);
         }
 
         @Test
         @DisplayName("rejection messages")
         void markRejectionMessages() {
-            assertThat(Rejections.UserAlreadyExists.getDefaultInstance())
-                    .isInstanceOf(RejectionMessage.class);
+            Truth.assertThat(Rejections.UserAlreadyExists.getDefaultInstance())
+                 .isInstanceOf(RejectionMessage.class);
             assertThat(Rejections.UserAlreadyExists.getDefaultInstance())
                     .isInstanceOf(UserRejection.class);
         }
@@ -183,8 +205,8 @@ final class ProtocPluginTest {
         @Test
         @DisplayName("mark UUID-based identifiers")
         void markUuids() {
-            assertThat(TypicalIdentifier.getDefaultInstance())
-                    .isInstanceOf(UuidValue.class);
+            Truth.assertThat(TypicalIdentifier.getDefaultInstance())
+                 .isInstanceOf(UuidValue.class);
         }
 
         @Test
@@ -196,8 +218,8 @@ final class ProtocPluginTest {
                     .isInstanceOf(UserRejection.class);
             assertFalse(Message.class.isAssignableFrom(UserRejection.class));
 
-            String id = Identifier.newUuid();
-            Rejections.UserAlreadyExists message = Rejections.UserAlreadyExists.newBuilder()
+            var id = Identifier.newUuid();
+            var message = Rejections.UserAlreadyExists.newBuilder()
                     .setId(id)
                     .build();
             UserRejection rejection = message;
@@ -241,22 +263,22 @@ final class ProtocPluginTest {
             @Test
             @DisplayName("regex pattern")
             void regex() {
-                assertThat(MessageEnhancedWithRegexGenerations.getDefaultInstance())
-                        .isInstanceOf(RegexedMessage.class);
+                Truth.assertThat(MessageEnhancedWithRegexGenerations.getDefaultInstance())
+                     .isInstanceOf(RegexedMessage.class);
             }
 
             @Test
             @DisplayName("prefix pattern")
             void prefix() {
-                assertThat(MessageEnhancedWithPrefixGenerations.getDefaultInstance())
-                        .isInstanceOf(PrefixedMessage.class);
+                Truth.assertThat(MessageEnhancedWithPrefixGenerations.getDefaultInstance())
+                     .isInstanceOf(PrefixedMessage.class);
             }
 
             @Test
             @DisplayName("suffix pattern")
             void postfix() {
-                assertThat(MessageEnhancedWithSuffixGenerations.getDefaultInstance())
-                        .isInstanceOf(SuffixedMessage.class);
+                Truth.assertThat(MessageEnhancedWithSuffixGenerations.getDefaultInstance())
+                     .isInstanceOf(SuffixedMessage.class);
             }
         }
     }
@@ -264,8 +286,7 @@ final class ProtocPluginTest {
     @Test
     @DisplayName("generate a custom method for a `.suffix()` pattern")
     void generateCustomPatternBasedMethod() {
-        MessageType expectedType =
-                new MessageType(MessageEnhancedWithSuffixGenerations.getDescriptor());
+        var expectedType = new MessageType(MessageEnhancedWithSuffixGenerations.getDescriptor());
         assertEquals(expectedType, MessageEnhancedWithSuffixGenerations.ownType());
     }
 
@@ -278,7 +299,7 @@ final class ProtocPluginTest {
     @Test
     @DisplayName("create instance of UUID identifier")
     void createInstanceOfUuidIdentifier() {
-        String uuid = Identifier.newUuid();
+        var uuid = Identifier.newUuid();
         assertEquals(TypicalIdentifier.of(uuid), TypicalIdentifier.of(uuid));
     }
 
@@ -290,17 +311,15 @@ final class ProtocPluginTest {
         @Test
         @DisplayName("prefix pattern")
         void prefixBasedMethod() {
-            MessageType expectedType =
-                    new MessageType(MessageEnhancedWithPrefixGenerations.getDescriptor());
+            var expected = new MessageType(MessageEnhancedWithPrefixGenerations.getDescriptor());
             assertThat(MessageEnhancedWithPrefixGenerations.ownType())
-                    .isEqualTo(expectedType);
+                    .isEqualTo(expected);
         }
 
         @Test
         @DisplayName("regex pattern")
         void regexBasedMethod() {
-            MessageType expectedType =
-                    new MessageType(MessageEnhancedWithRegexGenerations.getDescriptor());
+            var expectedType = new MessageType(MessageEnhancedWithRegexGenerations.getDescriptor());
             assertThat(MessageEnhancedWithRegexGenerations.ownType())
                     .isEqualTo(expectedType);
         }
@@ -308,10 +327,9 @@ final class ProtocPluginTest {
         @Test
         @DisplayName("suffix pattern")
         void suffixBasedMethod() {
-            MessageType expectedType =
-                    new MessageType(MessageEnhancedWithSuffixGenerations.getDescriptor());
+            var expected = new MessageType(MessageEnhancedWithSuffixGenerations.getDescriptor());
             assertThat(MessageEnhancedWithSuffixGenerations.ownType())
-                    .isEqualTo(expectedType);
+                    .isEqualTo(expected);
         }
     }
 
@@ -351,8 +369,8 @@ final class ProtocPluginTest {
         @Test
         @DisplayName("`UuidMethodFactory` if a message has single `uuid` field")
         void uuidMethodFactory() {
-            assertNotEquals(MFGTMessage.generate(), MFGTMessage.generate());
-            String uuid = Identifier.newUuid();
+            Assertions.assertNotEquals(MFGTMessage.generate(), MFGTMessage.generate());
+            var uuid = Identifier.newUuid();
             assertEquals(MFGTMessage.of(uuid), MFGTMessage.of(uuid));
         }
 
@@ -368,7 +386,7 @@ final class ProtocPluginTest {
     @DisplayName("generate columns for a queryable entity type")
     void generateColumns() {
         EntityColumn<?, ?> column = Movie.Column.title();
-        String expectedName = "title";
+        var expectedName = "title";
         assertThat(column.name().value())
                 .isEqualTo(expectedName);
     }
@@ -377,14 +395,14 @@ final class ProtocPluginTest {
     @DisplayName("generate fields for a subscribable message type")
     void generateFields() {
         SubscribableField field = MovieTitleChanged.Field.oldTitle().value();
-        String expectedFieldPath = "old_title.value";
+        var expectedFieldPath = "old_title.value";
         assertThat(field.getField().toString())
                 .isEqualTo(expectedFieldPath);
     }
 
     @CanIgnoreReturnValue
     private static Class<?> checkMarkerInterface(String fqn) throws ClassNotFoundException {
-        Class<?> cls = Class.forName(fqn);
+        var cls = Class.forName(fqn);
         assertThat(cls.isInterface())
                 .isTrue();
         assertThat(cls)
