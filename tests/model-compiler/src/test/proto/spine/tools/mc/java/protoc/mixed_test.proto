@@ -34,7 +34,7 @@ option java_multiple_files = true;
 option java_outer_classname = "MixedTestProto";
 option java_package = "io.spine.test.tools.mc.java.protoc";
 
-option (every_is).java_type = "io.spine.tools.protoc.test.PIUserEvent";
+option (every_is).java_type = "io.spine.test.tools.mc.java.protoc.PIUserEvent";
 option (every_is).generate = true;
 
 message PIUserCreated {
@@ -49,7 +49,7 @@ message PIUserNameUpdated {
 }
 
 message UserName {
-    option (is).java_type = "io.spine.tools.protoc.test.UserInfo";
+    option (is).java_type = "io.spine.test.tools.mc.java.protoc.UserInfo";
     option (is).generate = true;
 
     string first_name = 1;

@@ -25,7 +25,7 @@
  */
 syntax = "proto3";
 
-package spine.test.tools.protoc;
+package spine.tools.mc.java.protoc;
 
 import "spine/options.proto";
 

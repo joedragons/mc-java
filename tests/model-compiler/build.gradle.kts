@@ -37,27 +37,27 @@ dependencies {
 modelCompiler {
     java {
         codegen {
-            val methodFactory = "io.spine.tools.protoc.TestMethodFactory"
-            val nestedClassFactory = "io.spine.tools.mc.java.TestNestedClassFactory"
+            val methodFactory = "io.spine.tools.mc.java.protoc.TestMethodFactory"
+            val nestedClassFactory = "io.spine.tools.mc.java.protoc.TestNestedClassFactory"
 
             forMessages(by().suffix("documents.proto")) {
-                markAs("io.spine.tools.mc.java.DocumentMessage")
+                markAs("io.spine.tools.mc.java.protoc.DocumentMessage")
             }
 
-            forMessages(by().prefix("spine/tools/protoc/prefix_generation")) {
-                markAs("io.spine.tools.mc.java.PrefixedMessage")
+            forMessages(by().prefix("spine/tools/mc/java/protoc/prefix_generation")) {
+                markAs("io.spine.tools.mc.java.protoc.PrefixedMessage")
                 generateMethodsWith(methodFactory)
                 generateNestedClassesWith(nestedClassFactory)
             }
 
             forMessages(by().suffix("suffix_generation_test.proto")) {
-                markAs("io.spine.tools.mc.java.SuffixedMessage")
+                markAs("io.spine.tools.mc.java.protoc.SuffixedMessage")
                 generateMethodsWith(methodFactory)
                 generateNestedClassesWith(nestedClassFactory)
             }
 
             forMessages(by().regex(".*regex.*test.*")) {
-                markAs("io.spine.tools.mc.java.RegexedMessage")
+                markAs("io.spine.tools.mc.java.protoc.RegexedMessage")
                 generateMethodsWith(methodFactory)
                 generateNestedClassesWith(nestedClassFactory)
             }
