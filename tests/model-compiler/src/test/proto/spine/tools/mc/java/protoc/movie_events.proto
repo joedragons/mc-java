@@ -34,7 +34,7 @@ option java_package = "io.spine.test.tools.mc.java.protoc";
 option java_outer_classname = "MovieEventsProto";
 option java_multiple_files = true;
 
-import "spine/tools/protoc/movies.proto";
+import "spine/tools/mc/java/protoc/movies.proto";
 
 message MovieTitleChanged {
     MovieId id = 1;
