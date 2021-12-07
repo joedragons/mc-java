@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc;
+package io.spine.tools.mc.java.protoc;
 
 import io.spine.tools.column.Project;
 import io.spine.tools.column.ProjectCreation;
@@ -33,12 +33,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Method;
-
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.Assertions.assertHasPrivateParameterlessCtor;
-import static io.spine.tools.protoc.given.ColumnsTestEnv.assertDoesNotContainMethod;
-import static io.spine.tools.protoc.given.ColumnsTestEnv.checkColumnName;
+import static io.spine.tools.mc.java.protoc.given.ColumnsTestEnv.assertDoesNotContainMethod;
+import static io.spine.tools.mc.java.protoc.given.ColumnsTestEnv.checkColumnName;
 
 @SuppressWarnings("DuplicateStringLiteralInspection") // Random duplication.
 @DisplayName("`ProtocPlugin`, when generating entity columns, should")

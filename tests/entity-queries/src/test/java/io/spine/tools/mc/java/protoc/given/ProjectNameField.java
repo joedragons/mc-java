@@ -24,14 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.tools.mc.java.protoc.given;
+
+import io.spine.base.Field;
+import io.spine.base.SubscribableField;
+
 /**
- * The test environment for tests related to generation of strongly-typed fields and columns.
+ * A test-only subscribable field which marks the generated strongly-typed fields of a message.
+ *
+ * <p>See {@code build.gradle} for usage.
  */
+public final class ProjectNameField extends SubscribableField {
 
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.tools.protoc.given;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+    public ProjectNameField(Field field) {
+        super(field);
+    }
+}

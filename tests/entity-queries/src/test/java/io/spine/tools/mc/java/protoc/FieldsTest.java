@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc;
+package io.spine.tools.mc.java.protoc;
 
 import com.google.common.truth.Truth;
 import io.spine.base.EventMessageField;
@@ -34,7 +34,7 @@ import io.spine.tools.column.Project;
 import io.spine.tools.column.ProjectCreated;
 import io.spine.tools.column.ProjectName;
 import io.spine.tools.column.ProjectView;
-import io.spine.tools.protoc.given.ProjectNameField;
+import io.spine.tools.mc.java.protoc.given.ProjectNameField;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -69,7 +69,7 @@ class FieldsTest {
     @Test
     @DisplayName("generate nested classes only once in case of cyclic field references")
     void handleCyclicReferences() {
-        Project.Field.ProjectField parentProjectField = Project.Field.parentProject();
+        var parentProjectField = Project.Field.parentProject();
 
         checkFieldPath(parentProjectField.parentProject(), "parent_project.parent_project");
         Truth.assertThat(parentProjectField.getClass())
@@ -79,21 +79,21 @@ class FieldsTest {
     @Test
     @DisplayName("mark event message fields as `EventMessageField`")
     void markEventMessageFields() {
-        ProjectCreated.Field.ProjectIdField field = ProjectCreated.Field.id();
+        var field = ProjectCreated.Field.id();
         Truth.assertThat(field.getClass()).isAssignableTo(EventMessageField.class);
     }
 
     @Test
     @DisplayName("mark entity state fields as `EntityStateField`")
     void markEntityStateFields() {
-        ProjectView.Field.ProjectIdField field = ProjectView.Field.id();
+        var field = ProjectView.Field.id();
         Truth.assertThat(field.getClass()).isAssignableTo(EntityStateField.class);
     }
 
     @Test
     @DisplayName("generate fields for a custom type according to the Model Compiler configuration")
     void markCustomTypes() {
-        ProjectNameField field = ProjectName.Field.value();
+        var field = ProjectName.Field.value();
         assertThat(field.getClass()).isAssignableTo(ProjectNameField.class);
     }
 

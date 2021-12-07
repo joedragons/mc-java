@@ -24,19 +24,42 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc.given;
+package io.spine.tools.mc.java.protoc.given;
 
-import io.spine.base.Field;
-import io.spine.base.SubscribableField;
+import com.google.common.truth.Correspondence;
+import io.spine.query.EntityColumn;
+
+import java.lang.reflect.Method;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
- * A test-only subscribable field which marks the generated strongly-typed fields of a message.
- *
- * <p>See {@code build.gradle} for usage.
+ * A test environment and utilities for {@link io.spine.tools.protoc.ColumnsTest}.
  */
-public final class ProjectNameField extends SubscribableField {
+public final class ColumnsTestEnv {
 
-    public ProjectNameField(Field field) {
-        super(field);
+    /**
+     * Prevents this test environment utility from an instantiation.
+     */
+    private ColumnsTestEnv() {
+    }
+
+    public static void checkColumnName(EntityColumn<?, ?> column, String expectedName) {
+        assertThat(column.name().value()).isEqualTo(expectedName);
+    }
+
+    public static void assertDoesNotContainMethod(Class<?> type, String methodNames) {
+        var methods = type.getDeclaredMethods();
+        assertThat(methods).asList()
+                           .comparingElementsUsing(nameCorrespondence())
+                           .doesNotContain(methodNames);
+    }
+
+    private static Correspondence<Method, String> nameCorrespondence() {
+        return Correspondence.from(ColumnsTestEnv::hasName, "has name");
+    }
+
+    private static boolean hasName(Method method, String name) {
+        return name.equals(method.getName());
     }
 }

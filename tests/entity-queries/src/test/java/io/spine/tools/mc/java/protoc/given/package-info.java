@@ -24,42 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc.given;
-
-import com.google.common.truth.Correspondence;
-import io.spine.query.EntityColumn;
-
-import java.lang.reflect.Method;
-
-import static com.google.common.truth.Truth.assertThat;
-
 /**
- * A test environment and utilities for {@link io.spine.tools.protoc.ColumnsTest}.
+ * The test environment for tests related to generation of strongly-typed fields and columns.
  */
-public final class ColumnsTestEnv {
 
-    /**
-     * Prevents this test environment utility from an instantiation.
-     */
-    private ColumnsTestEnv() {
-    }
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.protoc.given;
 
-    public static void checkColumnName(EntityColumn<?, ?> column, String expectedName) {
-        assertThat(column.name().value()).isEqualTo(expectedName);
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    public static void assertDoesNotContainMethod(Class<?> type, String methodNames) {
-        Method[] methods = type.getDeclaredMethods();
-        assertThat(methods).asList()
-                           .comparingElementsUsing(nameCorrespondence())
-                           .doesNotContain(methodNames);
-    }
-
-    private static Correspondence<Method, String> nameCorrespondence() {
-        return Correspondence.from(ColumnsTestEnv::hasName, "has name");
-    }
-
-    private static boolean hasName(Method method, String name) {
-        return name.equals(method.getName());
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;
