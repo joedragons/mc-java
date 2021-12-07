@@ -28,7 +28,6 @@ package io.spine.sample.map.types;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-import io.spine.code.java.ClassName;
 import io.spine.type.KnownTypes;
 import io.spine.type.TypeUrl;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +36,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("KnownTypes should have an entry for")
+@DisplayName("`KnownTypes` should have an entry for")
 class KnownTypesTest {
 
     private static final String PROTO_TYPE_PREFIX = "type.spine.io/spine.sample.map.types.";
@@ -100,53 +99,53 @@ class KnownTypesTest {
     }
 
     @Test
-    @DisplayName("the top level messages")
+    @DisplayName("the top-level messages")
     void topLevelMessages() {
         assertIsKnownType(FIRST_MSG);
         assertIsKnownType(MSG_ONE);
     }
 
     @Test
-    @DisplayName("the second level messages")
+    @DisplayName("the second-level messages")
     void secondLevelMessages() {
         assertIsKnownType(compose(FIRST_MSG, SECOND_MSG));
         assertIsKnownType(compose(MSG_ONE, MSG_TWO));
     }
 
     @Test
-    @DisplayName("a second level enum")
+    @DisplayName("a second-level enum")
     void secondLevelEnum() {
         assertIsKnownType(compose(FIRST_MSG, SECOND_ENUM));
         assertIsKnownType(compose(MSG_ONE, ENUM_TWO));
     }
 
     @Test
-    @DisplayName("a third level message")
+    @DisplayName("a third-level message")
     void thirdLevelMessage() {
         assertIsKnownType(compose(FIRST_MSG, SECOND_MSG, THIRD_MSG));
     }
 
     @Test
-    @DisplayName("a third level enum")
+    @DisplayName("a third-level enum")
     void thirdLevelEnum() {
         assertIsKnownType(compose(FIRST_MSG, SECOND_MSG, THIRD_ENUM));
     }
 
     @Test
-    @DisplayName("a fourth level message")
+    @DisplayName("a fourth-level message")
     void fourthLevelMessage() {
         assertIsKnownType(compose(FIRST_MSG, SECOND_MSG, THIRD_MSG, FOURTH_MSG));
     }
 
     @Test
-    @DisplayName("a fourth level enum")
+    @DisplayName("a fourth-level enum")
     void fourthLevelEnum() {
         assertIsKnownType(compose(FIRST_MSG, SECOND_MSG, THIRD_MSG, FOURTH_ENUM));
     }
 
     private void assertIsKnownType(String protoTypeName, String javaClassName) {
-        TypeUrl url = TypeUrl.parse(PROTO_TYPE_PREFIX + protoTypeName);
-        ClassName className = knownTypes.classNameOf(url);
+        var url = TypeUrl.parse(PROTO_TYPE_PREFIX + protoTypeName);
+        var className = knownTypes.classNameOf(url);
 
         assertEquals(JAVA_PACKAGE_PREFIX + javaClassName, className.value());
     }
@@ -156,13 +155,11 @@ class KnownTypesTest {
     }
 
     private void assertIsKnownType(Iterable<String> parentsAndTypeName) {
-        String protoName = Joiner.on(".")
-                                 .join(parentsAndTypeName);
-        String javaName = Joiner.on("$")
-                                .join(parentsAndTypeName);
-        TypeUrl url = TypeUrl.parse(PROTO_TYPE_PREFIX + protoName);
+        var protoName = Joiner.on(".").join(parentsAndTypeName);
+        var javaName = Joiner.on("$").join(parentsAndTypeName);
+        var url = TypeUrl.parse(PROTO_TYPE_PREFIX + protoName);
 
-        ClassName className = knownTypes.classNameOf(url);
+        var className = knownTypes.classNameOf(url);
 
         assertEquals(JAVA_PACKAGE_PREFIX + javaName, className.value());
     }
