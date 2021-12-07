@@ -46,9 +46,9 @@ final class BuilderImplements extends AbstractCompilerOutput {
     }
 
     static BuilderImplements implementValidatingBuilder(MessageType targetType) {
-        String insertionPointName = InsertionPoint.builder_implements.forType(targetType);
-        String content = builderFor(targetType);
-        File file = prepareFile(targetType)
+        var insertionPointName = InsertionPoint.builder_implements.forType(targetType);
+        var content = builderFor(targetType);
+        var file = prepareFile(targetType)
                 .setInsertionPoint(insertionPointName)
                 .setContent(content)
                 .build();
@@ -56,9 +56,7 @@ final class BuilderImplements extends AbstractCompilerOutput {
     }
 
     private static String builderFor(MessageType type) {
-        String generic = new GeneratedClass()
-                .toCollection()
-                .asStringFor(type);
+        var generic = new GeneratedClass().toCollection().asStringFor(type);
         return format("%s%s,", ValidatingBuilder.class.getName(), generic);
     }
 }

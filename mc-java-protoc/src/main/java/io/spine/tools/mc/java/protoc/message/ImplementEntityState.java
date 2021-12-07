@@ -27,8 +27,6 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableList;
-import io.spine.code.java.ClassName;
-import io.spine.code.proto.FieldDeclaration;
 import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.mc.java.codegen.Entities;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
@@ -64,16 +62,16 @@ final class ImplementEntityState extends ImplementInterface {
 
     @Override
     public InterfaceParameters interfaceParameters(MessageType type) {
-        InterfaceParameter idType = firstFieldOf(type);
+        var idType = firstFieldOf(type);
         return InterfaceParameters.of(idType);
     }
 
     private static InterfaceParameter firstFieldOf(MessageType type) {
-        ImmutableList<FieldDeclaration> fields = type.fields();
+        var fields = type.fields();
         checkState(fields.size() > 0,
                    "At least one field is required in an `EntityState` message type.");
-        FieldDeclaration declaration = fields.get(0);
-        ClassName value = declaration.className();
+        var declaration = fields.get(0);
+        var value = declaration.className();
         return new ExistingClass(value);
     }
 }

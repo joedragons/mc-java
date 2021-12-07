@@ -29,14 +29,9 @@ package io.spine.tools.mc.java.protoc.message;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
-import io.spine.tools.mc.java.codegen.AddInterface;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.codegen.Entities;
-import io.spine.tools.mc.java.codegen.FilePattern;
-import io.spine.tools.mc.java.codegen.Messages;
-import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.tools.mc.java.codegen.Signals;
-import io.spine.tools.mc.java.codegen.Uuids;
 import io.spine.tools.mc.java.protoc.CodeGenerationTask;
 import io.spine.tools.mc.java.protoc.CodeGenerationTasks;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
@@ -45,7 +40,6 @@ import io.spine.type.MessageType;
 import io.spine.type.Type;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.toImmutableList;
@@ -91,8 +85,8 @@ public final class InterfaceGen extends CodeGenerator {
             tasks.addAll(tasksFor(config.getRejections()));
         }
         if (config.hasUuids()) {
-            Uuids uuids = config.getUuids();
-            List<AddInterface> addInterfaces = uuids.getAddInterfaceList();
+            var uuids = config.getUuids();
+            var addInterfaces = uuids.getAddInterfaceList();
             addInterfaces.stream()
                          .map(ImplementUuidValue::new)
                          .forEach(tasks::add);
@@ -100,8 +94,8 @@ public final class InterfaceGen extends CodeGenerator {
         if (config.hasEntities()) {
             tasks.addAll(tasksFor(config.getEntities()));
         }
-        for (Messages messages : config.getMessagesList()) {
-            Pattern pattern = messages.getPattern();
+        for (var messages : config.getMessagesList()) {
+            var pattern = messages.getPattern();
             messages.getAddInterfaceList()
                     .stream()
                     .map(ai -> new ImplementByPattern(ai.getName(), pattern))
@@ -112,8 +106,8 @@ public final class InterfaceGen extends CodeGenerator {
 
     private static ImmutableList<ImplementInterface> tasksFor(Signals signals) {
         ImmutableList.Builder<ImplementInterface> tasks = ImmutableList.builder();
-        List<AddInterface> addInterfaces = signals.getAddInterfaceList();
-        for (FilePattern pattern : signals.getPatternList()) {
+        var addInterfaces = signals.getAddInterfaceList();
+        for (var pattern : signals.getPatternList()) {
             addInterfaces.stream()
                          .map(ai -> new ImplementByPattern(ai.getName(), pattern))
                          .forEach(tasks::add);
@@ -122,7 +116,7 @@ public final class InterfaceGen extends CodeGenerator {
     }
 
     private static ImmutableList<ImplementInterface> tasksFor(Entities entities) {
-        List<AddInterface> interfaces = entities.getAddInterfaceList();
+        var interfaces = entities.getAddInterfaceList();
         return interfaces.stream()
                          .map(ai -> new ImplementEntityState(ai.getName(), entities))
                          .collect(toImmutableList());
@@ -154,9 +148,9 @@ public final class InterfaceGen extends CodeGenerator {
     }
 
     private ImmutableList<CompilerOutput> process(MessageType type) {
-        ImmutableList<CompilerOutput> matched = tasks.generateFor(type);
-        ImmutableList<CompilerOutput> mixed = MixInSpec.scanOptionsFor(type);
-        ImmutableSet<CompilerOutput> deduplicated = ImmutableSet.<CompilerOutput>builder()
+        var matched = tasks.generateFor(type);
+        var mixed = MixInSpec.scanOptionsFor(type);
+        var deduplicated = ImmutableSet.<CompilerOutput>builder()
                 .addAll(matched)
                 .addAll(mixed)
                 .build();

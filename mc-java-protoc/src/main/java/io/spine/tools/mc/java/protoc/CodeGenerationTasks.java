@@ -50,8 +50,8 @@ public final class CodeGenerationTasks {
         checkNotNull(type);
         ImmutableList.Builder<CompilerOutput> result = ImmutableList.builder();
         try {
-            for (CodeGenerationTask task : tasks) {
-                ImmutableList<CompilerOutput> output = task.generateFor(type);
+            for (var task : tasks) {
+                var output = task.generateFor(type);
                 result.addAll(output);
             }
             return result.build();

@@ -59,7 +59,7 @@ abstract class MethodGenerationTask implements CodeGenerationTask {
      * {@linkplain #factoryName factory}.
      */
     ImmutableList<CompilerOutput> generateMethodsFor(@NonNull MessageType type) {
-        MethodFactory factory = classLoader.newInstance(factoryName.getClassName().getCanonical());
+        var factory = classLoader.newInstance(factoryName.getClassName().getCanonical());
         return factory
                 .generateMethodsFor(type)
                 .stream()

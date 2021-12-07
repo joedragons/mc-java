@@ -51,8 +51,7 @@ public final class ProtocPluginFiles {
      */
     public static File.Builder prepareFile(Type<?, ?> type) {
         checkNotNull(type);
-        String fileName = SourceFile.forType(type)
-                                    .toString();
+        var fileName = SourceFile.forType(type).toString();
         return prepareFile(fileName);
     }
 
@@ -67,8 +66,8 @@ public final class ProtocPluginFiles {
     public static File.Builder prepareFile(String name) {
         checkNotNull(name);
         // Protoc consumes only `/` path separators.
-        String uriStyleName = name.replace('\\', '/');
-        File.Builder srcFile = File.newBuilder()
+        var uriStyleName = name.replace('\\', '/');
+        var srcFile = File.newBuilder()
                                    .setName(uriStyleName);
         return srcFile;
     }
