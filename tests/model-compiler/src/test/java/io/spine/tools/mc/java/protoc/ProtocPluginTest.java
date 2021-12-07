@@ -37,39 +37,39 @@ import io.spine.base.RejectionMessage;
 import io.spine.base.SubscribableField;
 import io.spine.base.UuidValue;
 import io.spine.query.EntityColumn;
-import io.spine.test.protoc.EducationalInstitution;
-import io.spine.test.protoc.Kindergarten;
-import io.spine.test.protoc.Outer;
-import io.spine.test.protoc.School;
-import io.spine.test.protoc.University;
-import io.spine.test.protoc.Wrapped;
-import io.spine.test.tools.protoc.Movie;
-import io.spine.test.tools.protoc.WeatherForecast;
-import io.spine.tools.protoc.CreateUser;
-import io.spine.tools.protoc.CustomerName;
-import io.spine.tools.protoc.CustomerNameOrBuilder;
-import io.spine.tools.protoc.MFGTMessage;
-import io.spine.tools.protoc.MessageEnhancedWithPrefixGenerations;
-import io.spine.tools.protoc.MessageEnhancedWithRegexGenerations;
-import io.spine.tools.protoc.MessageEnhancedWithSuffixGenerations;
-import io.spine.tools.protoc.MovieTitleChanged;
-import io.spine.tools.protoc.NotifyUser;
-import io.spine.tools.protoc.PICreateCustomer;
-import io.spine.tools.protoc.PICreateUser;
-import io.spine.tools.protoc.PICustomerCommand;
-import io.spine.tools.protoc.PICustomerCreated;
-import io.spine.tools.protoc.PICustomerEmailReceived;
-import io.spine.tools.protoc.PICustomerEvent;
-import io.spine.tools.protoc.PICustomerNotified;
-import io.spine.tools.protoc.PIUserCreated;
-import io.spine.tools.protoc.PIUserNameUpdated;
-import io.spine.tools.protoc.Rejections;
-import io.spine.tools.protoc.TypicalIdentifier;
-import io.spine.tools.protoc.UserCreated;
-import io.spine.tools.protoc.UserName;
-import io.spine.tools.protoc.UserNotified;
-import io.spine.tools.protoc.test.PIUserEvent;
-import io.spine.tools.protoc.test.UserInfo;
+import io.spine.test.tools.mc.java.protocEducationalInstitution;
+import io.spine.test.tools.mc.java.protocKindergarten;
+import io.spine.test.tools.mc.java.protocOuter;
+import io.spine.test.tools.mc.java.protocSchool;
+import io.spine.test.tools.mc.java.protocUniversity;
+import io.spine.test.tools.mc.java.protocWrapped;
+import io.spine.test.tools.mc.java.protoc.Movie;
+import io.spine.test.tools.mc.java.protoc.WeatherForecast;
+import io.spine.test.tools.mc.java.protoc.CreateUser;
+import io.spine.test.tools.mc.java.protoc.CustomerName;
+import io.spine.test.tools.mc.java.protoc.CustomerNameOrBuilder;
+import io.spine.test.tools.mc.java.protoc.MFGTMessage;
+import io.spine.test.tools.mc.java.protoc.MessageEnhancedWithPrefixGenerations;
+import io.spine.test.tools.mc.java.protoc.MessageEnhancedWithRegexGenerations;
+import io.spine.test.tools.mc.java.protoc.MessageEnhancedWithSuffixGenerations;
+import io.spine.test.tools.mc.java.protoc.MovieTitleChanged;
+import io.spine.test.tools.mc.java.protoc.NotifyUser;
+import io.spine.test.tools.mc.java.protoc.PICreateCustomer;
+import io.spine.test.tools.mc.java.protoc.PICreateUser;
+import io.spine.test.tools.mc.java.protoc.PICustomerCommand;
+import io.spine.test.tools.mc.java.protoc.PICustomerCreated;
+import io.spine.test.tools.mc.java.protoc.PICustomerEmailReceived;
+import io.spine.test.tools.mc.java.protoc.PICustomerEvent;
+import io.spine.test.tools.mc.java.protoc.PICustomerNotified;
+import io.spine.test.tools.mc.java.protoc.PIUserCreated;
+import io.spine.test.tools.mc.java.protoc.PIUserNameUpdated;
+import io.spine.test.tools.mc.java.protoc.Rejections;
+import io.spine.test.tools.mc.java.protoc.TypicalIdentifier;
+import io.spine.test.tools.mc.java.protoc.UserCreated;
+import io.spine.test.tools.mc.java.protoc.UserName;
+import io.spine.test.tools.mc.java.protoc.UserNotified;
+import io.spine.test.tools.mc.java.protoc.test.PIUserEvent;
+import io.spine.test.tools.mc.java.protoc.test.UserInfo;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -88,11 +88,11 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 final class ProtocPluginTest {
 
     private static final String EVENT_INTERFACE_FQN =
-            "io.spine.tools.protoc.PICustomerEvent";
+            "io.spine.test.tools.mc.java.protoc.PICustomerEvent";
     private static final String COMMAND_INTERFACE_FQN =
-            "io.spine.tools.protoc.PICustomerCommand";
+            "io.spine.test.tools.mc.java.protoc.PICustomerCommand";
     private static final String USER_COMMAND_FQN =
-            "io.spine.tools.protoc.PIUserCommand";
+            "io.spine.test.tools.mc.java.protoc.PIUserCommand";
 
     @Test
     @DisplayName("generate marker interfaces")
@@ -139,7 +139,7 @@ final class ProtocPluginTest {
                    event interface. It happens because `UserName` is declared in the same file with
                    events (see `mixed_test.proto`) and the following option is applied:
 
-                   option (every_is).java_type = "io.spine.tools.protoc.test.PIUserEvent";
+                   option (every_is).java_type = "io.spine.test.tools.mc.java.protoc.test.PIUserEvent";
 
                    This test should be updated to avoid the confusion on why a value object
                    becomes an event. Although, it serves for the purposes of the test, it
