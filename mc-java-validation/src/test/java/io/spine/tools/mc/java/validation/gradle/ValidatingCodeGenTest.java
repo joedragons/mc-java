@@ -26,7 +26,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.nio.file.Path;
 
 import static io.spine.tools.gradle.task.JavaTaskName.compileJava;
@@ -38,7 +37,7 @@ class ValidatingCodeGenTest {
 
     @BeforeAll
     static void createProject(@TempDir Path tempDir) {
-        File projectDir = tempDir.toFile();
+        var projectDir = tempDir.toFile();
         project = GradleProject
                 .setupAt(projectDir)
                 .fromResources("validation-gen-plugin-test")

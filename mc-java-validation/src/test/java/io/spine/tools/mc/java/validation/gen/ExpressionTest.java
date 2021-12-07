@@ -26,8 +26,6 @@
 
 package io.spine.tools.mc.java.validation.gen;
 
-import com.squareup.javapoet.CodeBlock;
-import io.spine.tools.mc.java.validation.gen.Expression;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,9 +37,8 @@ class ExpressionTest {
     @Test
     @DisplayName("create formatted expressions")
     void format() {
-        Expression<?> expression =
-                Expression.formatted("%s %s %d!", "hello", new StringBuilder("world"), 42);
-        CodeBlock code = expression.toCode();
+        var expression = Expression.formatted("%s %s %d!", "hello", new StringBuilder("world"), 42);
+        var code = expression.toCode();
         assertThat(code.toString())
                 .isEqualTo("hello world 42!");
     }

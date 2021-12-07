@@ -73,13 +73,12 @@ final class ConstraintCode implements Logging {
      * Builds a {@link CodeBlock} which represents this constraint code.
      */
     public CodeBlock compile() {
-        IsSet fieldIsSet = new IsSet(field);
+        var fieldIsSet = new IsSet(field);
         if (cardinality == Cardinality.SINGULAR) {
             return compileSingular(fieldIsSet, fieldAccess);
         } else {
-            CodeBlock elementValidation = compileSingular(fieldIsSet, element);
-            return CodeBlock
-                    .builder()
+            var elementValidation = compileSingular(fieldIsSet, element);
+            return CodeBlock.builder()
                     .beginControlFlow("$L.forEach($N ->", fieldAccess, element.value())
                     .add(elementValidation)
                     .endControlFlow(")")
@@ -88,11 +87,11 @@ final class ConstraintCode implements Logging {
     }
 
     private CodeBlock compileSingular(IsSet fieldIsSet, FieldAccess field) {
-        CodeBlock ifViolation = onViolation.apply(createViolation.apply(field))
-                                           .toCode();
-        BooleanExpression condition = conditionCheck.apply(field);
+        var ifViolation = onViolation.apply(createViolation.apply(field))
+                                     .toCode();
+        var condition = conditionCheck.apply(field);
         if (onlyIfSet) {
-            BooleanExpression valueIsPresent = fieldIsSet.valueIsPresent(field);
+            var valueIsPresent = fieldIsSet.valueIsPresent(field);
             condition = valueIsPresent.and(condition);
         }
         return condition.isConstant()
@@ -103,13 +102,12 @@ final class ConstraintCode implements Logging {
     private static CodeBlock evaluate(CodeBlock declarations,
                                       BooleanExpression condition,
                                       CodeBlock onViolation) {
-        CodeBlock check = condition.ifTrue(onViolation)
-                                   .toCode();
+        var check = condition.ifTrue(onViolation).toCode();
         return CodeBlock.builder()
-                        .add(declarations)
-                        .add(lineSeparator())
-                        .add(check)
-                        .build();
+                .add(declarations)
+                .add(lineSeparator())
+                .add(check)
+                .build();
     }
 
     private CodeBlock

@@ -30,7 +30,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
-import io.spine.code.java.SimpleClassName;
 import io.spine.type.MessageType;
 import io.spine.validate.ConstraintViolation;
 
@@ -88,9 +87,8 @@ final class ValidateMethod {
      * Creates a {@code MethodSpec} for this method.
      */
     private MethodSpec spec() {
-        SimpleClassName messageSimpleName = validatedType.javaClassName().toSimple();
-        MethodSpec validateMethod = MethodSpec
-                .methodBuilder(methodName)
+        var messageSimpleName = validatedType.javaClassName().toSimple();
+        var validateMethod = MethodSpec.methodBuilder(methodName)
                 .addModifiers(PRIVATE, STATIC)
                 .returns(immutableListOfViolations)
                 .addParameter(bestGuess(messageSimpleName.value()), parameter.toString())
@@ -100,14 +98,13 @@ final class ValidateMethod {
     }
 
     private CodeBlock buildValidateBody() {
-        CodeBlock.Builder validationCode = CodeBlock.builder();
-        for (CodeBlock constraintCode : compiledConstraints) {
+        var validationCode = CodeBlock.builder();
+        for (var constraintCode : compiledConstraints) {
             validationCode.add(constraintCode);
         }
         return validationCode.isEmpty()
                ? CodeBlock.of("return $T.of();", ImmutableList.class)
-               : CodeBlock
-                       .builder()
+               : CodeBlock.builder()
                        .addStatement("$T $N = $T.builder()",
                                      listBuilderOfViolations,
                                      VIOLATIONS,

@@ -54,7 +54,7 @@ final class ExternalConstraintFlag {
 
     ExternalConstraintFlag(FieldDeclaration field) {
         this.declaration = checkNotNull(field);
-        String name = format("is%sValidatedExternally", field.name().toCamelCase());
+        var name = format("is%sValidatedExternally", field.name().toCamelCase());
         this.field = BooleanExpression.fromCode(name);
         this.messageClassName = bestGuess(field.declaringType()
                                                .javaClassName()
@@ -83,8 +83,7 @@ final class ExternalConstraintFlag {
                 messageClassName,
                 declaration.name()
         );
-        FieldSpec spec = FieldSpec
-                .builder(Boolean.TYPE, field.toString(), PRIVATE, FINAL, STATIC)
+        var spec = FieldSpec.builder(Boolean.TYPE, field.toString(), PRIVATE, FINAL, STATIC)
                 .initializer(externallyValidated.toCode())
                 .build();
         return new Field(spec);
@@ -98,7 +97,7 @@ final class ExternalConstraintFlag {
         if (!(o instanceof ExternalConstraintFlag)) {
             return false;
         }
-        ExternalConstraintFlag that = (ExternalConstraintFlag) o;
+        var that = (ExternalConstraintFlag) o;
         return Objects.equal(declaration, that.declaration);
     }
 
