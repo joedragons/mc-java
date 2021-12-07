@@ -26,13 +26,12 @@
 
 package io.spine.tools.mc.java.rejection.gradle;
 
+import io.spine.code.java.PackageName;
+import io.spine.code.proto.FieldName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.Directory;
 import io.spine.tools.java.fs.FileName;
-import io.spine.code.java.PackageName;
-import io.spine.code.proto.FieldName;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
@@ -56,7 +55,7 @@ final class TestEnv {
     }
 
     static String rejectionsJavadocThrowableSource() {
-        Path fileName =
+        var fileName =
                 DefaultJavaPaths.at(Paths.get("/"))
                                 .generated()
                                 .mainSpine()

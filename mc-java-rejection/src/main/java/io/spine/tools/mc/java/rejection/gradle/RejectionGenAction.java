@@ -28,7 +28,6 @@ package io.spine.tools.mc.java.rejection.gradle;
 
 import com.google.common.collect.ImmutableSet;
 import io.spine.base.RejectionThrowable;
-import io.spine.base.RejectionType;
 import io.spine.code.java.PackageName;
 import io.spine.code.java.SimpleClassName;
 import io.spine.code.proto.FileSet;
@@ -51,7 +50,6 @@ import org.gradle.api.file.FileCollection;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -82,7 +80,7 @@ final class RejectionGenAction extends CodeGenerationAction {
      */
     static Action<Task> create(Project project, SourceSetName ssn) {
         Supplier<String> protoSrcDir = () -> protoDir(project, ssn).toString();
-        Supplier<FileSet> protoFiles = ProtoFiles.collect(project, ssn);
+        var protoFiles = ProtoFiles.collect(project, ssn);
         Supplier<String> targetDir = () -> generatedRejectionsDir(project, ssn).toString();
         return new RejectionGenAction(project, ssn, protoSrcDir, protoFiles, targetDir);
     }
@@ -98,10 +96,10 @@ final class RejectionGenAction extends CodeGenerationAction {
 
     @Override
     public void execute(Task task) {
-        FileSet files = protoFiles().get();
-        ImmutableSet<RejectionsFile> rejectionFiles = rejectionsInSourceSet(files);
+        var files = protoFiles().get();
+        var rejectionFiles = rejectionsInSourceSet(files);
         _debug().log("Processing the file descriptors for the rejections `%s`.", rejectionFiles);
-        for (RejectionsFile source : rejectionFiles) {
+        for (var source : rejectionFiles) {
             // We are sure that this is a rejections file because we got them filtered.
             generateRejections(source);
         }
@@ -111,9 +109,9 @@ final class RejectionGenAction extends CodeGenerationAction {
      * Obtains all rejection files in the currently processed {@linkplain #ssn source set}.
      */
     private ImmutableSet<RejectionsFile> rejectionsInSourceSet(FileSet allFiles) {
-        ImmutableSet<RejectionsFile> allRejections = RejectionsFile.findAll(allFiles);
-        Predicate<SourceFile> inSourceSet = belongsToSourceSet();
-        ImmutableSet<RejectionsFile> moduleRejections = allRejections.stream()
+        var allRejections = RejectionsFile.findAll(allFiles);
+        var inSourceSet = belongsToSourceSet();
+        var moduleRejections = allRejections.stream()
                 .filter(inSourceSet)
                 .collect(toImmutableSet());
         return moduleRejections;
@@ -132,8 +130,8 @@ final class RejectionGenAction extends CodeGenerationAction {
                 .collect(toImmutableSet());
 
         Predicate<SourceFile> predicate = file -> {
-            Path sourceFile = file.path();
-            boolean contains = protoFiles.stream()
+            var sourceFile = file.path();
+            var contains = protoFiles.stream()
                     .anyMatch(path -> path.endsWith(sourceFile));
             return contains;
         };
@@ -141,19 +139,19 @@ final class RejectionGenAction extends CodeGenerationAction {
     }
 
     private void generateRejections(RejectionsFile source) {
-        List<RejectionType> rejections = source.rejectionDeclarations();
+        var rejections = source.rejectionDeclarations();
         if (rejections.isEmpty()) {
             return;
         }
-        Path outputDir = targetDir().toPath();
+        var outputDir = targetDir().toPath();
         logGeneratingForFile(outputDir, source);
-        for (RejectionType rejectionType : rejections) {
+        for (var rejectionType : rejections) {
             // The name of the generated `ThrowableMessage` will be the same
             // as for the Protobuf message.
             _debug().log("Processing rejection `%s`.", rejectionType.simpleJavaClassName());
 
             TypeSpec spec = new RThrowableSpec(rejectionType);
-            TypeSpecWriter writer = new TypeSpecWriter(spec, indent());
+            var writer = new TypeSpecWriter(spec, indent());
             writer.write(outputDir);
         }
     }

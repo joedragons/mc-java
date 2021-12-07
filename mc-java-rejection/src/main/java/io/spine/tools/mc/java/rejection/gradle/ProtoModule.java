@@ -30,13 +30,8 @@ import io.spine.tools.gradle.SourceSetName;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
-import org.gradle.api.tasks.SourceSet;
-
-import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.gradle.ProtobufDependencies.sourceSetExtensionName;
-import static io.spine.tools.gradle.project.Projects.sourceSet;
 import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
 import static io.spine.tools.mc.java.gradle.Projects.protoFiles;
 
@@ -84,7 +79,7 @@ final class ProtoModule {
      *         directory is changing, the contents of the collection is updated.
      */
     FileCollection generatedRejections(SourceSetName ssn) {
-        Path targetDir = generatedRejectionsDir(project, ssn);
+        var targetDir = generatedRejectionsDir(project, ssn);
         FileCollection files = project.fileTree(targetDir);
         return files;
     }
