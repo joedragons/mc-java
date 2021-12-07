@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc;
+package io.spine.tools.mc.java.protoc;
 
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.Immutable;
@@ -42,8 +42,7 @@ public final class TestMethodFactory implements MethodFactory {
 
     @Override
     public List<Method> generateMethodsFor(MessageType messageType) {
-        MethodSpec spec = MethodSpec
-                .methodBuilder("ownType")
+        var spec = MethodSpec.methodBuilder("ownType")
                 .returns(MessageType.class)
                 .addStatement("return new $T(getDescriptor())", MessageType.class)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

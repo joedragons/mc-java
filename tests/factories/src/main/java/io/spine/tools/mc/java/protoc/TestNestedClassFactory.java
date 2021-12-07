@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.protoc;
+package io.spine.tools.mc.java.protoc;
 
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.Immutable;
@@ -50,20 +50,18 @@ public final class TestNestedClassFactory implements NestedClassFactory {
 
     @Override
     public List<NestedClass> generateClassesFor(MessageType messageType) {
-        ClassName messageClassName = ClassName.get("", messageType.simpleJavaClassName().value());
-        MethodSpec ownClass = MethodSpec
-                .methodBuilder("messageClass")
+        var messageClassName = ClassName.get("", messageType.simpleJavaClassName().value());
+        var ownClass = MethodSpec.methodBuilder("messageClass")
                 .addModifiers(PUBLIC, STATIC)
                 .returns(Class.class)
                 .addStatement("return $T.class", messageClassName)
                 .addJavadoc("Returns the message class for test purposes.")
                 .build();
-        TypeSpec spec = TypeSpec
-                .classBuilder("SomeNestedClass")
+        var spec = TypeSpec.classBuilder("SomeNestedClass")
                 .addModifiers(PUBLIC, STATIC, FINAL)
                 .addMethod(ownClass)
                 .build();
-        NestedClass generatedClass = new NestedClass(spec.toString());
+        var generatedClass = new NestedClass(spec.toString());
         return ImmutableList.of(generatedClass);
     }
 }
