@@ -28,16 +28,12 @@ package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
-import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.type.FileDescriptorSuperset;
 import org.gradle.api.Action;
 import org.gradle.api.Buildable;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.artifacts.Configuration;
-
-import java.io.File;
 
 import static io.spine.tools.gradle.JavaConfigurationName.runtimeClasspath;
 import static io.spine.tools.gradle.project.Projects.configuration;
@@ -62,10 +58,10 @@ final class DescriptorSetMergerPlugin implements Plugin<Project> {
     }
 
     private static void createTask(Project project, SourceSetName ssn) {
-        Configuration configuration = configuration(project, runtimeClasspath(ssn));
+        var configuration = configuration(project, runtimeClasspath(ssn));
         Buildable dependencies = configuration.getAllDependencies();
-        Action<Task> action = createMergingAction(ssn);
-        GradleTask task = GradleTask.newBuilder(mergeDescriptorSet(ssn), action)
+        var action = createMergingAction(ssn);
+        var task = GradleTask.newBuilder(mergeDescriptorSet(ssn), action)
                 .insertAfterTask(generateProto(ssn))
                 .insertBeforeTask(processResources(ssn))
                 .applyNowTo(project);
@@ -74,11 +70,11 @@ final class DescriptorSetMergerPlugin implements Plugin<Project> {
 
     private static Action<Task> createMergingAction(SourceSetName ssn) {
         return task -> {
-            FileDescriptorSuperset superset = new FileDescriptorSuperset();
-            Project project = task.getProject();
-            Configuration configuration = configuration(project, runtimeClasspath(ssn));
+            var superset = new FileDescriptorSuperset();
+            var project = task.getProject();
+            var configuration = configuration(project, runtimeClasspath(ssn));
             configuration.forEach(superset::addFromDependency);
-            File descriptorSet = descriptorSetFile(project, ssn);
+            var descriptorSet = descriptorSetFile(project, ssn);
             if (descriptorSet.exists()) {
                 superset.addFromDependency(descriptorSet);
             }

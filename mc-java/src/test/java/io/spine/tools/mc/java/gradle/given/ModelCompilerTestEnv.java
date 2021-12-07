@@ -41,8 +41,7 @@ public class ModelCompilerTestEnv {
     }
 
     public static String newUuid() {
-        String result = UUID.randomUUID()
-                            .toString();
+        var result = UUID.randomUUID().toString();
         return result;
     }
 }

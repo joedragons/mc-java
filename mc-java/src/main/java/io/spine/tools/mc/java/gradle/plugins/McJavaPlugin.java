@@ -53,7 +53,7 @@ public class McJavaPlugin extends LanguagePlugin implements Logging {
     @Override
     public void apply(Project project) {
         super.apply(project);
-        McJavaOptions extension = getMcJava(project);
+        var extension = getMcJava(project);
         extension.injectProject(project);
         createAndApplyPluginsIn(project);
     }

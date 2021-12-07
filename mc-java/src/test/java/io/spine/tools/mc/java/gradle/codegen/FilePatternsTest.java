@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.testing.Assertions.assertNpe;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("FilePatterns should")
+@DisplayName("`FilePatterns` should")
 final class FilePatternsTest extends UtilityClassTest<FilePatterns> {
 
     FilePatternsTest() {
@@ -48,19 +48,19 @@ final class FilePatternsTest extends UtilityClassTest<FilePatterns> {
     final class NotAllowNulls {
 
         @Test
-        @DisplayName("fileSuffix pattern")
+        @DisplayName("`fileSuffix` pattern")
         void fileSuffix() {
             assertNpe(() -> FilePatterns.fileSuffix(null));
         }
 
         @Test
-        @DisplayName("filePrefix pattern")
+        @DisplayName("`filePrefix` pattern")
         void filePrefix() {
             assertNpe(() -> FilePatterns.filePrefix(null));
         }
 
         @Test
-        @DisplayName("regex pattern")
+        @DisplayName("`regex` pattern")
         void regex() {
             assertNpe(() -> FilePatterns.fileRegex(null));
         }
@@ -77,24 +77,24 @@ final class FilePatternsTest extends UtilityClassTest<FilePatterns> {
             @Test
             @DisplayName("with file name")
             void withFileName() {
-                String suffix = "documents.proto";
-                FilePattern filter = FilePatterns.fileSuffix(suffix);
+                var suffix = "documents.proto";
+                var filter = FilePatterns.fileSuffix(suffix);
                 assertEquals(suffix, filter.getSuffix());
             }
 
             @Test
             @DisplayName("with path parts")
             void withPathParts() {
-                String suffix = "tools/protoc/documents.proto";
-                FilePattern filter = FilePatterns.fileSuffix(suffix);
+                var suffix = "tools/protoc/documents.proto";
+                var filter = FilePatterns.fileSuffix(suffix);
                 assertEquals(suffix, filter.getSuffix());
             }
 
             @Test
             @DisplayName("with absolute file path")
             void withAbsolutePath() {
-                String suffix = "/home/user/development/petproject/src/main/proto/documents.proto";
-                FilePattern filter = FilePatterns.fileSuffix(suffix);
+                var suffix = "/home/user/development/petproject/src/main/proto/documents.proto";
+                var filter = FilePatterns.fileSuffix(suffix);
                 assertEquals(suffix, filter.getSuffix());
             }
         }
@@ -106,53 +106,53 @@ final class FilePatternsTest extends UtilityClassTest<FilePatterns> {
             @Test
             @DisplayName("with file name")
             void withFileName() {
-                String prefix = "documents_";
-                FilePattern pattern = FilePatterns.filePrefix(prefix);
+                var prefix = "documents_";
+                var pattern = FilePatterns.filePrefix(prefix);
                 assertEquals(prefix, pattern.getPrefix());
             }
 
             @Test
             @DisplayName("with path parts")
             void withPathParts() {
-                String prefix = "io/spine/tools/documents_";
-                FilePattern pattern = FilePatterns.filePrefix(prefix);
+                var prefix = "io/spine/tools/documents_";
+                var pattern = FilePatterns.filePrefix(prefix);
                 assertEquals(prefix, pattern.getPrefix());
             }
 
             @Test
             @DisplayName("with absolute file path")
             void withAbsolutePath() {
-                String prefix = "/home/user/development/petproject/src/main/proto/test_";
-                FilePattern filter = FilePatterns.filePrefix(prefix);
+                var prefix = "/home/user/development/petproject/src/main/proto/test_";
+                var filter = FilePatterns.filePrefix(prefix);
                 assertEquals(prefix, filter.getPrefix());
             }
         }
 
         @Nested
-        @DisplayName("regex pattern")
+        @DisplayName("`regex` pattern")
         class Regex {
 
             @Test
             @DisplayName("with prefix and suffix wildcards")
             void withBothWildcards() {
-                String regex = ".*documents.*";
-                FilePattern pattern = FilePatterns.fileRegex(regex);
+                var regex = ".*documents.*";
+                var pattern = FilePatterns.fileRegex(regex);
                 assertEquals(regex, pattern.getRegex());
             }
 
             @Test
             @DisplayName("with path parts")
             void withPathParts() {
-                String regex = "io/spine/.*/documents/.*\\.proto";
-                FilePattern pattern = FilePatterns.fileRegex(regex);
+                var regex = "io/spine/.*/documents/.*\\.proto";
+                var pattern = FilePatterns.fileRegex(regex);
                 assertEquals(regex, pattern.getRegex());
             }
 
             @Test
             @DisplayName("with absolute file path")
             void withAbsolutePath() {
-                String regex = "/home/user/development/petproject/.*/proto/test_.*\\.proto";
-                FilePattern filter = FilePatterns.fileRegex(regex);
+                var regex = "/home/user/development/petproject/.*/proto/test_.*\\.proto";
+                var filter = FilePatterns.fileRegex(regex);
                 assertEquals(regex, filter.getRegex());
             }
         }

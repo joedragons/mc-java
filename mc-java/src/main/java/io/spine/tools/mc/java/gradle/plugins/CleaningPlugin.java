@@ -31,10 +31,8 @@ import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.logging.Logger;
 
 import java.io.File;
-import java.util.List;
 
 import static com.google.common.flogger.LazyArgs.lazy;
 import static io.spine.io.Delete.deleteRecursively;
@@ -51,16 +49,15 @@ public final class CleaningPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         Action<Task> preCleanAction = task -> cleanIn(project);
-        GradleTask preCleanTask =
-                GradleTask.newBuilder(preClean, preCleanAction)
-                        .insertBeforeTask(clean)
-                        .applyNowTo(project);
+        var preCleanTask = GradleTask.newBuilder(preClean, preCleanAction)
+                .insertBeforeTask(clean)
+                .applyNowTo(project);
         project.getLogger().debug("Pre-clean phase initialized: `{}`.", preCleanTask);
     }
 
     private static void cleanIn(Project project) {
-        Logger logger = project.getLogger();
-        List<File> dirsToClean = TempArtifactDirs.getFor(project);
+        var logger = project.getLogger();
+        var dirsToClean = TempArtifactDirs.getFor(project);
         logger.debug(
                 "Pre-clean: deleting the directories (`{}`).", lazy(dirsToClean::toString)
         );
