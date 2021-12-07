@@ -42,7 +42,7 @@ class CodeGenAnnotationsTest {
     @Test
     @DisplayName("have default values")
     void defaults() {
-        CodeGenAnnotations annotations = new CodeGenAnnotations();
+        var annotations = new CodeGenAnnotations();
 
         assertMatches(Experimental.class, annotations.experimentalClassName());
         assertMatches(SPI.class, annotations.spiClassName());

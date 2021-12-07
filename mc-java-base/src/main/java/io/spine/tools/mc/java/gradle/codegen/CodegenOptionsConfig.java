@@ -38,12 +38,12 @@ import io.spine.option.OptionsProto;
 import io.spine.query.EntityStateField;
 import io.spine.tools.java.code.Classpath;
 import io.spine.tools.java.code.UuidMethodFactory;
-import io.spine.tools.proto.code.ProtoTypeName;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.codegen.FilePattern;
 import io.spine.tools.mc.java.codegen.Messages;
 import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.tools.mc.java.codegen.TypePattern;
+import io.spine.tools.proto.code.ProtoTypeName;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;
@@ -157,10 +157,10 @@ public final class CodegenOptionsConfig extends Config<CodegenOptions> {
      * @see #by() for creating a file pattern for selecting messages
      */
     public void forMessages(FilePattern filePattern, Action<MessagesConfig> action) {
-        Pattern pattern = Pattern.newBuilder()
+        var pattern = Pattern.newBuilder()
                 .setFile(filePattern)
                 .build();
-        MessagesConfig config = new MessagesConfig(project, pattern);
+        var config = new MessagesConfig(project, pattern);
         action.execute(config);
         messagesConfigs.add(config.toProto());
     }
@@ -178,13 +178,13 @@ public final class CodegenOptionsConfig extends Config<CodegenOptions> {
      * Configures code generation for particular message.
      */
     public void forMessage(String protoTypeName, Action<MessagesConfig> action) {
-        ProtoTypeName name = ProtoTypeName.newBuilder()
+        var name = ProtoTypeName.newBuilder()
                 .setValue(protoTypeName)
                 .build();
-        Pattern pattern = Pattern.newBuilder()
+        var pattern = Pattern.newBuilder()
                 .setType(TypePattern.newBuilder().setExpectedType(name))
                 .build();
-        MessagesConfig config = new MessagesConfig(project, pattern);
+        var config = new MessagesConfig(project, pattern);
         config.emptyByConvention();
         action.execute(config);
         messagesConfigs.add(config.toProto());
@@ -193,8 +193,8 @@ public final class CodegenOptionsConfig extends Config<CodegenOptions> {
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored") // calling builder
     public CodegenOptions toProto() {
-        Classpath classpath = buildClasspath();
-        CodegenOptions.Builder builder = CodegenOptions.newBuilder()
+        var classpath = buildClasspath();
+        var builder = CodegenOptions.newBuilder()
                 .setCommands(commands.toProto())
                 .setEvents(events.toProto())
                 .setRejections(rejections.toProto())
@@ -207,7 +207,7 @@ public final class CodegenOptionsConfig extends Config<CodegenOptions> {
     }
 
     private Classpath buildClasspath() {
-        Classpath.Builder classpath = Classpath.newBuilder();
+        var classpath = Classpath.newBuilder();
         Collection<JavaCompile> javaCompileViews =
                 project.getTasks()
                         .withType(JavaCompile.class);

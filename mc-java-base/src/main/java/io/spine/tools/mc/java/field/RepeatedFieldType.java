@@ -35,13 +35,12 @@ import io.spine.code.java.PrimitiveType;
 import io.spine.code.proto.FieldDeclaration;
 
 import java.util.List;
-import java.util.Optional;
 
 import static io.spine.tools.mc.java.field.StandardAccessor.add;
 import static io.spine.tools.mc.java.field.StandardAccessor.addAll;
 import static io.spine.tools.mc.java.field.StandardAccessor.clear;
-import static io.spine.tools.mc.java.field.StandardAccessor.getCount;
 import static io.spine.tools.mc.java.field.StandardAccessor.get;
+import static io.spine.tools.mc.java.field.StandardAccessor.getCount;
 import static io.spine.tools.mc.java.field.StandardAccessor.getList;
 import static io.spine.tools.mc.java.field.StandardAccessor.set;
 
@@ -94,13 +93,12 @@ final class RepeatedFieldType implements FieldType {
     }
 
     private static TypeName typeNameFor(String componentTypeName) {
-        Optional<? extends Class<?>> wrapper = PrimitiveType.getWrapperClass(componentTypeName);
-        TypeName componentType =
-                wrapper.isPresent()
-                ? TypeName.get(wrapper.get())
-                : ClassName.bestGuess(componentTypeName);
-        ClassName listClass = ClassName.get(List.class);
-        ParameterizedTypeName result = ParameterizedTypeName.get(listClass, componentType);
+        var wrapper = PrimitiveType.getWrapperClass(componentTypeName);
+        var componentType = wrapper.isPresent()
+                            ? TypeName.get(wrapper.get())
+                            : ClassName.bestGuess(componentTypeName);
+        var listClass = ClassName.get(List.class);
+        var result = ParameterizedTypeName.get(listClass, componentType);
         return result;
     }
 

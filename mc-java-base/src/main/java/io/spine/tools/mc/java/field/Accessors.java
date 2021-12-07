@@ -61,7 +61,7 @@ public final class Accessors {
      * @return new instance
      */
     public static Accessors forField(io.spine.code.proto.FieldName name, FieldType type) {
-        FieldName javaFieldName = FieldName.from(name);
+        var javaFieldName = FieldName.from(name);
         return new Accessors(javaFieldName, type);
     }
 
@@ -72,7 +72,7 @@ public final class Accessors {
      * reference several method overloads.
      */
     public ImmutableSet<String> names() {
-        ImmutableSet<String> names = names(type.accessors());
+        var names = names(type.accessors());
         return names;
     }
 
