@@ -30,7 +30,6 @@ import com.google.common.base.Objects;
 import io.spine.code.java.ClassName;
 import org.checkerframework.checker.regex.qual.Regex;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -61,7 +60,7 @@ public final class ClassNamePattern {
      */
     static ClassNamePattern compile(@Regex String regex) {
         checkArgument(!isNullOrEmpty(regex));
-        Pattern pattern = Pattern.compile(regex);
+        var pattern = Pattern.compile(regex);
         return new ClassNamePattern(pattern);
     }
 
@@ -75,7 +74,7 @@ public final class ClassNamePattern {
      */
     boolean matches(ClassName name) {
         checkNotNull(name);
-        Matcher matcher = pattern.matcher(name.value());
+        var matcher = pattern.matcher(name.value());
         return matcher.matches();
     }
 
@@ -99,7 +98,7 @@ public final class ClassNamePattern {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ClassNamePattern pattern1 = (ClassNamePattern) o;
+        var pattern1 = (ClassNamePattern) o;
         return Objects.equal(pattern.pattern(), pattern1.pattern.pattern());
     }
 

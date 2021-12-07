@@ -112,11 +112,11 @@ public abstract class Annotator {
      */
     static <T extends JavaSource<T>>
     void rewriteSource(Path sourcePathPrefix, SourceFile sourceFile, SourceVisitor<T> visitor) {
-        Path absoluteSourcePath = sourcePathPrefix.resolve(sourceFile.path());
+        var absoluteSourcePath = sourcePathPrefix.resolve(sourceFile.path());
         if (exists(absoluteSourcePath)) {
             @SuppressWarnings("unchecked" /* There is no way to specify generic parameter
                                              for `AbstractJavaSource.class` value. */)
-            AbstractJavaSource<T> javaSource = (AbstractJavaSource<T>) parse(absoluteSourcePath);
+            var javaSource = (AbstractJavaSource<T>) parse(absoluteSourcePath);
             visitor.accept(javaSource);
             rewrite(javaSource, absoluteSourcePath);
         }
@@ -124,7 +124,7 @@ public abstract class Annotator {
 
     private static <T extends JavaSource<T>>
     void rewrite(AbstractJavaSource<T> javaSource, Path destination) {
-        String resultingSource = javaSource.toString();
+        var resultingSource = javaSource.toString();
         try {
             Files.write(destination, ImmutableList.of(resultingSource), TRUNCATE_EXISTING);
         } catch (IOException e) {
@@ -150,7 +150,7 @@ public abstract class Annotator {
      *         the program element to annotate
      */
     protected final void addAnnotation(AnnotationTargetSource<?, ?> source) {
-        String annotationFQN = annotation.value();
+        var annotationFQN = annotation.value();
         AnnotationSource<?> annotation = source.getAnnotation(annotationFQN);
         if (annotation == null) {
             AnnotationSource<?> newAnnotation = source.addAnnotation();

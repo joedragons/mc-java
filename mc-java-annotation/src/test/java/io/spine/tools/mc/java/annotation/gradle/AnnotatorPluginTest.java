@@ -26,12 +26,7 @@
 
 package io.spine.tools.mc.java.annotation.gradle;
 
-import com.google.protobuf.DescriptorProtos;
-import com.google.protobuf.DescriptorProtos.DescriptorProto;
-import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
-import com.google.protobuf.Descriptors.ServiceDescriptor;
 import io.spine.annotation.Internal;
 import io.spine.annotation.SPI;
 import io.spine.code.proto.FileName;
@@ -58,8 +53,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkState;
 import static io.spine.code.proto.FileDescriptors.DESC_EXTENSION;
@@ -90,7 +83,7 @@ class AnnotatorPluginTest {
     @BeforeAll
     static void compileProject() {
         projectDir = TempDir.forClass(AnnotatorPluginTest.class);
-        GradleProject project = GradleProject.setupAt(projectDir)
+        var project = GradleProject.setupAt(projectDir)
                 .fromResources(RESOURCE_DIR)
                 .copyBuildSrc()
                 .create();
@@ -206,8 +199,8 @@ class AnnotatorPluginTest {
     @Test
     @DisplayName("compile generated source with potential annotation duplication")
     void compilingSources() {
-        File tempDir = TempDir.forClass(AnnotatorPluginTest.class);
-        GradleProject project = GradleProject.setupAt(tempDir)
+        var tempDir = TempDir.forClass(AnnotatorPluginTest.class);
+        var project = GradleProject.setupAt(tempDir)
                 .fromResources(RESOURCE_DIR)
                 .copyBuildSrc()
                 .create();
@@ -223,11 +216,10 @@ class AnnotatorPluginTest {
                                                 Class<? extends Annotation> expectedAnnotation,
                                                 boolean shouldBeAnnotated)
             throws IOException {
-        FileDescriptor fileDescriptor = descriptorOf(testFile);
-        List<ServiceDescriptor> services = fileDescriptor.getServices();
-        for (ServiceDescriptor serviceDescriptor : services) {
-            SourceFile serviceFile =
-                    forService(serviceDescriptor.toProto(), fileDescriptor.toProto());
+        var fileDescriptor = descriptorOf(testFile);
+        var services = fileDescriptor.getServices();
+        for (var serviceDescriptor : services) {
+            var serviceFile = forService(serviceDescriptor.toProto(), fileDescriptor.toProto());
             SourceCheck check =
                     new MainDefinitionAnnotationCheck(expectedAnnotation, shouldBeAnnotated);
             checkGrpcService(serviceFile, check);
@@ -236,32 +228,31 @@ class AnnotatorPluginTest {
 
     private static void checkFieldAnnotations(GivenProtoFile testFile, boolean shouldBeAnnotated)
             throws IOException {
-        FileDescriptor fileDescriptor = descriptorOf(testFile.fileName());
-        Descriptor messageDescriptor = fileDescriptor.getMessageTypes().get(0);
-        Path sourcePath = forMessage(messageDescriptor.toProto(), fileDescriptor.toProto()).path();
-        NestedTypeFieldsAnnotationCheck check =
-                new NestedTypeFieldsAnnotationCheck(messageDescriptor, shouldBeAnnotated);
+        var fileDescriptor = descriptorOf(testFile.fileName());
+        var messageDescriptor = fileDescriptor.getMessageTypes().get(0);
+        var sourcePath = forMessage(messageDescriptor.toProto(), fileDescriptor.toProto()).path();
+        var check = new NestedTypeFieldsAnnotationCheck(messageDescriptor, shouldBeAnnotated);
         check(sourcePath, check);
     }
 
     private static
     void checkFieldAnnotationsMultiple(GivenProtoFile testFile, boolean shouldBeAnnotated)
             throws IOException {
-        FileDescriptor fileDescriptor = descriptorOf(testFile.fileName());
-        Descriptor messageDescriptor = fileDescriptor.getMessageTypes().get(0);
-        FieldDescriptor experimentalField = messageDescriptor.getFields().get(0);
-        Path sourcePath = forMessage(messageDescriptor.toProto(), fileDescriptor.toProto()).path();
+        var fileDescriptor = descriptorOf(testFile.fileName());
+        var messageDescriptor = fileDescriptor.getMessageTypes().get(0);
+        var experimentalField = messageDescriptor.getFields().get(0);
+        var sourcePath = forMessage(messageDescriptor.toProto(), fileDescriptor.toProto()).path();
         check(sourcePath, new FieldAnnotationCheck(experimentalField, shouldBeAnnotated));
     }
 
     private static
     void checkMainDefinitionAnnotations(GivenProtoFile testFile, boolean shouldBeAnnotated)
             throws IOException {
-        FileDescriptor fileDescriptor = descriptorOf(testFile.fileName());
-        for (Descriptor messageDescriptor : fileDescriptor.getMessageTypes()) {
-            DescriptorProto messageProto = messageDescriptor.toProto();
-            DescriptorProtos.FileDescriptorProto fileProto = fileDescriptor.toProto();
-            Path messagePath = forMessage(messageProto, fileProto).path();
+        var fileDescriptor = descriptorOf(testFile.fileName());
+        for (var messageDescriptor : fileDescriptor.getMessageTypes()) {
+            var messageProto = messageDescriptor.toProto();
+            var fileProto = fileDescriptor.toProto();
+            var messagePath = forMessage(messageProto, fileProto).path();
             SourceCheck annotationCheck = new MainDefinitionAnnotationCheck(shouldBeAnnotated);
             check(messagePath, annotationCheck);
         }
@@ -270,16 +261,16 @@ class AnnotatorPluginTest {
     private static
     void checkNestedTypesAnnotations(GivenProtoFile testFile, boolean shouldBeAnnotated)
             throws IOException {
-        FileDescriptor fileDescriptor = descriptorOf(testFile.fileName());
-        Path sourcePath = forOuterClassOf(fileDescriptor.toProto()).path();
+        var fileDescriptor = descriptorOf(testFile.fileName());
+        var sourcePath = forOuterClassOf(fileDescriptor.toProto()).path();
         check(sourcePath, new NestedTypesAnnotationCheck(shouldBeAnnotated));
     }
 
     private static void check(Path sourcePath, SourceCheck check) throws IOException {
-        Path filePath = DefaultJavaPaths.at(projectDir)
-                                        .generated()
-                                        .mainJava()
-                                        .resolve(sourcePath);
+        var filePath = DefaultJavaPaths.at(projectDir)
+                                       .generated()
+                                       .mainJava()
+                                       .resolve(sourcePath);
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
                 Roaster.parse(AbstractJavaSource.class, filePath.toFile());
@@ -288,10 +279,10 @@ class AnnotatorPluginTest {
 
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
-        Path fullPath = DefaultJavaPaths.at(projectDir)
-                                        .generated()
-                                        .mainGrpc()
-                                        .resolve(serviceFile);
+        var fullPath = DefaultJavaPaths.at(projectDir)
+                                       .generated()
+                                       .mainGrpc()
+                                       .resolve(serviceFile);
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
                 Roaster.parse(AbstractJavaSource.class, fullPath.toFile());
@@ -299,11 +290,11 @@ class AnnotatorPluginTest {
     }
 
     private static FileDescriptor descriptorOf(FileName testFile) {
-        Path mainDescriptor = mainDescriptorPath();
-        FileSet fileSet = FileSet.parse(mainDescriptor.toFile());
-        Optional<FileDescriptor> file = fileSet.tryFind(testFile);
+        var mainDescriptor = mainDescriptorPath();
+        var fileSet = FileSet.parse(mainDescriptor.toFile());
+        var file = fileSet.tryFind(testFile);
         checkState(file.isPresent(), "Unable to get file descriptor for `%s`.", testFile);
-        FileDescriptor result = file.get();
+        var result = file.get();
         return result;
     }
 

@@ -28,12 +28,9 @@ package io.spine.tools.mc.java.annotation.mark;
 
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.DescriptorProtos.FileOptions;
-import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.Descriptors.EnumDescriptor;
 import com.google.protobuf.Descriptors.FileDescriptor;
-import com.google.protobuf.Descriptors.ServiceDescriptor;
-import io.spine.tools.java.fs.SourceFile;
 import io.spine.code.java.ClassName;
+import io.spine.tools.java.fs.SourceFile;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.nio.file.Path;
@@ -64,7 +61,7 @@ final class FileAnnotator extends OptionAnnotator<FileDescriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor file : fileDescriptors()) {
+        for (var file : fileDescriptors()) {
             if (shouldAnnotate(file)) {
                 annotate(file);
             }
@@ -97,7 +94,7 @@ final class FileAnnotator extends OptionAnnotator<FileDescriptor> {
      * @see #annotateServices(FileDescriptor)
      */
     private void annotateNestedTypes(FileDescriptor file) {
-        SourceFile filePath = SourceFile.forOuterClassOf(file.toProto());
+        var filePath = SourceFile.forOuterClassOf(file.toProto());
         rewriteSource(filePath, input -> input.getNestedTypes().forEach(this::addAnnotation));
     }
 
@@ -110,7 +107,7 @@ final class FileAnnotator extends OptionAnnotator<FileDescriptor> {
      * @param file the file descriptor to get message descriptors
      */
     private void annotateMessages(FileDescriptor file) {
-        for (Descriptor messageType : file.getMessageTypes()) {
+        for (var messageType : file.getMessageTypes()) {
             annotateMessageTypes(messageType, file);
         }
     }
@@ -124,8 +121,8 @@ final class FileAnnotator extends OptionAnnotator<FileDescriptor> {
      * @param file the file descriptor to get enum descriptors
      */
     private void annotateEnums(FileDescriptor file) {
-        for (EnumDescriptor enumType : file.getEnumTypes()) {
-            SourceFile filePath = forEnum(enumType.toProto(), file.toProto());
+        for (var enumType : file.getEnumTypes()) {
+            var filePath = forEnum(enumType.toProto(), file.toProto());
             annotate(filePath);
         }
     }
@@ -141,8 +138,8 @@ final class FileAnnotator extends OptionAnnotator<FileDescriptor> {
      */
     private void annotateServices(FileDescriptor file) {
         SourceVisitor<JavaClassSource> annotation = new TypeDeclarationAnnotation();
-        for (ServiceDescriptor serviceDescriptor : file.getServices()) {
-            SourceFile serviceClass = forService(serviceDescriptor.toProto(), file.toProto());
+        for (var serviceDescriptor : file.getServices()) {
+            var serviceClass = forService(serviceDescriptor.toProto(), file.toProto());
             rewriteSource(genGrpcDir, serviceClass, annotation);
         }
     }

@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.annotation.mark;
 
-import com.google.common.flogger.FluentLogger;
 import io.spine.code.java.ClassName;
 import io.spine.logging.Logging;
 
@@ -49,9 +48,9 @@ final class OptionJob extends AnnotationJob implements Logging {
     // See: https://github.com/SpineEventEngine/base/issues/612
     @Override
     public void execute(AnnotatorFactory factory) {
-        FluentLogger.Api debug = _debug();
-        ClassName annotation = annotation();
-        ApiOption option = protobufOption;
+        var debug = _debug();
+        var annotation = annotation();
+        var option = protobufOption;
         debug.log("Annotating sources marked as `%s` with `%s`.",
                   option, annotation);
         debug.log("Annotating by the file option.");

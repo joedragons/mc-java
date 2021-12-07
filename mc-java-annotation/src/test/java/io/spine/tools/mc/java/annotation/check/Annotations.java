@@ -54,7 +54,7 @@ final class Annotations {
     static Optional<? extends AnnotationSource<?>>
     findAnnotation(AnnotationTargetSource<?, ?> javaSource,
                    Class<? extends Annotation> annotationType) {
-        String annotationName = annotationType.getName();
+        var annotationName = annotationType.getName();
         AnnotationSource<?> annotation = javaSource.getAnnotation(annotationName);
         return ofNullable(annotation);
     }

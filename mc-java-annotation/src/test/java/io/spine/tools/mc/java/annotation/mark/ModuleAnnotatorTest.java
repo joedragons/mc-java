@@ -61,8 +61,8 @@ class ModuleAnnotatorTest {
     @DisplayName("annotate by class name pattern")
     void annotateByClassPattern() {
         @Regex String classNamePattern = ".+OrBuilder";
-        FakeAnnotator.Factory factory = new FakeAnnotator.Factory();
-        ModuleAnnotator annotator = ModuleAnnotator.newBuilder()
+        var factory = new FakeAnnotator.Factory();
+        var annotator = ModuleAnnotator.newBuilder()
                 .setInternalPatterns(ImmutableSet.of(classNamePattern))
                 .setAnnotatorFactory(factory)
                 .setInternalAnnotation(ANNOTATION)
@@ -75,9 +75,9 @@ class ModuleAnnotatorTest {
     @Test
     @DisplayName("annotate by method name pattern")
     void annotateByMethodPattern() {
-        String methodName = "setInternalValue";
-        FakeAnnotator.Factory factory = new FakeAnnotator.Factory();
-        ModuleAnnotator annotator = ModuleAnnotator.newBuilder()
+        var methodName = "setInternalValue";
+        var factory = new FakeAnnotator.Factory();
+        var annotator = ModuleAnnotator.newBuilder()
                 .setInternalMethodNames(ImmutableSet.of(methodName))
                 .setAnnotatorFactory(factory)
                 .setInternalAnnotation(ANNOTATION)
@@ -88,9 +88,9 @@ class ModuleAnnotatorTest {
     }
 
     private static void checkAnnotateByOption(ApiOption option) {
-        FakeAnnotator.Factory factory = new FakeAnnotator.Factory();
-        Job optionJob = translate(option).as(ANNOTATION);
-        ModuleAnnotator annotator = ModuleAnnotator.newBuilder()
+        var factory = new FakeAnnotator.Factory();
+        var optionJob = translate(option).as(ANNOTATION);
+        var annotator = ModuleAnnotator.newBuilder()
                 .add(optionJob)
                 .setAnnotatorFactory(factory)
                 .setInternalAnnotation(ANNOTATION)

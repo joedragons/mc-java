@@ -46,7 +46,7 @@ final class MethodNameJob extends AnnotationJob implements Logging {
 
     @Override
     public void execute(AnnotatorFactory factory) {
-        ClassName annotation = annotation();
+        var annotation = annotation();
         _debug().log("Annotating methods matching patterns `%s` with `%s`.", patterns, annotation);
         factory.createMethodAnnotator(annotation, patterns)
                .annotate();
