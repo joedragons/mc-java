@@ -43,16 +43,14 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("not set fields produce a violation")
     void notSet() {
-        Due invalidMessage = Due.newBuilder()
-                                .buildPartial();
+        var invalidMessage = Due.newBuilder().buildPartial();
         assertInvalid(invalidMessage, "date | never");
     }
 
     @Test
     @DisplayName("a complete group of fields must be set")
     void notComplete() {
-        Combination invalidMessage = Combination
-                .newBuilder()
+        var invalidMessage = Combination.newBuilder()
                 .setA1("a1")
                 .setB2(ByteString.copyFrom("b2", UTF_16))
                 .buildPartial();
@@ -63,8 +61,7 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("if at least one alternative is set, no violation")
     void valid() {
-        Combination invalidMessage = Combination
-                .newBuilder()
+        var invalidMessage = Combination.newBuilder()
                 .setA1("a1")
                 .addA2("a2")
                 .build();
@@ -74,8 +71,7 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("if all the alternatives are set, no violation")
     void all() {
-        Combination invalidMessage = Combination
-                .newBuilder()
+        var invalidMessage = Combination.newBuilder()
                 .setA1("a1")
                 .addA2("a2")
                 .putB1(42, 314)
@@ -85,13 +81,11 @@ class RequiredFieldConstraintTest {
     }
 
     private static void assertInvalid(MessageWithConstraints message, String violationParam) {
-        ImmutableList<ConstraintViolation> violations = message.validate();
+        var violations = message.validate();
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
-                .containsExactly(ConstraintViolation
-                                         .newBuilder()
-                                         .setTypeName(TypeName.of(message)
-                                                              .value())
+                .containsExactly(ConstraintViolation.newBuilder()
+                                         .setTypeName(TypeName.of(message).value())
                                          .addParam(violationParam)
                                          .build());
     }

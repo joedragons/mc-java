@@ -26,7 +26,6 @@
 
 package io.spine.test.tools.validate;
 
-import io.spine.test.tools.validate.PersonName;
 import io.spine.validate.ConstraintViolation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,8 +42,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("message fields are validated")
     void checkEnclosedFields() {
-        DeliveryReceiver wrongAddress = DeliveryReceiver
-                .newBuilder()
+        var wrongAddress = DeliveryReceiver.newBuilder()
                 .setName(PersonName.newBuilder()
                                    .setGivenName("Adam"))
                 .setAddress(Address.newBuilder()
@@ -53,11 +51,11 @@ class ValidateConstraintTest {
         List<ConstraintViolation> violations = wrongAddress.validate();
         assertThat(violations)
                 .hasSize(1);
-        ConstraintViolation wrapperViolation = violations.get(0);
+        var wrapperViolation = violations.get(0);
         assertThat(wrapperViolation.getFieldPath()
                                    .getFieldName(0))
                 .isEqualTo("address");
-        List<ConstraintViolation> nestedViolations = wrapperViolation.getViolationList();
+        var nestedViolations = wrapperViolation.getViolationList();
         assertThat(nestedViolations)
                 .hasSize(2);
         assertThat(nestedViolations.get(0)
@@ -73,8 +71,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("repeated message fields are validated and violations are stored separately")
     void validateRepeated() {
-        DeliveryReceiver msg = DeliveryReceiver
-                .newBuilder()
+        var msg = DeliveryReceiver.newBuilder()
                 .setName(PersonName.newBuilder()
                                    .setGivenName("Eve"))
                 .setAddress(Address.newBuilder()
@@ -88,7 +85,7 @@ class ValidateConstraintTest {
                 .buildPartial();
         List<ConstraintViolation> violations = msg.validate();
         assertThat(violations).hasSize(2);
-        for (ConstraintViolation invalidPhone : violations) {
+        for (var invalidPhone : violations) {
             assertThat(invalidPhone.getFieldPath().getFieldName(0))
                     .isEqualTo("contact");
             assertThat(invalidPhone.getViolationList())
@@ -99,8 +96,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("recursive validation has an exit point")
     void recursive() {
-        BinaryTree tree = BinaryTree
-                .newBuilder()
+        var tree = BinaryTree.newBuilder()
                 .setValue(pack(newUuid()))
                 .setLeftChild(BinaryTree
                                       .newBuilder()
@@ -113,8 +109,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("not run validation if option value is `false`")
     void ignoreIfFalse() {
-        DeliveryReceiver receiver = DeliveryReceiver
-                .newBuilder()
+        var receiver = DeliveryReceiver.newBuilder()
                 .setName(PersonName.newBuilder()
                                    .setGivenName("Shawn"))
                 .setAddress(Address.newBuilder()

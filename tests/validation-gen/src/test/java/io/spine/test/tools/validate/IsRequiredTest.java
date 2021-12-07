@@ -27,11 +27,8 @@
 package io.spine.test.tools.validate;
 
 import com.google.protobuf.Message;
-import io.spine.validate.ConstraintViolation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.base.Identifier.newUuid;
@@ -43,11 +40,10 @@ class IsRequiredTest {
     @Test
     @DisplayName("throw if required field group is not set")
     void required() {
-        Meal message = Meal
-                .newBuilder()
+        var message = Meal.newBuilder()
                 .setCheese(Sauce.getDefaultInstance())
                 .buildPartial();
-        List<ConstraintViolation> violations = violationsOf(message);
+        var violations = violationsOf(message);
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0).getMsgFormat())
@@ -57,12 +53,10 @@ class IsRequiredTest {
     @Test
     @DisplayName("not throw if required field group is set")
     void requiredSet() {
-        Fish fish = Fish
-                .newBuilder()
+        var fish = Fish.newBuilder()
                 .setDescription(newUuid())
                 .build();
-        Meal message = Meal
-                .newBuilder()
+        var message = Meal.newBuilder()
                 .setCheese(Sauce.getDefaultInstance())
                 .setFish(fish)
                 .buildPartial();
@@ -72,12 +66,10 @@ class IsRequiredTest {
     @Test
     @DisplayName("ignore non-required field groups")
     void notRequired() {
-        Fish fish = Fish
-                .newBuilder()
+        var fish = Fish.newBuilder()
                 .setDescription(newUuid())
                 .build();
-        Meal message = Meal
-                .newBuilder()
+        var message = Meal.newBuilder()
                 .setFish(fish)
                 .buildPartial();
         assertValid(message);

@@ -85,7 +85,7 @@ class NumberConstraintTest {
     @Test
     @DisplayName("numerical range is checked")
     void range() {
-        String errorFragment = TypeName.of(Probability.class) + ".value";
+        var errorFragment = TypeName.of(Probability.class) + ".value";
         assertViolation(
                 Probability.newBuilder()
                            .setValue(1.1)
