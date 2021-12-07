@@ -26,14 +26,12 @@
 
 package io.spine.tools.mc.java.protoc.message;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.testing.NullPointerTester;
 import io.spine.base.EntityState;
 import io.spine.option.OptionsProto;
 import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.mc.java.codegen.AddInterface;
 import io.spine.tools.mc.java.codegen.Entities;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.proto.code.ProtoOption;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProject;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProjectId;
@@ -88,26 +86,25 @@ class ImplementEntityStateTest {
     @Test
     @DisplayName("produce code output for message that is entity state")
     void produceOutputIfIsEntityState() {
-        MessageType entityStateType = new MessageType(ProtocProject.getDescriptor());
-        ImmutableList<CompilerOutput> output = task.generateFor(entityStateType);
+        var entityStateType = new MessageType(ProtocProject.getDescriptor());
+        var output = task.generateFor(entityStateType);
         assertThat(output).hasSize(1);
 
-        CompilerOutput compilerOutput = output.get(0);
-        String insertionPoint = compilerOutput.asFile()
-                                              .getInsertionPoint();
+        var compilerOutput = output.get(0);
+        var insertionPoint = compilerOutput.asFile().getInsertionPoint();
         assertThat(insertionPoint).startsWith(message_implements.name());
     }
 
     @Test
     @DisplayName("return empty output if the message is not marked with `(entity)`")
     void forNonEntity() {
-        MessageType nonEntityType = new MessageType(ProtocProjectId.getDescriptor());
-        ImmutableList<CompilerOutput> output = task.generateFor(nonEntityType);
+        var nonEntityType = new MessageType(ProtocProjectId.getDescriptor());
+        var output = task.generateFor(nonEntityType);
         assertThat(output).isEmpty();
     }
 
     private static ImplementEntityState markEntityStatesAs(String className) {
-        JavaClassName name = className(className);
+        var name = className(className);
         return markEntityStatesAs(name);
     }
 
@@ -118,14 +115,13 @@ class ImplementEntityStateTest {
     }
 
     private static ImplementEntityState markEntityStatesAs(JavaClassName className) {
-        AddInterface iface = AddInterface.newBuilder()
+        var iface = AddInterface.newBuilder()
                 .setName(className)
                 .build();
-        ProtoOption option = ProtoOption.newBuilder()
+        var option = ProtoOption.newBuilder()
                 .setName(OptionsProto.entity.getDescriptor().getName())
                 .build();
-        Entities config = Entities
-                .newBuilder()
+        var config = Entities.newBuilder()
                 .addAddInterface(iface)
                 .addOption(option)
                 .build();

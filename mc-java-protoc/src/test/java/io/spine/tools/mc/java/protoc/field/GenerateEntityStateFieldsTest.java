@@ -89,21 +89,20 @@ final class GenerateEntityStateFieldsTest {
     @Test
     @DisplayName("produce code output for message that is entity state")
     void produceOutputIfIsEntityState() {
-        MessageType entityStateType = new MessageType(ProtocProject.getDescriptor());
-        ImmutableList<CompilerOutput> output = task.generateFor(entityStateType);
+        var entityStateType = new MessageType(ProtocProject.getDescriptor());
+        var output = task.generateFor(entityStateType);
         assertThat(output).hasSize(1);
 
-        CompilerOutput compilerOutput = output.get(0);
-        String insertionPoint = compilerOutput.asFile()
-                                              .getInsertionPoint();
+        var compilerOutput = output.get(0);
+        var insertionPoint = compilerOutput.asFile().getInsertionPoint();
         assertThat(insertionPoint).startsWith(class_scope.name());
     }
 
     @Test
     @DisplayName("return empty output if the message is not marked with `(entity)`")
     void forNonEntity() {
-        MessageType nonEntityType = new MessageType(ProtocProjectId.getDescriptor());
-        ImmutableList<CompilerOutput> output = task.generateFor(nonEntityType);
+        var nonEntityType = new MessageType(ProtocProjectId.getDescriptor());
+        var output = task.generateFor(nonEntityType);
         assertThat(output).isEmpty();
     }
 
@@ -120,14 +119,14 @@ final class GenerateEntityStateFieldsTest {
     }
 
     private static Entities config(String fieldType) {
-        JavaClassName name = className(fieldType);
-        GenerateFields generate = GenerateFields.newBuilder()
+        var name = className(fieldType);
+        var generate = GenerateFields.newBuilder()
                 .setSuperclass(name)
                 .build();
-        ProtoOption option = ProtoOption.newBuilder()
+        var option = ProtoOption.newBuilder()
                 .setName(OptionsProto.entity.getDescriptor().getName())
                 .build();
-        Entities result = Entities.newBuilder()
+        var result = Entities.newBuilder()
                 .addOption(option)
                 .setGenerateFields(generate)
                 .build();

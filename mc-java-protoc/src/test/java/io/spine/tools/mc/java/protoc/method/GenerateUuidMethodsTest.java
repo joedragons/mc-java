@@ -26,15 +26,13 @@
 
 package io.spine.tools.mc.java.protoc.method;
 
-import com.google.common.collect.ImmutableList;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
-import io.spine.tools.mc.java.protoc.ExternalClassLoader;
-import io.spine.tools.mc.java.protoc.given.TestMethodFactory;
 import io.spine.tools.java.code.Classpath;
 import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.java.code.MethodFactory;
 import io.spine.tools.mc.java.codegen.MethodFactoryName;
 import io.spine.tools.mc.java.codegen.Uuids;
+import io.spine.tools.mc.java.protoc.ExternalClassLoader;
+import io.spine.tools.mc.java.protoc.given.TestMethodFactory;
 import io.spine.tools.protoc.plugin.method.NonEnhancedMessage;
 import io.spine.tools.protoc.plugin.method.TestUuidValue;
 import io.spine.type.MessageType;
@@ -65,8 +63,8 @@ final class GenerateUuidMethodsTest {
         @Test
         @DisplayName("`null` `MessageType` is supplied")
         void nullMessageTypeIsSupplied() {
-            Uuids config = newTaskConfig("test");
-            GenerateUuidMethods task = newTask(config);
+            var config = newTaskConfig("test");
+            var task = newTask(config);
             assertNpe(() -> task.generateFor(null));
         }
     }
@@ -75,7 +73,7 @@ final class GenerateUuidMethodsTest {
     @ValueSource(strings = {"", "  "})
     @DisplayName("throw `IllegalArgumentException` if factory name is ")
     void throwIllegalArgumentException(String factoryName) {
-        Uuids config = newTaskConfig(factoryName);
+        var config = newTaskConfig(factoryName);
         assertIllegalArgument(() -> newTask(config));
     }
 
@@ -90,8 +88,8 @@ final class GenerateUuidMethodsTest {
         }
 
         private void assertEmptyResult(String factoryName) {
-            Uuids config = newTaskConfig(factoryName);
-            ImmutableList<CompilerOutput> result = newTask(config)
+            var config = newTaskConfig(factoryName);
+            var result = newTask(config)
                     .generateFor(new MessageType(NonEnhancedMessage.getDescriptor()));
             assertThat(result).isEmpty();
         }
@@ -100,16 +98,16 @@ final class GenerateUuidMethodsTest {
     @Test
     @DisplayName("generate new methods")
     void generateNewMethods() {
-        Uuids config = newTaskConfig(TestMethodFactory.class.getName());
+        var config = newTaskConfig(TestMethodFactory.class.getName());
         assertThat(newTask(config).generateFor(testType()))
                 .isNotEmpty();
     }
 
     private static Uuids newTaskConfig(String factoryName) {
-        JavaClassName factoryClass = JavaClassName.newBuilder()
+        var factoryClass = JavaClassName.newBuilder()
                 .setCanonical(factoryName)
                 .build();
-        MethodFactoryName name = MethodFactoryName.newBuilder()
+        var name = MethodFactoryName.newBuilder()
                 .setClassName(factoryClass)
                 .build();
         return Uuids.newBuilder()

@@ -27,6 +27,7 @@
 package io.spine.tools.mc.java.protoc;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.testing.TestValues;
 import io.spine.tools.protoc.plugin.EnhancedWithCodeGeneration;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
@@ -35,11 +36,12 @@ import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.Assertions.assertNpe;
+import static io.spine.testing.TestValues.nullRef;
 
-@DisplayName("CodeGenerationTasks should")
+@DisplayName("`CodeGenerationTasks` should")
 final class CodeGenerationTasksTest {
 
-    @DisplayName("throw NullPointerException if")
+    @DisplayName("throw `NullPointerException` if")
     @Nested
     class ThrowNpe {
 
@@ -49,10 +51,10 @@ final class CodeGenerationTasksTest {
             assertNpe(() -> new CodeGenerationTasks(null));
         }
 
-        @DisplayName("`null` MessageType is supplied")
+        @DisplayName("`null` `MessageType` is supplied")
         @Test
         void nullMessageTypeIsSupplied() {
-            assertNpe(() -> new CodeGenerationTasks(ImmutableList.of()).generateFor(null));
+            assertNpe(() -> new CodeGenerationTasks(ImmutableList.of()).generateFor(nullRef()));
         }
     }
 
@@ -61,18 +63,17 @@ final class CodeGenerationTasksTest {
     void performCodeGenerationUsingEachSuppliedTask() {
         ImmutableList<CodeGenerationTask> tasks =
                 ImmutableList.of(new SingleResultTask(), new SingleResultTask());
-        MessageType type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
-        CodeGenerationTasks codeGenerationTasks = new CodeGenerationTasks(tasks);
-        ImmutableList<CompilerOutput> actual = codeGenerationTasks.generateFor(type);
+        var type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
+        var codeGenerationTasks = new CodeGenerationTasks(tasks);
+        var actual = codeGenerationTasks.generateFor(type);
         assertThat(actual).hasSize(2);
     }
 
     private static class SingleResultTask implements CodeGenerationTask {
 
         @Override
-        @SuppressWarnings("ReturnOfNull")
         public ImmutableList<CompilerOutput> generateFor(MessageType type) {
-            return ImmutableList.of(() -> null);
+            return ImmutableList.of(TestValues::nullRef);
         }
     }
 }

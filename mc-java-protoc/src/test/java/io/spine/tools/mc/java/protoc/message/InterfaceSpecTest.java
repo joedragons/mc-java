@@ -26,8 +26,6 @@
 
 package io.spine.tools.mc.java.protoc.message;
 
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.JavaFile;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,17 +33,17 @@ import javax.annotation.Generated;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("MessageInterfaceSpec should")
+@DisplayName("`MessageInterfaceSpec` should")
 final class InterfaceSpecTest {
 
     @Test
     @DisplayName("generate interfaces")
     void generateInterfaces() {
-        String packageName = "io.spine.test";
-        String interfaceName = "CustomerEvent";
-        JavaFile javaFile = new InterfaceSpec(packageName, interfaceName).toJavaCode();
+        var packageName = "io.spine.test";
+        var interfaceName = "CustomerEvent";
+        var javaFile = new InterfaceSpec(packageName, interfaceName).toJavaCode();
 
-        AnnotationSpec generated = javaFile.typeSpec.annotations.get(0);
+        var generated = javaFile.typeSpec.annotations.get(0);
         assertEquals(Generated.class.getName(), generated.type.toString());
 
         assertEquals(packageName, javaFile.packageName);
