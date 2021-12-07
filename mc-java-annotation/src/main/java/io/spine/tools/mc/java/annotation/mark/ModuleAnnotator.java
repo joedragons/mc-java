@@ -164,7 +164,7 @@ public final class ModuleAnnotator {
                     .map(ClassNamePattern::compile)
                     .map(pattern -> new PatternJob(pattern, internalAnnotation))
                     .forEach(this::add);
-            ImmutableSet<MethodPattern> methodPatterns = internalMethodNames.stream()
+            var methodPatterns = internalMethodNames.stream()
                     .map(MethodPattern::exactly)
                     .collect(toImmutableSet());
             add(new MethodNameJob(methodPatterns, internalAnnotation));
