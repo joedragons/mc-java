@@ -28,7 +28,7 @@ package io.spine.tools.mc.java.protoc.message;
 
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
 import com.google.protobuf.compiler.PluginProtos.Version;
-import io.spine.test.protoc.BuilderTestProto;
+import io.spine.test.tools.mc.java.protoc.BuilderTestProto;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
 import org.junit.jupiter.api.DisplayName;
