@@ -42,7 +42,7 @@ public final class CompositeGenerator extends CodeGenerator {
 
     public static CompositeGenerator of(CodeGenerator... gen) {
         checkNotNull(gen);
-        ImmutableList<CodeGenerator> generators = ImmutableList.copyOf(gen);
+        var generators = ImmutableList.copyOf(gen);
         return new CompositeGenerator(generators);
     }
 
@@ -53,10 +53,9 @@ public final class CompositeGenerator extends CodeGenerator {
 
     @Override
     protected ImmutableSet<CompilerOutput> generate(Type<?, ?> type) {
-        ImmutableSet<CompilerOutput> output =
-                generators.stream()
-                          .flatMap(gen -> gen.generate(type).stream())
-                          .collect(toImmutableSet());
+        var output = generators.stream()
+                .flatMap(gen -> gen.generate(type).stream())
+                .collect(toImmutableSet());
         return output;
     }
 }

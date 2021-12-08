@@ -49,8 +49,7 @@ public final class FilePatternMatcher implements Predicate<MessageType> {
     @Override
     public boolean test(MessageType type) {
         checkNotNull(type);
-        String protoFileName = type.declaringFileName()
-                                   .value();
+        var protoFileName = type.declaringFileName().value();
         switch (pattern.getValueCase()) {
             case SUFFIX:
                 return protoFileName.endsWith(pattern.getSuffix());

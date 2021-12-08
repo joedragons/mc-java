@@ -26,8 +26,6 @@
 
 package io.spine.tools.mc.java.protoc.method;
 
-import com.google.protobuf.Descriptors;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.protoc.plugin.method.EnhancedMessage;
 import io.spine.tools.protoc.plugin.method.TestServiceProto;
@@ -36,32 +34,27 @@ import io.spine.type.ServiceType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("MethodGenerator should")
+@DisplayName("`MethodGenerator` should")
 final class MethodGenTest {
 
-    @DisplayName("ignore non-message types")
+    @DisplayName("ignore non-`Message` types")
     @Test
     void ignoreNonMessageTypes() {
-        MethodGen generator =
-                MethodGen.instance(CodegenOptions.getDefaultInstance());
-        Descriptors.ServiceDescriptor service = TestServiceProto.getDescriptor()
-                                                                .findServiceByName("MGTService");
-        ServiceType type = ServiceType.of(service);
-        Collection<CompilerOutput> result = generator.generate(type);
+        var generator = MethodGen.instance(CodegenOptions.getDefaultInstance());
+        var service = TestServiceProto.getDescriptor().findServiceByName("MGTService");
+        var type = ServiceType.of(service);
+        var result = generator.generate(type);
         assertTrue(result.isEmpty());
     }
 
     @DisplayName("try to generate methods for message types")
     @Test
     void generateMethodsForMessageTypes() {
-        MessageType type = new MessageType(EnhancedMessage.getDescriptor());
-        MethodGen generator =
-                MethodGen.instance(CodegenOptions.getDefaultInstance());
-        Collection<CompilerOutput> result = generator.generate(type);
+        var type = new MessageType(EnhancedMessage.getDescriptor());
+        var generator = MethodGen.instance(CodegenOptions.getDefaultInstance());
+        var result = generator.generate(type);
         assertTrue(result.isEmpty());
     }
 }

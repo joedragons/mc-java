@@ -64,8 +64,8 @@ public final class HandleMethodResult extends CheckReturnValue {
 
     @Override
     public Matcher<ExpressionTree> specializedMatcher() {
-        Matcher<ExpressionTree> checkReturnValue = super.specializedMatcher();
-        Matcher<ExpressionTree> notBuilderSetter = not(builderSetter());
+        var checkReturnValue = super.specializedMatcher();
+        var notBuilderSetter = not(builderSetter());
         return allOf(checkReturnValue, notBuilderSetter);
     }
 

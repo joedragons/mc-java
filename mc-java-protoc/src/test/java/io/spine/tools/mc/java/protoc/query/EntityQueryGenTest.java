@@ -30,8 +30,6 @@ import com.google.common.testing.NullPointerTester;
 import io.spine.option.OptionsProto;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.codegen.Entities;
-import io.spine.tools.mc.java.protoc.CodeGenerator;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
 import io.spine.tools.proto.code.ProtoOption;
 import io.spine.tools.protoc.plugin.nested.Task;
@@ -41,8 +39,6 @@ import io.spine.type.MessageType;
 import io.spine.type.Type;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
@@ -61,27 +57,27 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("generate code for entities if requested types where appropriate")
     void generateWhenRequired() {
-        CodegenOptions config = newOptions();
+        var config = newOptions();
 
-        CodeGenerator generator = EntityQueryGen.instance(config);
+        var generator = EntityQueryGen.instance(config);
         assertThat(generator)
                 .isInstanceOf(EntityQueryGen.class);
         Type<?, ?> type = new MessageType(TaskView.getDescriptor());
-        Collection<CompilerOutput> output = generate(generator, type);
+        var output = generate(generator, type);
         assertThat(output)
                 .isNotEmpty();
     }
 
     @Test
-    @DisplayName("ignore non-message types")
+    @DisplayName("ignore non-`Message` types")
     void enums() {
-        CodegenOptions config = newOptions();
+        var config = newOptions();
 
-        CodeGenerator generator = EntityQueryGen.instance(config);
+        var generator = EntityQueryGen.instance(config);
         assertThat(generator)
                 .isInstanceOf(EntityQueryGen.class);
         Type<?, ?> type = EnumType.create(Task.Priority.getDescriptor());
-        Collection<CompilerOutput> output = generate(generator, type);
+        var output = generate(generator, type);
 
         assertThat(output)
                 .isEmpty();
@@ -90,9 +86,9 @@ class EntityQueryGenTest {
     @Test
     @DisplayName("do nothing if turned off")
     void off() {
-        CodegenOptions config = newOptions(false);
+        var config = newOptions(false);
 
-        CodeGenerator generator = EntityQueryGen.instance(config);
+        var generator = EntityQueryGen.instance(config);
         assertThat(generator)
                 .isInstanceOf(NoOpGenerator.class);
     }
@@ -102,7 +98,7 @@ class EntityQueryGenTest {
     }
 
     private static CodegenOptions newOptions(boolean generate) {
-        Entities.Builder entities = Entities.newBuilder();
+        var entities = Entities.newBuilder();
         entities.addOption(ProtoOption.newBuilder()
                 .setName(OptionsProto.entity.getDescriptor().getName())
         );

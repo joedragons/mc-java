@@ -29,10 +29,9 @@ package io.spine.tools.mc.java.protoc.field;
 import com.google.common.collect.ImmutableList;
 import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.java.code.field.FieldFactory;
+import io.spine.tools.mc.java.codegen.Entities;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.EntityMatcher;
-import io.spine.tools.mc.java.codegen.Entities;
-import io.spine.tools.mc.java.codegen.GenerateFields;
 import io.spine.type.MessageType;
 
 import java.util.function.Predicate;
@@ -63,7 +62,7 @@ final class GenerateEntityStateFields extends FieldGenerationTask {
     }
 
     private static JavaClassName fieldSupertype(Entities config) {
-        GenerateFields generateFields = config.getGenerateFields();
+        var generateFields = config.getGenerateFields();
         if (!generateFields.hasSuperclass()) {
             throw newIllegalStateException(
                     "Expected a field class supertype, but got: `%s`.", config

@@ -29,7 +29,6 @@ package io.spine.tools.mc.java.annotation.mark;
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.Descriptors.FileDescriptor;
 import io.spine.code.java.ClassName;
-import io.spine.code.java.SimpleClassName;
 import io.spine.code.proto.TypeSet;
 import io.spine.tools.java.code.NestedClassName;
 import io.spine.tools.java.fs.SourceFile;
@@ -69,14 +68,14 @@ final class PatternAnnotator extends Annotator {
     }
 
     private static Stream<ClassName> allClasses(FileDescriptor file) {
-        TypeSet typeSet = TypeSet.from(file);
-        ClassName outerClass = ClassName.outerClass(file);
+        var typeSet = TypeSet.from(file);
+        var outerClass = ClassName.outerClass(file);
         Stream.Builder<ClassName> result = Stream.builder();
         result.accept(outerClass);
         typeSet.allTypes()
                .stream()
                .flatMap(type -> {
-                   ClassName typeName = type.javaClassName();
+                   var typeName = type.javaClassName();
                    return type.supportsBuilders()
                           ? Stream.of(typeName, typeName.orBuilder())
                           : Stream.of(typeName);
@@ -107,7 +106,7 @@ final class PatternAnnotator extends Annotator {
         @Override
         public void accept(AbstractJavaSource<JavaClassSource> source) {
             checkNotNull(source);
-            AnnotationTargetSource<?, ?> target = findTarget(source);
+            var target = findTarget(source);
             addAnnotation(target);
         }
 
@@ -125,15 +124,15 @@ final class PatternAnnotator extends Annotator {
             if (root.getQualifiedName().equals(targetClass.value())) {
                 return root;
             } else {
-                ImmutableList<SimpleClassName> names = NestedClassName.from(targetClass).split();
+                var names = NestedClassName.from(targetClass).split();
                 checkState(!names.isEmpty(), "Invalid class name `%s`.", targetClass);
-                SimpleClassName rootName = names.get(0);
+                var rootName = names.get(0);
                 checkArgument(root.getName()
                                   .equals(rootName.value()));
-                AbstractJavaSource<JavaClassSource> source = root;
-                for (SimpleClassName name : names.subList(1, names.size())) {
+                var source = root;
+                for (var name : names.subList(1, names.size())) {
                     @SuppressWarnings("unchecked")
-                    AbstractJavaSource<JavaClassSource> nested =
+                    var nested =
                             (AbstractJavaSource<JavaClassSource>) source.getNestedType(name.value());
                     source = nested;
                 }

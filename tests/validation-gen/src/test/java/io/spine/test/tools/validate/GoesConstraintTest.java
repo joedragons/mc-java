@@ -26,7 +26,6 @@
 
 package io.spine.test.tools.validate;
 
-import com.google.common.collect.ImmutableList;
 import io.spine.base.FieldPath;
 import io.spine.type.TypeName;
 import io.spine.validate.ConstraintViolation;
@@ -43,28 +42,25 @@ class GoesConstraintTest {
     @DisplayName("if the associated field is not set and the target field is set, " +
             "a violation is produced")
     void failIfNotSet() {
-        Paper paper = Paper
-                .newBuilder()
+        var paper = Paper.newBuilder()
                 .setWhenArchived(currentTime())
                 .buildPartial();
-        ImmutableList<ConstraintViolation> violations = paper.validate();
+        var violations = paper.validate();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0))
                 .comparingExpectedFieldsOnly()
-                .isEqualTo(ConstraintViolation
-                                   .newBuilder()
+                .isEqualTo(ConstraintViolation.newBuilder()
                                    .setTypeName(TypeName.of(paper).value())
                                    .setFieldPath(FieldPath.newBuilder()
-                                                          .addFieldName("when_archived"))
+                                                         .addFieldName("when_archived"))
                                    .build());
     }
 
     @Test
     @DisplayName("if both fields are set, no violation")
     void bothSet() {
-        Paper paper = Paper
-                .newBuilder()
+        var paper = Paper.newBuilder()
                 .setArchiveId(ArchiveId.generate())
                 .setWhenArchived(currentTime())
                 .build();
@@ -74,17 +70,14 @@ class GoesConstraintTest {
     @Test
     @DisplayName("if neither field is set, no violation")
     void noneSet() {
-        Paper paper = Paper
-                .newBuilder()
-                .build();
+        var paper = Paper.newBuilder().build();
         assertThat(paper.validate()).isEmpty();
     }
 
     @Test
     @DisplayName("if the associated field is set and target is not set, no violation")
     void targetNotSet() {
-        Paper paper = Paper
-                .newBuilder()
+        var paper = Paper.newBuilder()
                 .setArchiveId(ArchiveId.generate())
                 .build();
         assertThat(paper.validate()).isEmpty();

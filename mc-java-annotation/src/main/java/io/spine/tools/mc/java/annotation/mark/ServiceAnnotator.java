@@ -52,7 +52,7 @@ final class ServiceAnnotator extends OptionAnnotator<ServiceDescriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor fileDescriptor : fileDescriptors()) {
+        for (var fileDescriptor : fileDescriptors()) {
             annotate(fileDescriptor);
         }
     }
@@ -68,9 +68,9 @@ final class ServiceAnnotator extends OptionAnnotator<ServiceDescriptor> {
     }
 
     private void annotateServices(FileDescriptor file) {
-        for (ServiceDescriptor service : file.getServices()) {
+        for (var service : file.getServices()) {
             if (shouldAnnotate(service)) {
-                SourceFile serviceClass = SourceFile.forService(service.toProto(), file.toProto());
+                var serviceClass = SourceFile.forService(service.toProto(), file.toProto());
                 annotate(serviceClass);
             }
         }

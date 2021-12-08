@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.validation.gen;
 
-import com.google.protobuf.Descriptors.FieldDescriptor.JavaType;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -95,30 +94,30 @@ final class IsSet {
     }
 
     private CodeBlock methodBody() {
-        MessageAccess message = MessageAccess.of(MESSAGE);
-        FieldAccess fieldAccess = message.get(field);
+        var message = MessageAccess.of(MESSAGE);
+        var fieldAccess = message.get(field);
         return field.isCollection()
                ? methodBodyForCollection(fieldAccess)
                : methodBodyForSingular(fieldAccess);
     }
 
     private CodeBlock methodBodyForSingular(FieldAccess fieldAccess) {
-        BooleanExpression expression = valueIsPresent(fieldAccess);
+        var expression = valueIsPresent(fieldAccess);
         alwaysTrue = expression.isConstant() && expression.isConstantTrue();
         return expression.returnStatement();
     }
 
     private CodeBlock methodBodyForCollection(FieldAccess fieldAccess) {
-        BooleanExpression collectionIsNotEmpty = Containers
+        var collectionIsNotEmpty = Containers
                 .isEmpty(fieldAccess)
                 .negate();
         Expression<?> elementAccess = Expression.of("el");
-        BooleanExpression elementIsSet = valueIsPresent(elementAccess);
+        var elementIsSet = valueIsPresent(elementAccess);
         if (elementIsSet.isConstant()) {
             checkState(elementIsSet.isConstantTrue(), "The field `%s` can never be non-default.");
             return collectionIsNotEmpty.returnStatement();
         } else {
-            String nonDefaultField = "nonDefault";
+            var nonDefaultField = "nonDefault";
             return CodeBlock
                     .builder()
                     .beginControlFlow("if ($L)", collectionIsNotEmpty)
@@ -162,7 +161,7 @@ final class IsSet {
      * @see #valueIsPresent(Expression)
      */
     public BooleanExpression valueIsNotSet(Expression<?> valueAccess) {
-        JavaType javaType = field.isMap()
+        var javaType = field.isMap()
                             ? field.valueDeclaration()
                                    .javaType()
                             : field.javaType();
@@ -198,7 +197,7 @@ final class IsSet {
      */
     public static BooleanExpression
     alternativeIsSet(Alternative alternative, MessageAccess messageAccess) {
-        BooleanExpression alternativeMatched =
+        var alternativeMatched =
                 alternative.fields()
                            .stream()
                            .map(IsSet::new)

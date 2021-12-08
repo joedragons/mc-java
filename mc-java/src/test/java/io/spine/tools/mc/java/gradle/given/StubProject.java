@@ -28,7 +28,6 @@ package io.spine.tools.mc.java.gradle.given;
 
 import io.spine.testing.TempDir;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.testfixtures.ProjectBuilder;
 
 import java.io.File;
@@ -57,8 +56,8 @@ public final class StubProject {
      * Creates a new Gradle project for the purposes of the passed test suite class.
      */
     public static StubProject createFor(Class<?> testSuiteClass) {
-        File tempDir = TempDir.forClass(testSuiteClass);
-        Project project = createAt(tempDir);
+        var tempDir = TempDir.forClass(testSuiteClass);
+        var project = createAt(tempDir);
         return new StubProject(project);
     }
 
@@ -75,7 +74,7 @@ public final class StubProject {
      * @param projectDir the {@linkplain Project#getProjectDir() root directory} of the project
      */
     public static Project createAt(File projectDir) {
-        Project project = ProjectBuilder.builder()
+        var project = ProjectBuilder.builder()
                 .withProjectDir(projectDir)
                 .build();
         project.getPluginManager()
@@ -90,7 +89,7 @@ public final class StubProject {
      * repositories for proper dependency resolution.
      */
     public StubProject withMavenRepositories() {
-        RepositoryHandler repositories = project.getRepositories();
+        var repositories = project.getRepositories();
         applyStandard(repositories);
         return this;
     }

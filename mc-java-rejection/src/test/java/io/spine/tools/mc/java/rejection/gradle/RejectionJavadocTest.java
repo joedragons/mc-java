@@ -35,8 +35,6 @@ import io.spine.tools.java.code.BuilderSpec;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocCapableSource;
-import org.jboss.forge.roaster.model.source.JavaDocSource;
-import org.jboss.forge.roaster.model.source.JavaSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -63,15 +61,14 @@ class RejectionJavadocTest {
 
     @BeforeAll
     static void generateSources() throws IOException {
-        File projectDir = TempDir.forClass(RejectionJavadocTest.class);
-        GradleProject project = GradleProject
-                .setupAt(projectDir)
+        var projectDir = TempDir.forClass(RejectionJavadocTest.class);
+        var project = GradleProject.setupAt(projectDir)
                 .copyBuildSrc()
                 .fromResources("rejection-javadoc-test") // Contains `build.gradle.kts`
                 .addFile("src/main/proto/javadoc_rejections.proto", rejectionWithJavadoc())
                 .create();
         project.executeTask(generateRejections(SourceSetName.main));
-        File generatedFile = new File(
+        var generatedFile = new File(
                 projectDir.getAbsolutePath() + rejectionsJavadocThrowableSource()
         );
         generatedSource = Roaster.parse(JavaClassSource.class, generatedFile);
@@ -90,8 +87,8 @@ class RejectionJavadocTest {
         @Test
         @DisplayName("`Builder` of rejection")
         void forBuilder() {
-            String builderTypeName = SimpleClassName.ofBuilder().value();
-            JavaSource<?> builderType = generatedSource.getNestedType(builderTypeName);
+            var builderTypeName = SimpleClassName.ofBuilder().value();
+            var builderType = generatedSource.getNestedType(builderTypeName);
             assertBuilderJavadoc((JavaClassSource) builderType);
         }
     }
@@ -116,25 +113,23 @@ class RejectionJavadocTest {
     private static void assertMethodDoc(String expectedComment,
                                         JavaClassSource source,
                                         String methodName) {
-        MethodSource<JavaClassSource> method = findMethod(source, methodName);
+        var method = findMethod(source, methodName);
         assertDoc(expectedComment, method);
     }
 
     private static MethodSource<JavaClassSource>
     findMethod(JavaClassSource source, String methodName) {
-        MethodSource<JavaClassSource> method =
-                source.getMethods()
-                        .stream()
-                        .filter(m -> methodName.equals(m.getName()))
-                        .findFirst()
-                        .orElseThrow(() -> newIllegalStateException(
-                                "Cannot find the method `%s`.", methodName)
-                        );
+        var method = source.getMethods().stream()
+                .filter(m -> methodName.equals(m.getName()))
+                .findFirst()
+                .orElseThrow(() -> newIllegalStateException(
+                        "Cannot find the method `%s`.", methodName)
+                );
         return method;
     }
 
     private static void assertDoc(String expectedText, JavaDocCapableSource<?> source) {
-        JavaDocSource<?> javadoc = source.getJavaDoc();
+        var javadoc = source.getJavaDoc();
         assertThat(javadoc.getFullText())
                 .isEqualTo(expectedText);
     }

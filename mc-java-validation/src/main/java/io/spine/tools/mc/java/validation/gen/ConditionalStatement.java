@@ -54,13 +54,13 @@ final class ConditionalStatement {
     ConditionalStatement(BooleanExpression condition, CodeBlock positiveBranch) {
         checkNotNull(condition);
         checkNotNull(positiveBranch);
-        CodeBlock.Builder code = startStatement(condition, positiveBranch);
+        var code = startStatement(condition, positiveBranch);
         this.code = checkNotNull(code);
     }
 
     private static CodeBlock.Builder startStatement(BooleanExpression condition,
                                                     CodeBlock positiveBranch) {
-        CodeBlock.Builder code = CodeBlock.builder();
+        var code = CodeBlock.builder();
         code.beginControlFlow("if ($L)", condition.value());
         code.add(positiveBranch);
         code.add(lineSeparator());

@@ -27,7 +27,6 @@
 package io.spine.query;
 
 import io.spine.query.given.EntityQueryTestEnv;
-import io.spine.tools.query.ProjectId;
 import io.spine.tools.query.ProjectView;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,18 +39,18 @@ final class EntityQueryTest {
     @Test
     @DisplayName("allow to copy itself")
     void copyToEntityQuery() {
-        ProjectView.Query original = EntityQueryTestEnv.givenQuery();
-        ProjectView.QueryBuilder destinationBuilder = ProjectView.query();
+        var original = EntityQueryTestEnv.givenQuery();
+        var destinationBuilder = ProjectView.query();
         original.copyTo(destinationBuilder);
 
-        ProjectView.Query copy = destinationBuilder.build();
+        var copy = destinationBuilder.build();
         assertThat(copy).isEqualTo(original);
     }
     @Test
     @DisplayName("allow the conversion to a `RecordQuery`")
     void convertToRecordQuery() {
-        ProjectView.Query original = EntityQueryTestEnv.givenQuery();
-        RecordQuery<ProjectId, ProjectView> copy = original.toRecordQuery();
+        var original = EntityQueryTestEnv.givenQuery();
+        var copy = original.toRecordQuery();
 
         assertThat(copy.subject()).isEqualTo(original.subject());
         assertThat(copy.mask()).isEqualTo(original.mask());

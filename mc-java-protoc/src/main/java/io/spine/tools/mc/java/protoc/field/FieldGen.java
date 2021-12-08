@@ -29,10 +29,7 @@ package io.spine.tools.mc.java.protoc.field;
 import com.google.common.collect.ImmutableList;
 import io.spine.tools.java.code.field.FieldFactory;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
-import io.spine.tools.mc.java.codegen.Entities;
-import io.spine.tools.mc.java.codegen.GenerateFields;
 import io.spine.tools.mc.java.codegen.Messages;
-import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.tools.mc.java.codegen.Signals;
 import io.spine.tools.mc.java.protoc.CodeGenerationTask;
 import io.spine.tools.mc.java.protoc.CodeGenerationTasks;
@@ -73,7 +70,7 @@ public final class FieldGen extends CodeGenerator {
      */
     public static FieldGen instance(CodegenOptions config) {
         checkNotNull(config);
-        Builder builder = new Builder(config);
+        var builder = new Builder(config);
         builder.addFromAll();
         return builder.build();
     }
@@ -83,8 +80,8 @@ public final class FieldGen extends CodeGenerator {
         if (!(type instanceof MessageType)) {
             return ImmutableList.of();
         }
-        MessageType messageType = (MessageType) type;
-        ImmutableList<CompilerOutput> result = codeGenerationTasks.generateFor(messageType);
+        var messageType = (MessageType) type;
+        var result = codeGenerationTasks.generateFor(messageType);
         return result;
     }
 
@@ -125,36 +122,36 @@ public final class FieldGen extends CodeGenerator {
         }
 
         private void addFromMessages() {
-            for (Messages group : config.getMessagesList()) {
+            for (var group : config.getMessagesList()) {
                 taskFor(group).ifPresent(tasks::add);
             }
         }
 
         private void addFromRejections() {
             if (config.hasRejections()) {
-                Signals signals = config.getRejections();
+                var signals = config.getRejections();
                 tasks.addAll(tasksFor(signals));
             }
         }
 
         private void addFromEvents() {
             if (config.hasEvents()) {
-                Signals signals = config.getEvents();
+                var signals = config.getEvents();
                 tasks.addAll(tasksFor(signals));
             }
         }
 
         private void addFromCommands() {
             if (config.hasCommands()) {
-                Signals signals = config.getCommands();
+                var signals = config.getCommands();
                 tasks.addAll(tasksFor(signals));
             }
         }
 
         private void addFromEntities() {
             if (config.hasEntities()) {
-                Entities entities = config.getEntities();
-                GenerateFields fields = entities.getGenerateFields();
+                var entities = config.getEntities();
+                var fields = entities.getGenerateFields();
                 if (fields.hasSuperclass()) {
                     tasks.add(new GenerateEntityStateFields(entities, factory));
                 }
@@ -162,7 +159,7 @@ public final class FieldGen extends CodeGenerator {
         }
 
         private static ImmutableList<GenerateFieldsByPattern> tasksFor(Signals signals) {
-            GenerateFields generateFields = signals.getGenerateFields();
+            var generateFields = signals.getGenerateFields();
             if (!generateFields.hasSuperclass()) {
                 return ImmutableList.of();
             }
@@ -174,14 +171,12 @@ public final class FieldGen extends CodeGenerator {
         }
 
         private static Optional<GenerateFieldsByPattern> taskFor(Messages messages) {
-            GenerateFields generateFields = messages.getGenerateFields();
+            var generateFields = messages.getGenerateFields();
             if (!generateFields.hasSuperclass()) {
                 return Optional.empty();
             }
-            Pattern pattern = messages.getPattern();
-            GenerateFieldsByPattern task = new GenerateFieldsByPattern(
-                    generateFields, pattern, factory
-            );
+            var pattern = messages.getPattern();
+            var task = new GenerateFieldsByPattern(generateFields, pattern, factory);
             return Optional.of(task);
         }
     }

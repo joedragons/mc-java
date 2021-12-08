@@ -26,8 +26,6 @@
 
 package io.spine.test.tools.validate;
 
-import com.google.common.collect.ImmutableList;
-import io.spine.validate.ConstraintViolation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,11 +37,11 @@ class ExternalConstraintTest {
     @Test
     @DisplayName("call external validation")
     void validateExternal() {
-        User user = User.newBuilder()
-                        .addContact(Email.newBuilder()
-                                         .setValue("not an email"))
-                        .buildPartial();
-        ImmutableList<ConstraintViolation> violations = user.validate();
+        var user = User.newBuilder()
+                .addContact(Email.newBuilder()
+                                    .setValue("not an email"))
+                .buildPartial();
+        var violations = user.validate();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0)
@@ -55,14 +53,14 @@ class ExternalConstraintTest {
     @Test
     @DisplayName("invoke generated validation if no external validation is defined")
     void noExternal() {
-        ShippingAddress address = ShippingAddress
+        var address = ShippingAddress
                 .newBuilder()
                 .setSecondLine("first line is required and not set")
                 .buildPartial();
-        User user = User.newBuilder()
-                        .addShippingAddress(address)
-                        .buildPartial();
-        ImmutableList<ConstraintViolation> violations = user.validate();
+        var user = User.newBuilder()
+                .addShippingAddress(address)
+                .buildPartial();
+        var violations = user.validate();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0)
@@ -74,10 +72,10 @@ class ExternalConstraintTest {
     @Test
     @DisplayName("ignore external constraints if `(validate)` is not set")
     void noValidate() {
-        SimplePersonName name = SimplePersonName.newBuilder()
+        var name = SimplePersonName.newBuilder()
                 .setValue("A")
                 .buildPartial();
-        User user = User.newBuilder()
+        var user = User.newBuilder()
                 .setName(name)
                 .buildPartial();
         assertThat(user.validate())

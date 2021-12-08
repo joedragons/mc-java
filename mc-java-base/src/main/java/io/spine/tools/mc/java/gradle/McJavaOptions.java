@@ -118,7 +118,7 @@ public class McJavaOptions {
     }
 
     public static Indent getIndent(Project project) {
-        Indent result = getMcJava(project).indent;
+        var result = getMcJava(project).indent;
         _debug().log("The current indent is %d.", result.size());
         return result;
     }
@@ -140,17 +140,17 @@ public class McJavaOptions {
     }
 
     public static CodeGenAnnotations getCodeGenAnnotations(Project project) {
-        CodeGenAnnotations annotations = getMcJava(project).generateAnnotations;
+        var annotations = getMcJava(project).generateAnnotations;
         return annotations;
     }
 
     public static ImmutableSet<String> getInternalClassPatterns(Project project) {
-        List<String> patterns = getMcJava(project).internalClassPatterns;
+        var patterns = getMcJava(project).internalClassPatterns;
         return ImmutableSet.copyOf(patterns);
     }
 
     public static ImmutableSet<String> getInternalMethodNames(Project project) {
-        List<String> patterns = getMcJava(project).internalMethodNames;
+        var patterns = getMcJava(project).internalMethodNames;
         return ImmutableSet.copyOf(patterns);
     }
 }

@@ -78,7 +78,7 @@ public final class Accessor implements Serializable {
      * @return the method name
      */
     public String format(FieldName field) {
-        String name = String.format(template(), field.capitalize());
+        var name = String.format(template(), field.capitalize());
         return name;
     }
 
@@ -94,7 +94,7 @@ public final class Accessor implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Accessor template = (Accessor) o;
+        var template = (Accessor) o;
         return Objects.equal(template(), template.template());
     }
 

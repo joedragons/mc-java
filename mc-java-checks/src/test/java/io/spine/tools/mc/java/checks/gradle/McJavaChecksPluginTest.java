@@ -55,18 +55,18 @@ class McJavaChecksPluginTest {
     @Test
     @DisplayName("create Spine check extension")
     void addingExtension() {
-        Project project = stubProject.get();
+        var project = stubProject.get();
         project.getPluginManager()
                .apply(McJavaChecksPlugin.class);
-        ExtensionContainer extensions = project.getExtensions();
-        Object found = extensions.findByName(McJavaChecksExtension.name());
+        var extensions = project.getExtensions();
+        var found = extensions.findByName(McJavaChecksExtension.name());
         assertNotNull(found);
     }
 
     @Test
     @DisplayName("apply to empty project")
     void applyingToEmptyProject() {
-        Project project = stubProject.get();
+        var project = stubProject.get();
         project.getPluginManager()
                .apply(McJavaChecksPlugin.class);
     }

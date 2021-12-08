@@ -64,8 +64,8 @@ class AnnotationProcessorConfigurationTest
         assertThat(configurations.findByName(annotationProcessor.value()))
                 .isNull();
 
-        Configuration cfg = AnnotationProcessorConfiguration.findOrCreateIn(project);
-        Configuration found = configurations.findByName(annotationProcessor.value());
+        var cfg = AnnotationProcessorConfiguration.findOrCreateIn(project);
+        var found = configurations.findByName(annotationProcessor.value());
         assertThat(cfg)
                 .isEqualTo(found);
     }

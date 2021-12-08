@@ -26,23 +26,17 @@
 
 package io.spine.tools.mc.java.annotation.gradle;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.code.java.ClassName;
 import io.spine.logging.Logging;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.mc.java.annotation.mark.AnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.DefaultAnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.ModuleAnnotator;
-import io.spine.tools.mc.java.gradle.CodeGenAnnotations;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.file.SourceDirectorySet;
 import org.gradle.api.logging.Logger;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.gradle.ProtobufDependencies.sourceSetExtensionName;
@@ -76,39 +70,37 @@ final class AnnotationAction implements Action<Task>, Logging {
 
     @Override
     public void execute(Task task) {
-        Project project = task.getProject();
+        var project = task.getProject();
         if (!containsProtoCode(project)) {
             return;
         }
-        File descriptorSetFile = descriptorSetFile(project, sourceSetName);
+        var descriptorSetFile = descriptorSetFile(project, sourceSetName);
         if (!descriptorSetFile.exists()) {
             logMissing(project.getLogger(), descriptorSetFile);
             return;
         }
-        ModuleAnnotator annotator = createAnnotator(project);
+        var annotator = createAnnotator(project);
         annotator.annotate();
     }
 
     /** Verifies of the source set of the given project contains Protobuf source code. */
     private boolean containsProtoCode(Project project) {
-        SourceDirectorySet protoSet = protoDirectorySet(project, sourceSetName);
+        var protoSet = protoDirectorySet(project, sourceSetName);
         if (protoSet == null) {
             return false;
         }
-        Set<File> dirs =
-                protoSet.getSourceDirectories()
-                        .getFiles();
-        boolean hasProtoDir = dirs.stream()
+        var dirs = protoSet.getSourceDirectories().getFiles();
+        var hasProtoDir = dirs.stream()
                 .anyMatch(dir -> dir.getPath().endsWith(rootName()));
         return hasProtoDir;
     }
 
     private ModuleAnnotator createAnnotator(Project project) {
-        AnnotatorFactory annotatorFactory = createAnnotationFactory(project);
-        CodeGenAnnotations annotations = getCodeGenAnnotations(project);
-        ClassName internalClassName = annotations.internalClassName();
-        ImmutableSet<String> internalClassPatterns = getInternalClassPatterns(project);
-        ImmutableSet<String> internalMethodNames = getInternalMethodNames(project);
+        var annotatorFactory = createAnnotationFactory(project);
+        var annotations = getCodeGenAnnotations(project);
+        var internalClassName = annotations.internalClassName();
+        var internalClassPatterns = getInternalClassPatterns(project);
+        var internalMethodNames = getInternalMethodNames(project);
         return ModuleAnnotator.newBuilder()
                 .setAnnotatorFactory(annotatorFactory)
                 .add(translate(spi()).as(annotations.spiClassName()))
@@ -122,18 +114,18 @@ final class AnnotationAction implements Action<Task>, Logging {
     }
 
     private AnnotatorFactory createAnnotationFactory(Project project) {
-        SourceSetName ssn = sourceSetName;
-        File descriptorSetFile = descriptorSetFile(project, ssn);
-        Path generatedJavaPath = generatedJavaDir(project, ssn);
-        Path generatedGrpcPath = generatedGrpcDir(project, ssn);
-        AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory.newInstance(
+        var ssn = sourceSetName;
+        var descriptorSetFile = descriptorSetFile(project, ssn);
+        var generatedJavaPath = generatedJavaDir(project, ssn);
+        var generatedGrpcPath = generatedGrpcDir(project, ssn);
+        var annotatorFactory = DefaultAnnotatorFactory.newInstance(
                 descriptorSetFile, generatedJavaPath, generatedGrpcPath
         );
         return annotatorFactory;
     }
 
     private void logMissing(Logger logger, File descriptorSetFile) {
-        String nl = System.lineSeparator();
+        var nl = System.lineSeparator();
         logger.warn(
                 "Missing descriptor set file `{}`" +
                         " produced for the source set `{}` which has `{}` extension." + nl +

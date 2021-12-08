@@ -56,7 +56,7 @@ abstract class FieldGenerationTask implements CodeGenerationTask {
      * Performs the actual code generation using the supplied {@linkplain #factory}.
      */
     ImmutableList<CompilerOutput> generateFieldsFor(MessageType type) {
-        ClassName className = ClassName.of(fieldSupertype.getCanonical());
+        var className = ClassName.of(fieldSupertype.getCanonical());
         return factory
                 .createFor(type, className)
                 .stream()

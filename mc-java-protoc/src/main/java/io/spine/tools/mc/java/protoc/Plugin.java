@@ -75,9 +75,9 @@ public final class Plugin {
      * The entry point of the program.
      */
     public static void main(String[] args) {
-        CodeGeneratorRequest request = readRequest();
-        CodegenOptions config = readConfig(request);
-        CompositeGenerator generator = CompositeGenerator.of(
+        var request = readRequest();
+        var config = readConfig(request);
+        var generator = CompositeGenerator.of(
                 InterfaceGen.instance(config),
                 MethodGen.instance(config),
                 BuilderGen.instance(config),
@@ -87,7 +87,7 @@ public final class Plugin {
                 EntityQueryGen.instance(config),
                 FieldGen.instance(config)
         );
-        CodeGeneratorResponse response = generator.process(request);
+        var response = generator.process(request);
         writeResponse(response);
     }
 
@@ -97,7 +97,7 @@ public final class Plugin {
 
     private static CodeGeneratorRequest readRequest() {
         try {
-            CodeGeneratorRequest request = CodeGeneratorRequest.parseFrom(System.in, registry());
+            var request = CodeGeneratorRequest.parseFrom(System.in, registry());
             return request;
         } catch (IOException e) {
             throw newIllegalStateException(e, "Unable to read Code Generator Request.");
@@ -105,9 +105,9 @@ public final class Plugin {
     }
 
     private static CodegenOptions readConfig(CodeGeneratorRequest request) {
-        String configFilePath = decodeBase64(request.getParameter());
-        try (FileInputStream fis = new FileInputStream(configFilePath)) {
-            CodegenOptions config = CodegenOptions.parseFrom(fis, registry());
+        var configFilePath = decodeBase64(request.getParameter());
+        try (var fis = new FileInputStream(configFilePath)) {
+            var config = CodegenOptions.parseFrom(fis, registry());
             return config;
         } catch (InvalidProtocolBufferException e) {
             throw newIllegalStateException(e, "Unable to decode Spine Protoc Plugin config.");

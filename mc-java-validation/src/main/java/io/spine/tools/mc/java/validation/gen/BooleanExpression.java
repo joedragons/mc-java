@@ -75,7 +75,7 @@ final class BooleanExpression extends CodeExpression<Boolean> {
      * @return new expression
      */
     public static BooleanExpression fromCode(String code, Object... args) {
-        CodeBlock block = CodeBlock.of(code, args);
+        var block = CodeBlock.of(code, args);
         return new BooleanExpression(block.toString());
     }
 

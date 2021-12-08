@@ -28,13 +28,11 @@ package io.spine.tools.mc.java.rejection.gradle;
 import com.google.common.collect.ImmutableList;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
-import io.spine.tools.gradle.task.TaskName;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.file.FileCollection;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
@@ -61,7 +59,7 @@ public final class RejectionGenPlugin implements Plugin<Project> {
      */
     @Override
     public void apply(Project project) {
-        Helper helper = new Helper(project);
+        var helper = new Helper(project);
         helper.configure();
         project.getLogger().info(
                 "Rejection generation plugin initialized with tasks: `{}`.",
@@ -92,17 +90,17 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         }
 
         private GradleTask createTask(SourceSetName ssn) {
-            Action<Task> action = RejectionGenAction.create(project, ssn);
+            var action = RejectionGenAction.create(project, ssn);
             return createTask(action, ssn);
         }
 
         private GradleTask createTask(Action<Task> action, SourceSetName ssn) {
-            TaskName rejections = generateRejections(ssn);
-            TaskName mergeTask = mergeDescriptorSet(ssn);
-            TaskName compileTask = compileJava(ssn);
-            FileCollection inputFiles = module.protoSource(ssn);
-            FileCollection outputFiles = module.generatedRejections(ssn);
-            GradleTask task = GradleTask.newBuilder(rejections, action)
+            var rejections = generateRejections(ssn);
+            var mergeTask = mergeDescriptorSet(ssn);
+            var compileTask = compileJava(ssn);
+            var inputFiles = module.protoSource(ssn);
+            var outputFiles = module.generatedRejections(ssn);
+            var task = GradleTask.newBuilder(rejections, action)
                     .insertBeforeTask(compileTask)
                     .insertAfterTask(mergeTask)
                     .withInputFiles(inputFiles)

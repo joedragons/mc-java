@@ -45,7 +45,7 @@ class MethodPatternTest {
     }
 
     @Test
-    @DisplayName("not allow null parameters")
+    @DisplayName("not allow `null` parameters")
     void notAllowNulls() {
         new NullPointerTester()
                 .testInstanceMethods(MethodPattern.exactly("getValue"), PACKAGE);
@@ -54,16 +54,16 @@ class MethodPatternTest {
     @Test
     @DisplayName("match exactly by name")
     void matchExactly() {
-        String methodName = "getUnknownFields";
-        MethodPattern pattern = MethodPattern.exactly(methodName);
+        var methodName = "getUnknownFields";
+        var pattern = MethodPattern.exactly(methodName);
         assertTrue(pattern.matches(methodName));
     }
 
     @Test
     @DisplayName("not match different names")
     void notMatch() {
-        String methodName = "parseFrom";
-        MethodPattern pattern = MethodPattern.exactly(methodName);
+        var methodName = "parseFrom";
+        var pattern = MethodPattern.exactly(methodName);
         assertFalse(pattern.matches(methodName.toLowerCase()));
     }
 }

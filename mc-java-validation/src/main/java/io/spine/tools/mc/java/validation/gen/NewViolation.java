@@ -66,8 +66,7 @@ final class NewViolation implements Expression<ConstraintViolation> {
     @Override
     public CodeBlock toCode() {
         @SuppressWarnings("DuplicateStringLiteralInspection")
-        CodeBlock.Builder builder = CodeBlock
-                .builder()
+        var builder = CodeBlock.builder()
                 .add("$T.newBuilder()", ConstraintViolation.class)
                 .add(".setMsgFormat($S)", message)
                 .add(".setTypeName($S)", type.name().value());
@@ -94,7 +93,7 @@ final class NewViolation implements Expression<ConstraintViolation> {
     private void addFieldPath(CodeBlock.Builder builder) {
         if (field.getFieldNameCount() > 0) {
             builder.add(".setFieldPath($T.newBuilder()", FieldPath.class);
-            for (String fieldName : field.getFieldNameList()) {
+            for (var fieldName : field.getFieldNameList()) {
                 builder.add(".addFieldName($S)", fieldName);
             }
             builder.add(".build())");
@@ -102,7 +101,7 @@ final class NewViolation implements Expression<ConstraintViolation> {
     }
 
     private void addParams(CodeBlock.Builder builder) {
-        for (String param : params) {
+        for (var param : params) {
             builder.add(".addParam($S)", param);
         }
     }
@@ -117,7 +116,7 @@ final class NewViolation implements Expression<ConstraintViolation> {
      */
     static Builder forField(FieldContext field) {
         checkNotNull(field);
-        FieldDeclaration declaration = field.targetDeclaration();
+        var declaration = field.targetDeclaration();
         return new Builder()
                 .setType(declaration.declaringType())
                 .setField(field.fieldPath());

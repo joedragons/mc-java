@@ -59,7 +59,7 @@ final class Method implements ClassMember {
         if (!(o instanceof Method)) {
             return false;
         }
-        Method method = (Method) o;
+        var method = (Method) o;
         return Objects.equal(methodSpec, method.methodSpec);
     }
 

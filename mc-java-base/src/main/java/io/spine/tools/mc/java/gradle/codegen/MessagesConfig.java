@@ -29,7 +29,6 @@ package io.spine.tools.mc.java.gradle.codegen;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import io.spine.tools.gradle.Multiple;
-import io.spine.tools.mc.java.codegen.GenerateFields;
 import io.spine.tools.mc.java.codegen.GenerateMethods;
 import io.spine.tools.mc.java.codegen.GenerateNestedClasses;
 import io.spine.tools.mc.java.codegen.Messages;
@@ -98,12 +97,12 @@ public final class MessagesConfig extends ConfigWithFields<Messages> {
 
     @Override
     Messages toProto() {
-        Messages.Builder result = Messages.newBuilder()
+        var result = Messages.newBuilder()
                 .setPattern(pattern)
                 .addAllAddInterface(interfaces())
                 .addAllGenerateMethods(generateMethods())
                 .addAllGenerateNestedClasses(generateNestedClasses());
-        GenerateFields generateFields = generateFields();
+        var generateFields = generateFields();
         if (isNotDefault(generateFields)) {
             result.setGenerateFields(generateFields);
         }
@@ -118,10 +117,10 @@ public final class MessagesConfig extends ConfigWithFields<Messages> {
     }
 
     private static GenerateMethods methodFactoryConfig(String methodFactoryClass) {
-        MethodFactoryName factoryName = MethodFactoryName.newBuilder()
+        var factoryName = MethodFactoryName.newBuilder()
                 .setClassName(className(methodFactoryClass))
                 .build();
-        GenerateMethods config = GenerateMethods.newBuilder()
+        var config = GenerateMethods.newBuilder()
                 .setFactory(factoryName)
                 .build();
         return config;
@@ -135,10 +134,10 @@ public final class MessagesConfig extends ConfigWithFields<Messages> {
     }
 
     private static GenerateNestedClasses nestedClassFactoryConfig(String methodFactoryClass) {
-        NestedClassFactoryName factoryName = NestedClassFactoryName.newBuilder()
+        var factoryName = NestedClassFactoryName.newBuilder()
                 .setClassName(className(methodFactoryClass))
                 .build();
-        GenerateNestedClasses config = GenerateNestedClasses.newBuilder()
+        var config = GenerateNestedClasses.newBuilder()
                 .setFactory(factoryName)
                 .build();
         return config;

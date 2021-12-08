@@ -44,22 +44,18 @@ class ValidatorTest {
     @Test
     @DisplayName("validate according to validation rules")
     void multipleRules() {
-        String validValue = "any text";
-        AlwaysInvalid invalidMessage = AlwaysInvalid
-                .newBuilder()
+        var validValue = "any text";
+        var invalidMessage = AlwaysInvalid.newBuilder()
                 .setAlwaysInvalidA(validValue)
                 .setAlwaysInvalidB(validValue)
                 .build();
-        FirstConstraintTarget first = FirstConstraintTarget
-                .newBuilder()
+        var first = FirstConstraintTarget.newBuilder()
                 .setCanBeValid(invalidMessage)
                 .build();
-        SecondConstraintTarget second = SecondConstraintTarget
-                .newBuilder()
+        var second = SecondConstraintTarget.newBuilder()
                 .setCanBeValid(invalidMessage)
                 .build();
-        ConstraintTargetAggregate aggregateState = ConstraintTargetAggregate
-                .newBuilder()
+        var aggregateState = ConstraintTargetAggregate.newBuilder()
                 .setFirst(first)
                 .setSecond(second)
                 .build();

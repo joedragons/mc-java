@@ -29,7 +29,6 @@ package io.spine.tools.mc.java.checks.gradle;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ConfigurationContainer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.gradle.JavaConfigurationName.annotationProcessor;
@@ -55,8 +54,8 @@ final class AnnotationProcessorConfiguration {
      */
     static Configuration findOrCreateIn(Project project) {
         checkNotNull(project);
-        ConfigurationContainer configurations = project.getConfigurations();
-        String cfgName = annotationProcessor.value();
+        var configurations = project.getConfigurations();
+        var cfgName = annotationProcessor.value();
         @Nullable Configuration config = configurations.findByName(cfgName);
         if (config == null) {
             config = configurations.create(cfgName);

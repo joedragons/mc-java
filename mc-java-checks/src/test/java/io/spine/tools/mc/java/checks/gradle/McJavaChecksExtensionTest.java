@@ -29,7 +29,6 @@ package io.spine.tools.mc.java.checks.gradle;
 import io.spine.tools.mc.checks.Severity;
 import io.spine.tools.mc.java.checks.gradle.given.StubProject;
 import org.gradle.api.Project;
-import org.gradle.api.plugins.ExtensionContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,7 @@ class McJavaChecksExtensionTest {
     @BeforeEach
     void setUp() {
         project = StubProject.createFor(getClass()).get();
-        ExtensionContainer extensions = project.getExtensions();
+        var extensions = project.getExtensions();
         extension = extensions.create(McJavaChecksExtension.name(),
                                       McJavaChecksExtension.class);
     }
@@ -54,9 +53,9 @@ class McJavaChecksExtensionTest {
     @Test
     @DisplayName("return use validating builder severity")
     void obtainingSeverity() {
-        final Severity expected = Severity.ERROR;
+        final var expected = Severity.ERROR;
         extension.useValidatingBuilderSeverity = expected;
-        final Severity actual = getUseValidatingBuilderSeverity(project);
+        final var actual = getUseValidatingBuilderSeverity(project);
         assertThat(actual)
                 .isEqualTo(expected);
     }
@@ -64,7 +63,7 @@ class McJavaChecksExtensionTest {
     @Test
     @DisplayName("return `null` severity if not set")
     void ifNotSet() {
-        Severity severity = getUseValidatingBuilderSeverity(project);
+        var severity = getUseValidatingBuilderSeverity(project);
         assertThat(severity)
                 .isNull();
     }

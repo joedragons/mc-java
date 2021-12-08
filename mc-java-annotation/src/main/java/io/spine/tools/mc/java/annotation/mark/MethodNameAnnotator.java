@@ -93,7 +93,7 @@ final class MethodNameAnnotator extends Annotator {
         }
 
         private boolean matching(Method<?, ?> method) {
-            String methodName = method.getName();
+            var methodName = method.getName();
             return patterns.stream()
                            .anyMatch(pattern -> pattern.matches(methodName));
         }

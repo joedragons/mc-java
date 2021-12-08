@@ -43,11 +43,11 @@ final class ClassMemberTest {
     @DisplayName("create valid compiler output")
     @Test
     void createValidCompilerOutput() {
-        String methodBody = "public void test(){}";
-        Method method = new Method(methodBody);
-        MessageType type = new MessageType(MessageWithClassScopeInsertion.getDescriptor());
-        ClassMember result = ClassMember.method(method, type);
-        File file = result.asFile();
+        var methodBody = "public void test(){}";
+        var method = new Method(methodBody);
+        var type = new MessageType(MessageWithClassScopeInsertion.getDescriptor());
+        var result = ClassMember.method(method, type);
+        var file = result.asFile();
 
         assertEquals(methodBody, file.getContent());
         assertEquals(insertionPoint(type), file.getInsertionPoint());

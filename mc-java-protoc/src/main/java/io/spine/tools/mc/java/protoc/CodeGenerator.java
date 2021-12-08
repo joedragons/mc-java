@@ -32,7 +32,6 @@ import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
-import com.google.protobuf.compiler.PluginProtos.Version;
 import io.spine.code.proto.FileName;
 import io.spine.code.proto.FileSet;
 import io.spine.code.proto.TypeSet;
@@ -41,7 +40,6 @@ import io.spine.type.Type;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -114,12 +112,12 @@ public abstract class CodeGenerator {
         checkNotNull(request);
         checkNotEmpty(request);
         checkCompilerVersion(request);
-        FileSet fileSet = FileSet.of(request.getProtoFileList());
+        var fileSet = FileSet.of(request.getProtoFileList());
         MoreKnownTypes.extendWith(fileSet);
-        ImmutableSet<FileName> requestedFileNames = toFileNames(request);
-        FileSet requestedFiles = fileSet.find(requestedFileNames);
-        TypeSet typeSet = TypeSet.from(requestedFiles);
-        CodeGeneratorResponse response = process(typeSet);
+        var requestedFileNames = toFileNames(request);
+        var requestedFiles = fileSet.find(requestedFileNames);
+        var typeSet = TypeSet.from(requestedFiles);
+        var response = process(typeSet);
         return response;
     }
 
@@ -162,10 +160,9 @@ public abstract class CodeGenerator {
      * Processes all passed proto files.
      */
     private CodeGeneratorResponse process(TypeSet types) {
-        Set<CompilerOutput> rawOutput = generate(types);
+        var rawOutput = generate(types);
         Collection<File> mergedFiles = mergeFiles(rawOutput);
-        CodeGeneratorResponse response = CodeGeneratorResponse
-                .newBuilder()
+        var response = CodeGeneratorResponse.newBuilder()
                 .addAllFile(mergedFiles)
                 .build();
         return response;
@@ -186,19 +183,18 @@ public abstract class CodeGenerator {
      * Ensures that the version of the Google Protobuf Compiler is 3.* or higher.
      */
     private void checkCompilerVersion(CodeGeneratorRequest request) {
-        Version version = request.getCompilerVersion();
+        var version = request.getCompilerVersion();
         checkArgument(version.getMajor() >= 3,
                       "Please use `protoc` of version 3.* or higher to run `%s`.",
                       getClass().getName());
     }
 
     private static List<File> mergeFiles(Collection<CompilerOutput> allFiles) {
-        Map<Boolean, List<File>> partitionedFiles = allFiles
-                .stream()
+        var partitionedFiles = allFiles.stream()
                 .map(CompilerOutput::asFile)
                 .collect(partitioningBy(File::hasInsertionPoint));
-        List<File> insertionPoints = mergeInsertionPoints(partitionedFiles.get(true));
-        List<File> completeFiles = partitionedFiles.get(false);
+        var insertionPoints = mergeInsertionPoints(partitionedFiles.get(true));
+        var completeFiles = partitionedFiles.get(false);
 
         List<File> merged = newArrayListWithExpectedSize(allFiles.size());
         merged.addAll(insertionPoints);
@@ -208,9 +204,8 @@ public abstract class CodeGenerator {
     }
 
     private static List<File> mergeInsertionPoints(Collection<File> insertionPoints) {
-        File emptyFile = File.getDefaultInstance();
-        List<File> merged = insertionPoints
-                .stream()
+        var emptyFile = File.getDefaultInstance();
+        var merged = insertionPoints.stream()
                 .collect(groupingBy(File::getInsertionPoint, reducing(CodeGenerator::joinContent)))
                 .values()
                 .stream()
@@ -228,7 +223,7 @@ public abstract class CodeGenerator {
      */
     private static File joinContent(File left, File right) {
         return left.toBuilder()
-                   .setContent(left.getContent() + System.lineSeparator() + right.getContent())
-                   .build();
+                .setContent(left.getContent() + System.lineSeparator() + right.getContent())
+                .build();
     }
 }

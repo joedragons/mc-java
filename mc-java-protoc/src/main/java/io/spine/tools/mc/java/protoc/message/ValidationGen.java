@@ -27,11 +27,9 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.protobuf.compiler.PluginProtos;
 import io.spine.base.EventMessage;
 import io.spine.code.java.ClassName;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
-import io.spine.tools.mc.java.codegen.Validation;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.InsertionPoint;
@@ -64,9 +62,9 @@ public final class ValidationGen extends CodeGenerator {
      */
     public static CodeGenerator instance(CodegenOptions config) {
         checkNotNull(config);
-        Validation validation = config.getValidation();
-        boolean skipBuilders = validation.getSkipBuilders();
-        boolean skipValidation = validation.getSkipValidation();
+        var validation = config.getValidation();
+        var skipBuilders = validation.getSkipBuilders();
+        var skipValidation = validation.getSkipValidation();
         return skipBuilders || skipValidation
                ? NoOpGenerator.instance()
                : new ValidationGen();
@@ -97,14 +95,11 @@ public final class ValidationGen extends CodeGenerator {
      * @return compiler output relevant for the passed type
      */
     private static ImmutableSet<CompilerOutput> generateValidationFor(MessageType type) {
-        ValidateSpecs factory = new ValidateSpecs(type);
-        CompilerOutput builderInsertionPoint =
-                insertCode(type, builder_scope, factory.vBuildMethod().toString());
-        CompilerOutput validateMethod =
-                insertCode(type, class_scope, factory.validateMethod().toString());
-        CompilerOutput validatorClass =
-                insertCode(type, class_scope, factory.validatorClass().toString());
-        Implement iface = interfaceFor(type, implementMessageWithConstraints());
+        var factory = new ValidateSpecs(type);
+        var builderInsertionPoint = insertCode(type, builder_scope, factory.vBuildMethod().toString());
+        var validateMethod = insertCode(type, class_scope, factory.validateMethod().toString());
+        var validatorClass = insertCode(type, class_scope, factory.validatorClass().toString());
+        var iface = interfaceFor(type, implementMessageWithConstraints());
         ImmutableSet.Builder<CompilerOutput> builder = ImmutableSet.builder();
         builder.add(
                 iface,
@@ -112,20 +107,19 @@ public final class ValidationGen extends CodeGenerator {
                 validateMethod,
                 validatorClass
         );
-        ImmutableSet<CompilerOutput> result = builder.build();
+        var result = builder.build();
         return result;
     }
 
     private static ExistingInterface implementMessageWithConstraints() {
-        ClassName baseInterface = ClassName.of(MessageWithConstraints.class);
-        ExistingInterface result = new ExistingInterface(baseInterface);
+        var baseInterface = ClassName.of(MessageWithConstraints.class);
+        var result = new ExistingInterface(baseInterface);
         return result;
     }
 
     private static CompilerOutput
     insertCode(Type<?, ?> type, InsertionPoint target, String javaCode) {
-        PluginProtos.CodeGeneratorResponse.File file = ProtocPluginFiles
-                .prepareFile(type)
+        var file = ProtocPluginFiles.prepareFile(type)
                 .setInsertionPoint(target.forType(type))
                 .setContent(javaCode)
                 .build();

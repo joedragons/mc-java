@@ -27,7 +27,6 @@
 package io.spine.tools.mc.java.protoc.column;
 
 import com.google.common.collect.ImmutableList;
-import io.spine.tools.java.code.NestedClass;
 import io.spine.tools.java.code.column.ColumnFactory;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.codegen.Entities;
@@ -41,7 +40,6 @@ import io.spine.type.MessageType;
 import io.spine.type.Type;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Predicate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -76,8 +74,8 @@ public final class ColumnGen extends CodeGenerator {
      */
     public static CodeGenerator instance(CodegenOptions config) {
         checkNotNull(config);
-        Entities entities = config.getEntities();
-        boolean generate = entities.getGenerateQueries();
+        var entities = config.getEntities();
+        var generate = entities.getGenerateQueries();
         return generate
                ? new ColumnGen(entities)
                : NoOpGenerator.instance();
@@ -93,7 +91,7 @@ public final class ColumnGen extends CodeGenerator {
     }
 
     private ImmutableList<CompilerOutput> generateFor(MessageType type) {
-        List<NestedClass> generatedClasses = factory.generateClassesFor(type);
+        var generatedClasses = factory.generateClassesFor(type);
         ImmutableList<CompilerOutput> result =
                 generatedClasses.stream()
                                 .map(cls -> ClassMember.nestedClass(cls, type))
@@ -105,7 +103,7 @@ public final class ColumnGen extends CodeGenerator {
         if (!(type instanceof MessageType)) {
             return false;
         }
-        MessageType messageType = (MessageType) type;
+        var messageType = (MessageType) type;
         return entityMatcher.test(messageType) && hasColumns(messageType);
     }
 }

@@ -27,6 +27,7 @@
 
 package io.spine.tools.mc.java.checks
 
+import com.google.common.annotations.VisibleForTesting
 import io.spine.tools.gradle.Artifact
 import io.spine.tools.gradle.Dependency
 import io.spine.tools.gradle.DependencyVersions
@@ -35,7 +36,8 @@ import io.spine.tools.gradle.ThirdPartyDependency
 /**
  * The name of the Maven artifact of the Model Compiler for Java Checks.
  */
-internal const val MC_JAVA_CHECKS_ARTIFACT = "spine-mc-java-checks"
+@VisibleForTesting  /* Otherwise should have been `internal`. */
+public const val MC_JAVA_CHECKS_ARTIFACT: String = "spine-mc-java-checks"
 
 private val versions = DependencyVersions.loadFor(MC_JAVA_CHECKS_ARTIFACT)
 

@@ -27,14 +27,12 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.testing.NullPointerTester;
-import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.codegen.GenerateNestedClasses;
 import io.spine.tools.mc.java.codegen.Messages;
 import io.spine.tools.mc.java.codegen.NestedClassFactoryName;
 import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.tools.mc.java.gradle.codegen.FilePatterns;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.given.TestNestedClassFactory;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
@@ -42,8 +40,6 @@ import io.spine.type.EnumType;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
@@ -62,11 +58,11 @@ class NestedClassGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        CodegenOptions options = newOptions();
+        var options = newOptions();
 
-        NestedClassGen generator = NestedClassGen.instance(options);
-        MessageType type = new MessageType(TaskView.getDescriptor());
-        Collection<CompilerOutput> output = generator.generate(type);
+        var generator = NestedClassGen.instance(options);
+        var type = new MessageType(TaskView.getDescriptor());
+        var output = generator.generate(type);
 
         assertThat(output).isNotEmpty();
     }
@@ -74,31 +70,31 @@ class NestedClassGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        CodegenOptions config = newOptions();
+        var config = newOptions();
 
-        NestedClassGen generator = NestedClassGen.instance(config);
-        EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
-        Collection<CompilerOutput> output = generator.generate(enumType);
+        var generator = NestedClassGen.instance(config);
+        var enumType = EnumType.create(Task.Priority.getDescriptor());
+        var output = generator.generate(enumType);
 
         assertThat(output).isEmpty();
     }
 
     private static CodegenOptions newOptions() {
-        JavaClassName name = className(TestNestedClassFactory.class);
-        NestedClassFactoryName factoryName = NestedClassFactoryName.newBuilder()
+        var name = className(TestNestedClassFactory.class);
+        var factoryName = NestedClassFactoryName.newBuilder()
                 .setClassName(name)
                 .build();
-        GenerateNestedClasses generate = GenerateNestedClasses.newBuilder()
+        var generate = GenerateNestedClasses.newBuilder()
                 .setFactory(factoryName)
                 .build();
-        Pattern pattern = Pattern.newBuilder()
+        var pattern = Pattern.newBuilder()
                 .setFile(FilePatterns.fileSuffix("test_fields.proto"))
                 .build();
-        Messages messages = Messages.newBuilder()
+        var messages = Messages.newBuilder()
                 .setPattern(pattern)
                 .addGenerateNestedClasses(generate)
                 .build();
-        CodegenOptions result = CodegenOptions.newBuilder()
+        var result = CodegenOptions.newBuilder()
                 .addMessages(messages)
                 .build();
         return result;

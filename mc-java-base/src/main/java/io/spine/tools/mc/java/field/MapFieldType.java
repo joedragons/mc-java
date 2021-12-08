@@ -28,7 +28,6 @@ package io.spine.tools.mc.java.field;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.Immutable;
-import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
@@ -36,18 +35,17 @@ import com.squareup.javapoet.TypeName;
 import io.spine.code.proto.FieldDeclaration;
 
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static io.spine.tools.mc.java.field.Accessor.prefix;
 import static io.spine.tools.mc.java.field.Accessor.prefixAndPostfix;
-import static io.spine.tools.mc.java.field.StandardAccessor.putAll;
 import static io.spine.tools.mc.java.field.StandardAccessor.clear;
-import static io.spine.tools.mc.java.field.StandardAccessor.getCount;
 import static io.spine.tools.mc.java.field.StandardAccessor.get;
+import static io.spine.tools.mc.java.field.StandardAccessor.getCount;
 import static io.spine.tools.mc.java.field.StandardAccessor.getMap;
 import static io.spine.tools.mc.java.field.StandardAccessor.put;
+import static io.spine.tools.mc.java.field.StandardAccessor.putAll;
 import static io.spine.tools.mc.java.field.StandardAccessor.remove;
 
 /**
@@ -78,9 +76,9 @@ final class MapFieldType implements FieldType {
      * Constructs the new instance based on the key and the value type names.
      */
     MapFieldType(FieldDeclaration field) {
-        Map.Entry<TypeName, TypeName> entryTypeNames = entryTypeNames(field);
-        TypeName keyType = boxIfPrimitive(entryTypeNames.getKey());
-        TypeName valueType = boxIfPrimitive(entryTypeNames.getValue());
+        var entryTypeNames = entryTypeNames(field);
+        var keyType = boxIfPrimitive(entryTypeNames.getKey());
+        var valueType = boxIfPrimitive(entryTypeNames.getValue());
         this.typeName = ParameterizedTypeName.get(ClassName.get(Map.class), keyType, valueType);
     }
 
@@ -125,19 +123,19 @@ final class MapFieldType implements FieldType {
      */
     private static Map.Entry<TypeName, TypeName> entryTypeNames(FieldDeclaration mapField) {
         checkArgument(mapField.isMap());
-        int keyFieldIndex = 0;
-        int valueFieldIndex = 1;
-        Descriptor mapEntry = mapField.descriptor().getMessageType();
-        List<FieldDescriptor> fields = mapEntry.getFields();
-        FieldDescriptor keyField = fields.get(keyFieldIndex);
-        FieldDescriptor valueField = fields.get(valueFieldIndex);
-        TypeName keyTypeName = typeNameOf(keyField);
-        TypeName valueTypeName = typeNameOf(valueField);
+        var keyFieldIndex = 0;
+        var valueFieldIndex = 1;
+        var mapEntry = mapField.descriptor().getMessageType();
+        var fields = mapEntry.getFields();
+        var keyField = fields.get(keyFieldIndex);
+        var valueField = fields.get(valueFieldIndex);
+        var keyTypeName = typeNameOf(keyField);
+        var valueTypeName = typeNameOf(valueField);
         return new AbstractMap.SimpleEntry<>(keyTypeName, valueTypeName);
     }
 
     private static TypeName typeNameOf(FieldDescriptor descr) {
-        FieldDeclaration decl = new FieldDeclaration(descr);
+        var decl = new FieldDeclaration(descr);
         return FieldType.of(decl).name();
     }
 }

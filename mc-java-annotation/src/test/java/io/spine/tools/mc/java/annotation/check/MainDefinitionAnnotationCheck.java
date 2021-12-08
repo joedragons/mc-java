@@ -60,8 +60,8 @@ public final class MainDefinitionAnnotationCheck extends SourceCheck {
     public void accept(AbstractJavaSource<JavaClassSource> source) {
         checkNotNull(source);
         Optional<?> annotation = findAnnotation(source, this.annotation);
-        String sourceName = source.getCanonicalName();
-        String annotationName = this.annotation.getName();
+        var sourceName = source.getCanonicalName();
+        var annotationName = this.annotation.getName();
         if (shouldBeAnnotated()) {
             assertTrue(
                     annotation.isPresent(),

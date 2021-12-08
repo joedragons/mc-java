@@ -52,7 +52,7 @@ class RejectionGenPluginTest {
     static void generateRejections() {
         projectDir = TempDir.forClass(RejectionGenPluginTest.class);
 
-        GradleProject project = GradleProject.setupAt(projectDir)
+        var project = GradleProject.setupAt(projectDir)
                 .fromResources("rejections-gen-plugin-test")
                 .copyBuildSrc()
                 .create();
@@ -83,12 +83,12 @@ class RejectionGenPluginTest {
         return projectDir.toPath().resolve("generated/");
     }
     private static Path targetMainDir() {
-        Path targetRoot = generatedRoot().resolve("main/spine/");
+        var targetRoot = generatedRoot().resolve("main/spine/");
         return targetRoot;
     }
 
     private static Path targetTestDir() {
-        Path targetRoot = generatedRoot().resolve("test/spine/");
+        var targetRoot = generatedRoot().resolve("test/spine/");
         return targetRoot;
     }
 
@@ -100,7 +100,7 @@ class RejectionGenPluginTest {
         @DisplayName("for 'main' source set")
         void mainPackageName() {
             // As defined in `resources/.../main_rejections.proto`.
-            Path packageDir = targetMainDir().resolve("io/spine/sample/rejections");
+            var packageDir = targetMainDir().resolve("io/spine/sample/rejections");
             assertExists(packageDir);
 
             // As defined in `resources/.../main_rejections.proto`.
@@ -116,7 +116,7 @@ class RejectionGenPluginTest {
         @DisplayName("for 'test' source set")
         void testPackageName() {
             // As defined in `resources/.../test_rejections.proto`.
-            Path packageDir = targetTestDir().resolve("io/spine/sample/rejections");
+            var packageDir = targetTestDir().resolve("io/spine/sample/rejections");
             assertExists(packageDir);
 
             // As defined in `resources/.../test_rejections.proto`.
@@ -130,7 +130,7 @@ class RejectionGenPluginTest {
     }
 
     private static void assertJavaFileExists(Path packageDir, String typeName) {
-        Path file = packageDir.resolve(typeName + ".java");
+        var file = packageDir.resolve(typeName + ".java");
         assertExists(file);
     }
 }

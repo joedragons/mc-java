@@ -70,36 +70,34 @@ final class CodeGeneratorTest {
     @DisplayName("process valid `CodeGeneratorRequest`")
     @Test
     void processValidRequest() {
-        Uuids uuids = Uuids.newBuilder()
+        var uuids = Uuids.newBuilder()
                 .addAddInterface(addInterface(TestInterface.class))
                 .build();
-        CodegenOptions config = CodegenOptions.newBuilder()
+        var config = CodegenOptions.newBuilder()
                 .setUuids(uuids)
                 .build();
-        CodeGeneratorRequest request = requestBuilder()
+        var request = requestBuilder()
                 .addProtoFile(TestGeneratorsProto.getDescriptor()
                                                  .toProto())
                 .addFileToGenerate(TEST_PROTO_FILE)
                 .setParameter(protocConfig(config, testPluginConfig))
                 .build();
-        MessageType type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
-        File firstFile = File
-                .newBuilder()
+        var type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
+        var firstFile = File.newBuilder()
                 .setName("file.proto")
                 .setContent(TestInterface.class.getName() + ',')
                 .setInsertionPoint(InsertionPoint.message_implements.forType(type))
                 .build();
-        File secondFile = File
-                .newBuilder()
+        var secondFile = File.newBuilder()
                 .setName("file.proto")
                 .setContent("public void test(){}")
                 .setInsertionPoint(InsertionPoint.class_scope.forType(type))
                 .build();
-        TestGenerator firstGenerator = new TestGenerator(new TestCompilerOutput(firstFile),
-                                                         new TestCompilerOutput(secondFile));
-        CodeGeneratorResponse result = firstGenerator.process(request);
+        var firstGenerator = new TestGenerator(new TestCompilerOutput(firstFile),
+                                               new TestCompilerOutput(secondFile));
+        var result = firstGenerator.process(request);
 
-        IterableSubject assertFiles = assertThat(result.getFileList());
+        var assertFiles = assertThat(result.getFileList());
         assertFiles
                 .hasSize(2);
         assertFiles
@@ -109,36 +107,34 @@ final class CodeGeneratorTest {
     @DisplayName("concatenate code generated for the same insertion point")
     @Test
     void concatenateGeneratedCode() {
-        CodegenOptions config = CodegenOptions.getDefaultInstance();
-        CodeGeneratorRequest request = requestBuilder()
+        var config = CodegenOptions.getDefaultInstance();
+        var request = requestBuilder()
                 .addProtoFile(TestGeneratorsProto.getDescriptor()
                                                  .toProto())
                 .addFileToGenerate(TEST_PROTO_FILE)
                 .setParameter(protocConfig(config, testPluginConfig))
                 .build();
-        MessageType type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
-        String firstMethod = "public void test1(){}";
-        String secondMethod = "public void test2(){}";
-        File firstFile = File
-                .newBuilder()
+        var type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
+        var firstMethod = "public void test1(){}";
+        var secondMethod = "public void test2(){}";
+        var firstFile = File.newBuilder()
                 .setName("file.proto")
                 .setContent(firstMethod)
                 .setInsertionPoint(InsertionPoint.class_scope.forType(type))
                 .build();
-        File secondFile = firstFile
-                .toBuilder()
+        var secondFile = firstFile.toBuilder()
                 .setContent(secondMethod)
                 .build();
         ImmutableList<CompilerOutput> compilerOutputs = ImmutableList.of(
                 new TestCompilerOutput(firstFile), new TestCompilerOutput(secondFile)
         );
-        TestGenerator generator = new TestGenerator(compilerOutputs);
+        var generator = new TestGenerator(compilerOutputs);
 
-        CodeGeneratorResponse result = generator.process(request);
+        var result = generator.process(request);
         assertThat(result.getFileList())
                 .hasSize(1);
-        File file = result.getFile(0);
-        StringSubject assertFileContent = assertThat(file.getContent());
+        var file = result.getFile(0);
+        var assertFileContent = assertThat(file.getContent());
         assertFileContent
                 .contains(firstMethod);
         assertFileContent
@@ -148,17 +144,16 @@ final class CodeGeneratorTest {
     @DisplayName("drop duplicates in generated code for the same insertion point")
     @Test
     void dropCodeDuplicates() {
-        CodegenOptions config = CodegenOptions.getDefaultInstance();
-        CodeGeneratorRequest request = requestBuilder()
+        var config = CodegenOptions.getDefaultInstance();
+        var request = requestBuilder()
                 .addProtoFile(TestGeneratorsProto.getDescriptor()
                                                  .toProto())
                 .addFileToGenerate(TEST_PROTO_FILE)
                 .setParameter(protocConfig(config, testPluginConfig))
                 .build();
-        MessageType type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
-        String method = "public void test1(){}";
-        File generated = File
-                .newBuilder()
+        var type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
+        var method = "public void test1(){}";
+        var generated = File.newBuilder()
                 .setName("file.proto")
                 .setContent(method)
                 .setInsertionPoint(InsertionPoint.class_scope.forType(type))
@@ -166,13 +161,13 @@ final class CodeGeneratorTest {
         ImmutableList<CompilerOutput> compilerOutputs = ImmutableList.of(
                 new TestCompilerOutput(generated), new TestCompilerOutput(generated)
         );
-        TestGenerator generator = new TestGenerator(compilerOutputs);
+        var generator = new TestGenerator(compilerOutputs);
 
-        CodeGeneratorResponse result = generator.process(request);
+        var result = generator.process(request);
         assertThat(result.getFileList())
                 .hasSize(1);
-        File file = result.getFile(0);
-        StringSubject fileContent = assertThat(file.getContent());
+        var file = result.getFile(0);
+        var fileContent = assertThat(file.getContent());
         fileContent
                 .isEqualTo(method);
     }
@@ -205,7 +200,7 @@ final class CodeGeneratorTest {
     }
 
     private static CodeGeneratorRequest requestWithUnsupportedVersion() {
-        CodeGeneratorRequest.Builder result = requestBuilder();
+        var result = requestBuilder();
         result.setCompilerVersion(result.getCompilerVersionBuilder()
                                         .setMajor(2));
         return result.build();

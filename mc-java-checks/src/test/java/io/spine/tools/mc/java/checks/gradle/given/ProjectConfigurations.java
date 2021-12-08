@@ -27,7 +27,6 @@
 package io.spine.tools.mc.java.checks.gradle.given;
 
 import org.gradle.api.Project;
-import org.gradle.api.tasks.TaskCollection;
 import org.gradle.api.tasks.compile.JavaCompile;
 
 import java.util.List;
@@ -54,9 +53,9 @@ public class ProjectConfigurations {
      * @throws AssertionError if the project contains any arguments for compile tasks
      */
     public static void assertCompileTasksEmpty(Project project) {
-        TaskCollection<JavaCompile> javaCompileTasks = acquireJavaCompileTasks(project);
-        for (JavaCompile task : javaCompileTasks) {
-            List<String> compilerArgs = obtainCompilerArgs(task);
+        var javaCompileTasks = acquireJavaCompileTasks(project);
+        for (var task : javaCompileTasks) {
+            var compilerArgs = obtainCompilerArgs(task);
             assertEmpty(compilerArgs);
         }
     }
@@ -73,9 +72,9 @@ public class ProjectConfigurations {
      *         any of the specified arguments
      */
     public static void assertCompileTasksContain(Project project, String... args) {
-        TaskCollection<JavaCompile> javaCompileTasks = acquireJavaCompileTasks(project);
-        for (JavaCompile task : javaCompileTasks) {
-            List<String> compilerArgs = obtainCompilerArgs(task);
+        var javaCompileTasks = acquireJavaCompileTasks(project);
+        for (var task : javaCompileTasks) {
+            var compilerArgs = obtainCompilerArgs(task);
             assertHasAllArgs(compilerArgs, args);
         }
     }

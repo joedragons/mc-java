@@ -52,12 +52,12 @@ public final class McJavaChecksPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
         McJavaChecksExtension.createIn(project);
-        boolean dependencyResolved = McJavaChecksDependency.addTo(project);
+        var dependencyResolved = McJavaChecksDependency.addTo(project);
         if (!dependencyResolved) {
             return;
         }
 
-        McJavaChecksSeverity severity = McJavaChecksSeverity.initFor(project);
+        var severity = McJavaChecksSeverity.initFor(project);
         severity.addConfigureSeverityAction();
     }
 }

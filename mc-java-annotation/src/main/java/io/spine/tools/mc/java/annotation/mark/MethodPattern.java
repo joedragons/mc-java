@@ -83,7 +83,7 @@ public final class MethodPattern {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MethodPattern pattern = (MethodPattern) o;
+        var pattern = (MethodPattern) o;
         return Objects.equal(name, pattern.name);
     }
 

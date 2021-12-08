@@ -49,10 +49,10 @@ public final class TypePatternMatcher implements Predicate<MessageType> {
 
     @Override
     public boolean test(MessageType type) {
-        String typeName = type.name().value();
+        var typeName = type.name().value();
         switch (pattern.getValueCase()) {
             case EXPECTED_TYPE:
-                String expectedType = pattern.getExpectedType().getValue();
+                var expectedType = pattern.getExpectedType().getValue();
                 return expectedType.equals(typeName);
             case REGEX:
                 return typeName.matches(pattern.getRegex());

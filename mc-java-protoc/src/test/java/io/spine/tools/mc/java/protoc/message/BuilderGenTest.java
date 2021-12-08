@@ -26,19 +26,13 @@
 
 package io.spine.tools.mc.java.protoc.message;
 
-import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
-import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
-import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
 import com.google.protobuf.compiler.PluginProtos.Version;
-import io.spine.test.protoc.BuilderTestProto;
+import io.spine.test.tools.mc.java.protoc.BuilderTestProto;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
-import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.NoOpGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -48,17 +42,15 @@ class BuilderGenTest {
     @Test
     @DisplayName("produce builder insertion points")
     void produceBuilderInsertionPoints() {
-        CodeGenerator generator =
-                BuilderGen.instance(CodegenOptions.getDefaultInstance());
-        FileDescriptor file = BuilderTestProto.getDescriptor();
-        CodeGeneratorRequest request = CodeGeneratorRequest
-                .newBuilder()
+        var generator = BuilderGen.instance(CodegenOptions.getDefaultInstance());
+        var file = BuilderTestProto.getDescriptor();
+        var request = CodeGeneratorRequest.newBuilder()
                 .addProtoFile(file.toProto())
                 .addFileToGenerate(file.getFullName())
                 .setCompilerVersion(Version.newBuilder().setMajor(3).build())
                 .build();
-        CodeGeneratorResponse response = generator.process(request);
-        List<File> files = response.getFileList();
+        var response = generator.process(request);
+        var files = response.getFileList();
         assertThat(files).hasSize(1);
         assertThat(files.get(0).getInsertionPoint()).isNotEmpty();
     }
@@ -66,9 +58,9 @@ class BuilderGenTest {
     @Test
     @DisplayName("do nothing if configured to skip validating builders")
     void ignoreIfConfigured() {
-        CodegenOptions.Builder config = CodegenOptions.newBuilder();
+        var config = CodegenOptions.newBuilder();
         config.getValidationBuilder().setSkipBuilders(true);
-        CodeGenerator generator = BuilderGen.instance(config.build());
+        var generator = BuilderGen.instance(config.build());
         assertThat(generator).isInstanceOf(NoOpGenerator.class);
     }
 }
