@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":mc-java-rejection"))
 
     implementation("io.spine:proto-data:0.1.2")
+    implementation("io.spine.validation:model:2.0.0-SNAPSHOT.11")
 
     testImplementation(Spine(project).testlib)
     testImplementation(gradleTestKit())

@@ -38,6 +38,7 @@ dependencies {
 
     val spine = io.spine.internal.dependency.Spine(project)
     testImplementation(spine.pluginTestlib)
+    testImplementation(project(":mc-java-testlib"))
     testImplementation(gradleTestKit())
 }
 

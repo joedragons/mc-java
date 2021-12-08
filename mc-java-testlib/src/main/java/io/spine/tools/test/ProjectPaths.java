@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "mc-java"
+package io.spine.tools.test;
 
-include(
-    "mc-java",
-    "mc-java-annotation",
-    "mc-java-base",
-    "mc-java-checks",
-    "mc-java-protoc",
-    "mc-java-rejection",
-    "mc-java-testlib",
-    "mc-java-validation"
-)
+import java.nio.file.Path;
+
+public final class ProjectPaths {
+
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private ProjectPaths() {
+    }
+
+    public static Path protobufGeneratedDir(Path projectDir, String generatorName) {
+        return projectDir.resolve("build")
+                         .resolve("generated-proto")
+                         .resolve("main")
+                         .resolve(generatorName);
+    }
+
+    public static Path protobufGeneratedDir(Path projectDir) {
+        return protobufGeneratedDir(projectDir, "java");
+    }
+}

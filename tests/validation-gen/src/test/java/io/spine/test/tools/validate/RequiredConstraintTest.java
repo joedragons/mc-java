@@ -231,10 +231,10 @@ class RequiredConstraintTest {
         void repeatedInt() {
             Collections.Builder instance = Collections
                     .newBuilder()
-                    .addNotEmptyListOfLongs(0L)
-                    .putContainsANonEmptyStringValue("", "")
+                    .addNotEmptyListOfLongs(123456789L)
+                    .putContainsANonEmptyStringValue("222", "111")
                     .addAtLeastOnePieceOfMeat(CHICKEN)
-                    .putNotEmptyMapOfInts(42, 0);
+                    .putNotEmptyMapOfInts(42, 42);
             assertValid(instance);
         }
     }
@@ -257,8 +257,8 @@ class RequiredConstraintTest {
         void mapOfInts() {
             Collections.Builder instance = Collections
                     .newBuilder()
-                    .putNotEmptyMapOfInts(0, 0)
-                    .putContainsANonEmptyStringValue("  ", "")
+                    .putNotEmptyMapOfInts(0, 42)
+                    .putContainsANonEmptyStringValue("  ", "qwertyuiop")
                     .addAtLeastOnePieceOfMeat(FISH)
                     .addNotEmptyListOfLongs(981L);
             assertValid(instance);
@@ -275,20 +275,20 @@ class RequiredConstraintTest {
         @DisplayName("cannot be empty")
         void empty() {
             Collections.Builder instance = Collections.newBuilder();
-            checkViolation(instance, FIELD);
+            checkViolation(instance, FIELD, "Collection must not be empty");
         }
 
         @Test
-        @DisplayName("cannot have a single empty value entry")
+        @DisplayName("cannot have an empty value entry")
         void nonEmptyValue() {
             Collections.Builder empty = Collections.newBuilder()
                     .putContainsANonEmptyStringValue("", "");
             assertInvalid(empty);
 
             Collections.Builder nonEmpty = Collections.newBuilder()
-                    .putContainsANonEmptyStringValue("", "")
+                    .putContainsANonEmptyStringValue("bar", "foo")
                     .putContainsANonEmptyStringValue("foo", "bar")
-                    .putNotEmptyMapOfInts(0, 0)
+                    .putNotEmptyMapOfInts(111, 314)
                     .addAtLeastOnePieceOfMeat(FISH)
                     .addNotEmptyListOfLongs(42L);
             assertValid(nonEmpty);
@@ -316,7 +316,7 @@ class RequiredConstraintTest {
         @DisplayName("cannot be empty")
         void emptyRepeatedEnum() {
             Collections.Builder instance = Collections.newBuilder();
-            checkViolation(instance, FIELD);
+            checkViolation(instance, FIELD, "must not be empty");
         }
 
         @Test
@@ -328,19 +328,20 @@ class RequiredConstraintTest {
                     .addAtLeastOnePieceOfMeat(VEGETABLE)
                     .putContainsANonEmptyStringValue("  ", "   ")
                     .addNotEmptyListOfLongs(42L);
-            checkViolation(allZero, FIELD);
+            checkViolation(allZero, FIELD, "cannot contain default values");
         }
 
         @Test
-        @DisplayName("must have at least one value with non-zero emum item value")
+        @DisplayName("must not have event one value with non-zero enum item value")
         void repeatedEnum() {
             Collections.Builder instance = Collections.newBuilder()
-                    .putContainsANonEmptyStringValue("", "")
-                    .addNotEmptyListOfLongs(24L)
-                    .putNotEmptyMapOfInts(0, 42)
+                    .putContainsANonEmptyStringValue("111", "222")
+                    .addNotEmptyListOfLongs(0L)
+                    .putNotEmptyMapOfInts(0, 0)
                     .addAtLeastOnePieceOfMeat(FISH)
+                    .addAtLeastOnePieceOfMeat(CHICKEN)
                     .addAtLeastOnePieceOfMeat(VEGETABLE);
-            assertValid(instance);
+            checkViolation(instance, FIELD, "default values");
         }
     }
 
@@ -373,10 +374,10 @@ class RequiredConstraintTest {
         class InEvent {
 
             @Test
-            @DisplayName("can be empty")
+            @DisplayName("cannot be empty")
             void notSet() {
                 ProjectCreated.Builder msg = ProjectCreated.newBuilder();
-                assertValid(msg);
+                checkViolation(msg, "id");
             }
         }
 
@@ -385,10 +386,10 @@ class RequiredConstraintTest {
         class InRejection {
 
             @Test
-            @DisplayName("can be empty")
+            @DisplayName("cannot be empty")
             void notSet() {
                 CannotCreateProject.Builder msg = CannotCreateProject.newBuilder();
-                assertValid(msg);
+                checkViolation(msg, "id");
             }
         }
 

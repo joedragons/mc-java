@@ -79,6 +79,7 @@ import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.POTENTIAL_ANNOTATION_DUP;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.SPI_SERVICE;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
+import static io.spine.tools.test.ProjectPaths.protobufGeneratedDir;
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 
 @DisplayName("`AnnotatorPlugin` should")
@@ -279,8 +280,7 @@ class AnnotatorPluginTest {
     }
 
     private static void check(Path sourcePath, SourceCheck check) throws IOException {
-        @SuppressWarnings("DuplicateStringLiteralInspection") // "java" is a commonly used word.
-        Path filePath = generatedJavaSource("java")
+        Path filePath = protobufGeneratedDir(testProjectDir.toPath())
                 .resolve(sourcePath);
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
@@ -290,20 +290,12 @@ class AnnotatorPluginTest {
 
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
-        Path filePath = generatedJavaSource("grpc")
+        Path filePath = protobufGeneratedDir(testProjectDir.toPath(), "grpc")
                 .resolve(serviceFile.path());
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
                 Roaster.parse(AbstractJavaSource.class, filePath.toFile());
         check.accept(javaSource);
-    }
-
-    private static Path generatedJavaSource(String generator) {
-        return testProjectDir.toPath()
-                             .resolve("build")
-                             .resolve("generated-proto")
-                             .resolve("main")
-                             .resolve(generator);
     }
 
     private static FileDescriptor descriptorOf(FileName testFile) {

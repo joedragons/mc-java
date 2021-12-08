@@ -31,10 +31,10 @@ import io.spine.code.proto.FieldName;
 import io.spine.tools.gradle.testing.GradleProject;
 import io.spine.tools.java.fs.Directory;
 import io.spine.tools.java.fs.FileName;
+import io.spine.tools.test.ProjectPaths;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static java.lang.String.format;
@@ -64,10 +64,8 @@ final class TestEnv {
                             .build();
     }
 
-    public static Path rejectionsJavadocThrowableSource() {
-        return Paths.get("generated")
-                    .resolve("main")
-                    .resolve("spine")
+    public static Path rejectionsJavadocThrowableSource(Path projectDir) {
+        return ProjectPaths.protobufGeneratedDir(projectDir, "spine")
                     .resolve(Directory.of(JAVA_PACKAGE).path())
                     .resolve(REJECTION_FILE_NAME.value());
     }

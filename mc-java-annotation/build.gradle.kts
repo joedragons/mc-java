@@ -35,10 +35,9 @@ dependencies {
         exclude(group = "com.google.guava")
     }
 
-    val spine = Spine(project)
     implementation(project(":mc-java-base"))
-
-    testImplementation(spine.pluginTestlib)
+    testImplementation(project(":mc-java-testlib"))
+    testImplementation(Spine(project).pluginTestlib)
     testImplementation(gradleTestKit())
 }
 
