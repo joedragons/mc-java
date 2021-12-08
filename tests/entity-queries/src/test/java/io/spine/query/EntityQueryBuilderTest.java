@@ -21,7 +21,6 @@
 package io.spine.query;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.truth.Truth8;
 import com.google.protobuf.FieldMask;
 import io.spine.tools.query.ProjectId;
 import io.spine.tools.query.ProjectView;
@@ -31,6 +30,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth8.assertThat;
 import static io.spine.query.ComparisonOperator.EQUALS;
 import static io.spine.query.ComparisonOperator.GREATER_THAN;
 import static io.spine.query.ComparisonOperator.LESS_THAN;
@@ -140,8 +140,7 @@ class EntityQueryBuilderTest {
                                    .either(startedMoreThanMonthAgo, isDone, isDeleted)
                                    .build();
 
-            var rootPredicate = query.subject()
-                                     .predicate();
+            var rootPredicate = query.subject().predicate();
             var predicates = rootPredicate.children();
             assertThat(predicates).hasSize(0);
             assertThat(rootPredicate.operator()).isEqualTo(OR);
@@ -258,7 +257,6 @@ class EntityQueryBuilderTest {
                          () -> ProjectView.query()
                                           .limit(100)
                                           .build());
-
         }
     }
 
@@ -308,7 +306,7 @@ class EntityQueryBuilderTest {
             var maybeMask = ProjectView.query()
                                        .withMask(mask)
                                        .whichMask();
-            Truth8.assertThat(maybeMask)
+            assertThat(maybeMask)
                   .isPresent();
             assertThat(maybeMask.get()).isEqualTo(mask);
         }

@@ -27,7 +27,6 @@
 package io.spine.tools.mc.java.protoc;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.truth.Truth;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
 import io.spine.base.CommandMessage;
@@ -37,23 +36,19 @@ import io.spine.base.RejectionMessage;
 import io.spine.base.SubscribableField;
 import io.spine.base.UuidValue;
 import io.spine.query.EntityColumn;
-import io.spine.test.tools.mc.java.protoc.EducationalInstitution;
-import io.spine.test.tools.mc.java.protoc.Kindergarten;
-import io.spine.test.tools.mc.java.protoc.Outer;
-import io.spine.test.tools.mc.java.protoc.School;
-import io.spine.test.tools.mc.java.protoc.University;
-import io.spine.test.tools.mc.java.protoc.Wrapped;
-import io.spine.test.tools.mc.java.protoc.Movie;
-import io.spine.test.tools.mc.java.protoc.WeatherForecast;
 import io.spine.test.tools.mc.java.protoc.CreateUser;
 import io.spine.test.tools.mc.java.protoc.CustomerName;
 import io.spine.test.tools.mc.java.protoc.CustomerNameOrBuilder;
+import io.spine.test.tools.mc.java.protoc.EducationalInstitution;
+import io.spine.test.tools.mc.java.protoc.Kindergarten;
 import io.spine.test.tools.mc.java.protoc.MFGTMessage;
 import io.spine.test.tools.mc.java.protoc.MessageEnhancedWithPrefixGenerations;
 import io.spine.test.tools.mc.java.protoc.MessageEnhancedWithRegexGenerations;
 import io.spine.test.tools.mc.java.protoc.MessageEnhancedWithSuffixGenerations;
+import io.spine.test.tools.mc.java.protoc.Movie;
 import io.spine.test.tools.mc.java.protoc.MovieTitleChanged;
 import io.spine.test.tools.mc.java.protoc.NotifyUser;
+import io.spine.test.tools.mc.java.protoc.Outer;
 import io.spine.test.tools.mc.java.protoc.PICreateCustomer;
 import io.spine.test.tools.mc.java.protoc.PICreateUser;
 import io.spine.test.tools.mc.java.protoc.PICustomerCommand;
@@ -62,14 +57,18 @@ import io.spine.test.tools.mc.java.protoc.PICustomerEmailReceived;
 import io.spine.test.tools.mc.java.protoc.PICustomerEvent;
 import io.spine.test.tools.mc.java.protoc.PICustomerNotified;
 import io.spine.test.tools.mc.java.protoc.PIUserCreated;
+import io.spine.test.tools.mc.java.protoc.PIUserEvent;
 import io.spine.test.tools.mc.java.protoc.PIUserNameUpdated;
 import io.spine.test.tools.mc.java.protoc.Rejections;
+import io.spine.test.tools.mc.java.protoc.School;
 import io.spine.test.tools.mc.java.protoc.TypicalIdentifier;
+import io.spine.test.tools.mc.java.protoc.University;
 import io.spine.test.tools.mc.java.protoc.UserCreated;
+import io.spine.test.tools.mc.java.protoc.UserInfo;
 import io.spine.test.tools.mc.java.protoc.UserName;
 import io.spine.test.tools.mc.java.protoc.UserNotified;
-import io.spine.test.tools.mc.java.protoc.PIUserEvent;
-import io.spine.test.tools.mc.java.protoc.UserInfo;
+import io.spine.test.tools.mc.java.protoc.WeatherForecast;
+import io.spine.test.tools.mc.java.protoc.Wrapped;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -103,9 +102,9 @@ final class ProtocPluginTest {
     @Test
     @DisplayName("implement marker interface in the generated messages")
     void implementMarkerInterfacesInGeneratedMessages() {
-        Truth.assertThat(PICustomerNotified.getDefaultInstance())
+        assertThat(PICustomerNotified.getDefaultInstance())
              .isInstanceOf(PICustomerEvent.class);
-        Truth.assertThat(PICustomerEmailReceived.getDefaultInstance())
+        assertThat(PICustomerEmailReceived.getDefaultInstance())
              .isInstanceOf(PICustomerEvent.class);
     }
 
@@ -128,12 +127,12 @@ final class ProtocPluginTest {
     @Test
     @DisplayName("use `IS` and `EVERY IS` together")
     void isAndEveryIsTogether() {
-        Truth.assertThat(PIUserCreated.getDefaultInstance())
+        assertThat(PIUserCreated.getDefaultInstance())
              .isInstanceOf(PIUserEvent.class);
-        Truth.assertThat(PIUserNameUpdated.getDefaultInstance())
+        assertThat(PIUserNameUpdated.getDefaultInstance())
              .isInstanceOf(PIUserEvent.class);
 
-        Truth.assertThat(UserName.getDefaultInstance())
+        assertThat(UserName.getDefaultInstance())
              /*
                    This assertion verifies if the `UserName` implements a custom
                    event interface. It happens because `UserName` is declared in the same file with
@@ -178,25 +177,25 @@ final class ProtocPluginTest {
         @Test
         @DisplayName("command messages")
         void markCommandMessages() {
-            Truth.assertThat(CreateUser.getDefaultInstance())
+            assertThat(CreateUser.getDefaultInstance())
                  .isInstanceOf(CommandMessage.class);
-            Truth.assertThat(NotifyUser.getDefaultInstance())
+            assertThat(NotifyUser.getDefaultInstance())
                  .isInstanceOf(CommandMessage.class);
         }
 
         @Test
         @DisplayName("event messages")
         void markMessages() {
-            Truth.assertThat(UserCreated.getDefaultInstance())
+            assertThat(UserCreated.getDefaultInstance())
                  .isInstanceOf(EventMessage.class);
-            Truth.assertThat(UserNotified.getDefaultInstance())
+            assertThat(UserNotified.getDefaultInstance())
                  .isInstanceOf(EventMessage.class);
         }
 
         @Test
         @DisplayName("rejection messages")
         void markRejectionMessages() {
-            Truth.assertThat(Rejections.UserAlreadyExists.getDefaultInstance())
+            assertThat(Rejections.UserAlreadyExists.getDefaultInstance())
                  .isInstanceOf(RejectionMessage.class);
             assertThat(Rejections.UserAlreadyExists.getDefaultInstance())
                     .isInstanceOf(UserRejection.class);
@@ -205,7 +204,7 @@ final class ProtocPluginTest {
         @Test
         @DisplayName("mark UUID-based identifiers")
         void markUuids() {
-            Truth.assertThat(TypicalIdentifier.getDefaultInstance())
+            assertThat(TypicalIdentifier.getDefaultInstance())
                  .isInstanceOf(UuidValue.class);
         }
 
@@ -263,21 +262,21 @@ final class ProtocPluginTest {
             @Test
             @DisplayName("regex pattern")
             void regex() {
-                Truth.assertThat(MessageEnhancedWithRegexGenerations.getDefaultInstance())
+                assertThat(MessageEnhancedWithRegexGenerations.getDefaultInstance())
                      .isInstanceOf(RegexedMessage.class);
             }
 
             @Test
             @DisplayName("prefix pattern")
             void prefix() {
-                Truth.assertThat(MessageEnhancedWithPrefixGenerations.getDefaultInstance())
+                assertThat(MessageEnhancedWithPrefixGenerations.getDefaultInstance())
                      .isInstanceOf(PrefixedMessage.class);
             }
 
             @Test
             @DisplayName("suffix pattern")
             void postfix() {
-                Truth.assertThat(MessageEnhancedWithSuffixGenerations.getDefaultInstance())
+                assertThat(MessageEnhancedWithSuffixGenerations.getDefaultInstance())
                      .isInstanceOf(SuffixedMessage.class);
             }
         }
