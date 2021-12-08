@@ -67,8 +67,7 @@ public final class ProtocPluginFiles {
         checkNotNull(name);
         // Protoc consumes only `/` path separators.
         var uriStyleName = name.replace('\\', '/');
-        var srcFile = File.newBuilder()
-                                   .setName(uriStyleName);
+        var srcFile = File.newBuilder().setName(uriStyleName);
         return srcFile;
     }
 }
