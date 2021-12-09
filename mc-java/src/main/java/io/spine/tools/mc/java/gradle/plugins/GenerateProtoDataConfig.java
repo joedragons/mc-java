@@ -29,7 +29,7 @@ package io.spine.tools.mc.java.gradle.plugins;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.gradle.McJavaOptions;
 import io.spine.tools.proto.code.ProtoOption;
-import io.spine.validation.MessageMakers;
+import io.spine.validation.MessageMarkers;
 import io.spine.validation.ValidationConfig;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
@@ -52,7 +52,7 @@ public abstract class GenerateProtoDataConfig extends DefaultTask {
     private void writeFile() throws IOException {
         McJavaOptions options = getMcJava(getProject());
         CodegenOptions codegen = options.codegen.toProto();
-        MessageMakers makers = MessageMakers.newBuilder()
+        MessageMarkers makers = MessageMarkers.newBuilder()
                 .addAllCommandPattern(codegen.getCommands().getPatternList())
                 .addAllEventPattern(codegen.getEvents().getPatternList())
                 .addAllRejectionPattern(codegen.getRejections().getPatternList())
