@@ -36,6 +36,7 @@ import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.Guava
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
+import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.RunBuild
@@ -72,7 +73,9 @@ plugins {
         id(id)
     }
     kotlin("jvm") version io.spine.internal.dependency.Kotlin.version
-    id("io.spine.proto-data") version "0.1.2"
+    with(io.spine.internal.dependency.Spine.ProtoData) {
+        id(pluginId) version version
+    }
 }
 
 spinePublishing {
@@ -114,11 +117,13 @@ subprojects {
         plugin("io.spine.proto-data")
     }
 
+    val validation = Spine(project).validation
+
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
 
-        protoData("io.spine.validation:java:2.0.0-SNAPSHOT.11")
+        protoData(validation.java)
 
         compileOnlyApi(FindBugs.annotations)
         compileOnlyApi(CheckerFramework.annotations)
@@ -131,7 +136,7 @@ subprojects {
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
 
-        testImplementation("io.spine.validation:runtime:2.0.0-SNAPSHOT.11")
+        testImplementation(validation.runtime)
     }
 
     val spineBaseVersion: String by extra
