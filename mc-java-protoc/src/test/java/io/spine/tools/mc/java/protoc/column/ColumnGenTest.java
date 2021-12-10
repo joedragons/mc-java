@@ -29,8 +29,6 @@ package io.spine.tools.mc.java.protoc.column;
 import com.google.common.testing.NullPointerTester;
 import io.spine.option.OptionsProto;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
-import io.spine.tools.mc.java.protoc.CodeGenerator;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.proto.code.ProtoOption;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
@@ -38,8 +36,6 @@ import io.spine.type.EnumType;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
@@ -58,11 +54,11 @@ class ColumnGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        CodegenOptions config = newOptions();
+        var config = newOptions();
 
-        CodeGenerator generator = ColumnGen.instance(config);
-        MessageType type = new MessageType(TaskView.getDescriptor());
-        Collection<CompilerOutput> output = generate(generator, type);
+        var generator = ColumnGen.instance(config);
+        var type = new MessageType(TaskView.getDescriptor());
+        var output = generate(generator, type);
 
         assertThat(output)
                 .isNotEmpty();
@@ -71,18 +67,18 @@ class ColumnGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        CodegenOptions config = newOptions();
+        var config = newOptions();
 
-        CodeGenerator generator = ColumnGen.instance(config);
-        EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
-        Collection<CompilerOutput> output = generate(generator, enumType);
+        var generator = ColumnGen.instance(config);
+        var enumType = EnumType.create(Task.Priority.getDescriptor());
+        var output = generate(generator, enumType);
 
         assertThat(output)
                 .isEmpty();
     }
 
     private static CodegenOptions newOptions() {
-        CodegenOptions.Builder config = CodegenOptions.newBuilder();
+        var config = CodegenOptions.newBuilder();
         config.getEntitiesBuilder()
               .setGenerateQueries(true)
               .addOption(

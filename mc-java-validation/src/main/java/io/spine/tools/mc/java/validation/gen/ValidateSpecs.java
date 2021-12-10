@@ -26,19 +26,17 @@
 
 package io.spine.tools.mc.java.validation.gen;
 
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import io.spine.annotation.Beta;
-import io.spine.validate.ValidatingBuilder;
 import io.spine.tools.java.code.GeneratedBy;
 import io.spine.tools.java.code.NestedClassName;
 import io.spine.type.MessageType;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.Constraints;
 import io.spine.validate.MessageWithConstraints;
+import io.spine.validate.ValidatingBuilder;
 import io.spine.validate.ValidationException;
 
 import javax.annotation.Generated;
@@ -81,7 +79,7 @@ public final class ValidateSpecs {
     }
 
     private static String nameForValidator(MessageType type) {
-        StringBuilder candidate = new StringBuilder("Validator");
+        var candidate = new StringBuilder("Validator");
         while (nameClashes(type, candidate.toString())) {
             candidate.append('$');
         }
@@ -89,15 +87,13 @@ public final class ValidateSpecs {
     }
 
     private static boolean nameClashes(MessageType type, String name) {
-        boolean withOwnName = type.simpleJavaClassName()
-                                  .value()
-                                  .equals(name);
+        var withOwnName = type.simpleJavaClassName()
+                              .value()
+                              .equals(name);
         if (withOwnName) {
             return true;
         }
-        boolean withNestedName = type
-                .nestedDeclarations()
-                .stream()
+        var withNestedName = type.nestedDeclarations().stream()
                 .anyMatch(nested -> nested.simpleJavaClassName()
                                           .value()
                                           .equals(name));
@@ -128,14 +124,12 @@ public final class ValidateSpecs {
      * @return the validator class
      */
     public TypeSpec validatorClass() {
-        MethodSpec ctor = MethodSpec
-                .constructorBuilder()
+        var ctor = MethodSpec.constructorBuilder()
                 .addModifiers(PRIVATE)
                 .addJavadoc("Prevents validator class instantiation.")
                 .build();
-        AnnotationSpec generated = GeneratedBy.spineModelCompiler();
-        TypeSpec.Builder type = TypeSpec
-                .classBuilder(validatorSimpleName)
+        var generated = GeneratedBy.spineModelCompiler();
+        var type = TypeSpec.classBuilder(validatorSimpleName)
                 .addAnnotation(generated)
                 .addModifiers(PRIVATE, STATIC, FINAL)
                 .addMethod(ctor);
@@ -146,9 +140,8 @@ public final class ValidateSpecs {
     }
 
     private Set<ClassMember> generateMembers() {
-        Constraints constraints = Constraints.of(type);
-        Set<ClassMember> methods = constraints
-                .runThrough(new ValidationCodeGenerator(VALIDATE_METHOD, type));
+        var constraints = Constraints.of(type);
+        var methods = constraints.runThrough(new ValidationCodeGenerator(VALIDATE_METHOD, type));
         return methods;
     }
 
@@ -162,8 +155,7 @@ public final class ValidateSpecs {
      * @return {@code validate()} method
      */
     public MethodSpec validateMethod() {
-        return MethodSpec
-                .methodBuilder(VALIDATE_METHOD)
+        return MethodSpec.methodBuilder(VALIDATE_METHOD)
                 .addModifiers(PUBLIC)
                 .addAnnotation(Beta.class)
                 .addAnnotation(Override.class)
@@ -182,10 +174,9 @@ public final class ValidateSpecs {
      * @see ValidatingBuilder#vBuild() for the full contract.
      */
     public MethodSpec vBuildMethod() {
-        ClassName messageClass = bestGuess(messageSimpleName.value());
-        Class<ValidationException> exceptionClass = ValidationException.class;
-        CodeBlock body = CodeBlock
-                .builder()
+        var messageClass = bestGuess(messageSimpleName.value());
+        var exceptionClass = ValidationException.class;
+        var body = CodeBlock.builder()
                 .addStatement("$T $N = build()",
                               messageClass, MESSAGE_VARIABLE)
                 .addStatement("$T $N = $N.$N()",

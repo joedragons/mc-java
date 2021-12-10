@@ -27,12 +27,9 @@
 package io.spine.tools.mc.java.validation.gen;
 
 import com.google.protobuf.Descriptors.Descriptor;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
 import io.spine.test.tools.validate.NotValidator;
 import io.spine.test.tools.validate.Validator;
 import io.spine.test.tools.validate.avocado.Greenhouse;
-import io.spine.tools.mc.java.validation.gen.ValidateSpecs;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,9 +44,9 @@ class ValidateSpecsTest {
     @Test
     @DisplayName("generate `Validator` class")
     void generateClass() {
-        MessageType type = new MessageType(Greenhouse.getDescriptor());
-        ValidateSpecs factory = new ValidateSpecs(type);
-        TypeSpec validatorClass = factory.validatorClass();
+        var type = new MessageType(Greenhouse.getDescriptor());
+        var factory = new ValidateSpecs(type);
+        var validatorClass = factory.validatorClass();
         assertThat(isName(validatorClass.name))
                 .isTrue();
         assertThat(validatorClass.methodSpecs)
@@ -61,9 +58,9 @@ class ValidateSpecsTest {
     @Test
     @DisplayName("generate `validate()` method")
     void generateValidate() {
-        MessageType type = new MessageType(Greenhouse.getDescriptor());
-        ValidateSpecs factory = new ValidateSpecs(type);
-        MethodSpec validateMethod = factory.validateMethod();
+        var type = new MessageType(Greenhouse.getDescriptor());
+        var factory = new ValidateSpecs(type);
+        var validateMethod = factory.validateMethod();
         assertThat(isName(validateMethod.name))
                 .isTrue();
         assertThat(validateMethod.returnType.toString())
@@ -73,9 +70,9 @@ class ValidateSpecsTest {
     @Test
     @DisplayName("generate `vBuild()` method")
     void generateVBuild() {
-        MessageType type = new MessageType(Greenhouse.getDescriptor());
-        ValidateSpecs factory = new ValidateSpecs(type);
-        MethodSpec validateMethod = factory.vBuildMethod();
+        var type = new MessageType(Greenhouse.getDescriptor());
+        var factory = new ValidateSpecs(type);
+        var validateMethod = factory.vBuildMethod();
         assertThat(isName(validateMethod.name))
                 .isTrue();
         assertThat(validateMethod.returnType.toString())
@@ -90,7 +87,7 @@ class ValidateSpecsTest {
     }
 
     private static void checkEscaped(Descriptor type) {
-        ValidateSpecs ifOuterClass = new ValidateSpecs(new MessageType(type));
+        var ifOuterClass = new ValidateSpecs(new MessageType(type));
         assertThat(ifOuterClass.validatorClass().name).isEqualTo("Validator$");
     }
 }

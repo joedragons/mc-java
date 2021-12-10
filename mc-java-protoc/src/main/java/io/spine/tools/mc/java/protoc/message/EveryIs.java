@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.protoc.message;
 
-import com.google.protobuf.Descriptors.FileDescriptor;
 import io.spine.code.proto.FileOption;
 import io.spine.option.IsOption;
 import io.spine.option.OptionsProto;
@@ -54,8 +53,8 @@ final class EveryIs extends FileOption<IsOption> {
      * @return the value of the option, or {@code Optional.empty()} if the option is not specified
      */
     static Optional<IsOption> of(MessageType type) {
-        FileDescriptor file = type.file();
-        Optional<IsOption> value = new EveryIs().valueFrom(file);
+        var file = type.file();
+        var value = new EveryIs().valueFrom(file);
         return value;
     }
 }

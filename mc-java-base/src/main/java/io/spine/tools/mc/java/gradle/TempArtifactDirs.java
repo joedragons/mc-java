@@ -60,13 +60,13 @@ public class TempArtifactDirs {
     public static List<File> getFor(Project project) {
         ImmutableList.Builder<File> result = ImmutableList.builder();
         result.addAll(tempArtifactDirsOf(project));
-        List<File> dirs = fromOptionsOf(project);
+        var dirs = fromOptionsOf(project);
         if (!dirs.isEmpty()) {
             log.atFine()
                .log("Found %d directories to clean: `%s`.", dirs.size(), dirs);
             result.addAll(dirs);
         } else {
-            String defaultValue = def(project).generated().toString();
+            var defaultValue = def(project).generated().toString();
             log.atFine()
                .log("Default directory to clean: `%s`.", defaultValue);
             result.add(new File(defaultValue));
@@ -75,11 +75,10 @@ public class TempArtifactDirs {
     }
 
     private static List<File> fromOptionsOf(Project project) {
-        McJavaOptions options = getMcJava(project);
-        List<File> dirs = options.tempArtifactDirs
-                    .stream()
-                    .map(File::new)
-                    .collect(toList());
+        var options = getMcJava(project);
+        var dirs = options.tempArtifactDirs.stream()
+                .map(File::new)
+                .collect(toList());
         return dirs;
     }
 
@@ -98,10 +97,9 @@ public class TempArtifactDirs {
     }
 
     private static @Nullable File tempArtifactsDirOf(Project project) {
-        File projectDir = canonicalDirOf(project);
-        File tempArtifactsDir =
-                DefaultJavaPaths.at(projectDir)
-                                .tempArtifacts();
+        var projectDir = canonicalDirOf(project);
+        var tempArtifactsDir = DefaultJavaPaths.at(projectDir)
+                                               .tempArtifacts();
         if (tempArtifactsDir.exists()) {
             return tempArtifactsDir;
         } else {
@@ -111,7 +109,7 @@ public class TempArtifactDirs {
 
     private static File canonicalDirOf(Project project) {
         File result;
-        File projectDir = project.getProjectDir();
+        var projectDir = project.getProjectDir();
         try {
             result = projectDir.getCanonicalFile();
         } catch (IOException e) {

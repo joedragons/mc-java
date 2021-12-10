@@ -27,8 +27,6 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.testing.NullPointerTester;
-import com.google.common.truth.IterableSubject;
-import com.google.common.truth.StringSubject;
 import com.google.protobuf.DescriptorProtos.FileDescriptorProto;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
@@ -42,9 +40,9 @@ import io.spine.code.java.PackageName;
 import io.spine.tools.java.fs.Directory;
 import io.spine.tools.java.fs.FileName;
 import io.spine.tools.java.fs.SourceFile;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.gradle.codegen.CodegenOptionsConfig;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
-import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.protoc.plugin.message.tests.EveryIsGeneratedProto;
 import io.spine.tools.protoc.plugin.message.tests.EveryIsInOneFileProto;
 import io.spine.tools.protoc.plugin.message.tests.EveryIsTestProto;
@@ -58,7 +56,6 @@ import io.spine.tools.protoc.plugin.message.tests.TestEventsProto;
 import io.spine.tools.protoc.plugin.message.tests.UserNameProto;
 import io.spine.tools.protoc.plugin.message.tests.UserProto;
 import io.spine.tools.protoc.plugin.message.tests.UuidValues;
-import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,11 +63,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -109,7 +102,6 @@ final class InterfaceGenTest {
     /**
      * The pattern for the detecting {@linkplain #JAVA_PACKAGE test data package}.
      */
-    @SuppressWarnings("DynamicRegexReplaceableByCompiledPattern")
     private static final String PACKAGE_PATTERN =
             "^\\s*" + JAVA_PACKAGE.value().replace(".", "\\.");
 
@@ -147,8 +139,8 @@ final class InterfaceGenTest {
 
     @BeforeAll
     static void setUpConfig() {
-        Project project = ProjectBuilder.builder().build();
-        CodegenOptionsConfig options = new CodegenOptionsConfig(project);
+        var project = ProjectBuilder.builder().build();
+        var options = new CodegenOptionsConfig(project);
         config = options.toProto();
     }
 
@@ -166,8 +158,8 @@ final class InterfaceGenTest {
     }
 
     private static String messageNameFrom(File file) {
-        String fileName = file.getName();
-        String messageName = PROTO_PACKAGE + '.' +
+        var fileName = file.getName();
+        var messageName = PROTO_PACKAGE + '.' +
                 fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
         return messageName;
     }
@@ -179,23 +171,21 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`EveryIs` option")
         void everyIsOption() {
-            String filePath = protoFile("every_is_test.proto");
+            var filePath = protoFile("every_is_test.proto");
 
-            FileDescriptorProto fileDescr =
-                    EveryIsTestProto.getDescriptor()
-                                    .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = EveryIsTestProto.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(2, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertPackage(file);
 
-                String messageName = messageNameFrom(file);
-                String insertionPoint = file.getInsertionPoint();
+                var messageName = messageNameFrom(file);
+                var insertionPoint = file.getInsertionPoint();
                 assertThat(insertionPoint)
                         .isEqualTo(format(INSERTION_POINT_IMPLEMENTS, messageName));
-                String content = file.getContent();
+                var content = file.getContent();
                 assertThat(content)
                         .matches(CUSTOMER_EVENT_INTERFACE_PATTERN);
             }
@@ -204,23 +194,23 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`Is` option")
         void generateInsertionPointContentsForIsOption() {
-            String filePath = protoFile("is_test.proto");
+            var filePath = protoFile("is_test.proto");
 
-            FileDescriptorProto fileDescr =
+            var fileDescr =
                     IsTestProto.getDescriptor()
                                .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(2, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertPackage(file);
 
-                String name = file.getName();
-                String insertionPoint = file.getInsertionPoint();
+                var name = file.getName();
+                var insertionPoint = file.getInsertionPoint();
                 assertFalse(insertionPoint.isEmpty());
-                String content = file.getContent();
-                StringSubject assertContent = assertThat(content);
+                var content = file.getContent();
+                var assertContent = assertThat(content);
                 if (name.endsWith("ProtocNameUpdated.java")) {
                     assertContent.contains("Event,");
                 } else if (name.endsWith("ProtocUpdateName.java")) {
@@ -232,23 +222,21 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`EveryIs` in single file")
         void generateInsertionPointContentsForEveryIsInSingleFile() {
-            String filePath = protoFile("every_is_in_one_file.proto");
+            var filePath = protoFile("every_is_in_one_file.proto");
 
-            FileDescriptorProto fileDescr =
-                    EveryIsInOneFileProto.getDescriptor()
-                                         .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = EveryIsInOneFileProto.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(2, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 if (!haveSamePath(file, sourceWithPackage("ProtocCustomerEvent"))) {
                     assertFilePath(file, sourceWithPackage("EveryIsInOneFileProto"));
 
-                    String insertionPoint = file.getInsertionPoint();
+                    var insertionPoint = file.getInsertionPoint();
                     assertThat(insertionPoint)
                             .startsWith(format(INSERTION_POINT_IMPLEMENTS, PROTO_PACKAGE));
-                    String content = file.getContent();
+                    var content = file.getContent();
                     assertThat(content)
                             .matches(CUSTOMER_EVENT_INTERFACE_PATTERN);
                 }
@@ -258,22 +246,20 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`Is` in single file")
         void isInSingleFile() {
-            String filePath = protoFile("is_in_one_file.proto");
+            var filePath = protoFile("is_in_one_file.proto");
 
-            FileDescriptorProto fileDescr =
-                    IsInOneFileProto.getDescriptor()
-                                    .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = IsInOneFileProto.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(2, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertFilePath(file, sourceWithPackage("IsInOneFileProto"));
 
-                String insertionPoint = file.getInsertionPoint();
+                var insertionPoint = file.getInsertionPoint();
                 assertThat(insertionPoint)
                         .startsWith(format(INSERTION_POINT_IMPLEMENTS, PROTO_PACKAGE));
-                String content = file.getContent();
+                var content = file.getContent();
                 assertThat(content)
                         .matches(CUSTOMER_EVENT_INTERFACE_PATTERN);
             }
@@ -287,16 +273,14 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`EventMessage`")
         void eventMessage() {
-            String filePath = protoFile("test_events.proto");
+            var filePath = protoFile("test_events.proto");
 
-            FileDescriptorProto fileDescr =
-                    TestEventsProto.getDescriptor()
-                                   .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = TestEventsProto.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(2, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertGeneratedInterface(EventMessage.class, file);
             }
         }
@@ -304,16 +288,14 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`CommandMessage`")
         void commandMessage() {
-            String filePath = protoFile("test_commands.proto");
+            var filePath = protoFile("test_commands.proto");
 
-            FileDescriptorProto fileDescr =
-                    TestCommandsProto.getDescriptor()
-                                     .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = TestCommandsProto.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(2, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertGeneratedInterface(CommandMessage.class, file);
             }
         }
@@ -321,16 +303,14 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`RejectionMessage`")
         void generateRejectionMessageInsertionPoints() {
-            String filePath = protoFile("test_rejections.proto");
+            var filePath = protoFile("test_rejections.proto");
 
-            FileDescriptorProto fileDescr =
-                    Rejections.getDescriptor()
-                              .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = Rejections.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(1, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertGeneratedInterface(RejectionMessage.class, file);
             }
         }
@@ -338,16 +318,14 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`UuidValue`")
         void uuidValue() {
-            String filePath = protoFile("uuid_values.proto");
+            var filePath = protoFile("uuid_values.proto");
 
-            FileDescriptorProto fileDescr =
-                    UuidValues.getDescriptor()
-                              .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = UuidValues.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(1, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertTrue(file.hasInsertionPoint());
                 assertTrue(file.hasName());
                 assertThat(file.getContent())
@@ -359,42 +337,38 @@ final class InterfaceGenTest {
     @Test
     @DisplayName("not generate `UuidValue` insertion points for ineligible messages")
     void notGenerateUuidValueForNonEligible() {
-        String filePath = protoFile("non_uuid_values.proto");
+        var filePath = protoFile("non_uuid_values.proto");
 
-        FileDescriptorProto fileDescr =
-                NonUuidValues.getDescriptor()
-                             .toProto();
-        CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+        var fileDescr = NonUuidValues.getDescriptor().toProto();
+        var response = processCodeGenRequest(filePath, fileDescr);
         assertNotNull(response);
-        List<File> files = response.getFileList();
+        var files = response.getFileList();
         assertThat(files).isEmpty();
     }
 
     @Test
     @DisplayName("not accept requests from old compiler")
     void notAcceptRequestsFromOldCompiler() {
-        Version version = Version.newBuilder()
+        var version = Version.newBuilder()
                 .setMajor(2)
                 .build();
-        FileDescriptorProto stubFile = FileDescriptorProto.getDefaultInstance();
-        CodeGeneratorRequest request =
-                CodeGeneratorRequest.newBuilder()
-                                    .setCompilerVersion(version)
-                                    .addProtoFile(stubFile)
-                                    .build();
+        var stubFile = FileDescriptorProto.getDefaultInstance();
+        var request = CodeGeneratorRequest.newBuilder()
+                .setCompilerVersion(version)
+                .addProtoFile(stubFile)
+                .build();
         assertIllegalArgument(() -> codeGenerator.process(request));
     }
 
     @Test
     @DisplayName("not accept empty requests")
     void notAcceptEmptyRequests() {
-        Version version = Version.newBuilder()
+        var version = Version.newBuilder()
                 .setMajor(3)
                 .build();
-        CodeGeneratorRequest request =
-                CodeGeneratorRequest.newBuilder()
-                                    .setCompilerVersion(version)
-                                    .build();
+        var request = CodeGeneratorRequest.newBuilder()
+                .setCompilerVersion(version)
+                .build();
         assertIllegalArgument(() -> codeGenerator.process(request));
     }
 
@@ -405,28 +379,26 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`(is)` if `generate = true`")
         void forIs() {
-            String filePath = protoFile("is_generated.proto");
+            var filePath = protoFile("is_generated.proto");
 
-            FileDescriptorProto fileDescr =
-                    IsGeneratedProto.getDescriptor()
-                                    .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = IsGeneratedProto.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(4, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertPackage(file);
 
-                String fileName = file.getName();
-                String insertionPoint = file.getInsertionPoint();
+                var fileName = file.getName();
+                var insertionPoint = file.getInsertionPoint();
                 if (!insertionPoint.isEmpty()) {
-                    String messageName = messageNameFrom(file);
+                    var messageName = messageNameFrom(file);
                     assertThat(insertionPoint)
                             .isEqualTo(format(INSERTION_POINT_IMPLEMENTS, messageName));
                 }
 
-                String content = file.getContent();
-                StringSubject assertContent = assertThat(content);
+                var content = file.getContent();
+                var assertContent = assertThat(content);
                 if (fileName.endsWith("ProtocSurnameUpdated.java")) {
                     assertContent.contains("Event,");
                 } else if (fileName.endsWith("ProtocUpdateSurname.java")) {
@@ -441,29 +413,27 @@ final class InterfaceGenTest {
         @Test
         @DisplayName("`(every_is)` if `generate = true`")
         void forEveryIs() {
-            String filePath = protoFile("every_is_generated.proto");
+            var filePath = protoFile("every_is_generated.proto");
 
-            FileDescriptorProto fileDescr =
-                    EveryIsGeneratedProto.getDescriptor()
-                                         .toProto();
-            CodeGeneratorResponse response = processCodeGenRequest(filePath, fileDescr);
+            var fileDescr = EveryIsGeneratedProto.getDescriptor().toProto();
+            var response = processCodeGenRequest(filePath, fileDescr);
             assertNotNull(response);
-            List<File> files = response.getFileList();
+            var files = response.getFileList();
             assertEquals(3, files.size());
-            for (File file : files) {
+            for (var file : files) {
                 assertPackage(file);
 
-                String content = file.getContent();
-                String insertionPoint = file.getInsertionPoint();
+                var content = file.getContent();
+                var insertionPoint = file.getInsertionPoint();
                 if (!insertionPoint.isEmpty()) {
-                    String messageName = messageNameFrom(file);
+                    var messageName = messageNameFrom(file);
                     assertThat(insertionPoint)
                             .isEqualTo(format(INSERTION_POINT_IMPLEMENTS, messageName));
 
-                    Matcher matcher = PROJECT_EVENT_INTERFACE_PATTERN.matcher(content);
+                    var matcher = PROJECT_EVENT_INTERFACE_PATTERN.matcher(content);
                     assertTrue(matcher.matches());
                 } else {
-                    Matcher matcher = PROJECT_EVENT_INTERFACE_DECL_PATTERN.matcher(content);
+                    var matcher = PROJECT_EVENT_INTERFACE_DECL_PATTERN.matcher(content);
                     assertTrue(matcher.find());
                 }
             }
@@ -473,26 +443,20 @@ final class InterfaceGenTest {
     @Test
     @DisplayName("skip generation for types included in compilation but not requested to be generated")
     void skipIncluded() {
-        FileDescriptorProto requestedTypes =
-                UserProto.getDescriptor()
-                         .toProto();
-        FileDescriptorProto includedTypes =
-                UserNameProto.getDescriptor()
-                             .toProto();
-        CodeGeneratorRequest request =
-                CodeGeneratorRequest.newBuilder()
-                                    .setCompilerVersion(version())
-                                    .addFileToGenerate(protoFile("user.proto"))
-                                    .addProtoFile(requestedTypes)
-                                    .addProtoFile(includedTypes)
-                                    .build();
-        CodeGeneratorResponse response = codeGenerator.process(request);
-        Set<String> generatedFiles = response.getFileList()
-                                             .stream()
-                                             .map(File::getName)
-                                             .collect(toSet());
+        var requestedTypes = UserProto.getDescriptor().toProto();
+        var includedTypes = UserNameProto.getDescriptor().toProto();
+        var request = CodeGeneratorRequest.newBuilder()
+                .setCompilerVersion(version())
+                .addFileToGenerate(protoFile("user.proto"))
+                .addProtoFile(requestedTypes)
+                .addProtoFile(includedTypes)
+                .build();
+        var response = codeGenerator.process(request);
+        var generatedFiles = response.getFileList().stream()
+                .map(File::getName)
+                .collect(toSet());
 
-        IterableSubject assertFiles = assertThat(generatedFiles);
+        var assertFiles = assertThat(generatedFiles);
         assertFiles.doesNotContain(javaFile("UserName.java"));
         assertFiles.doesNotContain(javaFile("Name.java"));
         assertFiles.containsExactly(
@@ -503,22 +467,21 @@ final class InterfaceGenTest {
 
     private CodeGeneratorResponse
     processCodeGenRequest(String filePath, FileDescriptorProto descriptor) {
-        CodeGeneratorRequest request =
-                CodeGeneratorRequest.newBuilder()
-                                    .setCompilerVersion(version())
-                                    .addFileToGenerate(filePath)
-                                    .addProtoFile(descriptor)
-                                    .build();
+        var request = CodeGeneratorRequest.newBuilder()
+                .setCompilerVersion(version())
+                .addFileToGenerate(filePath)
+                .addProtoFile(descriptor)
+                .build();
         return codeGenerator.process(request);
     }
 
     private static SourceFile sourceWithPackage(String typeName) {
-        FileName fileName = FileName.forType(typeName);
+        var fileName = FileName.forType(typeName);
         return Directory.of(JAVA_PACKAGE).resolve(fileName);
     }
 
     private static boolean haveSamePath(File generatedFile, SourceFile anotherFile) {
-        Path generatedFilePath = Paths.get(generatedFile.getName());
+        var generatedFilePath = Paths.get(generatedFile.getName());
         return generatedFilePath.equals(anotherFile.path());
     }
 
@@ -527,8 +490,8 @@ final class InterfaceGenTest {
     }
 
     private static void assertPackage(File generatedFile) {
-        Path generatedFilePath = Paths.get(generatedFile.getName());
-        Directory directory = Directory.of(JAVA_PACKAGE);
+        var generatedFilePath = Paths.get(generatedFile.getName());
+        var directory = Directory.of(JAVA_PACKAGE);
         assertThat(generatedFilePath.toString())
                 .startsWith(directory.path().toString());
     }
@@ -542,7 +505,7 @@ final class InterfaceGenTest {
     private static void assertGeneratedInterface(Class<?> interfaceClass, File file) {
         assertTrue(file.hasInsertionPoint());
         assertTrue(file.hasName());
-        StringSubject assertContent = assertThat(file.getContent());
+        var assertContent = assertThat(file.getContent());
         assertContent.startsWith(interfaceClass.getName());
         assertContent.endsWith(",");
     }

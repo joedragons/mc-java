@@ -30,13 +30,13 @@ import io.spine.tools.mc.gradle.ModelCompilerOptions;
 import io.spine.tools.mc.java.checks.gradle.given.ProjectConfigurations;
 import io.spine.tools.mc.java.checks.gradle.given.StubProject;
 import org.gradle.api.Project;
-import org.gradle.api.plugins.ExtensionContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.tools.mc.checks.Severity.ERROR;
+import static io.spine.tools.mc.java.checks.gradle.McJavaChecksSeverity.EQUALITY_ERROR;
 import static io.spine.tools.mc.java.checks.gradle.McJavaChecksSeverity.ERROR_PRONE_PLUGIN_ID;
 
 /**
@@ -63,7 +63,7 @@ class McJavaChecksSeverityTest {
         project.getPlugins()
                .apply(ERROR_PRONE_PLUGIN_ID);
         configureModelCompilerExtension();
-        McJavaChecksExtension extension = configureSpineCheckExtension();
+        var extension = configureSpineCheckExtension();
         extension.useValidatingBuilderSeverity = ERROR;
         configurer.setHasErrorPronePlugin(true);
         configurer.addConfigureSeverityAction();
@@ -71,7 +71,7 @@ class McJavaChecksSeverityTest {
     }
 
     @Test
-    @DisplayName("not add severity args if ErrorProne plugin not applied")
+    @DisplayName("not add severity args if Error Prone plugin not applied")
     void detectErrorProne() {
         configurer.setHasErrorPronePlugin(false);
         configurer.addConfigureSeverityAction();
@@ -79,21 +79,20 @@ class McJavaChecksSeverityTest {
     }
 
     private McJavaChecksExtension configureSpineCheckExtension() {
-        ExtensionContainer extensions = project.getExtensions();
-        McJavaChecksExtension extension =
-                extensions.create(McJavaChecksExtension.name(),
-                                  McJavaChecksExtension.class);
+        var extensions = project.getExtensions();
+        var extension = extensions.create(McJavaChecksExtension.name(),
+                                          McJavaChecksExtension.class);
         return extension;
     }
 
     private ModelCompilerOptions configureModelCompilerExtension() {
-        ExtensionContainer extensions = project.getExtensions();
-        ModelCompilerOptions extension = extensions.create(ModelCompilerOptions.name, ModelCompilerOptions.class);
+        var extensions = project.getExtensions();
+        var extension = extensions.create(ModelCompilerOptions.name, ModelCompilerOptions.class);
         return extension;
     }
 
     private void checkSeverityConfiguredToError() {
-        ProjectConfigurations.assertCompileTasksContain(project, "-Xep:ReferenceEquality:ERROR");
+        ProjectConfigurations.assertCompileTasksContain(project, EQUALITY_ERROR);
     }
 
     private void checkSeverityNotConfigured() {

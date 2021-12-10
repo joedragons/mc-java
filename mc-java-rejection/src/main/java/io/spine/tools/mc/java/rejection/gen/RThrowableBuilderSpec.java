@@ -26,21 +26,19 @@
 
 package io.spine.tools.mc.java.rejection.gen;
 
-import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import io.spine.base.RejectionType;
-import io.spine.tools.java.code.BuilderSpec;
-import io.spine.tools.java.code.JavaPoetName;
 import io.spine.code.java.PackageName;
 import io.spine.code.java.SimpleClassName;
-import io.spine.tools.java.javadoc.JavadocText;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.code.proto.FieldName;
 import io.spine.protobuf.Messages;
+import io.spine.tools.java.code.BuilderSpec;
+import io.spine.tools.java.code.JavaPoetName;
+import io.spine.tools.java.javadoc.JavadocText;
 import io.spine.tools.mc.java.field.FieldType;
 import io.spine.validate.Validate;
 
@@ -83,14 +81,13 @@ final class RThrowableBuilderSpec implements BuilderSpec {
 
     @Override
     public PackageName packageName() {
-        PackageName packageName = rejection.javaPackage();
+        var packageName = rejection.javaPackage();
         return packageName;
     }
 
     @Override
     public com.squareup.javapoet.TypeSpec toPoet() {
-        com.squareup.javapoet.TypeSpec result = com.squareup.javapoet.TypeSpec
-                .classBuilder(name.value())
+        var result = com.squareup.javapoet.TypeSpec.classBuilder(name.value())
                 .addModifiers(PUBLIC, STATIC)
                 .addJavadoc(classJavadoc().value())
                 .addField(initializedProtoBuilder())
@@ -111,7 +108,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
         @SuppressWarnings("DuplicateStringLiteralInspection") /* The duplicated string is in
                 tests of the code which cannot share common constants with this class.
                 For the time being let's keep it as is. */
-        JavadocText javadoc = fromEscaped("@return a new builder for the rejection").withNewLine();
+        var javadoc = fromEscaped("@return a new builder for the rejection").withNewLine();
         return methodBuilder(newBuilder.name())
                 .addModifiers(PUBLIC, STATIC)
                 .addJavadoc(javadoc.value())
@@ -147,8 +144,8 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private static MethodSpec constructor() {
-        String rawJavadoc = "Prevent direct instantiation of the builder.";
-        JavadocText javadoc = fromEscaped(rawJavadoc).withNewLine();
+        var rawJavadoc = "Prevent direct instantiation of the builder.";
+        var javadoc = fromEscaped(rawJavadoc).withNewLine();
         return constructorBuilder()
                 .addJavadoc(javadoc.value())
                 .addModifiers(PRIVATE)
@@ -156,7 +153,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private MethodSpec rejectionMessage() {
-        JavadocText javadoc = fromEscaped("Obtains the rejection and validates it.").withNewLine();
+        var javadoc = fromEscaped("Obtains the rejection and validates it.").withNewLine();
         return methodBuilder("rejectionMessage")
                 .addModifiers(PRIVATE)
                 .addJavadoc(javadoc.value())
@@ -169,8 +166,8 @@ final class RThrowableBuilderSpec implements BuilderSpec {
 
     @SuppressWarnings("DuplicateStringLiteralInspection") // The same string has different semantics
     private MethodSpec build() {
-        String rawJavadoc = "Creates the rejection from the builder and validates it.";
-        JavadocText javadoc = fromEscaped(rawJavadoc).withNewLine();
+        var rawJavadoc = "Creates the rejection from the builder and validates it.";
+        var javadoc = fromEscaped(rawJavadoc).withNewLine();
         return methodBuilder(BuilderSpec.BUILD_METHOD_NAME)
                 .addModifiers(PUBLIC)
                 .addJavadoc(javadoc.value())
@@ -180,9 +177,8 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private JavadocText classJavadoc() {
-        String rejectionName = rejection.simpleJavaClassName().value();
-        String javadocText = CodeBlock
-                .builder()
+        var rejectionName = rejection.simpleJavaClassName().value();
+        var javadocText = CodeBlock.builder()
                 .add("The builder for the {@code $L} rejection.", rejectionName)
                 .build()
                 .toString();
@@ -192,10 +188,8 @@ final class RThrowableBuilderSpec implements BuilderSpec {
 
     @SuppressWarnings("DuplicateStringLiteralInspection") // Random generated code duplication.
     private FieldSpec initializedProtoBuilder() {
-        String builder = SimpleClassName.ofBuilder().value();
-        ClassName builderClass =
-                messageClass.className()
-                            .nestedClass(builder);
+        var builder = SimpleClassName.ofBuilder().value();
+        var builderClass = messageClass.className().nestedClass(builder);
         return FieldSpec
                 .builder(builderClass, BUILDER_FIELD, PRIVATE, FINAL)
                 .initializer("$T.newBuilder()", messageClass.value())
@@ -204,22 +198,21 @@ final class RThrowableBuilderSpec implements BuilderSpec {
 
     private List<MethodSpec> setters() {
         List<MethodSpec> methods = new ArrayList<>();
-        ImmutableList<FieldDeclaration> fields = rejection.fields();
-        for (FieldDeclaration field : fields) {
-            FieldType fieldType = FieldType.of(field);
-            MethodSpec setter = fieldSetter(field, fieldType);
+        var fields = rejection.fields();
+        for (var field : fields) {
+            var fieldType = FieldType.of(field);
+            var setter = fieldSetter(field, fieldType);
             methods.add(setter);
         }
         return methods;
     }
 
     private MethodSpec fieldSetter(FieldDeclaration field, FieldType fieldType) {
-        FieldName fieldName = field.name();
-        String parameterName = fieldName.javaCase();
-        String methodName =
-                fieldType.primarySetter()
-                         .format(io.spine.tools.java.code.field.FieldName.from(fieldName));
-        MethodSpec.Builder methodBuilder = methodBuilder(methodName)
+        var fieldName = field.name();
+        var parameterName = fieldName.javaCase();
+        var methodName = fieldType.primarySetter()
+                                  .format(io.spine.tools.java.code.field.FieldName.from(fieldName));
+        var methodBuilder = methodBuilder(methodName)
                 .addModifiers(PUBLIC)
                 .returns(thisType())
                 .addParameter(fieldType.name(), parameterName)
@@ -232,7 +225,7 @@ final class RThrowableBuilderSpec implements BuilderSpec {
     }
 
     private static String wrapInPre(String text) {
-        JavadocText javaDoc = fromUnescaped(text).inPreTags();
+        var javaDoc = fromUnescaped(text).inPreTags();
         return javaDoc.value();
     }
 

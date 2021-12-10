@@ -26,29 +26,22 @@
 
 package io.spine.tools.mc.java.gradle.plugins;
 
-import io.spine.tools.gradle.ConfigurationName;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
-import io.spine.tools.gradle.task.TaskName;
 import io.spine.tools.type.FileDescriptorSuperset;
 import org.gradle.api.Action;
 import org.gradle.api.Buildable;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.artifacts.Configuration;
 
-import java.io.File;
-
-import static io.spine.tools.gradle.ConfigurationName.runtimeClasspath;
-import static io.spine.tools.gradle.ConfigurationName.testRuntimeClasspath;
+import static io.spine.tools.gradle.JavaConfigurationName.runtimeClasspath;
+import static io.spine.tools.gradle.project.Projects.configuration;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
-import static io.spine.tools.gradle.task.JavaTaskName.processTestResources;
 import static io.spine.tools.gradle.task.ProtobufTaskName.generateProto;
-import static io.spine.tools.gradle.task.ProtobufTaskName.generateTestProto;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeDescriptorSet;
-import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSet;
 
 /**
  * A Gradle plugin which merges the descriptor file with all the descriptor files from
@@ -57,31 +50,31 @@ import static io.spine.tools.mc.java.gradle.McJavaTaskName.mergeTestDescriptorSe
  * <p>The merge result is used to {@linkplain
  * io.spine.tools.type.MoreKnownTypes#extendWith(java.io.File) extend the known type registry}.
  */
-public class DescriptorSetMergerPlugin implements Plugin<Project> {
+final class DescriptorSetMergerPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        createTask(project, false);
-        createTask(project, true);
+        getSourceSetNames(project).forEach(ssn -> createTask(project, ssn));
     }
 
-    private static void createTask(Project project, boolean tests) {
-        Configuration configuration = configuration(project, configurationName(tests));
+    private static void createTask(Project project, SourceSetName ssn) {
+        var configuration = configuration(project, runtimeClasspath(ssn));
         Buildable dependencies = configuration.getAllDependencies();
-        GradleTask task = GradleTask.newBuilder(taskName(tests), createMergingAction(tests))
-                .insertAfterTask(generateProtoTaskName(tests))
-                .insertBeforeTask(processResourcesTaskName(tests))
+        var action = createMergingAction(ssn);
+        var task = GradleTask.newBuilder(mergeDescriptorSet(ssn), action)
+                .insertAfterTask(generateProto(ssn))
+                .insertBeforeTask(processResources(ssn))
                 .applyNowTo(project);
         task.getTask().dependsOn(dependencies);
     }
 
-    private static Action<Task> createMergingAction(boolean tests) {
+    private static Action<Task> createMergingAction(SourceSetName ssn) {
         return task -> {
-            Project project = task.getProject();
-            Configuration configuration = configuration(project, configurationName(tests));
-            File descriptorSet = descriptorSetFile(project, sourceSet(tests));
-            FileDescriptorSuperset superset = new FileDescriptorSuperset();
+            var superset = new FileDescriptorSuperset();
+            var project = task.getProject();
+            var configuration = configuration(project, runtimeClasspath(ssn));
             configuration.forEach(superset::addFromDependency);
+            var descriptorSet = descriptorSetFile(project, ssn);
             if (descriptorSet.exists()) {
                 superset.addFromDependency(descriptorSet);
             }
@@ -89,38 +82,4 @@ public class DescriptorSetMergerPlugin implements Plugin<Project> {
                     .loadIntoKnownTypes();
         };
     }
-
-    private static SourceSetName sourceSet(boolean tests) {
-        return tests ? SourceSetName.test : SourceSetName.main;
-    }
-
-    private static Configuration configuration(Project project, ConfigurationName name) {
-        return project.getConfigurations()
-                      .getByName(name.value());
-    }
-
-    private static ConfigurationName configurationName(boolean tests) {
-        return tests
-               ? testRuntimeClasspath
-               : runtimeClasspath;
-    }
-
-    private static TaskName taskName(boolean tests) {
-        return tests
-               ? mergeTestDescriptorSet
-               : mergeDescriptorSet;
-    }
-
-    private static TaskName generateProtoTaskName(boolean tests) {
-        return tests
-               ? generateTestProto
-               : generateProto;
-    }
-
-    private static TaskName processResourcesTaskName(boolean tests) {
-        return tests
-               ? processTestResources
-               : processResources;
-    }
-
 }

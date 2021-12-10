@@ -47,21 +47,21 @@ class GeneratedMessageTest {
     @Test
     @DisplayName("create a valid message using `vBuild()`")
     void obtainValid() {
-        CardNumber number = valid.vBuild();
+        var number = valid.vBuild();
         checkValid(number);
     }
 
     @Test
     @DisplayName("throw `ValidationException` if the message is not valid")
     void throwIfInvalid() {
-        ValidationException exception = assertThrows(ValidationException.class, invalid::vBuild);
+        var exception = assertThrows(ValidationException.class, invalid::vBuild);
         assertThat(exception.getConstraintViolations()).isNotEmpty();
     }
 
     @Test
     @DisplayName("ignore invalid message when skipping validation intentionally")
     void ignoreIfPartial() {
-        CardNumber number = invalid.buildPartial();
+        var number = invalid.buildPartial();
         assertThat(number).isNotNull();
         assertThrows(ValidationException.class, () -> checkValid(number));
     }

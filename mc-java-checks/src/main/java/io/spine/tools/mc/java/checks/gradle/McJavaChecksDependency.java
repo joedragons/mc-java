@@ -32,14 +32,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
-import org.gradle.api.artifacts.DependencySet;
-import org.gradle.api.artifacts.component.ComponentSelector;
 import org.gradle.api.artifacts.result.DependencyResult;
 import org.gradle.api.artifacts.result.ResolutionResult;
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult;
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency;
-
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.gradle.Artifact.SPINE_TOOLS_GROUP;
@@ -63,6 +59,13 @@ public final class McJavaChecksDependency implements Logging {
         this.dependency = checksDependency();
     }
 
+    private static DefaultExternalModuleDependency checksDependency() {
+        var version = Artifacts.mcJavaChecksVersion();
+        return new DefaultExternalModuleDependency(
+                SPINE_TOOLS_GROUP, Artifacts.MC_JAVA_CHECKS_ARTIFACT, version
+        );
+    }
+
     /**
      * Adds the dependency of the Spine Model Checks to the given configuration.
      *
@@ -72,9 +75,9 @@ public final class McJavaChecksDependency implements Logging {
      */
     public static boolean addTo(Project project) {
         checkNotNull(project);
-        Configuration cfg = AnnotationProcessorConfiguration.findOrCreateIn(project);
-        McJavaChecksDependency dep = new McJavaChecksDependency(cfg);
-        boolean result = dep.addDependency();
+        var cfg = AnnotationProcessorConfiguration.findOrCreateIn(project);
+        var dep = new McJavaChecksDependency(cfg);
+        var result = dep.addDependency();
         return result;
     }
 
@@ -84,7 +87,7 @@ public final class McJavaChecksDependency implements Logging {
      * @return {@code true} if the operation was successful, {@code false} otherwise
      */
     private boolean addDependency() {
-        ResolutionHelper helper = new ResolutionHelper();
+        var helper = new ResolutionHelper();
         if (helper.wasResolved()) {
             addDependencyTo(configuration);
             return true;
@@ -99,28 +102,21 @@ public final class McJavaChecksDependency implements Logging {
      */
     private void addDependencyTo(Configuration cfg) {
         _debug().log("Adding a dependency on `%s` to the `%s` configuration.", mcJavaChecks(), cfg);
-        DependencySet dependencies = cfg.getDependencies();
+        var dependencies = cfg.getDependencies();
         dependencies.add(dependency);
-    }
-
-    private static DefaultExternalModuleDependency checksDependency() {
-        String version = Artifacts.mcJavaChecksVersion();
-        return new DefaultExternalModuleDependency(
-                SPINE_TOOLS_GROUP, Artifacts.MC_JAVA_CHECKS_ARTIFACT, version
-        );
     }
 
     /**
      * Assists with checking if the dependency can be resolved, and if not, helps with
      * logging error diagnostics.
      */
-    private class ResolutionHelper {
+    private final class ResolutionHelper {
 
         private final ResolutionResult resolutionResult;
         private @Nullable UnresolvedDependencyResult unresolved;
 
         private ResolutionHelper() {
-            Configuration configCopy = configuration.copy();
+            var configCopy = configuration.copy();
             addDependencyTo(configCopy);
             resolutionResult =
                     configCopy.getIncoming()
@@ -136,14 +132,14 @@ public final class McJavaChecksDependency implements Logging {
          * future logging needs.
          */
         private boolean wasResolved() {
-            Set<? extends DependencyResult> allDeps = resolutionResult.getAllDependencies();
-            String group = requireNonNull(dependency.getGroup());
-            String name = dependency.getName();
+            var allDeps = resolutionResult.getAllDependencies();
+            var group = requireNonNull(dependency.getGroup());
+            var name = dependency.getName();
             for (DependencyResult dep : allDeps) {
                 if (dep instanceof UnresolvedDependencyResult) {
-                    UnresolvedDependencyResult unresolved = (UnresolvedDependencyResult) dep;
-                    ComponentSelector attempted = unresolved.getAttempted();
-                    String displayName = attempted.getDisplayName();
+                    var unresolved = (UnresolvedDependencyResult) dep;
+                    var attempted = unresolved.getAttempted();
+                    var displayName = attempted.getDisplayName();
                     if (displayName.contains(group) && displayName.contains(name)) {
                         this.unresolved = unresolved;
                         return false;
@@ -154,7 +150,7 @@ public final class McJavaChecksDependency implements Logging {
         }
 
         private void logUnresolved() {
-            String problemReport = toErrorMessage(requireNonNull(unresolved));
+            var problemReport = toErrorMessage(requireNonNull(unresolved));
             _warn().log(
                     "Unable to add a dependency on `%s` to the configuration `%s` because some " +
                             "dependencies could not be resolved: " +
@@ -164,8 +160,8 @@ public final class McJavaChecksDependency implements Logging {
         }
 
         private String toErrorMessage(UnresolvedDependencyResult entry) {
-            String dependency = entry.getAttempted().getDisplayName();
-            Throwable throwable = entry.getFailure();
+            var dependency = entry.getAttempted().getDisplayName();
+            var throwable = entry.getFailure();
             return format("%nDependency: `%s`%nProblem: `%s`", dependency, throwable);
         }
     }

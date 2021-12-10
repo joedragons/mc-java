@@ -20,7 +20,6 @@
 
 package io.spine.query.given;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.FieldMask;
 import io.spine.query.Column;
@@ -28,7 +27,6 @@ import io.spine.query.ComparisonOperator;
 import io.spine.query.QueryPredicate;
 import io.spine.query.RecordColumn;
 import io.spine.query.Subject;
-import io.spine.query.SubjectParameter;
 import io.spine.tools.query.ProjectId;
 import io.spine.tools.query.ProjectView;
 
@@ -68,7 +66,7 @@ public final class EntityQueryBuilderTestEnv {
     public static Subject<ProjectId, ProjectView>
     subjectWithNoParameters(ProjectView.Query query) {
         assertThat(query).isNotNull();
-        Subject<ProjectId, ProjectView> subject = query.subject();
+        var subject = query.subject();
         assertThat(subject.predicate()
                           .children()).isEmpty();
         return subject;
@@ -111,39 +109,17 @@ public final class EntityQueryBuilderTestEnv {
                                            Column<?, ?> column,
                                            ComparisonOperator operator,
                                            Object value) {
-        boolean parameterFound = false;
-        for (SubjectParameter<?, ?, ?> parameter : predicate.allParams()) {
+        var parameterFound = false;
+        for (var parameter : predicate.allParams()) {
             if (parameter.column()
                          .equals(column)) {
-                ComparisonOperator actualOperator = parameter.operator();
-                Object actualValue = parameter.value();
+                var actualOperator = parameter.operator();
+                var actualValue = parameter.value();
                 if (actualOperator == operator && value.equals(actualValue)) {
                     parameterFound = true;
                 }
             }
         }
         assertThat(parameterFound).isTrue();
-    }
-
-    /**
-     * Asserts the given predicate has exactly one parameter which compares the values
-     * of specific column to the specified value with a certain comparison operator.
-     *
-     * @param predicate
-     *         the predicate under assertion
-     * @param column
-     *         the column for which the parameter value is asserted
-     * @param operator
-     *         the operator of the asserted parameter
-     * @param value
-     *         value of the parameter
-     */
-    public static void assertOnlyParamWithAnd(QueryPredicate<ProjectView> predicate,
-                                              Column<?, ?> column,
-                                              ComparisonOperator operator,
-                                              Object value) {
-        ImmutableList<SubjectParameter<?, ?, ?>> allParams = predicate.allParams();
-        assertThat(allParams).hasSize(1);
-        assertHasParamValue(predicate, column, operator, value);
     }
 }

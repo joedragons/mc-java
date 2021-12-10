@@ -57,20 +57,20 @@ final class MessageAnnotator extends OptionAnnotator<Descriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor file : descriptors()) {
+        for (var file : fileDescriptors()) {
             annotate(file);
         }
     }
 
     @Override
     protected void annotateOneFile(FileDescriptor file) {
-        SourceFile outerClass = SourceFile.forOuterClassOf(file.toProto());
+        var outerClass = SourceFile.forOuterClassOf(file.toProto());
         rewriteSource(outerClass, new AnnotateNestedType(file));
     }
 
     @Override
     protected void annotateMultipleFiles(FileDescriptor file) {
-        for (Descriptor definitionDescriptor : getDefinitions(file)) {
+        for (var definitionDescriptor : getDefinitions(file)) {
             if (shouldAnnotate(definitionDescriptor)) {
                 annotateMessageTypes(definitionDescriptor, file);
             }
@@ -88,15 +88,15 @@ final class MessageAnnotator extends OptionAnnotator<Descriptor> {
 
     static <T extends JavaSource<T>>
     JavaSource<?> findNestedType(AbstractJavaSource<T> enclosingClass, String typeName) {
-        for (JavaSource<?> nestedType : enclosingClass.getNestedTypes()) {
+        for (var nestedType : enclosingClass.getNestedTypes()) {
             if (nestedType.getName()
                           .equals(typeName)) {
                 return nestedType;
             }
         }
 
-        String errMsg = format("Nested type `%s` is not defined in `%s`.",
-                                      typeName, enclosingClass.getName());
+        var errMsg = format("Nested type `%s` is not defined in `%s`.",
+                            typeName, enclosingClass.getName());
         throw new IllegalStateException(errMsg);
     }
 
@@ -114,15 +114,14 @@ final class MessageAnnotator extends OptionAnnotator<Descriptor> {
         @Override
         public void accept(AbstractJavaSource<JavaClassSource> input) {
             checkNotNull(input);
-            for (Descriptor definition : getDefinitions(file)) {
+            for (var definition : getDefinitions(file)) {
                 if (shouldAnnotate(definition)) {
-                    String messageName = definition.getName();
-                    JavaSource<?> message = findNestedType(input, messageName);
+                    var messageName = definition.getName();
+                    var message = findNestedType(input, messageName);
                     addAnnotation(message);
 
-                    String javaType = SimpleClassName.messageOrBuilder(messageName)
-                                                     .value();
-                    JavaSource<?> messageOrBuilder = findNestedType(input, javaType);
+                    var javaType = SimpleClassName.messageOrBuilder(messageName).value();
+                    var messageOrBuilder = findNestedType(input, javaType);
                     addAnnotation(messageOrBuilder);
                 }
             }

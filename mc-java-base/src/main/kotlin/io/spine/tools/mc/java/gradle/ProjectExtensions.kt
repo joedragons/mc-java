@@ -33,12 +33,15 @@ import io.spine.tools.fs.DirectoryName
 import io.spine.tools.fs.DirectoryName.grpc
 import io.spine.tools.fs.DirectoryName.java
 import io.spine.tools.fs.DirectoryName.spine
+import io.spine.tools.gradle.ProtobufDependencies
 import io.spine.tools.gradle.SourceSetName
+import io.spine.tools.gradle.project.sourceSet
 import io.spine.tools.java.fs.DefaultJavaPaths
 import io.spine.tools.mc.gradle.modelCompiler
 import java.nio.file.Path
 import kotlin.io.path.Path
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.the
@@ -57,7 +60,16 @@ private val Project.defaultPaths: DefaultJavaPaths
  */
 public fun Project.protoDir(ss: SourceSetName): Path {
     val sourceSetDir = defaultPaths.src().path().resolve(ss.value)
-    return sourceSetDir.resolve("proto")
+    return sourceSetDir.resolve(ProtobufDependencies.sourceSetExtensionName)
+}
+
+/**
+ * Obtains collection of proto files (if any) in the source set with the given name.
+ */
+public fun Project.protoFiles(ssn: SourceSetName): FileCollection? {
+    val sourceSet = sourceSet(ssn)
+    val extension = sourceSet.extensions.findByName(ProtobufDependencies.sourceSetExtensionName)
+    return extension as FileCollection?
 }
 
 /**

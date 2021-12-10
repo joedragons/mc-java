@@ -27,7 +27,6 @@
 package io.spine.test.options;
 
 import io.spine.code.proto.FieldContext;
-import io.spine.code.proto.FieldDeclaration;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintTranslator;
 import io.spine.validate.option.FieldConstraint;
@@ -49,9 +48,9 @@ public final class Direction extends FieldValidatingOption<BytesDirection> {
 
     @Override
     public Constraint constraintFor(FieldContext field) {
-        FieldDeclaration declaration = field.targetDeclaration();
-        BytesDirection optionValue = optionValue(field);
-        return new FieldConstraint<BytesDirection>(optionValue, declaration) {
+        var declaration = field.targetDeclaration();
+        var optionValue = optionValue(field);
+        return new FieldConstraint<>(optionValue, declaration) {
             @Override
             public String errorMessage(FieldContext field) {
                 return "";

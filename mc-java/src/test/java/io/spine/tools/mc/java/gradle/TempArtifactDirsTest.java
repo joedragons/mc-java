@@ -60,7 +60,7 @@ class TempArtifactDirsTest {
     void setUp() {
         projectDir = TempDir.forClass(TempArtifactDirsTest.class);
         project = StubProject.createAt(projectDir);
-        RepositoryHandler repositories = project.getRepositories();
+        var repositories = project.getRepositories();
         applyStandard(repositories);
         PluginManager plugins = project.getPluginManager();
         plugins.apply("java");
@@ -76,7 +76,7 @@ class TempArtifactDirsTest {
         @Test
         @DisplayName("default value, if not set")
         void defaultValue() {
-            List<String> actualDirs = actualDirs();
+            var actualDirs = actualDirs();
 
             assertThat(actualDirs).hasSize(1);
             assertNotEmptyAndIsInProjectDir(actualDirs.get(0));
@@ -95,7 +95,7 @@ class TempArtifactDirsTest {
         void list() {
             options.tempArtifactDirs = newArrayList(newUuid(), newUuid());
 
-            List<String> actualDirs = actualDirs();
+            var actualDirs = actualDirs();
             assertThat(actualDirs)
                     .isEqualTo(options.tempArtifactDirs);
         }
@@ -104,23 +104,23 @@ class TempArtifactDirsTest {
     @Test
     @DisplayName("include `.spine` dir, if exists")
     void includeSpineDir() throws IOException {
-        DefaultJavaPaths defaultProject = DefaultJavaPaths.at(projectDir);
-        File spineDir = defaultProject.tempArtifacts();
+        var defaultProject = DefaultJavaPaths.at(projectDir);
+        var spineDir = defaultProject.tempArtifacts();
         assertTrue(spineDir.mkdir());
-        String generatedDir =
+        var generatedDir =
                 defaultProject.generated()
                               .path()
                               .toFile()
                               .getCanonicalPath();
 
-        List<String> dirsToClean = actualDirs();
+        var dirsToClean = actualDirs();
 
         assertThat(dirsToClean)
                 .containsAtLeast(spineDir.getCanonicalPath(), generatedDir);
     }
 
     private List<String> actualDirs() {
-        List<String> result =
+        var result =
                 TempArtifactDirs.getFor(project)
                                 .stream()
                                 .map(File::toString)

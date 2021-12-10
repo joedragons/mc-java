@@ -27,17 +27,15 @@
 package io.spine.tools.mc.java.annotation.mark;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.flogger.FluentLogger;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.code.java.ClassName;
-import io.spine.logging.Logging;
 import org.checkerframework.checker.regex.qual.Regex;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static com.google.common.collect.Sets.newHashSet;
 
 /**
  * A source code annotation facade.
@@ -53,10 +51,12 @@ public final class ModuleAnnotator {
     }
 
     /**
-     * Executes the {@linkplain Job annotation jobs}.
+     * Creates a new builder for the instances of this type.
+     *
+     * @return new instance of {@code Builder}
      */
-    public void annotate() {
-        jobs.forEach(job -> job.execute(annotatorFactory));
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     /**
@@ -70,140 +70,10 @@ public final class ModuleAnnotator {
     }
 
     /**
-     * A job of the annotator.
-     *
-     * <p>Typically, represents a piece of routine source code annotation work to perform.
+     * Executes the {@linkplain Job annotation jobs}.
      */
-    public interface Job extends Logging {
-
-        /**
-         * Executes this job.
-         *
-         * @param factory
-         *         a factory of {@link Annotator} instances to use to create annotators suitable for
-         *         the job
-         */
-        void execute(AnnotatorFactory factory);
-    }
-
-    /**
-     * An annotation {@link Job} which covers Java sources generated from Protobuf marked with
-     * a certain {@link ApiOption}.
-     */
-    private static final class OptionJob implements Job {
-
-        private final ApiOption protobufOption;
-        private final ClassName javaAnnotation;
-
-        private OptionJob(ApiOption protobufOption, ClassName javaAnnotation) {
-            this.protobufOption = protobufOption;
-            this.javaAnnotation = javaAnnotation;
-        }
-
-        @SuppressWarnings("FloggerSplitLogStatement")
-        // See: https://github.com/SpineEventEngine/base/issues/612
-        @Override
-        public void execute(AnnotatorFactory factory) {
-            FluentLogger.Api debug = _debug();
-            debug.log("Annotating sources marked as `%s` with `%s`.",
-                      protobufOption, javaAnnotation);
-            debug.log("Annotating by the file option.");
-            factory.createFileAnnotator(javaAnnotation, protobufOption)
-                   .annotate();
-            debug.log("Annotating by the message option.");
-            factory.createMessageAnnotator(javaAnnotation, protobufOption)
-                   .annotate();
-            if (protobufOption.supportsServices()) {
-                debug.log("Annotating by the service option.");
-                factory.createServiceAnnotator(javaAnnotation, protobufOption)
-                       .annotate();
-            }
-            if (protobufOption.supportsFields()) {
-                debug.log("Annotating by the field option.");
-                factory.createFieldAnnotator(javaAnnotation, protobufOption)
-                       .annotate();
-            }
-            debug.log("Option `%s` processed.", protobufOption);
-        }
-    }
-
-    /**
-     * An annotation {@link Job} which covers generated Java classes which have a certain naming.
-     *
-     * <p>For example, all classes ending with {@code OrBuilder}.
-     */
-    private static final class PatternJob implements Job {
-
-        private final ClassNamePattern pattern;
-        private final ClassName javaAnnotation;
-
-        private PatternJob(ClassNamePattern pattern, ClassName annotation) {
-            this.javaAnnotation = annotation;
-            this.pattern = pattern;
-        }
-
-        @Override
-        public void execute(AnnotatorFactory factory) {
-            _debug().log("Annotating classes matching `%s` with `%s`.", pattern, javaAnnotation);
-            factory.createPatternAnnotator(javaAnnotation, pattern)
-                   .annotate();
-            _debug().log("Pattern `%s` processed.", pattern);
-        }
-    }
-
-    /**
-     * An annotation {@link Job} which annotates methods matching certain naming patterns.
-     */
-    private static final class MethodNameJob implements Job {
-
-        private final ImmutableSet<MethodPattern> patterns;
-        private final ClassName javaAnnotation;
-
-        private MethodNameJob(ImmutableSet<MethodPattern> patterns, ClassName javaAnnotation) {
-            this.patterns = patterns;
-            this.javaAnnotation = javaAnnotation;
-        }
-
-        @Override
-        public void execute(AnnotatorFactory factory) {
-            _debug().log("Annotating methods matching patterns `%s` with `%s`.",
-                         patterns, javaAnnotation);
-            factory.createMethodAnnotator(javaAnnotation, patterns)
-                   .annotate();
-        }
-    }
-
-    /**
-     * A builder of {@link Job} instances.
-     *
-     * <p>To receive an instance of the builder, call {@code ModuleAnnotator.translate(...)}.
-     * The builder completes the {@code Job} construction DSL with the {@link #as(ClassName)}
-     * method.
-     */
-    public static final class JobBuilder {
-
-        private final ApiOption targetOption;
-
-        private JobBuilder(ApiOption targetOption) {
-            this.targetOption = targetOption;
-        }
-
-        /**
-         * Builds an instance of {@code Job}.
-         */
-        public Job as(ClassName annotation) {
-            checkNotNull(annotation);
-            return new OptionJob(targetOption, annotation);
-        }
-    }
-
-    /**
-     * Creates a new builder for the instances of this type.
-     *
-     * @return new instance of {@code Builder}
-     */
-    public static Builder newBuilder() {
-        return new Builder();
+    public void annotate() {
+        jobs.forEach(job -> job.execute(annotatorFactory));
     }
 
     /**
@@ -221,7 +91,7 @@ public final class ModuleAnnotator {
          * Prevents direct instantiation.
          */
         private Builder() {
-            this.jobs = newHashSet();
+            this.jobs = new HashSet<>();
         }
 
         public Builder setAnnotatorFactory(AnnotatorFactory annotatorFactory) {
@@ -291,11 +161,10 @@ public final class ModuleAnnotator {
             checkNotNull(annotatorFactory);
             checkNotNull(internalAnnotation);
             internalPatterns.stream()
-                            .map(ClassNamePattern::compile)
-                            .map(pattern -> new PatternJob(pattern, internalAnnotation))
-                            .forEach(this::add);
-            ImmutableSet<MethodPattern> methodPatterns = internalMethodNames
-                    .stream()
+                    .map(ClassNamePattern::compile)
+                    .map(pattern -> new PatternJob(pattern, internalAnnotation))
+                    .forEach(this::add);
+            var methodPatterns = internalMethodNames.stream()
                     .map(MethodPattern::exactly)
                     .collect(toImmutableSet());
             add(new MethodNameJob(methodPatterns, internalAnnotation));

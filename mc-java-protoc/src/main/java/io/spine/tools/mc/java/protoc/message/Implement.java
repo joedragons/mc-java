@@ -51,12 +51,12 @@ public final class Implement extends AbstractCompilerOutput {
      * @return new instance of {@code MessageImplements}
      */
     public static Implement interfaceFor(MessageType type, Interface iface) {
-        String insertionPoint = InsertionPoint.message_implements.forType(type);
-        String content = buildContent(type, iface);
-        File.Builder file = ProtocPluginFiles.prepareFile(type);
-        File result = file.setInsertionPoint(insertionPoint)
-                          .setContent(content)
-                          .build();
+        var insertionPoint = InsertionPoint.message_implements.forType(type);
+        var content = buildContent(type, iface);
+        var file = ProtocPluginFiles.prepareFile(type);
+        var result = file.setInsertionPoint(insertionPoint)
+                         .setContent(content)
+                         .build();
         return new Implement(result);
     }
 
@@ -67,9 +67,8 @@ public final class Implement extends AbstractCompilerOutput {
      * a generated {@code MessageOrBuilder} interface.
      */
     private static String buildContent(MessageType type, Interface iface) {
-        String params = iface.parameters()
-                             .asStringFor(type);
-        String result = iface.name() + params + ',';
+        var params = iface.parameters().asStringFor(type);
+        var result = iface.name() + params + ',';
         return result;
     }
 }

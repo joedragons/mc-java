@@ -27,7 +27,6 @@
 package io.spine.tools.mc.java.annotation.mark;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.DescriptorProtos.FieldOptions;
 import com.google.protobuf.Descriptors.Descriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -69,7 +68,7 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
 
     @Override
     public void annotate() {
-        for (FileDescriptor file : descriptors()) {
+        for (var file : fileDescriptors()) {
             annotate(file);
         }
     }
@@ -77,17 +76,17 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
     @Override
     protected void annotateOneFile(FileDescriptor file) {
         if (shouldAnnotate(file)) {
-            SourceFile outerClass = SourceFile.forOuterClassOf(file.toProto());
+            var outerClass = SourceFile.forOuterClassOf(file.toProto());
             rewriteSource(outerClass, new FileFieldAnnotation(this, file));
         }
     }
 
     @Override
     protected void annotateMultipleFiles(FileDescriptor file) {
-        for (Descriptor type : file.getMessageTypes()) {
+        for (var type : file.getMessageTypes()) {
             if (shouldAnnotate(type)) {
                 SourceVisitor<JavaClassSource> annotation = new MessageFieldAnnotation(this, type);
-                SourceFile sourceFile = SourceFile.forMessage(type.toProto(), file.toProto());
+                var sourceFile = SourceFile.forMessage(type.toProto(), file.toProto());
                 rewriteSource(sourceFile, annotation);
             }
         }
@@ -136,8 +135,8 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
      *         the expected value for the {@code java_multiple_files}.
      */
     private static void checkMultipleFilesOption(FileDescriptor file, boolean expectedValue) {
-        boolean actualValue = file.getOptions()
-                                  .getJavaMultipleFiles();
+        var actualValue = file.getOptions()
+                              .getJavaMultipleFiles();
         if (actualValue != expectedValue) {
             throw newIllegalStateException("`java_multiple_files` should be `%s`, but was `%s`.",
                                            expectedValue, actualValue);
@@ -172,15 +171,14 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
          *         the field descriptor to get field name
          */
         private void annotateMessageField(JavaClassSource message, FieldDeclaration field) {
-            JavaClassSource messageBuilder = builderOf(message);
+            var messageBuilder = builderOf(message);
             annotateAccessors(message, field);
             annotateAccessors(messageBuilder, field);
         }
 
         private static JavaClassSource builderOf(JavaClassSource messageSource) {
-            String builderName = SimpleClassName.ofBuilder()
-                                                .value();
-            JavaSource<?> builderSource = messageSource.getNestedType(builderName);
+            var builderName = SimpleClassName.ofBuilder().value();
+            var builderSource = messageSource.getNestedType(builderName);
             return castToClass(builderSource);
         }
 
@@ -193,14 +191,12 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
          *         the declaration of the field to be annotated
          */
         private void annotateAccessors(JavaClassSource javaSource, FieldDeclaration field) {
-            ImmutableSet<String> names =
-                    Accessors.forField(field.name(), FieldType.of(field))
-                             .names();
-            javaSource.getMethods()
-                      .stream()
-                      .filter(MethodSource::isPublic)
-                      .filter(method -> names.contains(method.getName()))
-                      .forEach(annotator::addAnnotation);
+            var names = Accessors.forField(field.name(), FieldType.of(field))
+                                 .names();
+            javaSource.getMethods().stream()
+                    .filter(MethodSource::isPublic)
+                    .filter(method -> names.contains(method.getName()))
+                    .forEach(annotator::addAnnotation);
         }
 
         /**
@@ -245,7 +241,7 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
         @Override
         public void accept(AbstractJavaSource<JavaClassSource> input) {
             checkNotNull(input);
-            for (FieldDescriptor field : message.getFields()) {
+            for (var field : message.getFields()) {
                 if (shouldAnnotate(field)) {
                     annotate(input, field);
                 }
@@ -278,15 +274,15 @@ final class FieldAnnotator extends OptionAnnotator<FieldDescriptor> {
         @Override
         public void accept(AbstractJavaSource<JavaClassSource> input) {
             checkNotNull(input);
-            for (Descriptor message : file.getMessageTypes()) {
+            for (var message : file.getMessageTypes()) {
                 processMessage(input, message);
             }
         }
 
         private void processMessage(AbstractJavaSource<JavaClassSource> input, Descriptor message) {
-            for (FieldDescriptor field : message.getFields()) {
+            for (var field : message.getFields()) {
                 if (shouldAnnotate(field)) {
-                    JavaSource<?> nested = findNestedType(input, message.getName());
+                    var nested = findNestedType(input, message.getName());
                     annotate(nested, field);
                 }
             }

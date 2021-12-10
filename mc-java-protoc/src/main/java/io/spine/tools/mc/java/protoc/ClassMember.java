@@ -52,7 +52,7 @@ public final class ClassMember extends AbstractCompilerOutput {
      * @return a new instance of the {@code ClassMember} compiler output
      */
     public static ClassMember method(Method method, MessageType type) {
-        File response = codeGeneratorResponse(method.toString(), type);
+        var response = codeGeneratorResponse(method.toString(), type);
         return new ClassMember(response);
     }
 
@@ -67,14 +67,14 @@ public final class ClassMember extends AbstractCompilerOutput {
      * @return a new instance of the {@code ClassMember} compiler output
      */
     public static ClassMember nestedClass(NestedClass cls, MessageType type) {
-        File response = codeGeneratorResponse(cls.toString(), type);
+        var response = codeGeneratorResponse(cls.toString(), type);
         return new ClassMember(response);
     }
 
     private static File
     codeGeneratorResponse(String content, MessageType type) {
-        String insertionPoint = InsertionPoint.class_scope.forType(type);
-        File result = ProtocPluginFiles.prepareFile(type)
+        var insertionPoint = InsertionPoint.class_scope.forType(type);
+        var result = ProtocPluginFiles.prepareFile(type)
                .setInsertionPoint(insertionPoint)
                .setContent(content)
                .build();

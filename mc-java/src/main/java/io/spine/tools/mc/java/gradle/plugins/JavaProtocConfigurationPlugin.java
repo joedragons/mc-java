@@ -28,14 +28,11 @@ package io.spine.tools.mc.java.gradle.plugins;
 
 import com.google.protobuf.gradle.ExecutableLocator;
 import com.google.protobuf.gradle.GenerateProtoTask;
-import com.google.protobuf.gradle.GenerateProtoTask.PluginOptions;
 import io.spine.code.proto.DescriptorReference;
 import io.spine.tools.gradle.ProtocConfigurationPlugin;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
-import io.spine.tools.gradle.task.TaskName;
-import io.spine.tools.mc.java.gradle.McJavaOptions;
-import io.spine.tools.mc.java.codegen.CodegenOptions;
+import org.gradle.api.Action;
 import org.gradle.api.NamedDomainObjectContainer;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -81,7 +78,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
     @Override
     protected void customizeTask(GenerateProtoTask protocTask) {
-        Helper helper = new Helper(protocTask);
+        var helper = new Helper(protocTask);
         helper.configure();
     }
 
@@ -120,15 +117,15 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
         private void customizeDescriptorSetGeneration() {
             setResourceDirectory();
-            GradleTask writeRef = GradleTask.newBuilder(
-                            writeDescriptorReference(sourceSetName), task -> writeRefFile())
+            var taskName = writeDescriptorReference(sourceSetName);
+            var writeRef = GradleTask.newBuilder(taskName, writeRefFile())
                     .insertBeforeTask(processResources(sourceSetName))
                     .applyNowTo(project);
             protocTask.finalizedBy(writeRef.getTask());
         }
 
         private void setResourceDirectory() {
-            Path resourceDirectory =
+            var resourceDirectory =
                     descriptorFile.toPath()
                                   .getParent();
             protocTask.getSourceSet()
@@ -136,19 +133,27 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
                       .srcDir(resourceDirectory);
         }
 
+        private Action<Task> writeRefFile() {
+            return task -> {
+                var resourceDirectory = descriptorFile.toPath().getParent();
+                var reference = DescriptorReference.toOneFile(descriptorFile);
+                reference.writeTo(resourceDirectory);
+            };
+        }
+
         private void addTaskDependency() {
-            Task writeConfig = writePluginConfigTask();
+            var writeConfig = writePluginConfigTask();
             protocTask.dependsOn(writeConfig);
         }
 
         private void addPlugins() {
-            NamedDomainObjectContainer<PluginOptions> plugins = protocTask.getPlugins();
+            var plugins = protocTask.getPlugins();
             plugins.create(grpc.name());
             plugins.create(spineProtoc.name(),
                             options -> {
                                 options.setOutputSubDir("java");
-                                Path filePath = spineProtocConfigFile();
-                                String encodedPath = toBase64Encoded(filePath);
+                                var filePath = spineProtocConfigFile();
+                                var encodedPath = toBase64Encoded(filePath);
                                 options.option(encodedPath);
                             });
         }
@@ -163,17 +168,17 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
          * So, any valid file name would suffice. We add the name of the source set for clarity.
          */
         private Path spineProtocConfigFile() {
-            String prefix = sourceSetName.toPrefix();
-            String fileName = prefix.isEmpty()
-                    ? CONFIG_PB
-                    : prefix + '-' + CONFIG_PB;
-            Path configFile = pluginTempDir().resolve(fileName);
+            var prefix = sourceSetName.toPrefix();
+            var fileName = prefix.isEmpty()
+                           ? CONFIG_PB
+                           : prefix + '-' + CONFIG_PB;
+            var configFile = pluginTempDir().resolve(fileName);
             return configFile;
         }
 
         private Path pluginTempDir() {
-            File buildDir = project.getBuildDir();
-            Path result = Paths.get(buildDir.getAbsolutePath(), "tmp", SPINE_PROTOC_PLUGIN_NAME);
+            var buildDir = project.getBuildDir();
+            var result = Paths.get(buildDir.getAbsolutePath(), "tmp", SPINE_PROTOC_PLUGIN_NAME);
             return result;
         }
 
@@ -182,33 +187,29 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
          * that is expected to run after the {@code clean} task.
          */
         private Task writePluginConfigTask() {
-            TaskName taskName = writePluginConfiguration(sourceSetName);
-            return GradleTask.newBuilder(taskName, task -> writePluginConfig())
+            var taskName = writePluginConfiguration(sourceSetName);
+            return GradleTask.newBuilder(taskName, writePluginConfig())
                     .allowNoDependencies()
                     .applyNowTo(project)
                     .getTask()
                     .mustRunAfter(clean.name());
         }
 
-        private void writePluginConfig() {
-            Path configFile = spineProtocConfigFile();
-            McJavaOptions options = getMcJava(project);
-            CodegenOptions codegenOptions = options.codegen.toProto();
+        private Action<Task> writePluginConfig() {
+            return task -> {
+                var configFile = spineProtocConfigFile();
+                var options = getMcJava(project);
+                var codegenOptions = options.codegen.toProto();
 
-            ensureFile(configFile);
-            try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
-                codegenOptions.writeTo(fos);
-            } catch (FileNotFoundException e) {
-                throw errorOn("create", e, configFile);
-            } catch (IOException e) {
-                throw errorOn("store", e, configFile);
-            }
-        }
-
-        private void writeRefFile() {
-            Path resourceDirectory = descriptorFile.toPath().getParent();
-            DescriptorReference reference = DescriptorReference.toOneFile(descriptorFile);
-            reference.writeTo(resourceDirectory);
+                ensureFile(configFile);
+                try (var fos = new FileOutputStream(configFile.toFile())) {
+                    codegenOptions.writeTo(fos);
+                } catch (FileNotFoundException e) {
+                    throw errorOn("create", e, configFile);
+                } catch (IOException e) {
+                    throw errorOn("store", e, configFile);
+                }
+            };
         }
 
         private static

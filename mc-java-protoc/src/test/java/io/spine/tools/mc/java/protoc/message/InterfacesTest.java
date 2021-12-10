@@ -44,10 +44,10 @@ final class InterfacesTest {
     @DisplayName("implement interface")
     @Test
     void implementInterface() {
-        FilePattern pattern = fileSuffix("test_events.proto");
-        JavaClassName className = className(TestInterface.class);
-        ImplementByPattern implementByPattern = newTask(className, pattern);
-        MessageType targetType = new MessageType(ProjectCreated.getDescriptor());
+        var pattern = fileSuffix("test_events.proto");
+        var className = className(TestInterface.class);
+        var implementByPattern = newTask(className, pattern);
+        var targetType = new MessageType(ProjectCreated.getDescriptor());
         assertThat(implementByPattern.generateFor(targetType))
                 .isNotEmpty();
     }

@@ -27,8 +27,6 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
-import com.squareup.javapoet.JavaFile;
-import io.spine.tools.java.fs.SourceFile;
 import io.spine.option.IsOption;
 import io.spine.tools.mc.java.protoc.AbstractCompilerOutput;
 import io.spine.type.MessageType;
@@ -70,14 +68,14 @@ final class UserDefinedInterface
         checkNotNull(type);
         checkNotNull(isOption);
         checkNotEmptyOrBlank(isOption.getJavaType());
-        InterfaceSpec spec = createFor(type, isOption);
-        JavaFile javaCode = spec.toJavaCode();
-        SourceFile file = spec.toSourceFile();
-        File interfaceFile = prepareFile(file.toString())
+        var spec = createFor(type, isOption);
+        var javaCode = spec.toJavaCode();
+        var file = spec.toSourceFile();
+        var interfaceFile = prepareFile(file.toString())
                 .setContent(javaCode.toString())
                 .build();
-        String fqn = spec.fullName();
-        UserDefinedInterface result = new UserDefinedInterface(interfaceFile, fqn);
+        var fqn = spec.fullName();
+        var result = new UserDefinedInterface(interfaceFile, fqn);
         return result;
     }
 

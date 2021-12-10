@@ -42,7 +42,7 @@ public final class BuilderOfGeneratedClass implements InterfaceParameter {
 
     @Override
     public String valueFor(MessageType generatedClass) {
-        String result = format(
+        var result = format(
                 "%s.%s", generatedClass.simpleJavaClassName(), SimpleClassName.ofBuilder()
         );
         return result;

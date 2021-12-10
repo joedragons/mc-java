@@ -58,8 +58,8 @@ abstract class NestedClassGenerationTask implements CodeGenerationTask {
      * Performs the actual code generation using the supplied {@linkplain #factoryName factory}.
      */
     ImmutableList<CompilerOutput> generateNestedClassesFor(@NonNull MessageType type) {
-        String className = factoryName.getClassName().getCanonical();
-        NestedClassFactory factory = classLoader.newInstance(className);
+        var className = factoryName.getClassName().getCanonical();
+        var factory = classLoader.newInstance(className);
         return factory
                 .generateClassesFor(type)
                 .stream()

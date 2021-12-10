@@ -26,8 +26,6 @@
 
 package io.spine.tools.mc.java.protoc;
 
-import com.google.common.truth.StringSubject;
-import com.google.protobuf.Descriptors.FileDescriptor;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
@@ -63,10 +61,10 @@ import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;
 import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileRegex;
 import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.fileSuffix;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.addInterface;
-import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.optionsWithoutValidation;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.generateMethods;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.generateNested;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.methodFactory;
+import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.optionsWithoutValidation;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.pattern;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.protocConfig;
 import static io.spine.tools.mc.java.protoc.given.CodeGeneratorRequestGiven.requestBuilder;
@@ -96,20 +94,20 @@ final class PluginTest {
     @Test
     @DisplayName("generate UUID message")
     void generateUuidMethod() {
-        Uuids uuids = Uuids.newBuilder()
+        var uuids = Uuids.newBuilder()
                 .addMethodFactory(methodFactory(UuidMethodFactory.class))
                 .build();
-        CodegenOptions config = optionsWithoutValidation()
+        var config = optionsWithoutValidation()
                 .setUuids(uuids)
                 .build();
-        CodeGeneratorRequest request = requestBuilder()
+        var request = requestBuilder()
                 .addProtoFile(TestMethodProtos.getDescriptor().toProto())
                 .addFileToGenerate("spine/tools/protoc/method/test_protos.proto")
                 .setParameter(protocConfig(config, testPluginConfig))
                 .build();
 
-        CodeGeneratorResponse response = runPlugin(request);
-        List<File> messageMethods =
+        var response = runPlugin(request);
+        var messageMethods =
                 filterFiles(response, InsertionPoint.class_scope);
         assertThat(messageMethods)
                 .hasSize(1);
@@ -118,92 +116,91 @@ final class PluginTest {
     @Test
     @DisplayName("process suffix patterns")
     void processSuffixPatterns() {
-        Messages messages = Messages.newBuilder()
+        var messages = Messages.newBuilder()
                 .setPattern(pattern(fileSuffix(TEST_PROTO_SUFFIX)))
                 .addAddInterface(addInterface(TestInterface.class))
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        CodegenOptions config = optionsWithoutValidation()
+        var config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
-        CodeGeneratorRequest request = requestBuilder()
+        var request = requestBuilder()
                 .addProtoFile(TestGeneratorsProto.getDescriptor()
                                                  .toProto())
                 .addFileToGenerate(TEST_PROTO_FILE)
                 .setParameter(protocConfig(config, testPluginConfig))
                 .build();
 
-        CodeGeneratorResponse response = runPlugin(request);
+        var response = runPlugin(request);
         checkGenerated(response);
     }
 
     @Test
     @DisplayName("process prefix patterns")
     void processPrefixPatterns() {
-        Messages messages = Messages.newBuilder()
+        var messages = Messages.newBuilder()
                 .setPattern(pattern(filePrefix(TEST_PROTO_PREFIX)))
                 .addAddInterface(addInterface(TestInterface.class))
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        CodegenOptions config = optionsWithoutValidation()
+        var config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
-        CodeGeneratorRequest request = requestBuilder()
+        var request = requestBuilder()
                 .addProtoFile(TestGeneratorsProto.getDescriptor().toProto())
                 .addFileToGenerate(TEST_PROTO_FILE)
                 .setParameter(protocConfig(config, testPluginConfig))
                 .build();
 
-        CodeGeneratorResponse response = runPlugin(request);
+        var response = runPlugin(request);
         checkGenerated(response);
     }
 
     @Test
     @DisplayName("process regex patterns")
     void processRegexPatterns() {
-        Messages messages = Messages.newBuilder()
+        var messages = Messages.newBuilder()
                 .setPattern(pattern(fileRegex(TEST_PROTO_REGEX)))
                 .addAddInterface(addInterface(TestInterface.class))
                 .addGenerateMethods(generateMethods(TestMethodFactory.class))
                 .addGenerateNestedClasses(generateNested(TestNestedClassFactory.class))
                 .build();
-        CodegenOptions config = optionsWithoutValidation()
+        var config = optionsWithoutValidation()
                 .addMessages(messages)
                 .build();
-        CodeGeneratorRequest request = requestBuilder()
+        var request = requestBuilder()
                 .addProtoFile(TestGeneratorsProto.getDescriptor().toProto())
                 .addFileToGenerate(TEST_PROTO_FILE)
                 .setParameter(protocConfig(config, testPluginConfig))
                 .build();
 
-        CodeGeneratorResponse response = runPlugin(request);
+        var response = runPlugin(request);
         checkGenerated(response);
     }
 
     @Test
     @DisplayName("mark generated message builders with the `ValidatingBuilder` interface")
     void markBuildersWithInterface() {
-        FileDescriptor testGeneratorsDescriptor = TestGeneratorsProto.getDescriptor();
-        CodegenOptions config = CodegenOptions.getDefaultInstance();
-        String protocConfigPath = protocConfig(config, testPluginConfig);
-        CodeGeneratorRequest request = requestBuilder()
+        var testGeneratorsDescriptor = TestGeneratorsProto.getDescriptor();
+        var config = CodegenOptions.getDefaultInstance();
+        var protocConfigPath = protocConfig(config, testPluginConfig);
+        var request = requestBuilder()
                 .addProtoFile(testGeneratorsDescriptor.toProto())
                 .addFileToGenerate(TEST_PROTO_FILE)
                 .setParameter(protocConfigPath)
                 .build();
-        CodeGeneratorResponse response = runPlugin(request);
+        var response = runPlugin(request);
 
-        MessageType type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
-        String expectedPointName = InsertionPoint.builder_implements.forType(type);
+        var type = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
+        var expectedPointName = InsertionPoint.builder_implements.forType(type);
 
-        SourceFile expectedSourceFile = SourceFile.forType(type);
+        var expectedSourceFile = SourceFile.forType(type);
         @SuppressWarnings("DynamicRegexReplaceableByCompiledPattern")
-        String expectedFileName = expectedSourceFile.toString()
-                                                    .replaceAll("\\\\", "/");
-        File expectedFile = File
-                .newBuilder()
+        var expectedFileName = expectedSourceFile.toString()
+                                                 .replaceAll("\\\\", "/");
+        var expectedFile = File.newBuilder()
                 .setName(expectedFileName)
                 .setInsertionPoint(expectedPointName)
                 .setContent(BUILDER_INTERFACE)
@@ -227,8 +224,8 @@ final class PluginTest {
     @SuppressWarnings("ZeroLengthArrayAllocation")
     private static CodeGeneratorResponse runPlugin(CodeGeneratorRequest request) {
         try (InputStream testInput = new ByteArrayInputStream(request.toByteArray());
-             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-             PrintStream testOutput = new PrintStream(bos)
+             var bos = new ByteArrayOutputStream();
+             var testOutput = new PrintStream(bos)
         ) {
             withSystemStreams(testInput, testOutput, () -> Plugin.main(new String[]{}));
             return CodeGeneratorResponse.parseFrom(bos.toByteArray(),
@@ -240,8 +237,8 @@ final class PluginTest {
 
     @SuppressWarnings("UseOfSystemOutOrSystemErr") // Required by the protoc API.
     private static void withSystemStreams(InputStream in, PrintStream os, Runnable action) {
-        InputStream oldIn = System.in;
-        PrintStream oldOut = System.out;
+        var oldIn = System.in;
+        var oldOut = System.out;
         try {
             System.setIn(in);
             System.setOut(os);
@@ -253,22 +250,20 @@ final class PluginTest {
     }
 
     private static void checkGenerated(CodeGeneratorResponse response) {
-        List<File> responseFiles = response.getFileList();
+        var responseFiles = response.getFileList();
         assertThat(responseFiles)
                 .hasSize(2);
-        File interfaceFile = responseFiles
-                .stream()
+        var interfaceFile = responseFiles.stream()
                 .filter(file -> file.getInsertionPoint().contains("implements"))
                 .findFirst()
                 .orElseGet(() -> fail("Expected an interface insertion point."));
-        File classScopeFile = responseFiles
-                .stream()
+        var classScopeFile = responseFiles.stream()
                 .filter(file -> file.getInsertionPoint().contains("class_scope"))
                 .findFirst()
                 .orElseGet(() -> fail("Expected a class scope insertion point."));
         assertThat(interfaceFile.getContent())
                 .contains(TestInterface.class.getName());
-        StringSubject assertClassScope = assertThat(classScopeFile.getContent());
+        var assertClassScope = assertThat(classScopeFile.getContent());
         assertClassScope
                 .contains(TEST_METHOD.toString());
         assertClassScope

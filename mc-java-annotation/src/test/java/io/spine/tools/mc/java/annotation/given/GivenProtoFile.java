@@ -61,10 +61,4 @@ public enum GivenProtoFile {
     public FileName fileName() {
         return fileName;
     }
-
-    public static List<String> names() {
-        return Arrays.stream(values())
-                     .map(item -> item.fileName.value())
-                     .collect(toImmutableList());
-    }
 }

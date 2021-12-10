@@ -26,18 +26,16 @@
 
 package io.spine.tools.mc.java.checks.gradle;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ConfigurationContainer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.gradle.ConfigurationName.annotationProcessor;
+import static io.spine.tools.gradle.JavaConfigurationName.annotationProcessor;
 
 /**
  * A helper for adding
- * {@link io.spine.tools.gradle.ConfigurationName#annotationProcessor annotationProcessor}
+ * {@link io.spine.tools.gradle.JavaConfigurationName#annotationProcessor annotationProcessor}
  * configuration to a Gradle Project.
  */
 final class AnnotationProcessorConfiguration {
@@ -56,22 +54,12 @@ final class AnnotationProcessorConfiguration {
      */
     static Configuration findOrCreateIn(Project project) {
         checkNotNull(project);
-        ConfigurationContainer configurations = project.getConfigurations();
-        @Nullable Configuration config = configurations.findByName(annotationProcessor.value());
+        var configurations = project.getConfigurations();
+        var cfgName = annotationProcessor.value();
+        @Nullable Configuration config = configurations.findByName(cfgName);
         if (config == null) {
-            config = configurations.create(annotationProcessor.value());
+            config = configurations.create(cfgName);
         }
         return config;
-    }
-
-    /**
-     * Get {@code annotationProcessor} configuration in the project.
-     */
-    @VisibleForTesting
-    static Configuration in(Project project) {
-        checkNotNull(project);
-        ConfigurationContainer configurations = project.getConfigurations();
-        Configuration result = configurations.getByName(annotationProcessor.value());
-        return result;
     }
 }

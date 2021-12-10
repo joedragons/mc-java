@@ -60,22 +60,22 @@ public final class FieldAnnotationCheck extends SourceCheck {
     }
 
     private static JavaClassSource builderOf(JavaSource<?> messageSource) {
-        TypeHolder<?> messageType = (TypeHolder<?>) messageSource;
-        JavaType<?> builderType = messageType.getNestedType(ofBuilder().value());
+        var messageType = (TypeHolder<?>) messageSource;
+        var builderType = messageType.getNestedType(ofBuilder().value());
         return (JavaClassSource) builderType;
     }
 
     @Override
     public void accept(AbstractJavaSource<JavaClassSource> input) {
         checkNotNull(input);
-        JavaClassSource message = (JavaClassSource) input;
-        JavaClassSource messageBuilder = builderOf(message);
+        var message = (JavaClassSource) input;
+        var messageBuilder = builderOf(message);
         checkAccessorsAnnotation(message);
         checkAccessorsAnnotation(messageBuilder);
     }
 
     private void checkAccessorsAnnotation(JavaClassSource message) {
-        String fieldNameCamelCase = FieldName.of(field.toProto()).toCamelCase();
+        var fieldNameCamelCase = FieldName.of(field.toProto()).toCamelCase();
         message.getMethods()
                .stream()
                .filter(VisibilityScoped::isPublic)
@@ -85,7 +85,7 @@ public final class FieldAnnotationCheck extends SourceCheck {
 
     private void assertMethodAnnotation(MethodSource<JavaClassSource> method) {
         Optional<?> annotation = findInternalAnnotation(method);
-        String methodName = method.getName();
+        var methodName = method.getName();
         if (shouldBeAnnotated()) {
             assertTrue(annotation.isPresent(), msg(true, methodName));
         } else {
@@ -94,8 +94,8 @@ public final class FieldAnnotationCheck extends SourceCheck {
     }
 
     private String msg(boolean expected, String methodName) {
-        String annotationClass = Internal.class.getSimpleName();
-        String fullFieldName = field.getFullName();
+        var annotationClass = Internal.class.getSimpleName();
+        var fullFieldName = field.getFullName();
         return format(
                 "The method `%s()` generated for the field `%s` is expected to be" +
                         "%s" +

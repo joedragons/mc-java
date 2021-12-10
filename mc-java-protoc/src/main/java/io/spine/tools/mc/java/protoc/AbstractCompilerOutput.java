@@ -60,7 +60,7 @@ public abstract class AbstractCompilerOutput implements CompilerOutput {
         if (!(o instanceof AbstractCompilerOutput)) {
             return false;
         }
-        AbstractCompilerOutput output = (AbstractCompilerOutput) o;
+        var output = (AbstractCompilerOutput) o;
         return Objects.equal(file, output.file);
     }
 

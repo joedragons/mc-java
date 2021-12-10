@@ -54,25 +54,22 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
  */
 public abstract class Annotator {
 
-
-    private final ImmutableList<FileDescriptor> descriptors;
-
-    /**
-     * The name of the Java class of the annotation to apply.
-     */
+    /** The name of the Java class of the annotation to apply. */
     private final ClassName annotation;
 
-    /**
-     * An absolute path to the Java sources to annotate.
-     */
-    private final Path genProtoDir;
+    /** Descriptor of files to process. */
+    private final ImmutableList<FileDescriptor> fileDescriptors;
+
+    /** Absolute path to the Java sources to annotate. */
+    private final Path genJavaDir;
 
     protected Annotator(ClassName annotation,
-                        ImmutableList<FileDescriptor> descriptors,
-                        Path genProtoDir) {
+                        ImmutableList<FileDescriptor> fileDescriptors,
+                        Path genJavaDir) {
         this.annotation = checkNotNull(annotation);
-        this.descriptors = checkNotNull(descriptors);
-        this.genProtoDir = checkNotNull(genProtoDir);
+        checkNotNull(fileDescriptors);
+        this.fileDescriptors = fileDescriptors;
+        this.genJavaDir = checkNotNull(genJavaDir);
     }
 
     /**
@@ -98,7 +95,7 @@ public abstract class Annotator {
      */
     protected <T extends JavaSource<T>>
     void rewriteSource(SourceFile relativeSourcePath, SourceVisitor<T> visitor) {
-        rewriteSource(genProtoDir, relativeSourcePath, visitor);
+        rewriteSource(genJavaDir, relativeSourcePath, visitor);
     }
 
     /**
@@ -115,11 +112,11 @@ public abstract class Annotator {
      */
     static <T extends JavaSource<T>>
     void rewriteSource(Path sourcePathPrefix, SourceFile sourceFile, SourceVisitor<T> visitor) {
-        Path absoluteSourcePath = sourcePathPrefix.resolve(sourceFile.path());
+        var absoluteSourcePath = sourcePathPrefix.resolve(sourceFile.path());
         if (exists(absoluteSourcePath)) {
             @SuppressWarnings("unchecked" /* There is no way to specify generic parameter
                                              for `AbstractJavaSource.class` value. */)
-            AbstractJavaSource<T> javaSource = (AbstractJavaSource<T>) parse(absoluteSourcePath);
+            var javaSource = (AbstractJavaSource<T>) parse(absoluteSourcePath);
             visitor.accept(javaSource);
             rewrite(javaSource, absoluteSourcePath);
         }
@@ -127,7 +124,7 @@ public abstract class Annotator {
 
     private static <T extends JavaSource<T>>
     void rewrite(AbstractJavaSource<T> javaSource, Path destination) {
-        String resultingSource = javaSource.toString();
+        var resultingSource = javaSource.toString();
         try {
             Files.write(destination, ImmutableList.of(resultingSource), TRUNCATE_EXISTING);
         } catch (IOException e) {
@@ -153,7 +150,7 @@ public abstract class Annotator {
      *         the program element to annotate
      */
     protected final void addAnnotation(AnnotationTargetSource<?, ?> source) {
-        String annotationFQN = annotation.value();
+        var annotationFQN = annotation.value();
         AnnotationSource<?> annotation = source.getAnnotation(annotationFQN);
         if (annotation == null) {
             AnnotationSource<?> newAnnotation = source.addAnnotation();
@@ -164,8 +161,8 @@ public abstract class Annotator {
     /**
      * Obtains the list of file descriptors from which the annotated Java code is generated.
      */
-    protected final ImmutableList<FileDescriptor> descriptors() {
-        return descriptors;
+    protected final ImmutableList<FileDescriptor> fileDescriptors() {
+        return fileDescriptors;
     }
 
     /**

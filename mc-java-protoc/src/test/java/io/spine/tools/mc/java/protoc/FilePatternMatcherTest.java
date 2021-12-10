@@ -57,7 +57,7 @@ class FilePatternMatcherTest {
         @DisplayName("`null` `MessageType` is supplied")
         void nullMessageTypeIsSupplied() {
             assertNpe(() -> {
-                FilePattern pattern = FilePattern.getDefaultInstance();
+                var pattern = FilePattern.getDefaultInstance();
                 new FilePatternMatcher(pattern).test(null);
             });
         }
@@ -86,8 +86,8 @@ class FilePatternMatcherTest {
         }
 
         private void assertMatches(FilePattern pattern) {
-            FilePatternMatcher matcher = new FilePatternMatcher(pattern);
-            MessageType type = new MessageType(FPMMessage.getDescriptor());
+            var matcher = new FilePatternMatcher(pattern);
+            var type = new MessageType(FPMMessage.getDescriptor());
             assertTrue(matcher.test(type));
         }
     }
@@ -115,8 +115,8 @@ class FilePatternMatcherTest {
         }
 
         private void assertNotMatches(FilePattern pattern) {
-            FilePatternMatcher matcher = new FilePatternMatcher(pattern);
-            MessageType type = new MessageType(FPMMessage.getDescriptor());
+            var matcher = new FilePatternMatcher(pattern);
+            var type = new MessageType(FPMMessage.getDescriptor());
             assertFalse(matcher.test(type));
         }
     }

@@ -53,7 +53,7 @@ final class ExternalClassLoaderTest {
 
     @BeforeEach
     void setUp() {
-        Classpath instance = Classpath.getDefaultInstance();
+        var instance = Classpath.getDefaultInstance();
         classLoader = new ExternalClassLoader<>(instance, MethodFactory.class);
     }
 

@@ -27,8 +27,6 @@
 package io.spine.tools.mc.java.protoc.query;
 
 import com.google.common.collect.ImmutableList;
-import io.spine.tools.java.code.Method;
-import io.spine.tools.java.code.NestedClass;
 import io.spine.tools.java.code.query.EntityQueryFactory;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.codegen.Entities;
@@ -41,7 +39,6 @@ import io.spine.type.MessageType;
 import io.spine.type.Type;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Predicate;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -103,8 +100,8 @@ public class EntityQueryGen extends CodeGenerator {
      */
     public static CodeGenerator instance(CodegenOptions config) {
         checkNotNull(config);
-        Entities entities = config.getEntities();
-        boolean enabled = entities.getGenerateQueries();
+        var entities = config.getEntities();
+        var enabled = entities.getGenerateQueries();
         return enabled
                ? new EntityQueryGen(entities)
                : NoOpGenerator.instance();
@@ -133,15 +130,15 @@ public class EntityQueryGen extends CodeGenerator {
     }
 
     private void addClasses(MessageType type, ImmutableList.Builder<CompilerOutput> builder) {
-        List<NestedClass> classes = factory.generateClassesFor(type);
-        for (NestedClass cls : classes) {
+        var classes = factory.generateClassesFor(type);
+        for (var cls : classes) {
             builder.add(ClassMember.nestedClass(cls, type));
         }
     }
 
     private void addMethods(MessageType type, ImmutableList.Builder<CompilerOutput> builder) {
-        List<Method> methods = factory.generateMethodsFor(type);
-        for (Method method : methods) {
+        var methods = factory.generateMethodsFor(type);
+        for (var method : methods) {
             builder.add(ClassMember.method(method, type));
         }
     }

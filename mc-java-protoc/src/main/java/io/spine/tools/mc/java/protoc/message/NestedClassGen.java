@@ -27,16 +27,14 @@
 package io.spine.tools.mc.java.protoc.message;
 
 import com.google.common.collect.ImmutableList;
+import io.spine.tools.java.code.NestedClassFactory;
+import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.protoc.CodeGenerationTask;
 import io.spine.tools.mc.java.protoc.CodeGenerationTasks;
 import io.spine.tools.mc.java.protoc.CodeGenerator;
 import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.mc.java.protoc.ExternalClassLoader;
 import io.spine.tools.mc.java.protoc.InsertionPoint;
-import io.spine.tools.java.code.Classpath;
-import io.spine.tools.java.code.NestedClassFactory;
-import io.spine.tools.mc.java.codegen.CodegenOptions;
-import io.spine.tools.mc.java.codegen.Messages;
 import io.spine.type.MessageType;
 import io.spine.type.Type;
 
@@ -65,11 +63,10 @@ public final class NestedClassGen extends CodeGenerator {
      */
     public static NestedClassGen instance(CodegenOptions config) {
         checkNotNull(config);
-        Classpath classpath = config.getClasspath();
-        ExternalClassLoader<NestedClassFactory> classLoader =
-                new ExternalClassLoader<>(classpath, NestedClassFactory.class);
+        var classpath = config.getClasspath();
+        var classLoader = new ExternalClassLoader<>(classpath, NestedClassFactory.class);
         ImmutableList.Builder<CodeGenerationTask> tasks = ImmutableList.builder();
-        for (Messages messages : config.getMessagesList()) {
+        for (var messages : config.getMessagesList()) {
             messages.getGenerateNestedClassesList()
                     .stream()
                     .map(generate -> new GenerateNestedClasses(
@@ -84,8 +81,8 @@ public final class NestedClassGen extends CodeGenerator {
         if (!(type instanceof MessageType)) {
             return ImmutableList.of();
         }
-        MessageType messageType = (MessageType) type;
-        ImmutableList<CompilerOutput> result = tasks.generateFor(messageType);
+        var messageType = (MessageType) type;
+        var result = tasks.generateFor(messageType);
         return result;
     }
 }

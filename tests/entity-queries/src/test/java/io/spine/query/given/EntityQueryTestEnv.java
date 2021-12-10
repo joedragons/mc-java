@@ -49,9 +49,8 @@ public final class EntityQueryTestEnv {
         Either<ProjectView.QueryBuilder> isDone = b -> b.status()
                                                         .is(DONE);
         Either<ProjectView.QueryBuilder> isDeleted = b -> b.where(DELETED.column(), true);
-        FieldMask nameAndStatus = maskNameAndStatus();
-        ProjectView.Query query =
-                ProjectView.query()
+        var nameAndStatus = maskNameAndStatus();
+        var query = ProjectView.query()
                            .projectId()
                            .in(ProjectId.generate(), ProjectId.generate())
                            .where(ARCHIVED.column(), false)
@@ -65,12 +64,10 @@ public final class EntityQueryTestEnv {
     }
 
     private static FieldMask maskNameAndStatus() {
-        FieldMask mask = FieldMask.newBuilder()
-                                  .addPaths(projectName().name()
-                                                         .value())
-                                  .addPaths(status().name()
-                                                    .value())
-                                  .build();
+        var mask = FieldMask.newBuilder()
+                .addPaths(projectName().name().value())
+                .addPaths(status().name().value())
+                .build();
         return mask;
     }
 }

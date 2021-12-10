@@ -29,11 +29,9 @@ import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeName;
 import io.spine.base.RejectionThrowable;
 import io.spine.base.RejectionType;
 import io.spine.code.java.PackageName;
-import io.spine.code.java.SimpleClassName;
 import io.spine.logging.Logging;
 import io.spine.tools.java.code.GeneratedBy;
 import io.spine.tools.java.code.JavaPoetName;
@@ -78,15 +76,14 @@ public final class RThrowableSpec implements TypeSpec, Logging {
 
     @Override
     public PackageName packageName() {
-        PackageName packageName = declaration.javaPackage();
+        var packageName = declaration.javaPackage();
         return packageName;
     }
 
     @Override
     public com.squareup.javapoet.TypeSpec toPoet() {
-        SimpleClassName className = declaration.simpleJavaClassName();
-        com.squareup.javapoet.TypeSpec rejection =
-                com.squareup.javapoet.TypeSpec.classBuilder(className.value())
+        var className = declaration.simpleJavaClassName();
+        var rejection = com.squareup.javapoet.TypeSpec.classBuilder(className.value())
                         .addJavadoc(classJavadoc())
                         .addAnnotation(GeneratedBy.spineModelCompiler())
                         .addModifiers(PUBLIC)
@@ -103,8 +100,8 @@ public final class RThrowableSpec implements TypeSpec, Logging {
     private MethodSpec constructor() {
         _debug().log("Creating the constructor for the type `%s`.",
                      declaration.simpleJavaClassName());
-        ParameterSpec builderParameter = builder.asParameter();
-        CodeBlock buildRejectionMessage = builder.buildRejectionMessage();
+        var builderParameter = builder.asParameter();
+        var buildRejectionMessage = builder.buildRejectionMessage();
         return constructorBuilder()
                 .addJavadoc(constructorJavadoc(builderParameter))
                 .addModifiers(PRIVATE)
@@ -114,9 +111,9 @@ public final class RThrowableSpec implements TypeSpec, Logging {
     }
 
     private MethodSpec messageThrown() {
-        String methodSignature = messageThrown.signature();
+        var methodSignature = messageThrown.signature();
         _debug().log("Adding method `%s`.", methodSignature);
-        TypeName returnType = messageClass.value();
+        var returnType = messageClass.value();
         return MethodSpec.methodBuilder(messageThrown.name())
                 .addAnnotation(Override.class)
                 .addModifiers(PUBLIC)
@@ -131,14 +128,14 @@ public final class RThrowableSpec implements TypeSpec, Logging {
      * @return the class-level Javadoc content
      */
     private CodeBlock classJavadoc() {
-        JavadocText leadingComments =
+        var leadingComments =
                 declaration.leadingComments()
                            .map(text -> JavadocText.fromUnescaped(text)
                                                    .inPreTags()
                                                    .withNewLine())
                            .orElse(JavadocText.fromEscaped(""));
-        PackageName rejectionPackage = declaration.javaPackage();
-        CodeBlock sourceProtoNote = CodeBlock.builder()
+        var rejectionPackage = declaration.javaPackage();
+        var sourceProtoNote = CodeBlock.builder()
                 .add("Rejection based on proto type ")
                 .add("{@code $L.$L}", rejectionPackage, declaration.simpleJavaClassName())
                 .build();
@@ -158,16 +155,12 @@ public final class RThrowableSpec implements TypeSpec, Logging {
      * @return the constructor Javadoc content
      */
     private static CodeBlock constructorJavadoc(ParameterSpec builderParameter) {
-        JavadocText generalPart =
+        var generalPart =
                 JavadocText.fromUnescaped("Creates a new instance.")
                            .withNewLine()
                            .withNewLine();
-        CodeBlock paramsBlock =
-                CodeBlock.of("@param $N the builder for the rejection",
-                             builderParameter);
-        JavadocText paramsPart =
-                JavadocText.fromEscaped(paramsBlock.toString())
-                           .withNewLine();
+        var paramsBlock = CodeBlock.of("@param $N the builder for the rejection", builderParameter);
+        var paramsPart = JavadocText.fromEscaped(paramsBlock.toString()).withNewLine();
         return CodeBlock.builder()
                 .add(generalPart.value())
                 .add(paramsPart.value())

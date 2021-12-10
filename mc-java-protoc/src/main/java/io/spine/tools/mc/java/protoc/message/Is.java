@@ -47,7 +47,7 @@ final class Is extends MessageOption<IsOption> {
     }
 
     static Optional<IsOption> of(MessageType type) {
-        Optional<IsOption> result = new Is().valueFrom(type.descriptor());
+        var result = new Is().valueFrom(type.descriptor());
         return result;
     }
 }

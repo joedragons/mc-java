@@ -64,7 +64,7 @@ class ExternalConstraintTest {
     @Test
     @DisplayName("invoke generated validation if no external validation is defined")
     void noExternal() {
-        ShippingAddress address = ShippingAddress
+        var address = ShippingAddress
                 .newBuilder()
                 .setSecondLine("first line is required and not set")
                 .buildPartial();
@@ -86,10 +86,10 @@ class ExternalConstraintTest {
     @Test
     @DisplayName("ignore external constraints if `(validate)` is not set")
     void noValidate() {
-        SimplePersonName name = SimplePersonName.newBuilder()
+        var name = SimplePersonName.newBuilder()
                 .setValue("A")
                 .buildPartial();
-        User user = User.newBuilder()
+        var user = User.newBuilder()
                 .setName(name)
                 .buildPartial();
         assertThat(user.validate())

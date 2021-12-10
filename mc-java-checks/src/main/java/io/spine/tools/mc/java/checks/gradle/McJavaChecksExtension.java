@@ -29,6 +29,8 @@ package io.spine.tools.mc.java.checks.gradle;
 import io.spine.tools.mc.checks.Severity;
 import org.gradle.api.Project;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Allows configuring severity for all the Spine Java Checks applied to the project.
  *
@@ -46,14 +48,13 @@ public class McJavaChecksExtension {
      * Creates an instance of the extension in the given project.
      */
     static void createIn(Project project) {
+        checkNotNull(project);
         project.getExtensions()
                .create(name(), McJavaChecksExtension.class);
     }
 
     public static Severity getUseValidatingBuilderSeverity(Project project) {
-        McJavaChecksExtension extension = (McJavaChecksExtension)
-                project.getExtensions()
-                       .getByName(name());
+        var extension = (McJavaChecksExtension) project.getExtensions().getByName(name());
         return extension.useValidatingBuilderSeverity;
     }
 

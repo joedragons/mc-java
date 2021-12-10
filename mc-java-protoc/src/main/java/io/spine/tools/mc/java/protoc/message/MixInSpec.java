@@ -63,9 +63,9 @@ final class MixInSpec {
      * @see InterfaceGen#generate(Type)
      */
     static ImmutableList<CompilerOutput> scanOptionsFor(MessageType type) {
-        ImmutableList<CompilerOutput> fromFileOption = scanEveryIsOption(type);
-        ImmutableList<CompilerOutput> fromTypeOption = scanIsOption(type);
-        ImmutableSet<CompilerOutput> deduplicated = ImmutableSet.<CompilerOutput>builder()
+        var fromFileOption = scanEveryIsOption(type);
+        var fromTypeOption = scanIsOption(type);
+        var deduplicated = ImmutableSet.<CompilerOutput>builder()
                 .addAll(fromFileOption)
                 .addAll(fromTypeOption)
                 .build();
@@ -90,18 +90,18 @@ final class MixInSpec {
         if (option == null) {
             return ImmutableList.of();
         }
-        MixInSpec mix = mixFor(type, option);
+        var mix = mixFor(type, option);
         return mix.asList();
     }
 
     private static MixInSpec mixFor(MessageType type, IsOption isOption) {
-        UserDefinedInterface fromOption = UserDefinedInterface.declaredFor(type, isOption);
-        Implement standard = interfaceFor(type, fromOption);
+        var fromOption = UserDefinedInterface.declaredFor(type, isOption);
+        var standard = interfaceFor(type, fromOption);
         @Nullable UserDefinedInterface custom =
                 isOption.getGenerate()
                 ? fromOption
                 : null;
-        MixInSpec result = new MixInSpec(standard, custom);
+        var result = new MixInSpec(standard, custom);
         return result;
     }
 
@@ -122,7 +122,7 @@ final class MixInSpec {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MixInSpec that = (MixInSpec) o;
+        var that = (MixInSpec) o;
         return Objects.equal(standardInterface, that.standardInterface) &&
                 Objects.equal(customInterface, that.customInterface);
     }

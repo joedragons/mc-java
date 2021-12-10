@@ -26,10 +26,8 @@
 
 package io.spine.tools.mc.java.protoc;
 
-import com.google.common.truth.StringSubject;
 import io.spine.tools.protoc.plugin.EnhancedWithCodeGeneration;
 import io.spine.type.MessageType;
-import io.spine.type.TypeName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,16 +37,16 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
-@DisplayName("InsertionPoint should")
+@DisplayName("`InsertionPoint` should")
 final class InsertionPointTest {
 
     @DisplayName("create valid Protoc insertion point")
     @ParameterizedTest(name = "\"{0}\"")
     @EnumSource(value = InsertionPoint.class, names = "outer_class_scope", mode = EXCLUDE)
     void createValidInsertionPoint(InsertionPoint insertionPoint) {
-        MessageType testMessage = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
-        TypeName typeName = testMessage.name();
-        StringSubject subject = assertThat(insertionPoint.forType(testMessage));
+        var testMessage = new MessageType(EnhancedWithCodeGeneration.getDescriptor());
+        var typeName = testMessage.name();
+        var subject = assertThat(insertionPoint.forType(testMessage));
         subject.contains(typeName.toString());
         subject.contains(":");
         subject.contains(insertionPoint.getDefinition());
@@ -57,7 +55,7 @@ final class InsertionPointTest {
     @DisplayName("create valid \"outer_class_scope\" insertion point")
     @Test
     void createValidOuterClassScopeInsertionPoint() {
-        String actual = InsertionPoint.outer_class_scope.forType(null);
+        var actual = InsertionPoint.outer_class_scope.forType(null);
         assertEquals(InsertionPoint.outer_class_scope.getDefinition(), actual);
     }
 }

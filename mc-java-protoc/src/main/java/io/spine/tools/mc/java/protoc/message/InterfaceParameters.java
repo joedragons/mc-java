@@ -47,7 +47,7 @@ public final class InterfaceParameters {
     }
 
     public static InterfaceParameters of(InterfaceParameter... param) {
-        ImmutableList<InterfaceParameter> params = ImmutableList.copyOf(param);
+        var params = ImmutableList.copyOf(param);
         return new InterfaceParameters(params);
     }
 
@@ -69,7 +69,7 @@ public final class InterfaceParameters {
         if (params.isEmpty()) {
             return "";
         }
-        String result = '<' + joinFor(type) + '>';
+        var result = '<' + joinFor(type) + '>';
         return result;
     }
 

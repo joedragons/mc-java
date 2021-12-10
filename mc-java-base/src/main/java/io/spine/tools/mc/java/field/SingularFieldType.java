@@ -34,8 +34,6 @@ import com.squareup.javapoet.TypeName;
 import io.spine.code.java.PrimitiveType;
 import io.spine.code.proto.FieldDeclaration;
 
-import java.util.Optional;
-
 import static com.google.protobuf.Descriptors.FieldDescriptor.JavaType.STRING;
 import static io.spine.tools.mc.java.field.Accessor.prefix;
 import static io.spine.tools.mc.java.field.Accessor.prefixAndPostfix;
@@ -102,18 +100,16 @@ final class SingularFieldType implements FieldType {
     }
 
     private static TypeName constructTypeNameFor(String name) {
-        Optional<? extends Class<?>> boxedScalarPrimitive =
-                PrimitiveType.getWrapperClass(name);
+        var boxedScalarPrimitive = PrimitiveType.getWrapperClass(name);
 
         if (boxedScalarPrimitive.isPresent()) {
-            TypeName unboxed = TypeName.get(boxedScalarPrimitive.get())
-                                       .unbox();
+            var unboxed = TypeName.get(boxedScalarPrimitive.get()).unbox();
             return unboxed;
         }
 
         // Make a possibly nested class name use the dot notation.
-        String dottedName = name.replace('$', '.');
-        ClassName result = ClassName.bestGuess(dottedName);
+        var dottedName = name.replace('$', '.');
+        var result = ClassName.bestGuess(dottedName);
         return result;
     }
 }

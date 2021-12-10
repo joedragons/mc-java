@@ -68,7 +68,7 @@ class RequiredConstraintTest {
     @Test
     @DisplayName("a number field can have any value")
     void ignoreNumbers() {
-        Singulars.Builder singulars = Singulars.newBuilder()
+        var singulars = Singulars.newBuilder()
                 .setOneOrMoreBytes(ByteString.copyFromUtf8("qwerty"))
                 .setNotVegetable(CHICKEN)
                 .setNotEmptyString("   ")
@@ -92,8 +92,7 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("must have a non-empty value")
         void acceptNonEmptyString() {
-            Singulars.Builder singulars = Singulars
-                    .newBuilder()
+            var singulars = Singulars.newBuilder()
                     .setNotEmptyString(" ")
                     .setNotVegetable(FISH)
                     .setNotDefault(Enclosed.newBuilder().setValue("  "))
@@ -190,7 +189,7 @@ class RequiredConstraintTest {
         @Test
         @DisplayName("cannot be of type `google.protobuf.Empty`")
         void notAllowEmptyRequired() {
-            final String fieldName = "impossible";
+            final var fieldName = "impossible";
 
             AlwaysInvalid.Builder unset = AlwaysInvalid.newBuilder();
             checkViolation(unset, fieldName);
@@ -205,7 +204,7 @@ class RequiredConstraintTest {
     @Test
     @DisplayName("all violations on a single message are collected")
     void collectManyViolations() {
-        Singulars instance = Singulars.getDefaultInstance();
+        var instance = Singulars.getDefaultInstance();
         Optional<ValidationError> error = instance.validate();
         assertThat(error)
                 .isPresent();

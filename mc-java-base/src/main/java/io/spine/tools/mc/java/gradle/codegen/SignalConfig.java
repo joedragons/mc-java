@@ -77,8 +77,7 @@ public final class SignalConfig extends MessageGroupConfig<Signals> {
     void convention(MessageFile file,
                     Class<? extends SignalMessage> interfaceClass,
                     @Nullable Class<?> fieldSuperclass) {
-        FilePattern pattern = FilePattern
-                .newBuilder()
+        var pattern = FilePattern.newBuilder()
                 .setSuffix(file.suffix())
                 .build();
         convention(pattern);

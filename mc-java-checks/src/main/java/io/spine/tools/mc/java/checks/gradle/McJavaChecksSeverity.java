@@ -33,7 +33,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.invocation.Gradle;
-import org.gradle.api.plugins.PluginContainer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.mc.java.checks.gradle.McJavaChecksExtension.getUseValidatingBuilderSeverity;
@@ -47,6 +46,9 @@ import static io.spine.tools.mc.java.checks.gradle.McJavaChecksExtension.getUseV
 public final class McJavaChecksSeverity implements Logging {
 
     static final String ERROR_PRONE_PLUGIN_ID = "net.ltgt.errorprone";
+
+    @VisibleForTesting
+    static final String EQUALITY_ERROR = "-Xep:ReferenceEquality:ERROR";
 
     private final Project project;
     private @Nullable Boolean hasErrorPronePlugin;
@@ -73,7 +75,7 @@ public final class McJavaChecksSeverity implements Logging {
      */
     public void addConfigureSeverityAction() {
         Action<Gradle> configureCheckSeverity = g -> configureCheckSeverity();
-        Gradle gradle = project.getGradle();
+        var gradle = project.getGradle();
         gradle.projectsEvaluated(configureCheckSeverity);
     }
 
@@ -95,7 +97,7 @@ public final class McJavaChecksSeverity implements Logging {
      */
     private boolean hasErrorPronePlugin() {
         if (hasErrorPronePlugin == null) {
-            PluginContainer appliedPlugins = project.getPlugins();
+            var appliedPlugins = project.getPlugins();
             hasErrorPronePlugin = appliedPlugins.hasPlugin(ERROR_PRONE_PLUGIN_ID);
         }
         return hasErrorPronePlugin;
@@ -105,7 +107,7 @@ public final class McJavaChecksSeverity implements Logging {
      * Configures default level of check severities.
      */
     private void configureSeverities() {
-        Severity severity = getUseValidatingBuilderSeverity(project);
+        var severity = getUseValidatingBuilderSeverity(project);
         if (severity == null) {
             severity = Severity.WARN;
         }
@@ -119,7 +121,7 @@ public final class McJavaChecksSeverity implements Logging {
                 .of(project)
                 // Pass already present check to demo the API.
                 // Enumerate our custom checks doing the same later.
-                .addArgs("-Xep:ReferenceEquality:ERROR"/*, severityArg*/);
+                .addArgs(EQUALITY_ERROR/*, severityArg*/);
     }
 
     /**

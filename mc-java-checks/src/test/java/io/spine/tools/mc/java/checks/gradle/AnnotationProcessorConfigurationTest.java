@@ -36,7 +36,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
-import static io.spine.tools.gradle.ConfigurationName.annotationProcessor;
+import static io.spine.tools.gradle.JavaConfigurationName.annotationProcessor;
 
 @DisplayName("`AnnotationProcessorConfiguration` should")
 class AnnotationProcessorConfigurationTest
@@ -64,8 +64,8 @@ class AnnotationProcessorConfigurationTest
         assertThat(configurations.findByName(annotationProcessor.value()))
                 .isNull();
 
-        Configuration cfg = AnnotationProcessorConfiguration.findOrCreateIn(project);
-        Configuration found = configurations.findByName(annotationProcessor.value());
+        var cfg = AnnotationProcessorConfiguration.findOrCreateIn(project);
+        var found = configurations.findByName(annotationProcessor.value());
         assertThat(cfg)
                 .isEqualTo(found);
     }

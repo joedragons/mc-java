@@ -57,13 +57,12 @@ final class InterfaceSpec {
     }
 
     static InterfaceSpec createFor(MessageType declaringType, IsOption isOption) {
-        String javaType = isOption.getJavaType();
+        var javaType = isOption.getJavaType();
         InterfaceSpec spec;
         if (javaType.contains(delimiter())) {
             spec = from(javaType);
         } else {
-            String javaPackage = declaringType.javaPackage()
-                                              .value();
+            var javaPackage = declaringType.javaPackage().value();
             spec = new InterfaceSpec(javaPackage, javaType);
         }
         return spec;
@@ -73,9 +72,9 @@ final class InterfaceSpec {
      * Parses a {@code MessageInterfaceSpec} from the given type fully qualified name.
      */
     private static InterfaceSpec from(String fullName) {
-        int index = fullName.lastIndexOf(delimiter());
-        String name = fullName.substring(index + 1);
-        String packageName = fullName.substring(0, index);
+        var index = fullName.lastIndexOf(delimiter());
+        var name = fullName.substring(index + 1);
+        var packageName = fullName.substring(0, index);
         return new InterfaceSpec(packageName, name);
     }
 
@@ -83,20 +82,17 @@ final class InterfaceSpec {
      * Converts the instance to {@link JavaFile}.
      */
     JavaFile toJavaCode() {
-        TypeSpec spec = TypeSpec
-                .interfaceBuilder(name())
+        var spec = TypeSpec.interfaceBuilder(name())
                 .addSuperinterface(Message.class)
                 .addModifiers(PUBLIC)
                 .addAnnotation(GeneratedBy.spineModelCompiler())
                 .build();
-        JavaFile javaFile = JavaFile
-                .builder(packageName, spec)
-                .build();
+        var javaFile = JavaFile.builder(packageName, spec).build();
         return javaFile;
     }
 
     SourceFile toSourceFile() {
-        SourceFile result = SourceFile.forType(packageName, name);
+        var result = SourceFile.forType(packageName, name);
         return result;
     }
 
@@ -126,7 +122,7 @@ final class InterfaceSpec {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        InterfaceSpec other = (InterfaceSpec) obj;
+        var other = (InterfaceSpec) obj;
         return Objects.equals(this.packageName, other.packageName)
                 && Objects.equals(this.name, other.name);
     }

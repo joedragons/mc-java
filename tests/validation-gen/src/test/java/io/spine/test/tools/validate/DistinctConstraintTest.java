@@ -45,8 +45,7 @@ class DistinctConstraintTest {
     @Test
     @DisplayName("duplicates result in a violation")
     void notUnique() {
-        ProtoSet msg = ProtoSet
-                .newBuilder()
+        var msg = ProtoSet.newBuilder()
                 .addElement(toAny("123"))
                 .addElement(toAny("321"))
                 .addElement(toAny("123"))
@@ -57,18 +56,16 @@ class DistinctConstraintTest {
         List<ConstraintViolation> violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
-                .containsExactly(ConstraintViolation
-                                         .newBuilder()
+                .containsExactly(ConstraintViolation.newBuilder()
                                          .setFieldPath(FieldPath.newBuilder()
-                                                                .addFieldName("element"))
+                                                               .addFieldName("element"))
                                          .build());
     }
 
     @Test
     @DisplayName("unique elements do not result in a violation")
     void unique() {
-        ProtoSet msg = ProtoSet
-                .newBuilder()
+        var msg = ProtoSet.newBuilder()
                 .addElement(toAny("42"))
                 .addElement(toAny(42))
                 .build();
@@ -79,9 +76,7 @@ class DistinctConstraintTest {
     @Test
     @DisplayName("empty list does not result in a violation")
     void empty() {
-        ProtoSet msg = ProtoSet
-                .newBuilder()
-                .build();
+        var msg = ProtoSet.newBuilder().build();
         assertThat(msg.validate())
                 .isEmpty();
     }

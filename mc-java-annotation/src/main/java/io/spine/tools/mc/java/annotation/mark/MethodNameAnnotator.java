@@ -65,13 +65,13 @@ final class MethodNameAnnotator extends Annotator {
     public void annotate() {
         if (!patterns.isEmpty()) {
             SourceVisitor<?> visitor = new AnnotateMethods();
-            descriptors().stream()
-                         .map(TypeSet::from)
-                         .map(TypeSet::allTypes)
-                         .flatMap(ImmutableSet::stream)
-                         .map(Type::javaClassName)
-                         .map(SourceFile::whichDeclares)
-                         .forEach(file -> rewriteSource(file, visitor));
+            fileDescriptors().stream()
+                    .map(TypeSet::from)
+                    .map(TypeSet::allTypes)
+                    .flatMap(ImmutableSet::stream)
+                    .map(Type::javaClassName)
+                    .map(SourceFile::whichDeclares)
+                    .forEach(file -> rewriteSource(file, visitor));
         }
     }
 
@@ -93,7 +93,7 @@ final class MethodNameAnnotator extends Annotator {
         }
 
         private boolean matching(Method<?, ?> method) {
-            String methodName = method.getName();
+            var methodName = method.getName();
             return patterns.stream()
                            .anyMatch(pattern -> pattern.matches(methodName));
         }

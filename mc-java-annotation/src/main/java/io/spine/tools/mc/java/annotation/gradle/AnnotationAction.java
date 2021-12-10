@@ -26,23 +26,22 @@
 
 package io.spine.tools.mc.java.annotation.gradle;
 
-import com.google.common.collect.ImmutableSet;
-import io.spine.code.java.ClassName;
 import io.spine.logging.Logging;
 import io.spine.tools.gradle.SourceSetName;
 import io.spine.tools.mc.java.annotation.mark.AnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.DefaultAnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.ModuleAnnotator;
-import io.spine.tools.mc.java.gradle.CodeGenAnnotations;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.logging.Logger;
 
 import java.io.File;
-import java.nio.file.Path;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.tools.gradle.ProtobufDependencies.sourceSetExtensionName;
 import static io.spine.tools.gradle.project.Projects.descriptorSetFile;
+import static io.spine.tools.gradle.project.Projects.protoDirectorySet;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.beta;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.experimental;
 import static io.spine.tools.mc.java.annotation.mark.ApiOption.internal;
@@ -53,43 +52,55 @@ import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalClassPatter
 import static io.spine.tools.mc.java.gradle.McJavaOptions.getInternalMethodNames;
 import static io.spine.tools.mc.java.gradle.Projects.generatedGrpcDir;
 import static io.spine.tools.mc.java.gradle.Projects.generatedJavaDir;
+import static io.spine.tools.proto.fs.Directory.rootName;
 
 /**
- * A task action which performs generated code annotation.
+ * A task action which annotates the generated code.
  */
 final class AnnotationAction implements Action<Task>, Logging {
 
-    private final SourceSetName sourceSet;
+    private final SourceSetName sourceSetName;
 
     /**
      * Creates a new action instance.
-     *
-     * @param mainCode
-     *         if {@code true} the production code will be annotated,
-     *         otherwise the action will annotate the code of tests
      */
-    AnnotationAction(boolean mainCode) {
-        this.sourceSet = mainCode ? SourceSetName.main : SourceSetName.test;
+    AnnotationAction(SourceSetName ssn) {
+        this.sourceSetName = checkNotNull(ssn);
     }
 
     @Override
     public void execute(Task task) {
-        Project project = task.getProject();
-        File descriptorSetFile = descriptorSetFile(project, sourceSet);
+        var project = task.getProject();
+        if (!containsProtoCode(project)) {
+            return;
+        }
+        var descriptorSetFile = descriptorSetFile(project, sourceSetName);
         if (!descriptorSetFile.exists()) {
             logMissing(project.getLogger(), descriptorSetFile);
             return;
         }
-        ModuleAnnotator annotator = createAnnotator(project);
+        var annotator = createAnnotator(project);
         annotator.annotate();
     }
 
+    /** Verifies of the source set of the given project contains Protobuf source code. */
+    private boolean containsProtoCode(Project project) {
+        var protoSet = protoDirectorySet(project, sourceSetName);
+        if (protoSet == null) {
+            return false;
+        }
+        var dirs = protoSet.getSourceDirectories().getFiles();
+        var hasProtoDir = dirs.stream()
+                .anyMatch(dir -> dir.getPath().endsWith(rootName()));
+        return hasProtoDir;
+    }
+
     private ModuleAnnotator createAnnotator(Project project) {
-        AnnotatorFactory annotatorFactory = createAnnotationFactory(project);
-        CodeGenAnnotations annotations = getCodeGenAnnotations(project);
-        ClassName internalClassName = annotations.internalClassName();
-        ImmutableSet<String> internalClassPatterns = getInternalClassPatterns(project);
-        ImmutableSet<String> internalMethodNames = getInternalMethodNames(project);
+        var annotatorFactory = createAnnotationFactory(project);
+        var annotations = getCodeGenAnnotations(project);
+        var internalClassName = annotations.internalClassName();
+        var internalClassPatterns = getInternalClassPatterns(project);
+        var internalMethodNames = getInternalMethodNames(project);
         return ModuleAnnotator.newBuilder()
                 .setAnnotatorFactory(annotatorFactory)
                 .add(translate(spi()).as(annotations.spiClassName()))
@@ -103,24 +114,28 @@ final class AnnotationAction implements Action<Task>, Logging {
     }
 
     private AnnotatorFactory createAnnotationFactory(Project project) {
-        File descriptorSetFile = descriptorSetFile(project, sourceSet);
-        Path generatedJavaPath = generatedJavaDir(project, sourceSet);
-        Path generatedGrpcPath = generatedGrpcDir(project, sourceSet);
-        AnnotatorFactory annotatorFactory = DefaultAnnotatorFactory.newInstance(
+        var ssn = sourceSetName;
+        var descriptorSetFile = descriptorSetFile(project, ssn);
+        var generatedJavaPath = generatedJavaDir(project, ssn);
+        var generatedGrpcPath = generatedGrpcDir(project, ssn);
+        var annotatorFactory = DefaultAnnotatorFactory.newInstance(
                 descriptorSetFile, generatedJavaPath, generatedGrpcPath
         );
         return annotatorFactory;
     }
 
-    private static void logMissing(Logger logger, File descriptorSetFile) {
-        String nl = System.lineSeparator();
+    private void logMissing(Logger logger, File descriptorSetFile) {
+        var nl = System.lineSeparator();
         logger.warn(
-                "Missing descriptor set file `{}`." + nl +
+                "Missing descriptor set file `{}`" +
+                        " produced for the source set `{}` which has `{}` extension." + nl +
                         "Please enable descriptor set generation." + nl +
                         "See: " +
                         "https://github.com/google/protobuf-gradle-plugin/blob/master/README.md" +
                         "#generate-descriptor-set-files",
-                descriptorSetFile.getPath()
+                descriptorSetFile.getPath(),
+                sourceSetName,
+                sourceSetExtensionName
         );
     }
 }

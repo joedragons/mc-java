@@ -61,8 +61,7 @@ class CustomConstraintsTest {
     @Test
     @DisplayName("be applied to validated messages")
     void application() {
-        ByteMatrix matrix = ByteMatrix
-                .newBuilder()
+        var matrix = ByteMatrix.newBuilder()
                 .addValue(ByteString.copyFrom(new byte[]{42}))
                 .addValue(ByteString.EMPTY)
                 .buildPartial();
@@ -71,18 +70,16 @@ class CustomConstraintsTest {
                 .isPresent();
         assertThat(error.get().getConstraintViolationList())
                 .comparingExpectedFieldsOnly()
-                .containsExactly(ConstraintViolation
-                                         .newBuilder()
+                .containsExactly(ConstraintViolation.newBuilder()
                                          .setFieldPath(FieldPath.newBuilder()
-                                                                .addFieldName("value"))
+                                                               .addFieldName("value"))
                                          .build());
     }
 
     @Test
     @DisplayName("be applied to valid messages and pass")
     void validMessages() {
-        ByteMatrix matrix = ByteMatrix
-                .newBuilder()
+        var matrix = ByteMatrix.newBuilder()
                 .addValue(ByteString.copyFrom(new byte[]{42}))
                 .build();
         assertThat(matrix.validate())

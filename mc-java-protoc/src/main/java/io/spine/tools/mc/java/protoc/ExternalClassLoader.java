@@ -59,7 +59,7 @@ public final class ExternalClassLoader<T> implements Logging {
 
     public T newInstance(@FullyQualifiedName String className) {
         checkNotEmptyOrBlank(className);
-        T result = from(className);
+        var result = from(className);
         return result;
     }
 
@@ -67,10 +67,9 @@ public final class ExternalClassLoader<T> implements Logging {
      * Instantiates the class defined by the specified fully-qualified name.
      */
     private T from(String fqn) {
-        Class<T> clazz = loadClass(fqn);
+        var clazz = loadClass(fqn);
         try {
-            T instance = clazz.getConstructor()
-                              .newInstance();
+            var instance = clazz.getConstructor().newInstance();
             return instance;
         } catch (InstantiationException | IllegalAccessException
                 | NoSuchMethodException | InvocationTargetException e) {
@@ -82,7 +81,7 @@ public final class ExternalClassLoader<T> implements Logging {
 
     @SuppressWarnings("unchecked") // The class is already checked to be assignable during the cast.
     private Class<T> loadClass(String fqn) {
-        Class<?> factory = classByFqn(fqn);
+        var factory = classByFqn(fqn);
         if (loadedClass.isAssignableFrom(factory)) {
             return (Class<T>) factory;
         }
@@ -92,7 +91,7 @@ public final class ExternalClassLoader<T> implements Logging {
 
     private Class<?> classByFqn(String fqn) {
         try {
-            Class<?> factory = classLoader.loadClass(fqn);
+            var factory = classLoader.loadClass(fqn);
             return factory;
         } catch (ClassNotFoundException e) {
             _error().withCause(e)
@@ -102,10 +101,9 @@ public final class ExternalClassLoader<T> implements Logging {
     }
 
     private static ClassLoader classLoader(Classpath factoryClasspath) {
-        ClassLoader currentClassLoader = Thread.currentThread()
-                                               .getContextClassLoader();
-        URL[] classPathUrls = classPathUrls(factoryClasspath);
-        URLClassLoader loader = URLClassLoader.newInstance(classPathUrls, currentClassLoader);
+        var currentClassLoader = Thread.currentThread().getContextClassLoader();
+        var classPathUrls = classPathUrls(factoryClasspath);
+        var loader = URLClassLoader.newInstance(classPathUrls, currentClassLoader);
         return loader;
     }
 

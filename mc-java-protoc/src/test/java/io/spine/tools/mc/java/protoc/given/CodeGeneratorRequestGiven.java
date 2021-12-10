@@ -84,7 +84,7 @@ public final class CodeGeneratorRequestGiven {
      * Creates a builder for {@code SpineProtocConfig} with all the validation features turned off.
      */
     public static CodegenOptions.Builder optionsWithoutValidation() {
-        CodegenOptions.Builder builder = CodegenOptions.newBuilder();
+        var builder = CodegenOptions.newBuilder();
         builder.getValidationBuilder()
                .setSkipBuilders(true)
                .setSkipValidation(true);
@@ -113,7 +113,7 @@ public final class CodeGeneratorRequestGiven {
      * Creates a {@link GenerateMethods} config with the given factory class.
      */
     public static GenerateMethods generateMethods(Class<?> factory) {
-        MethodFactoryName factoryName = methodFactory(factory);
+        var factoryName = methodFactory(factory);
         return GenerateMethods.newBuilder()
                 .setFactory(factoryName)
                 .build();
@@ -152,7 +152,7 @@ public final class CodeGeneratorRequestGiven {
      * @return the path to the serialized config, encoded in Base64
      */
     public static String protocConfig(CodegenOptions config, Path configFile) {
-        try (FileOutputStream fos = new FileOutputStream(configFile.toFile())) {
+        try (var fos = new FileOutputStream(configFile.toFile())) {
             config.writeTo(fos);
         } catch (IOException e) {
             throw new IllegalStateException(e);
@@ -161,9 +161,8 @@ public final class CodeGeneratorRequestGiven {
     }
 
     private static String base64Encoded(String value) {
-        byte[] valueBytes = value.getBytes(UTF_8);
-        String result = Base64.getEncoder()
-                              .encodeToString(valueBytes);
+        var valueBytes = value.getBytes(UTF_8);
+        var result = Base64.getEncoder().encodeToString(valueBytes);
         return result;
     }
 

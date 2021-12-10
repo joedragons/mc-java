@@ -119,7 +119,7 @@ public enum InsertionPoint {
      * Creates Protoc insertion point for the supplied type.
      */
     public String forType(Type<?, ?> protobufType) {
-        String result = format("%s:%s", getDefinition(), protobufType.name());
+        var result = format("%s:%s", getDefinition(), protobufType.name());
         return result;
     }
 }

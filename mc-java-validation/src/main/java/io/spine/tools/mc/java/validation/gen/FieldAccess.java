@@ -65,7 +65,7 @@ final class FieldAccess extends CodeExpression<Object> {
     public static FieldAccess fieldOfMessage(MessageAccess message, FieldDeclaration field) {
         checkNotNull(message);
         checkNotNull(field);
-        FieldName fieldName = field.name();
+        var fieldName = field.name();
         if (field.isNotCollection()) {
             return singularField(message, fieldName);
         } else if (field.isMap()) {
@@ -91,7 +91,7 @@ final class FieldAccess extends CodeExpression<Object> {
     fromTemplate(String template, MessageAccess receiver, FieldName field) {
         checkNotNull(receiver);
         checkNotNull(field);
-        String expression = format(template, receiver, field.toCamelCase());
+        var expression = format(template, receiver, field.toCamelCase());
         return new FieldAccess(expression);
     }
 }

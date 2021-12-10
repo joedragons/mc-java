@@ -26,9 +26,7 @@
 package io.spine.tools.mc.java.gradle;
 
 import io.spine.tools.gradle.task.TaskName;
-import io.spine.tools.gradle.testing.TaskSubject;
 import io.spine.tools.mc.java.gradle.given.StubProject;
-import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.PluginManager;
 import org.gradle.api.tasks.TaskContainer;
@@ -57,10 +55,9 @@ class McJavaPluginTest {
 
     @BeforeEach
     void createProjectWithPlugin() {
-        Project project =
-                StubProject.createFor(getClass())
-                           .withMavenRepositories()
-                           .get();
+        var project = StubProject.createFor(getClass())
+                                 .withMavenRepositories()
+                                 .get();
         PluginManager plugins = project.getPluginManager();
         plugins.apply("java");
         plugins.apply("com.google.protobuf");
@@ -117,7 +114,7 @@ class McJavaPluginTest {
          *         the name of the task which depends on the asserted task.
          */
         void assertDependencies(TaskName task, TaskName dependency, TaskName dependantTask) {
-            TaskSubject assertTask = assertThat(task(task));
+            var assertTask = assertThat(task(task));
 
             assertTask.dependsOn(dependency)
                       .isTrue();
@@ -126,7 +123,7 @@ class McJavaPluginTest {
         }
 
         private Task task(TaskName taskName) {
-            Task task = tasks.getByName(taskName.name());
+            var task = tasks.getByName(taskName.name());
             assertThat(task).isNotNull();
             return task;
         }

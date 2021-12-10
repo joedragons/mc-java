@@ -57,9 +57,8 @@ class ValidationCodeGenTest {
     @Test
     @DisplayName("throw `UnsupportedOperationException` upon `CustomConstraint`")
     void notAllowCustom() {
-        CustomConstraint constraint = FakeConstraint.INSTANCE;
-        ValidationCodeGenerator compiler =
-                new ValidationCodeGenerator("test", constraint.targetType());
+        var constraint = FakeConstraint.INSTANCE;
+        var compiler = new ValidationCodeGenerator("test", constraint.targetType());
         assertThrows(UnsupportedOperationException.class, () -> compiler.visitCustom(constraint));
     }
 

@@ -33,7 +33,6 @@ import io.spine.code.proto.FieldDeclaration;
 import io.spine.validate.ConstraintTranslator;
 import io.spine.validate.ConstraintViolation;
 import io.spine.validate.CustomConstraint;
-import io.spine.validate.FieldValue;
 import io.spine.validate.MessageValue;
 import io.spine.validate.option.FieldConstraint;
 
@@ -58,10 +57,10 @@ public final class AllRequiredConstraint
 
     @Override
     public ImmutableList<ConstraintViolation> validate(MessageValue containingMessage) {
-        FieldValue value = containingMessage.valueOf(field());
-        long count = value.values().count();
-        long countOfNonDefault = value.nonDefault().count();
-        FieldContext context = value.context();
+        var value = containingMessage.valueOf(field());
+        var count = value.values().count();
+        var countOfNonDefault = value.nonDefault().count();
+        var context = value.context();
         return count > countOfNonDefault
                ? ImmutableList.of(
                 ConstraintViolation

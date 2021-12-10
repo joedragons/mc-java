@@ -58,7 +58,3 @@ fun getResolvedArtifactFor(dependency: String): String {
     }
     return javacDependency[0].file.absolutePath
 }
-
-val test: Test = tasks.test.get()
-val javacPath = getResolvedArtifactFor("javac")
-test.jvmArgs("-Xbootclasspath/p:$javacPath")

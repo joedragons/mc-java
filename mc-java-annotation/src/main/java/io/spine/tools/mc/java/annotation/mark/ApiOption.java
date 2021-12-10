@@ -125,7 +125,7 @@ public final class ApiOption {
      * @return {@code true} if the option is present in the declaration, {@code false} otherwise
      */
     boolean isPresentAt(FileDescriptor descriptor) {
-        FileOptions options = descriptor.getOptions();
+        var options = descriptor.getOptions();
         return optionPresent(options, fileOption);
     }
 
@@ -137,7 +137,7 @@ public final class ApiOption {
      * @return {@code true} if the option is present in the declaration, {@code false} otherwise
      */
     boolean isPresentAt(Descriptor descriptor) {
-        MessageOptions options = descriptor.getOptions();
+        var options = descriptor.getOptions();
         return optionPresent(options, messageOption);
     }
 
@@ -150,7 +150,7 @@ public final class ApiOption {
      */
     boolean isPresentAt(ServiceDescriptor descriptor) {
         checkState(serviceOption != null, "Option %s does not support services.", this);
-        ServiceOptions options = descriptor.getOptions();
+        var options = descriptor.getOptions();
         return optionPresent(options, serviceOption);
     }
 
@@ -163,7 +163,7 @@ public final class ApiOption {
      */
     boolean isPresentAt(FieldDescriptor descriptor) {
         checkState(fieldOption != null, "Option %s does not support fields.", this);
-        FieldOptions options = descriptor.getOptions();
+        var options = descriptor.getOptions();
         return optionPresent(options, fieldOption);
     }
 

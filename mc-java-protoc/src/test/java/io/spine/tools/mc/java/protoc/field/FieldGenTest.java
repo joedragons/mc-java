@@ -33,15 +33,12 @@ import io.spine.tools.mc.java.codegen.GenerateFields;
 import io.spine.tools.mc.java.codegen.Messages;
 import io.spine.tools.mc.java.codegen.Pattern;
 import io.spine.tools.mc.java.gradle.codegen.FilePatterns;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.protoc.plugin.nested.Task;
 import io.spine.tools.protoc.plugin.nested.TaskView;
 import io.spine.type.EnumType;
 import io.spine.type.MessageType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
 
 import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.DisplayNames.NOT_ACCEPT_NULLS;
@@ -60,11 +57,11 @@ class FieldGenTest {
     @Test
     @DisplayName("generate code for message types where appropriate")
     void generateCodeForMessages() {
-        CodegenOptions config = newConfig();
+        var config = newConfig();
 
-        FieldGen generator = FieldGen.instance(config);
-        MessageType type = new MessageType(TaskView.getDescriptor());
-        Collection<CompilerOutput> output = generator.generate(type);
+        var generator = FieldGen.instance(config);
+        var type = new MessageType(TaskView.getDescriptor());
+        var output = generator.generate(type);
 
         assertThat(output)
                 .isNotEmpty();
@@ -73,21 +70,21 @@ class FieldGenTest {
     @Test
     @DisplayName("ignore non-`Message` types")
     void ignoreNonMessageTypes() {
-        CodegenOptions config = newConfig();
+        var config = newConfig();
 
-        FieldGen generator = FieldGen.instance(config);
-        EnumType enumType = EnumType.create(Task.Priority.getDescriptor());
-        Collection<CompilerOutput> output = generator.generate(enumType);
+        var generator = FieldGen.instance(config);
+        var enumType = EnumType.create(Task.Priority.getDescriptor());
+        var output = generator.generate(enumType);
 
         assertThat(output)
                 .isEmpty();
     }
 
     private static CodegenOptions newConfig() {
-        Messages.Builder messages = Messages.newBuilder();
+        var messages = Messages.newBuilder();
         messages.setPattern(
                 Pattern.newBuilder().setFile(FilePatterns.fileSuffix("test_fields.proto")));
-        GenerateFields generateFields = GenerateFields.newBuilder()
+        var generateFields = GenerateFields.newBuilder()
                 .setSuperclass(className(SubscribableField.class))
                 .build();
         messages.setGenerateFields(generateFields);

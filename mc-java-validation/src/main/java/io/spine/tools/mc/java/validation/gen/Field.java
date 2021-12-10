@@ -59,7 +59,7 @@ final class Field implements ClassMember {
         if (!(o instanceof Field)) {
             return false;
         }
-        Field field = (Field) o;
+        var field = (Field) o;
         return Objects.equal(fieldSpec, field.fieldSpec);
     }
 

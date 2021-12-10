@@ -26,9 +26,7 @@
 
 package io.spine.test.options;
 
-import com.google.protobuf.Descriptors;
 import com.google.protobuf.Extension;
-import com.google.protobuf.ExtensionRegistry;
 import io.spine.code.proto.OptionExtensionRegistry;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +35,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static io.spine.option.OptionsProto.required;
 import static io.spine.test.options.BytesDirectionOptionProto.direction;
 
-@DisplayName("OptionExtensionRegistry should")
+@DisplayName("`OptionExtensionRegistry` should")
 class OptionsRegistryTest {
 
     @Test
@@ -53,11 +51,10 @@ class OptionsRegistryTest {
     }
 
     private static void assertContains(Extension<?, ?> option) {
-        ExtensionRegistry registry = OptionExtensionRegistry.instance();
-        Descriptors.FieldDescriptor descriptor = option.getDescriptor();
-        String name = descriptor.getFullName();
-        ExtensionRegistry.ExtensionInfo registeredExtension = registry
-                .findImmutableExtensionByName(name);
+        var registry = OptionExtensionRegistry.instance();
+        var descriptor = option.getDescriptor();
+        var name = descriptor.getFullName();
+        var registeredExtension = registry.findImmutableExtensionByName(name);
         assertThat(registeredExtension).isNotNull();
         assertThat(registeredExtension.descriptor).isEqualTo(descriptor);
     }

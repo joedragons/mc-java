@@ -105,7 +105,7 @@ interface Expression<R> {
     @FormatMethod
     static <R> Expression<R> formatted(@FormatString String template, Object... args) {
         checkNotNull(template);
-        String code = format(template, args);
+        var code = format(template, args);
         return of(code);
     }
 }

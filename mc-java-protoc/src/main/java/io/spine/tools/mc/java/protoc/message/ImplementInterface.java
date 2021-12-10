@@ -54,9 +54,9 @@ abstract class ImplementInterface implements CodeGenerationTask {
      */
     @Override
     public ImmutableList<CompilerOutput> generateFor(MessageType type) {
-        InterfaceParameters params = interfaceParameters(type);
+        var params = interfaceParameters(type);
         Interface iface = new ExistingInterface(interfaceName, params);
-        Implement result = Implement.interfaceFor(type, iface);
+        var result = Implement.interfaceFor(type, iface);
         return ImmutableList.of(result);
     }
 }

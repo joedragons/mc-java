@@ -83,7 +83,7 @@ abstract class ConfigWithFields<P extends Message> extends ConfigWithInterfaces<
      */
     final GenerateFields generateFields() {
         GenerateFields generateFields;
-        String superclassName = markFieldsAs.getOrElse("");
+        var superclassName = markFieldsAs.getOrElse("");
         if (superclassName.isEmpty()) {
             generateFields = GenerateFields.getDefaultInstance();
         } else {
