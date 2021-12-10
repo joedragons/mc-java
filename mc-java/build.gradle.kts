@@ -84,6 +84,5 @@ tasks.test {
 
 tasks.withType<WriteVersions> {
     version(Grpc.protobufPlugin)
-    version(Spine.ProtoData.pluginLib)
     version(validation.java)
 }

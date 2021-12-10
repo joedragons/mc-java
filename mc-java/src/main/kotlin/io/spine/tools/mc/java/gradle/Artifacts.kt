@@ -85,3 +85,13 @@ internal val mcJavaVersion: String by lazy {
     versions.versionOf(self)
         .orElseThrow { IllegalStateException("Unable to load versions of ${self}.") }
 }
+
+/**
+ * The version of the Validation modules.
+ */
+@get:JvmName("validationVersion")
+internal val validationVersion: String by lazy {
+    val validation: Dependency = ThirdPartyDependency("io.spine.validation", "java")
+    versions.versionOf(validation)
+        .orElseThrow { IllegalStateException("Unable to load versions of ${validation}.") }
+}

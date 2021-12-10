@@ -36,6 +36,7 @@ import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.TaskContainer;
 
+import static io.spine.tools.mc.java.gradle.Artifacts.validationVersion;
 import static java.io.File.separatorChar;
 import static java.lang.String.format;
 
@@ -63,8 +64,9 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
         );
 
         DependencyHandler dependencies = target.getDependencies();
-        dependencies.add("protoData", "io.spine.validation:java:2.0.0-SNAPSHOT.11");
-        dependencies.add("implementation", "io.spine.validation:runtime:2.0.0-SNAPSHOT.11");
+        String validationVersion = validationVersion();
+        dependencies.add("protoData", "io.spine.validation:java:" + validationVersion);
+        dependencies.add("implementation", "io.spine.validation:runtime:" + validationVersion);
 
         TaskContainer tasks = target.getTasks();
         tasks.withType(LaunchProtoData.class, task -> {
