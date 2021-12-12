@@ -26,7 +26,7 @@
 package io.spine.tools.mc.java.rejection.gradle;
 
 import com.google.common.collect.ImmutableList;
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.gradle.api.Action;

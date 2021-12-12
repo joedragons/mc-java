@@ -33,7 +33,7 @@ import io.spine.tools.fs.DirectoryName.grpc
 import io.spine.tools.fs.DirectoryName.java
 import io.spine.tools.fs.DirectoryName.spine
 import io.spine.tools.gradle.ProtobufDependencies
-import io.spine.tools.gradle.SourceSetName
+import io.spine.tools.code.SourceSetName
 import io.spine.tools.gradle.project.sourceSet
 import io.spine.tools.java.fs.DefaultJavaPaths
 import io.spine.tools.mc.gradle.modelCompiler

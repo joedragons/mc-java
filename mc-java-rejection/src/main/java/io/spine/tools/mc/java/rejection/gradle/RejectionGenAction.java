@@ -36,7 +36,7 @@ import io.spine.code.proto.SourceFile;
 import io.spine.tools.code.Indent;
 import io.spine.tools.gradle.CodeGenerationAction;
 import io.spine.tools.gradle.ProtoFiles;
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.java.code.TypeSpec;
 import io.spine.tools.java.code.TypeSpecWriter;
 import io.spine.tools.mc.java.gradle.McJavaOptions;

@@ -28,9 +28,11 @@ package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.java.PackageName;
 import io.spine.code.proto.FieldName;
+import io.spine.tools.code.SourceSetName;
+import io.spine.tools.fs.DirectoryName;
 import io.spine.tools.java.fs.DefaultJavaPaths;
-import io.spine.tools.java.fs.Directory;
 import io.spine.tools.java.fs.FileName;
+import io.spine.tools.java.fs.JavaFiles;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -55,12 +57,13 @@ final class TestEnv {
     }
 
     static String rejectionsJavadocThrowableSource() {
-        var fileName =
-                DefaultJavaPaths.at(Paths.get("/"))
-                                .generated()
-                                .mainSpine()
-                                .resolve(Directory.of(JAVA_PACKAGE))
-                                .resolve(REJECTION_FILE_NAME.value());
+        var fileName = DefaultJavaPaths.at(Paths.get("/"))
+                .generated()
+                .dir(SourceSetName.main)
+                .path()
+                .resolve("../" + DirectoryName.spine.value())
+                .resolve(JavaFiles.toDirectory(JAVA_PACKAGE))
+                .resolve(REJECTION_FILE_NAME.value());
         return fileName.toString();
     }
 
@@ -85,22 +88,22 @@ final class TestEnv {
         );
     }
 
-    public static String expectedClassComment() {
+    static String expectedClassComment() {
         return wrappedInPreTag(CLASS_COMMENT)
                 + " Rejection based on proto type  " +
                 "{@code " + JAVA_PACKAGE + '.' + REJECTION_NAME+ '}';
     }
 
-    public static String expectedBuilderClassComment() {
+    static String expectedBuilderClassComment() {
         return format("The builder for the  {@code %s}  rejection.", REJECTION_NAME);
     }
 
-    public static String expectedFirstFieldComment() {
+    static String expectedFirstFieldComment() {
         return wrappedInPreTag(FIRST_FIELD_COMMENT);
 
     }
 
-    public static String expectedSecondFieldComment() {
+    static String expectedSecondFieldComment() {
         return wrappedInPreTag(SECOND_FIELD_COMMENT);
     }
 

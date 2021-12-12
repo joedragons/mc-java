@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.annotation.gradle;
 
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;

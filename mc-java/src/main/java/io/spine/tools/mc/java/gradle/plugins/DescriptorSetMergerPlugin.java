@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.gradle.plugins;
 
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.type.FileDescriptorSuperset;
 import org.gradle.api.Action;

@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.rejection.gradle;
 
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.gradle.api.Project;
 import org.gradle.api.file.FileCollection;

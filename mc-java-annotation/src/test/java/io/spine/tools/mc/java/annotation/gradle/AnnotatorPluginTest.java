@@ -32,6 +32,7 @@ import io.spine.annotation.SPI;
 import io.spine.code.proto.FileName;
 import io.spine.code.proto.FileSet;
 import io.spine.testing.TempDir;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.testing.GradleProject;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.SourceFile;
@@ -220,8 +221,7 @@ class AnnotatorPluginTest {
         var services = fileDescriptor.getServices();
         for (var serviceDescriptor : services) {
             var serviceFile = forService(serviceDescriptor.toProto(), fileDescriptor.toProto());
-            SourceCheck check =
-                    new MainDefinitionAnnotationCheck(expectedAnnotation, shouldBeAnnotated);
+            var check = new MainDefinitionAnnotationCheck(expectedAnnotation, shouldBeAnnotated);
             checkGrpcService(serviceFile, check);
         }
     }
@@ -268,9 +268,10 @@ class AnnotatorPluginTest {
 
     private static void check(Path sourcePath, SourceCheck check) throws IOException {
         var filePath = DefaultJavaPaths.at(projectDir)
-                                       .generated()
-                                       .mainJava()
-                                       .resolve(sourcePath);
+               .generated()
+               .dir(SourceSetName.main)
+               .path()
+               .resolve(sourcePath);
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
                 Roaster.parse(AbstractJavaSource.class, filePath.toFile());
@@ -280,9 +281,11 @@ class AnnotatorPluginTest {
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
         var fullPath = DefaultJavaPaths.at(projectDir)
-                                       .generated()
-                                       .mainGrpc()
-                                       .resolve(serviceFile);
+               .generated()
+               .dir(SourceSetName.main) // main/java
+               .path()
+               .resolve("../grpc")
+               .resolve(serviceFile.path());
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
                 Roaster.parse(AbstractJavaSource.class, fullPath.toFile());
