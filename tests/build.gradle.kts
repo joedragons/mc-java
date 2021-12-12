@@ -59,14 +59,14 @@ buildscript {
         classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
     }
 
-    val spineBaseVersion: String by extra
+    val baseVersion: String by extra
     val toolBaseVersion: String by extra
     with(configurations) {
         io.spine.internal.gradle.doForceVersions(this)
         all {
             resolutionStrategy {
                 force(
-                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine:spine-base:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
@@ -126,14 +126,14 @@ subprojects {
         configureErrorProne()
     }
 
-    val spineBaseVersion: String by extra
+    val baseVersion: String by extra
 
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
         ErrorProne.annotations.forEach { compileOnly(it) }
-        implementation("io.spine:spine-base:$spineBaseVersion")
-        testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
+        implementation("io.spine:spine-base:$baseVersion")
+        testImplementation("io.spine.tools:spine-testlib:$baseVersion")
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
     }
@@ -145,8 +145,8 @@ subprojects {
         all {
             resolutionStrategy {
                 force(
-                    "io.spine:spine-base:$spineBaseVersion",
-                    "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine:spine-base:$baseVersion",
+                    "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )

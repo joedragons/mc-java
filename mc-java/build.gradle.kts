@@ -34,7 +34,7 @@ import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.WriteVersions
 import io.spine.internal.gradle.publish.PublishExtension
 
-val spineBaseVersion: String by extra
+val baseVersion: String by extra
 
 dependencies {
     implementation(JavaPoet.lib)
