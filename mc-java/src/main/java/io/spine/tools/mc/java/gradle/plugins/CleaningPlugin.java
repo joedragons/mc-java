@@ -48,7 +48,7 @@ public final class CleaningPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        Action<Task> preCleanAction = task -> cleanIn(project);
+        var preCleanAction = (Action<Task>) task -> cleanIn(project);
         var preCleanTask = GradleTask.newBuilder(preClean, preCleanAction)
                 .insertBeforeTask(clean)
                 .applyNowTo(project);
