@@ -48,6 +48,7 @@ public final class CleaningPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
+        @SuppressWarnings("RedundantExplicitVariableType") // Avoid an extra cast.
         Action<Task> preCleanAction = task -> cleanIn(project);
         var preCleanTask = GradleTask.newBuilder(preClean, preCleanAction)
                 .insertBeforeTask(clean)

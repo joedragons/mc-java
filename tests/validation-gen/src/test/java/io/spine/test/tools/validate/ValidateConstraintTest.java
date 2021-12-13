@@ -26,13 +26,8 @@
 
 package io.spine.test.tools.validate;
 
-import io.spine.validate.ConstraintViolation;
-import io.spine.validate.ValidationError;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
@@ -45,7 +40,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("message fields are validated")
     void checkEnclosedFields() {
-        DeliveryReceiver wrongAddress = DeliveryReceiver
+        var wrongAddress = DeliveryReceiver
                 .newBuilder()
                 .setName(PersonName.newBuilder()
                                    .setGivenName("Adam")
@@ -54,17 +49,17 @@ class ValidateConstraintTest {
                                    .setSecondLine("Wall St. 1")
                                    .buildPartial())
                 .buildPartial();
-        Optional<ValidationError> error = wrongAddress.validate();
+        var error = wrongAddress.validate();
         assertThat(error)
                 .isPresent();
-        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
+        var violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
-        ConstraintViolation wrapperViolation = violations.get(0);
+        var wrapperViolation = violations.get(0);
         assertThat(wrapperViolation.getFieldPath()
                                    .getFieldName(0))
                 .isEqualTo("address");
-        List<ConstraintViolation> nestedViolations = wrapperViolation.getViolationList();
+        var nestedViolations = wrapperViolation.getViolationList();
         assertThat(nestedViolations)
                 .hasSize(2);
         assertThat(nestedViolations.get(0)
@@ -80,7 +75,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("repeated message fields are validated and violations are stored separately")
     void validateRepeated() {
-        DeliveryReceiver msg = DeliveryReceiver
+        var msg = DeliveryReceiver
                 .newBuilder()
                 .setName(PersonName.newBuilder()
                                  .setGivenName("Eve"))
@@ -98,13 +93,13 @@ class ValidateConstraintTest {
                                     .setDigits("definitely not a number")
                                     .buildPartial())
                 .buildPartial();
-        Optional<ValidationError> error = msg.validate();
+        var error = msg.validate();
         assertThat(error)
                 .isPresent();
-        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
+        var violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(2);
-        for (ConstraintViolation invalidPhone : violations) {
+        for (var invalidPhone : violations) {
             assertThat(invalidPhone.getFieldPath().getFieldName(0))
                     .isEqualTo("contact");
             assertThat(invalidPhone.getViolationList())
@@ -115,21 +110,21 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("recursive validation has an exit point")
     void recursive() {
-        BinaryTree tree = BinaryTree
+        var tree = BinaryTree
                 .newBuilder()
                 .setValue(pack(newUuid()))
                 .setLeftChild(BinaryTree
                                       .newBuilder()
                                       .setValue(pack(newUuid())))
                 .build();
-        Optional<ValidationError> error = tree.validate();
+        var error = tree.validate();
         assertThat(error).isEmpty();
     }
 
     @Test
     @DisplayName("not run validation if option value is `false`")
     void ignoreIfFalse() {
-        DeliveryReceiver receiver = DeliveryReceiver
+        var receiver = DeliveryReceiver
                 .newBuilder()
                 .setName(PersonName.newBuilder()
                                    .setGivenName("Shawn"))

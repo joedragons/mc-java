@@ -30,11 +30,6 @@ import io.spine.protodata.gradle.Extension;
 import io.spine.protodata.gradle.LaunchProtoData;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.dsl.DependencyHandler;
-import org.gradle.api.file.RegularFile;
-import org.gradle.api.file.RegularFileProperty;
-import org.gradle.api.provider.Provider;
-import org.gradle.api.tasks.TaskContainer;
 
 import static io.spine.tools.mc.java.gradle.Artifacts.validationVersion;
 import static java.io.File.separatorChar;
@@ -49,8 +44,8 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
         target.getPluginManager()
               .apply("io.spine.proto-data");
 
-        Extension ext = target.getExtensions()
-                              .getByType(Extension.class);
+        var ext = target.getExtensions()
+                        .getByType(Extension.class);
         ext.renderers(
                 "io.spine.validation.java.PrintValidationInsertionPoints",
                 "io.spine.validation.java.JavaValidationRenderer"
@@ -63,16 +58,16 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
                 "spine/time_options.proto"
         );
 
-        DependencyHandler dependencies = target.getDependencies();
-        String validationVersion = validationVersion();
+        var dependencies = target.getDependencies();
+        var validationVersion = validationVersion();
         dependencies.add("protoData", "io.spine.validation:java:" + validationVersion);
         dependencies.add("implementation", "io.spine.validation:runtime:" + validationVersion);
 
-        TaskContainer tasks = target.getTasks();
+        var tasks = target.getTasks();
         tasks.withType(LaunchProtoData.class, task -> {
-            String name = task.getName();
-            String taskName = format("writeConfigFor_%s", name);
-            GenerateProtoDataConfig configTask = tasks.create(
+            var name = task.getName();
+            var taskName = format("writeConfigFor_%s", name);
+            var configTask = tasks.create(
                     taskName,
                     GenerateProtoDataConfig.class,
                     t -> linkConfigFile(target, task, t)
@@ -83,11 +78,11 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
 
     private static void linkConfigFile(Project target, LaunchProtoData task,
                                        GenerateProtoDataConfig t) {
-        RegularFileProperty targetFile = t.getTargetFile();
-        String fileName = t.getName() + ".bin";
-        Provider<RegularFile> defaultFile = target.getLayout()
-                                                  .getBuildDirectory()
-                                                  .file(CONFIG_SUBDIR + separatorChar + fileName);
+        var targetFile = t.getTargetFile();
+        var fileName = t.getName() + ".bin";
+        var defaultFile = target.getLayout()
+                                .getBuildDirectory()
+                                .file(CONFIG_SUBDIR + separatorChar + fileName);
         targetFile.convention(defaultFile);
         task.getConfiguration()
             .set(targetFile);

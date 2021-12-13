@@ -28,11 +28,6 @@ package io.spine.tools.mc.java.annotation.given;
 
 import io.spine.code.proto.FileName;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.google.common.collect.ImmutableList.toImmutableList;
-
 /**
  * Test proto file names.
  *

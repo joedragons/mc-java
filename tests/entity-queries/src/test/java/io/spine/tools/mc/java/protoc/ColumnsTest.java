@@ -33,7 +33,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.google.common.truth.Truth.assertThat;
 import static io.spine.testing.Assertions.assertHasPrivateParameterlessCtor;
 import static io.spine.tools.mc.java.protoc.given.ColumnsTestEnv.assertDoesNotContainMethod;
 import static io.spine.tools.mc.java.protoc.given.ColumnsTestEnv.checkColumnName;

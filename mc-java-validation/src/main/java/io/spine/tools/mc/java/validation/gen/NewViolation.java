@@ -30,7 +30,6 @@ import com.google.common.collect.ImmutableList;
 import com.squareup.javapoet.CodeBlock;
 import io.spine.base.FieldPath;
 import io.spine.code.proto.FieldContext;
-import io.spine.code.proto.FieldDeclaration;
 import io.spine.protobuf.TypeConverter;
 import io.spine.type.MessageType;
 import io.spine.validate.ConstraintViolation;

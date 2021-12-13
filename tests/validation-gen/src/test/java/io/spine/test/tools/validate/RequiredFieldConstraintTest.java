@@ -34,8 +34,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.google.common.base.Charsets.UTF_16;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static io.spine.test.tools.validate.IsValid.assertValid;
@@ -47,14 +45,14 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("not set fields produce a violation")
     void notSet() {
-        Due.Builder invalidMessage = Due.newBuilder();
+        var invalidMessage = Due.newBuilder();
         assertInvalid(invalidMessage, "date | never");
     }
 
     @Test
     @DisplayName("a complete group of fields must be set")
     void notComplete() {
-        Combination.Builder invalidMessage = Combination
+        var invalidMessage = Combination
                 .newBuilder()
                 .setA1("a1")
                 .setB2(ByteString.copyFrom("b2", UTF_16));
@@ -64,7 +62,7 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("if at least one alternative is set, no violation")
     void valid() {
-        Combination.Builder message = Combination
+        var message = Combination
                 .newBuilder()
                 .setA1("a1")
                 .addA2("a2");
@@ -74,7 +72,7 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("if all the alternatives are set, no violation")
     void all() {
-        Combination.Builder message = Combination
+        var message = Combination
                 .newBuilder()
                 .setA1("a1")
                 .addA2("a2")
@@ -84,8 +82,8 @@ class RequiredFieldConstraintTest {
     }
 
     private static void assertInvalid(Message.Builder message, String violationParam) {
-        List<ConstraintViolation> violations = IsValid.assertInvalid(message);
-        TypeName typeName = TypeName.of(message.buildPartial());
+        var violations = IsValid.assertInvalid(message);
+        var typeName = TypeName.of(message.buildPartial());
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
                 .containsExactly(ConstraintViolation

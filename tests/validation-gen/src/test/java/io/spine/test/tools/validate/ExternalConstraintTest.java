@@ -26,14 +26,9 @@
 
 package io.spine.test.tools.validate;
 
-import io.spine.validate.ConstraintViolation;
-import io.spine.validate.ValidationError;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
@@ -45,14 +40,14 @@ class ExternalConstraintTest {
     @DisplayName("call external validation")
     @Disabled
     void validateExternal() {
-        User user = User.newBuilder()
+        var user = User.newBuilder()
                         .addContact(Email.newBuilder()
                                          .setValue("not an email"))
                         .buildPartial();
-        Optional<ValidationError> error = user.validate();
+        var error = user.validate();
         assertThat(error)
                 .isPresent();
-        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
+        var violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0)
@@ -68,13 +63,13 @@ class ExternalConstraintTest {
                 .newBuilder()
                 .setSecondLine("first line is required and not set")
                 .buildPartial();
-        User user = User.newBuilder()
+        var user = User.newBuilder()
                         .addShippingAddress(address)
                         .buildPartial();
-        Optional<ValidationError> error = user.validate();
+        var error = user.validate();
         assertThat(error)
                 .isPresent();
-        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
+        var violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0)

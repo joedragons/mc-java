@@ -28,20 +28,14 @@ package io.spine.tools.mc.java.validation.gen;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Range;
 import com.google.common.reflect.TypeToken;
-import com.google.protobuf.ProtocolMessageEnum;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import io.spine.code.proto.FieldContext;
 import io.spine.code.proto.FieldDeclaration;
-import io.spine.option.GoesOption;
-import io.spine.option.IfInvalidOption;
 import io.spine.protobuf.AnyPacker;
 import io.spine.type.MessageType;
 import io.spine.util.Duplicates;
-import io.spine.validate.Alternative;
-import io.spine.validate.ComparableNumber;
 import io.spine.validate.Constraint;
 import io.spine.validate.ConstraintTranslator;
 import io.spine.validate.ConstraintViolation;
@@ -135,13 +129,13 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     @Override
     public void visitRange(RangedConstraint<?> constraint) {
-        FieldDeclaration field = constraint.field();
+        var field = constraint.field();
         checkRange(constraint, field, Bound.LOWER);
         checkRange(constraint, field, Bound.UPPER);
     }
 
     private void checkRange(RangedConstraint<?> constraint, FieldDeclaration field, Bound bound) {
-        Range<ComparableNumber> range = constraint.range();
+        var range = constraint.range();
         if (bound.exists(range)) {
             Check check = fieldAccess -> bound.matches(fieldAccess, range).negate();
             CreateViolation violation = fieldAccess -> violation(field, fieldAccess, constraint);
@@ -155,10 +149,10 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     @Override
     public void visitRequired(RequiredConstraint constraint) {
-        FieldDeclaration field = constraint.field();
-        IsSet fieldIsSet = new IsSet(field);
-        Check messageIsNotSet = fieldAccess -> fieldIsSet.invocation(messageAccess)
-                                                         .negate();
+        var field = constraint.field();
+        var fieldIsSet = new IsSet(field);
+        var messageIsNotSet = (Check) fieldAccess -> fieldIsSet.invocation(messageAccess)
+                                                               .negate();
         CreateViolation violation = fieldAccess -> violation(field, constraint);
         append(constraintCode(field)
                        .conditionCheck(messageIsNotSet)
@@ -169,11 +163,11 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     @Override
     public void visitPattern(PatternConstraint constraint) {
-        FieldDeclaration field = constraint.field();
-        String pattern = constraint.optionValue()
-                                   .getRegex();
-        String matcher = "$T.compile($S, $L).matcher($L).";
-        String method = constraint.allowsPartialMatch()
+        var field = constraint.field();
+        var pattern = constraint.optionValue()
+                                .getRegex();
+        var matcher = "$T.compile($S, $L).matcher($L).";
+        var method = constraint.allowsPartialMatch()
                         ? "find()"
                         : "matches()";
         Check check = fieldAccess -> BooleanExpression.fromCode(
@@ -197,8 +191,8 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
      */
     @Override
     public void visitDistinct(DistinctConstraint constraint) {
-        FieldDeclaration field = constraint.field();
-        String duplicatesName = "duplicates" + field.name().toCamelCase();
+        var field = constraint.field();
+        var duplicatesName = "duplicates" + field.name().toCamelCase();
         Function<FieldAccess, CodeBlock> duplicates =
                 fieldAccess -> CodeBlock.of("$T<?> $N = $T.findIn($L);",
                                             Set.class,
@@ -217,12 +211,12 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     @Override
     public void visitGoesWith(GoesConstraint constraint) {
-        FieldDeclaration field = constraint.field();
-        GoesOption option = constraint.optionValue();
-        String pairedFieldName = option.getWith();
-        FieldDeclaration pairedField = type.field(pairedFieldName);
-        IsSet fieldIsSet = new IsSet(field);
-        IsSet pairedIsSet = new IsSet(pairedField);
+        var field = constraint.field();
+        var option = constraint.optionValue();
+        var pairedFieldName = option.getWith();
+        var pairedField = type.field(pairedFieldName);
+        var fieldIsSet = new IsSet(field);
+        var pairedIsSet = new IsSet(pairedField);
         Check check = f -> fieldIsSet.invocation(messageAccess)
                                      .and(pairedIsSet.invocation(messageAccess).negate());
         CreateViolation createViolation = f -> newViolation(field, constraint)
@@ -236,17 +230,17 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     @Override
     public void visitValidate(ValidateConstraint constraint) {
-        FieldDeclaration field = constraint.field();
+        var field = constraint.field();
         Expression<List<ConstraintViolation>> violationsVar =
                 Expression.formatted("%sViolations", field.name()
                                                           .javaCase());
-        Function<FieldAccess, CodeBlock> nestedViolations = obtainViolations(field, violationsVar);
+        var nestedViolations = obtainViolations(field, violationsVar);
         Check check = fieldAccess -> isEmpty(violationsVar).negate();
-        IfInvalidOption errorMessageOption = new IfInvalid().valueOrDefault(field.descriptor());
+        var errorMessageOption = new IfInvalid().valueOrDefault(field.descriptor());
         @SuppressWarnings("deprecation")
             // Old validation uses the deprecated field.
             // With the new validation lib, we will get rid of it.
-        String errorMessage = errorMessage(errorMessageOption, errorMessageOption.getMsgFormat());
+        var errorMessage = errorMessage(errorMessageOption, errorMessageOption.getMsgFormat());
         CreateViolation violation = fieldAccess -> newViolation(field, constraint)
                 .setMessage(errorMessage)
                 .setNestedViolations(violationsVar)
@@ -261,11 +255,11 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     private Function<FieldAccess, CodeBlock>
     obtainViolations(FieldDeclaration field,
                      Expression<List<ConstraintViolation>> violationsVar) {
-        ExternalConstraintFlag flag = new ExternalConstraintFlag(field);
+        var flag = new ExternalConstraintFlag(field);
         externalConstraintFlags.add(flag);
-        IsSet isSet = new IsSet(field);
+        var isSet = new IsSet(field);
         return fieldAccess -> {
-            CodeBlock assignViolations = isSet
+            var assignViolations = isSet
                     .valueIsNotSet(fieldAccess)
                     .ifTrue(assignToEmpty(violationsVar))
                     .elseIf(flag.value(), externalViolations(field, violationsVar, fieldAccess))
@@ -294,7 +288,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     private CodeBlock externalViolations(FieldDeclaration field,
                                          Expression<List<ConstraintViolation>> violationsVar,
                                          FieldAccess fieldAccess) {
-        ClassName typeName = ClassName.bestGuess(type.javaClassName().value());
+        var typeName = ClassName.bestGuess(type.javaClassName().value());
         Expression<FieldContext> fieldContextExpression =
                 Expression.fromCode("$T.create($T.getDescriptor().findFieldByNumber($L))",
                                     FieldContext.class,
@@ -315,35 +309,35 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     @Override
     public void visitRequiredField(RequiredFieldConstraint constraint) {
-        ImmutableSet<Alternative> alternatives = constraint.alternatives();
-        BooleanExpression fieldsAreSet = alternatives
+        var alternatives = constraint.alternatives();
+        var fieldsAreSet = alternatives
                 .stream()
                 .map(alt -> alternativeIsSet(alt, messageAccess))
                 .reduce(BooleanExpression::or)
                 .orElseThrow(
                         () -> new IllegalStateException("`(required_field)` must not be empty.")
                 );
-        BooleanExpression condition = fieldsAreSet.negate();
+        var condition = fieldsAreSet.negate();
         Expression<ConstraintViolation> violation = newViolation()
                 .setMessage("Required fields are not set. Must match pattern `%s`.")
                 .setField(fieldContext.fieldPath())
                 .addParam(constraint.optionValue())
                 .build();
-        CodeBlock check = applyIfTrue(condition, violation);
+        var check = applyIfTrue(condition, violation);
         compiledConstraints.add(check);
     }
 
     @Override
     public void visitRequiredOneof(IsRequiredConstraint constraint) {
-        Expression<ProtocolMessageEnum> caseValue =
+        var caseValue =
                 messageAccess.oneofCase(constraint.declaration());
-        BooleanExpression condition =
+        var condition =
                 BooleanExpression.fromCode("$L.getNumber() == $L", caseValue, 0);
         Expression<ConstraintViolation> violation = newViolation()
                 .setMessage(constraint.errorMessage(fieldContext))
                 .setField(fieldContext.fieldPath())
                 .build();
-        CodeBlock check = applyIfTrue(condition, violation);
+        var check = applyIfTrue(condition, violation);
         compiledConstraints.add(check);
     }
 
@@ -370,13 +364,13 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
                 .map(IsSet::method)
                 .map(Method::new)
                 .collect(toList());
-        ValidateMethod validateMethod =
+        var validateMethod =
                 new ValidateMethod(type, methodName, messageAccess, compiledConstraints);
-        List<ClassMember> externalFlags = externalConstraintFlags
+        var externalFlags = externalConstraintFlags
                 .stream()
                 .map(ExternalConstraintFlag::asClassMember)
                 .collect(toList());
-        ImmutableSet<ClassMember> methods = ImmutableSet.<ClassMember>builder()
+        var methods = ImmutableSet.<ClassMember>builder()
                 .add(validateMethod.asClassMember())
                 .addAll(isSetMethods)
                 .addAll(externalFlags)
@@ -394,7 +388,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     }
 
     private void compileCustomConstraints() {
-        CodeBlock code = CodeBlock.of(
+        var code = CodeBlock.of(
                 "$N.addAll($T.violationsOfCustomConstraints($L));$L",
                 VIOLATIONS, Validate.class, messageAccess, lineSeparator()
         );
@@ -406,7 +400,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     }
 
     private NewViolation.Builder newViolation(FieldDeclaration field, Constraint constraint) {
-        FieldContext context = fieldContext.forChild(field);
+        var context = fieldContext.forChild(field);
         return NewViolation.forField(context)
                 .setMessage(constraint.errorMessage(context));
     }
@@ -424,11 +418,11 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     private
     CodeBlock applyIfTrue(BooleanExpression condition, Expression<ConstraintViolation> violation) {
-        CodeBlock codeBlock =
+        var codeBlock =
                 violationAccumulator.apply(violation)
                                     .toCode();
-        CodeBlock result = condition.ifTrue(codeBlock)
-                                    .toCode();
+        var result = condition.ifTrue(codeBlock)
+                              .toCode();
         return result;
     }
 }

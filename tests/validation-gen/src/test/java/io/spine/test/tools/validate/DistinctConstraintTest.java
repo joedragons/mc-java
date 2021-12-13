@@ -28,12 +28,8 @@ package io.spine.test.tools.validate;
 
 import io.spine.base.FieldPath;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.ValidationError;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
 
 import static com.google.common.truth.Truth8.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
@@ -50,10 +46,10 @@ class DistinctConstraintTest {
                 .addElement(toAny("321"))
                 .addElement(toAny("123"))
                 .buildPartial();
-        Optional<ValidationError> error = msg.validate();
+        var error = msg.validate();
         assertThat(error)
                 .isPresent();
-        List<ConstraintViolation> violations = error.get().getConstraintViolationList();
+        var violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
                 .containsExactly(ConstraintViolation.newBuilder()

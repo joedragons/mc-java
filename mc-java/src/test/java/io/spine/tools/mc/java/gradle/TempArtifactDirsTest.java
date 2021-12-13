@@ -29,8 +29,6 @@ import io.spine.testing.TempDir;
 import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.mc.java.gradle.given.StubProject;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.dsl.RepositoryHandler;
-import org.gradle.api.plugins.PluginManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -62,7 +60,7 @@ class TempArtifactDirsTest {
         project = StubProject.createAt(projectDir);
         var repositories = project.getRepositories();
         applyStandard(repositories);
-        PluginManager plugins = project.getPluginManager();
+        var plugins = project.getPluginManager();
         plugins.apply("java");
         plugins.apply("com.google.protobuf");
         plugins.apply(MC_JAVA_GRADLE_PLUGIN_ID);

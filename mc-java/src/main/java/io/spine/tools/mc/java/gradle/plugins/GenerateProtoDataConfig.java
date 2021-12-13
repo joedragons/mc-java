@@ -27,7 +27,6 @@
 package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.tools.mc.java.codegen.CodegenOptions;
-import io.spine.tools.mc.java.gradle.McJavaOptions;
 import io.spine.tools.proto.code.ProtoOption;
 import io.spine.validation.MessageMarkers;
 import io.spine.validation.ValidationConfig;
@@ -36,7 +35,6 @@ import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.File;
 import java.io.IOException;
 
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
@@ -50,19 +48,19 @@ public abstract class GenerateProtoDataConfig extends DefaultTask {
 
     @TaskAction
     private void writeFile() throws IOException {
-        McJavaOptions options = getMcJava(getProject());
-        CodegenOptions codegen = options.codegen.toProto();
-        MessageMarkers makers = MessageMarkers.newBuilder()
+        var options = getMcJava(getProject());
+        var codegen = options.codegen.toProto();
+        var makers = MessageMarkers.newBuilder()
                 .addAllCommandPattern(codegen.getCommands().getPatternList())
                 .addAllEventPattern(codegen.getEvents().getPatternList())
                 .addAllRejectionPattern(codegen.getRejections().getPatternList())
                 .addAllEntityPattern(codegen.getEntities().getPatternList())
                 .addAllEntityOptionName(entityOptionsNames(codegen))
                 .build();
-        ValidationConfig config = ValidationConfig.newBuilder()
+        var config = ValidationConfig.newBuilder()
                 .setMessageMarkers(makers)
                 .build();
-        File file = getProject().file(getTargetFile());
+        var file = getProject().file(getTargetFile());
         file.getParentFile().mkdirs();
         write(file.toPath(), config.toByteArray());
     }

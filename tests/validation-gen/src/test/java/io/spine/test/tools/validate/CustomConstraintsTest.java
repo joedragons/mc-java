@@ -30,13 +30,10 @@ import com.google.protobuf.ByteString;
 import io.spine.base.FieldPath;
 import io.spine.test.tools.validate.rule.BytesAllRequiredFactory;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.ValidationError;
 import io.spine.validate.option.ValidatingOptionsLoader;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth8.assertThat;
@@ -65,7 +62,7 @@ class CustomConstraintsTest {
                 .addValue(ByteString.copyFrom(new byte[]{42}))
                 .addValue(ByteString.EMPTY)
                 .buildPartial();
-        Optional<ValidationError> error = matrix.validate();
+        var error = matrix.validate();
         assertThat(error)
                 .isPresent();
         assertThat(error.get().getConstraintViolationList())

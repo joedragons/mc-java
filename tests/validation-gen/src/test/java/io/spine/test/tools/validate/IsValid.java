@@ -47,7 +47,7 @@ final class IsValid {
     }
 
     static void assertValid(Message.Builder builder) {
-        Message msg = builder.build();
+        var msg = builder.build();
         assertThat(msg)
                 .isNotNull();
     }
@@ -55,7 +55,7 @@ final class IsValid {
     @CanIgnoreReturnValue
     static List<ConstraintViolation> assertInvalid(Message.Builder builder) {
         try {
-            Message msg = builder.build();
+            var msg = builder.build();
             return fail(format("Expected an invalid message but got: %s", toJson(msg)));
         } catch (ValidationException e) {
             return e.getConstraintViolations();
