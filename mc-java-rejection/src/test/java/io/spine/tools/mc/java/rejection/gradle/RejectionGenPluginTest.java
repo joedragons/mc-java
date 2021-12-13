@@ -26,16 +26,9 @@
 
 package io.spine.tools.mc.java.rejection.gradle;
 
-import io.spine.protobuf.Messages;
 import io.spine.testing.TempDir;
 import io.spine.tools.gradle.testing.GradleProject;
-import io.spine.tools.java.code.BuilderSpec;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.JavaDocCapableSource;
-import org.jboss.forge.roaster.model.source.JavaDocSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,13 +39,11 @@ import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
-import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedBuilderClassComment;
-import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedClassComment;
-import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedFirstFieldComment;
-import static io.spine.tools.mc.java.rejection.gradle.TestEnv.expectedSecondFieldComment;
-import static io.spine.util.Exceptions.newIllegalStateException;
+import static io.spine.tools.test.ProjectPaths.protobufGeneratedDir;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
+import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`RejectionGenPlugin` should")
@@ -90,18 +81,16 @@ class RejectionGenPluginTest {
         }
     }
 
-    private static Path generatedRoot() {
+    private static Path generatedRoot(String sourceSetName) {
         checkNotNull(projectDir);
-        return projectDir.toPath().resolve("generated/");
+        return protobufGeneratedDir(projectDir.toPath(), sourceSetName, "spine");
     }
     private static Path targetMainDir() {
-        var targetRoot = generatedRoot().resolve("main/spine/");
-        return targetRoot;
+        return generatedRoot(MAIN_SOURCE_SET_NAME);
     }
 
     private static Path targetTestDir() {
-        var targetRoot = generatedRoot().resolve("test/spine/");
-        return targetRoot;
+        return generatedRoot(TEST_SOURCE_SET_NAME);
     }
 
     @Nested
@@ -135,48 +124,6 @@ class RejectionGenPluginTest {
             assertJavaFileExists(packageDir, "TestRejection1");
             assertJavaFileExists(packageDir, "TestRejection2");
         }
-    }
-
-    private static void assertRejectionJavadoc(JavaClassSource rejection) {
-        assertDoc(expectedClassComment(), rejection);
-        assertMethodDoc("@return a new builder for the rejection", rejection,
-                        Messages.METHOD_NEW_BUILDER
-        );
-    }
-
-    private static void assertBuilderJavadoc(JavaClassSource builder) {
-        assertDoc(expectedBuilderClassComment(), builder);
-        assertMethodDoc(
-                "Creates the rejection from the builder and validates it.", builder,
-                BuilderSpec.BUILD_METHOD_NAME
-        );
-        assertMethodDoc(expectedFirstFieldComment(), builder, "setId");
-        assertMethodDoc(expectedSecondFieldComment(), builder, "setRejectionMessage");
-    }
-
-    private static void assertMethodDoc(String expectedComment,
-                                        JavaClassSource source,
-                                        String methodName) {
-        MethodSource<JavaClassSource> method = findMethod(source, methodName);
-        assertDoc(expectedComment, method);
-    }
-
-    private static MethodSource<JavaClassSource>
-    findMethod(JavaClassSource source, String methodName) {
-        MethodSource<JavaClassSource> method =
-                source.getMethods()
-                        .stream()
-                        .filter(m -> methodName.equals(m.getName()))
-                        .findFirst()
-                        .orElseThrow(() -> newIllegalStateException(
-                                "Cannot find the method `%s`.", methodName)
-                        );
-        return method;
-    }
-
-    private static void assertDoc(String expectedText, JavaDocCapableSource<?> source) {
-        JavaDocSource<?> javadoc = source.getJavaDoc();
-        Assertions.assertEquals(expectedText, javadoc.getFullText());
     }
 
     private static void assertExists(Path path) {

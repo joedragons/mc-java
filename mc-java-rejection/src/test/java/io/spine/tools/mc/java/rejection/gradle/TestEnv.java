@@ -36,6 +36,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import static java.lang.String.format;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 
 final class TestEnv {
 
@@ -55,7 +56,7 @@ final class TestEnv {
     }
 
     static Path rejectionsJavadocThrowableSource(Path projectDir) {
-        return ProjectPaths.protobufGeneratedDir(projectDir, "spine")
+        return ProjectPaths.protobufGeneratedDir(projectDir, MAIN_SOURCE_SET_NAME, "spine")
                     .resolve(Directory.of(JAVA_PACKAGE).path())
                     .resolve(REJECTION_FILE_NAME.value());
     }

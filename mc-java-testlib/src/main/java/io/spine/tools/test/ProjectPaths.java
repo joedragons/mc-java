@@ -36,14 +36,14 @@ public final class ProjectPaths {
     private ProjectPaths() {
     }
 
-    public static Path protobufGeneratedDir(Path projectDir, String generatorName) {
+    public static Path protobufGeneratedDir(Path projectDir, String sourceSetName, String generatorName) {
         return projectDir.resolve("build")
                          .resolve("generated-proto")
-                         .resolve("main")
+                         .resolve(sourceSetName)
                          .resolve(generatorName);
     }
 
     public static Path protobufGeneratedDir(Path projectDir) {
-        return protobufGeneratedDir(projectDir, "java");
+        return protobufGeneratedDir(projectDir, "main", "java");
     }
 }

@@ -34,6 +34,8 @@ import org.gradle.api.Project;
 
 import java.util.Set;
 
+import static io.spine.protobuf.Messages.isDefault;
+
 /**
  * A configuration for code generation for a certain group of messages joined by a file pattern.
  *
