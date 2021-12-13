@@ -28,12 +28,10 @@ package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.java.PackageName;
 import io.spine.code.proto.FieldName;
-import io.spine.tools.gradle.testing.GradleProject;
 import io.spine.tools.java.fs.Directory;
 import io.spine.tools.java.fs.FileName;
 import io.spine.tools.test.ProjectPaths;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -56,21 +54,13 @@ final class TestEnv {
     private TestEnv() {
     }
 
-    public static GradleProject newProjectWithRejectionsJavadoc(File projectFolder) {
-        return GradleProject.newBuilder()
-                            .setProjectName("rejections-javadoc")
-                            .setProjectFolder(projectFolder)
-                            .createProto("javadoc_rejections.proto", rejectionWithJavadoc())
-                            .build();
-    }
-
-    public static Path rejectionsJavadocThrowableSource(Path projectDir) {
+    static Path rejectionsJavadocThrowableSource(Path projectDir) {
         return ProjectPaths.protobufGeneratedDir(projectDir, "spine")
                     .resolve(Directory.of(JAVA_PACKAGE).path())
                     .resolve(REJECTION_FILE_NAME.value());
     }
 
-    private static Iterable<String> rejectionWithJavadoc() {
+    static Iterable<String> rejectionWithJavadoc() {
         return Arrays.asList(
                 "syntax = \"proto3\";",
                 "package spine.sample.rejections;",

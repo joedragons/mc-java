@@ -27,13 +27,11 @@
 package io.spine.tools.mc.java.gradle.codegen;
 
 import io.spine.testing.UtilityClassTest;
-import io.spine.tools.mc.java.codegen.FilePattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.testing.Assertions.assertNpe;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("`FilePatterns` should")
 final class FilePatternsTest extends UtilityClassTest<FilePatterns> {

@@ -40,6 +40,7 @@ import "google/protobuf/empty.proto";
 
 import "spine/tools/java/java.proto";
 import "spine/tools/proto/proto.proto";
+import "spine/validation/config.proto";
 
 // Code generation options passed to Spine Protoc Plugin.
 //
@@ -101,7 +102,7 @@ message Signals {
     // Note. Code generators do not presume any conventions. File patterns described above must
     // be added to `pattern` explicitly.
     //
-    repeated FilePattern pattern = 1;
+    repeated spine.validation.FilePattern pattern = 1;
 
     // Java interfaces to be added to all the messages defined by this group.
     repeated AddInterface add_interface = 2;
@@ -121,7 +122,7 @@ message Entities {
     // messages which match the given patterns and messages which are marked with given options
     // are considered to be entity states.
     //
-    repeated FilePattern pattern = 1;
+    repeated spine.validation.FilePattern pattern = 1;
 
     // Protobuf options which may mark an entity state definition.
     //
@@ -209,7 +210,7 @@ message Pattern {
     oneof kind {
 
         // File name pattern.
-        FilePattern file = 1;
+        spine.validation.FilePattern file = 1;
 
         // Type name pattern.
         TypePattern type = 2;
@@ -250,34 +251,6 @@ message NestedClassFactoryName {
 message MethodFactoryName {
 
     tools.java.JavaClassName class_name = 1;
-}
-
-// File pattern used to filter messages residing in files.
-message FilePattern {
-
-    oneof value {
-
-        // A suffix that a `.proto` file's full name should end with.
-        //
-        // If a `.proto` file matches the suffix, some code generation will be applied to
-        // all its messages.
-        //
-        string suffix = 1;
-
-        // A prefix that a `.proto` file's full name should start with.
-        //
-        // If a `.proto` file matches the prefix, some code generation will be applied to
-        // all its messages.
-        //
-        string prefix = 2;
-
-        // A regex a `.proto` file's full name should match.
-        //
-        // If a `.proto` file matches the regex, some code generation will be applied to
-        // all its messages.
-        //
-        string regex = 3;
-    }
 }
 
 // A type name pattern.

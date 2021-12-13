@@ -61,6 +61,7 @@ class Spine(p: ExtensionAware) {
         val runtime = "io.spine.validation:runtime:${p.validationVersion}"
         val java = "io.spine.validation:java:${p.validationVersion}"
         val model = "io.spine.validation:model:${p.validationVersion}"
+        val config = "io.spine.validation:configuration:${p.validationVersion}"
 
         private val ExtensionAware.validationVersion: String
             get() = extra["validationVersion"] as String

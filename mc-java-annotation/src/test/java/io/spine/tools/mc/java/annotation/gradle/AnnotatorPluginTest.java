@@ -278,7 +278,7 @@ class AnnotatorPluginTest {
 
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
-        Path filePath = protobufGeneratedDir(testProjectDir.toPath(), "grpc")
+        Path filePath = protobufGeneratedDir(projectDir.toPath(), "grpc")
                 .resolve(serviceFile.path());
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =

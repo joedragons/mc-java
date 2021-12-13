@@ -29,12 +29,10 @@ package io.spine.tools.mc.java.gradle.codegen;
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.Message;
 import io.spine.tools.gradle.Multiple;
-import io.spine.tools.mc.java.codegen.FilePattern;
+import io.spine.validation.FilePattern;
 import org.gradle.api.Project;
 
 import java.util.Set;
-
-import static io.spine.protobuf.Messages.isDefault;
 
 /**
  * A configuration for code generation for a certain group of messages joined by a file pattern.

@@ -54,7 +54,7 @@ dependencies {
     implementation(project(":mc-java-rejection"))
 
     implementation(Spine.ProtoData.pluginLib)
-    implementation(validation.model)
+    implementation(validation.config)
 
     testImplementation(gradleTestKit())
     testImplementation(spine.testlib)
