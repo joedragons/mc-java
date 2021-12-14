@@ -41,8 +41,25 @@ import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
 import static java.nio.file.Files.write;
 import static java.util.stream.Collectors.toSet;
 
+/**
+ * A task that writes the ProtoData configuration into a file.
+ *
+ * <p>The {@link #getTargetFile() targetFile} property defines the destination file.
+ *
+ * <p>This task configures ProtoData-based validation codegen. It tells which files and types
+ * are considered entities and signals, so that the Validation library may add extra constraints
+ * for those types.
+ */
+@SuppressWarnings({"AbstractClassNeverImplemented", "unused"})
+    // Gradle creates a subtype for this class.
 public abstract class GenerateProtoDataConfig extends DefaultTask {
 
+    /**
+     * The file where the config is written.
+     *
+     * <p>It's recommended to put this file under the {@code build} directory of the associated
+     * project, so that it is deleted upon {@code clean}-ing the project.
+     */
     @OutputFile
     public abstract RegularFileProperty getTargetFile();
 

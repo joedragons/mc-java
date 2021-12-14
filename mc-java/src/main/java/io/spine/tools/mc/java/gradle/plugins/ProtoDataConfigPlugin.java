@@ -35,6 +35,14 @@ import static io.spine.tools.mc.java.gradle.Artifacts.validationVersion;
 import static java.io.File.separatorChar;
 import static java.lang.String.format;
 
+/**
+ * The plugin that configures ProtoData for the associated project.
+ *
+ * <p>We use ProtoData and the Validation library to generate validation code right inside
+ * the Protobuf message classes. This plugin applies the {@code io.spine.proto-data} plugin,
+ * configures its extension, writes the ProtoData configuration file, and adds the required
+ * dependencies to the target project.
+ */
 final class ProtoDataConfigPlugin implements Plugin<Project> {
 
     private static final String CONFIG_SUBDIR = "protodata-config";
