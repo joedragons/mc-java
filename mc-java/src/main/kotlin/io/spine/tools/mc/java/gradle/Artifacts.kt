@@ -74,6 +74,32 @@ internal val spineProtocPlugin: Artifact by lazy {
         .build()
 }
 
+private const val VALIDATION_GROUP = "io.spine.validation"
+
+private val validationJavaDependency = ThirdPartyDependency(VALIDATION_GROUP, "java")
+
+private val validationVersion: String by lazy {
+    versions.versionOf(validationJavaDependency).orElseThrow()
+}
+
+@get:JvmName("validationJava")
+internal val validationJava: Artifact by lazy {
+    Artifact.newBuilder()
+        .setName(validationJavaDependency.name())
+        .setGroup(validationJavaDependency.groupId())
+        .setVersion(validationVersion)
+        .build()
+}
+
+@get:JvmName("validationRuntime")
+internal val validationRuntime: Artifact by lazy {
+    Artifact.newBuilder()
+        .setName("runtime")
+        .setGroup(VALIDATION_GROUP)
+        .setVersion(validationVersion)
+        .build()
+}
+
 /**
  * The version of the Model Compiler Java modules.
  *
@@ -84,14 +110,4 @@ internal val mcJavaVersion: String by lazy {
     val self: Dependency = ThirdPartyDependency(SPINE_TOOLS_GROUP, MC_JAVA_NAME)
     versions.versionOf(self)
         .orElseThrow { IllegalStateException("Unable to load versions of ${self}.") }
-}
-
-/**
- * The version of the Validation modules.
- */
-@get:JvmName("validationVersion")
-internal val validationVersion: String by lazy {
-    val validation: Dependency = ThirdPartyDependency("io.spine.validation", "java")
-    versions.versionOf(validation)
-        .orElseThrow { IllegalStateException("Unable to load versions of ${validation}.") }
 }

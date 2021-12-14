@@ -31,7 +31,8 @@ import io.spine.protodata.gradle.LaunchProtoData;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
-import static io.spine.tools.mc.java.gradle.Artifacts.validationVersion;
+import static io.spine.tools.mc.java.gradle.Artifacts.validationJava;
+import static io.spine.tools.mc.java.gradle.Artifacts.validationRuntime;
 import static java.io.File.separatorChar;
 import static java.lang.String.format;
 
@@ -45,13 +46,14 @@ import static java.lang.String.format;
  */
 final class ProtoDataConfigPlugin implements Plugin<Project> {
 
+    private static final String PROTO_DATA_ID = "io.spine.proto-data";
     private static final String CONFIG_SUBDIR = "protodata-config";
+
 
     @Override
     public void apply(Project target) {
         target.getPluginManager()
-              .apply("io.spine.proto-data");
-
+              .apply(PROTO_DATA_ID);
         var ext = target.getExtensions()
                         .getByType(Extension.class);
         ext.renderers(
@@ -67,9 +69,8 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
         );
 
         var dependencies = target.getDependencies();
-        var validationVersion = validationVersion();
-        dependencies.add("protoData", "io.spine.validation:java:" + validationVersion);
-        dependencies.add("implementation", "io.spine.validation:runtime:" + validationVersion);
+        dependencies.add("protoData", validationJava().notation());
+        dependencies.add("implementation", validationRuntime().notation());
 
         var tasks = target.getTasks();
         tasks.withType(LaunchProtoData.class, task -> {
