@@ -56,6 +56,11 @@ class Spine(p: ExtensionAware) {
     private val ExtensionAware.toolBaseVersion: String
         get() = extra["toolBaseVersion"] as String
 
+    /**
+     * Dependencies on Spine validation modules.
+     *
+     * See [`SpineEventEngine/validation`](https://github.com/SpineEventEngine/validation/).
+     */
     class Validation(p: ExtensionAware) {
 
         val runtime = "io.spine.validation:runtime:${p.validationVersion}"
@@ -67,9 +72,21 @@ class Spine(p: ExtensionAware) {
             get() = extra["validationVersion"] as String
     }
 
+    /**
+     * Dependencies on ProtoData modules.
+     *
+     * See [`SpineEventEngine/ProtoData`](https://github.com/SpineEventEngine/ProtoData/).
+     */
     object ProtoData {
 
         const val pluginId = "io.spine.proto-data"
+
+        /**
+         * The version of ProtoData.
+         *
+         * We declare ProtoData version here instead of `versions.gradle.kts` because we later use
+         * it in a `plugins` section in a build script.
+         */
         const val version = "0.1.2"
         const val pluginLib = "io.spine:proto-data:$version"
     }
