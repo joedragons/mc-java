@@ -28,6 +28,9 @@ package io.spine.tools.test;
 
 import java.nio.file.Path;
 
+/**
+ * A factory of paths to conventional locations in a Gradle project.
+ */
 public final class ProjectPaths {
 
     /**
@@ -36,13 +39,33 @@ public final class ProjectPaths {
     private ProjectPaths() {
     }
 
-    public static Path protobufGeneratedDir(Path projectDir, String sourceSetName, String generatorName) {
+    /**
+     * Obtains the path to the generated sources.
+     *
+     * @param projectDir
+     *         the absolute path to the project
+     * @param sourceSetName
+     *         the name of the source set
+     * @param generatorName
+     *         the name of the source code generator
+     * @return a path within the {@code projectDir}
+     */
+    public static Path protobufGeneratedDir(Path projectDir,
+                                            String sourceSetName,
+                                            String generatorName) {
         return projectDir.resolve("build")
                          .resolve("generated-proto")
                          .resolve(sourceSetName)
                          .resolve(generatorName);
     }
 
+    /**
+     * Obtains the path to the main-scope generated Java sources.
+     *
+     * @param projectDir
+     *         the absolute path to the project
+     * @return a path within the {@code projectDir}
+     */
     public static Path protobufGeneratedDir(Path projectDir) {
         return protobufGeneratedDir(projectDir, "main", "java");
     }
