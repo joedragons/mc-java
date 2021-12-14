@@ -27,7 +27,7 @@
 package io.spine.tools.mc.java.annotation.gradle;
 
 import io.spine.logging.Logging;
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.mc.java.annotation.mark.AnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.DefaultAnnotatorFactory;
 import io.spine.tools.mc.java.annotation.mark.ModuleAnnotator;

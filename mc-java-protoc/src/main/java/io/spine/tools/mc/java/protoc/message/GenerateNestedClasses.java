@@ -61,7 +61,7 @@ public final class GenerateNestedClasses extends NestedClassGenerationTask {
      * Generates nested classes for the given type.
      *
      * <p>No code is generated if the type file name does not match the supplied
-     * {@link io.spine.tools.mc.java.codegen.FilePattern pattern}.
+     * {@link io.spine.validation.FilePattern pattern}.
      */
     @Override
     public ImmutableList<CompilerOutput> generateFor(MessageType type) {

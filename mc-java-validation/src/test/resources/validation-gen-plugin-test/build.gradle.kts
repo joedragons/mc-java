@@ -43,7 +43,7 @@ buildscript {
         maven { url = uri(io.spine.internal.gradle.Repos.artifactRegistrySnapshots) }
     }
 
-    val spineBaseVersion: String by extra
+    val baseVersion: String by extra
     val mcJavaVersion: String by extra
     dependencies {
         io.spine.internal.dependency.Protobuf.libs.forEach { classpath(it) }
@@ -78,9 +78,9 @@ repositories {
     maven { url = uri(Repos.artifactRegistrySnapshots) }
 }
 
-val spineBaseVersion: String by extra
+val baseVersion: String by extra
 dependencies {
-    implementation("io.spine:spine-base:$spineBaseVersion")
+    implementation("io.spine:spine-base:$baseVersion")
 }
 
 sourceSets {

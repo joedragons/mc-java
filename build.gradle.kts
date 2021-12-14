@@ -136,7 +136,7 @@ subprojects {
         testImplementation(validation.runtime)
     }
 
-    val spineBaseVersion: String by extra
+    val baseVersion: String by extra
     val toolBaseVersion: String by extra
     with(configurations) {
         forceVersions()
@@ -144,8 +144,8 @@ subprojects {
         all {
             resolutionStrategy {
                 force(
-                    "io.spine:spine-base:$spineBaseVersion",
-                    "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine:spine-base:$baseVersion",
+                    "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
@@ -165,14 +165,14 @@ subprojects {
     JavadocConfig.applyTo(project)
     CheckStyleConfig.applyTo(project)
 
-    val javaVersion = 11
+    val javaVersion = JavaVersion.VERSION_11.toString()
     kotlin {
         applyJvmToolchain(javaVersion)
         explicitApi()
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
+        kotlinOptions.jvmTarget = javaVersion
         setFreeCompilerArgs()
     }
 
@@ -197,7 +197,7 @@ subprojects {
 
         val versions = Properties()
         with(versions) {
-            setProperty("baseVersion", spineBaseVersion)
+            setProperty("baseVersion", baseVersion)
             setProperty("protobufVersion", Protobuf.version)
             setProperty("gRPCVersion", Grpc.version)
         }

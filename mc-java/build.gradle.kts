@@ -33,7 +33,7 @@ import io.spine.internal.dependency.Roaster
 import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.WriteVersions
 
-val spineBaseVersion: String by extra
+val baseVersion: String by extra
 
 val spine = Spine(project)
 val validation = spine.validation

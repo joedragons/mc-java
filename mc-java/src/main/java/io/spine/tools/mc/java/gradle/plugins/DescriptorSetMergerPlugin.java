@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.gradle.plugins;
 
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import io.spine.tools.type.FileDescriptorSuperset;
 import org.gradle.api.Action;
@@ -59,7 +59,7 @@ final class DescriptorSetMergerPlugin implements Plugin<Project> {
 
     private static void createTask(Project project, SourceSetName ssn) {
         var configuration = configuration(project, runtimeClasspath(ssn));
-        Buildable dependencies = configuration.getAllDependencies();
+        var dependencies = configuration.getAllDependencies();
         var action = createMergingAction(ssn);
         var task = GradleTask.newBuilder(mergeDescriptorSet(ssn), action)
                 .insertAfterTask(generateProto(ssn))

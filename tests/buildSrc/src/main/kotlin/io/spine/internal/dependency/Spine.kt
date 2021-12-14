@@ -33,7 +33,7 @@ import org.gradle.kotlin.dsl.extra
  * Dependencies on Spine `base` modules.
  *
  * @constructor
- * Creates a new instance of `Spine` taking the `spineBaseVersion` from the given project's
+ * Creates a new instance of `Spine` taking the `baseVersion` from the given project's
  * extra properties.
  */
 class Spine(p: ExtensionAware) {
@@ -50,7 +50,7 @@ class Spine(p: ExtensionAware) {
     val validation = Validation(p)
 
     private val ExtensionAware.spineVersion: String
-        get() = extra["spineBaseVersion"] as String
+        get() = extra["baseVersion"] as String
     private val ExtensionAware.mcVersion: String
         get() = extra["mcVersion"] as String
     private val ExtensionAware.toolBaseVersion: String

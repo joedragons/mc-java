@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
+
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
@@ -48,25 +50,23 @@ buildscript {
 
     dependencies {
         classpath(io.spine.internal.dependency.Guava.lib)
-        @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
         classpath(io.spine.internal.dependency.Protobuf.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
-        @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
         classpath(io.spine.internal.dependency.ErrorProne.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
         classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
     }
 
-    val spineBaseVersion: String by extra
+    val baseVersion: String by extra
     val toolBaseVersion: String by extra
     with(configurations) {
         io.spine.internal.gradle.doForceVersions(this)
         all {
             resolutionStrategy {
                 force(
-                    "io.spine:spine-base:$spineBaseVersion",
+                    "io.spine:spine-base:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )
@@ -121,14 +121,14 @@ subprojects {
         configureErrorProne()
     }
 
-    val spineBaseVersion: String by extra
+    val baseVersion: String by extra
 
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
         ErrorProne.annotations.forEach { compileOnly(it) }
-        implementation("io.spine:spine-base:$spineBaseVersion")
-        testImplementation("io.spine.tools:spine-testlib:$spineBaseVersion")
+        implementation("io.spine:spine-base:$baseVersion")
+        testImplementation("io.spine.tools:spine-testlib:$baseVersion")
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
     }
@@ -140,8 +140,8 @@ subprojects {
         all {
             resolutionStrategy {
                 force(
-                    "io.spine:spine-base:$spineBaseVersion",
-                    "io.spine.tools:spine-testlib:$spineBaseVersion",
+                    "io.spine:spine-base:$baseVersion",
+                    "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion"
                 )

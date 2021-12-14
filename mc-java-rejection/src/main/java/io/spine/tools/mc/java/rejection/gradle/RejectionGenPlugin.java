@@ -27,7 +27,7 @@
 package io.spine.tools.mc.java.rejection.gradle;
 
 import com.google.common.collect.ImmutableList;
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

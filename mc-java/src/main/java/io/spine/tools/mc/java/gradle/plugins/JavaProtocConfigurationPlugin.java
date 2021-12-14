@@ -30,7 +30,7 @@ import com.google.protobuf.gradle.ExecutableLocator;
 import com.google.protobuf.gradle.GenerateProtoTask;
 import io.spine.code.proto.DescriptorReference;
 import io.spine.tools.gradle.ProtocConfigurationPlugin;
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
 import org.gradle.api.Action;
 import org.gradle.api.NamedDomainObjectContainer;

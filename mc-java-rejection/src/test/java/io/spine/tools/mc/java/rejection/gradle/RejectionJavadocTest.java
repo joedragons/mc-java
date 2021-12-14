@@ -29,7 +29,7 @@ package io.spine.tools.mc.java.rejection.gradle;
 import io.spine.code.java.SimpleClassName;
 import io.spine.protobuf.Messages;
 import io.spine.testing.TempDir;
-import io.spine.tools.gradle.SourceSetName;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.testing.GradleProject;
 import io.spine.tools.java.code.BuilderSpec;
 import org.jboss.forge.roaster.Roaster;
