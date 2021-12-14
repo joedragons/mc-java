@@ -24,6 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+@file:Suppress("RemoveRedundantQualifierName") // To prevent IDEA replacing FQN imports.
+
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
@@ -48,11 +50,9 @@ buildscript {
 
     dependencies {
         classpath(io.spine.internal.dependency.Guava.lib)
-        @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
         classpath(io.spine.internal.dependency.Protobuf.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
-        @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
         classpath(io.spine.internal.dependency.ErrorProne.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
@@ -78,14 +78,8 @@ buildscript {
 plugins {
     java
     idea
-    @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
-    io.spine.internal.dependency.Protobuf.GradlePlugin.apply {
-        id(id).version(version)
-    }
-    @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
-    io.spine.internal.dependency.ErrorProne.GradlePlugin.apply {
-        id(id)
-    }
+    id(io.spine.internal.dependency.Protobuf.GradlePlugin.id)
+    id(io.spine.internal.dependency.ErrorProne.GradlePlugin.id)
 }
 
 val baseRoot = "$rootDir/.."
