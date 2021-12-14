@@ -266,9 +266,9 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
                     .elseIf(flag.value(), externalViolations(field, violationsVar, fieldAccess))
                     .orElse(intrinsicViolations(field, violationsVar, fieldAccess));
             return CodeBlock.builder()
-                            .addStatement("$T $N", listOfViolations, violationsVar.toString())
-                            .addStatement(assignViolations)
-                            .build();
+                    .addStatement("$T $N", listOfViolations, violationsVar.toString())
+                    .addStatement(assignViolations)
+                    .build();
         };
     }
 
@@ -403,7 +403,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     private NewViolation.Builder newViolation(FieldDeclaration field, Constraint constraint) {
         var context = fieldContext.forChild(field);
         return NewViolation.forField(context)
-                .setMessage(constraint.errorMessage(context));
+                           .setMessage(constraint.errorMessage(context));
     }
 
     private NewViolation violation(FieldDeclaration field, Constraint constraint) {
