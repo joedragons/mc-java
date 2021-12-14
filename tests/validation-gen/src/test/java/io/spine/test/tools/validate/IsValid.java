@@ -38,6 +38,9 @@ import static io.spine.json.Json.toJson;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.fail;
 
+/**
+ * Assertions related to message validness.
+ */
 final class IsValid {
 
     /**
@@ -46,12 +49,25 @@ final class IsValid {
     private IsValid() {
     }
 
+    /**
+     * Assert the given {@code builder} produces a valid message.
+     *
+     * @param builder
+     *         the message builder
+     */
     static void assertValid(Message.Builder builder) {
         var msg = builder.build();
         assertThat(msg)
                 .isNotNull();
     }
 
+    /**
+     * Assert the given {@code builder} produces an invalid message.
+     *
+     * @param builder
+     *         the message builder
+     * @return the violations received from building the message
+     */
     @CanIgnoreReturnValue
     static List<ConstraintViolation> assertInvalid(Message.Builder builder) {
         try {
