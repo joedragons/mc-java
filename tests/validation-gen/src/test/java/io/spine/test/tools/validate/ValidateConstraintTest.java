@@ -40,8 +40,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("message fields are validated")
     void checkEnclosedFields() {
-        var wrongAddress = DeliveryReceiver
-                .newBuilder()
+        var wrongAddress = DeliveryReceiver.newBuilder()
                 .setName(PersonName.newBuilder()
                                  .setGivenName("Adam")
                                  .buildPartial())
@@ -96,11 +95,13 @@ class ValidateConstraintTest {
         var error = msg.validate();
         assertThat(error)
                 .isPresent();
-        var violations = error.get().getConstraintViolationList();
+        var violations = error.get()
+                              .getConstraintViolationList();
         assertThat(violations)
                 .hasSize(2);
         for (var invalidPhone : violations) {
-            assertThat(invalidPhone.getFieldPath().getFieldName(0))
+            assertThat(invalidPhone.getFieldPath()
+                                   .getFieldName(0))
                     .isEqualTo("contact");
             assertThat(invalidPhone.getViolationList())
                     .hasSize(1);
@@ -110,11 +111,9 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("recursive validation has an exit point")
     void recursive() {
-        var tree = BinaryTree
-                .newBuilder()
+        var tree = BinaryTree.newBuilder()
                 .setValue(pack(newUuid()))
-                .setLeftChild(BinaryTree
-                                      .newBuilder()
+                .setLeftChild(BinaryTree.newBuilder()
                                       .setValue(pack(newUuid())))
                 .build();
         var error = tree.validate();
@@ -124,8 +123,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("not run validation if option value is `false`")
     void ignoreIfFalse() {
-        var receiver = DeliveryReceiver
-                .newBuilder()
+        var receiver = DeliveryReceiver.newBuilder()
                 .setName(PersonName.newBuilder()
                                  .setGivenName("Shawn"))
                 .setAddress(Address.newBuilder()
