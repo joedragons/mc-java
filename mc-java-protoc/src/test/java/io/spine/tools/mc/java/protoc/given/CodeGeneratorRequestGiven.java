@@ -31,12 +31,12 @@ import com.google.protobuf.compiler.PluginProtos;
 import io.spine.option.OptionsProto;
 import io.spine.tools.mc.java.codegen.AddInterface;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
-import io.spine.tools.mc.java.codegen.FilePattern;
 import io.spine.tools.mc.java.codegen.GenerateMethods;
 import io.spine.tools.mc.java.codegen.GenerateNestedClasses;
 import io.spine.tools.mc.java.codegen.MethodFactoryName;
 import io.spine.tools.mc.java.codegen.NestedClassFactoryName;
 import io.spine.tools.mc.java.codegen.Pattern;
+import io.spine.validation.FilePattern;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

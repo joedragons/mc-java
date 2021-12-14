@@ -26,15 +26,12 @@
 
 package io.spine.tools.mc.java.protoc.field;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.testing.NullPointerTester;
 import io.spine.base.SubscribableField;
 import io.spine.option.OptionsProto;
-import io.spine.tools.java.code.JavaClassName;
 import io.spine.tools.java.code.field.FieldFactory;
 import io.spine.tools.mc.java.codegen.Entities;
 import io.spine.tools.mc.java.codegen.GenerateFields;
-import io.spine.tools.mc.java.protoc.CompilerOutput;
 import io.spine.tools.proto.code.ProtoOption;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProject;
 import io.spine.tools.protoc.plugin.message.tests.ProtocProjectId;

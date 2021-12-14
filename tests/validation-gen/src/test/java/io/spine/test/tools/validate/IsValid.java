@@ -24,50 +24,57 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.test.validate;
+package io.spine.test.tools.validate;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.protobuf.Message;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.Validate;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.spine.validate.ValidationException;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.google.common.truth.Truth.assertThat;
+import static io.spine.json.Json.toJson;
+import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.fail;
 
-@DisplayName("`MessageValidator` should")
-class ValidatorTest {
+/**
+ * Assertions related to message validness.
+ */
+final class IsValid {
 
-    private List<ConstraintViolation> violations;
-
-    @Test
-    @DisplayName("validate according to validation rules")
-    void multipleRules() {
-        var validValue = "any text";
-        var invalidMessage = AlwaysInvalid.newBuilder()
-                .setAlwaysInvalidA(validValue)
-                .setAlwaysInvalidB(validValue)
-                .build();
-        var first = FirstConstraintTarget.newBuilder()
-                .setCanBeValid(invalidMessage)
-                .build();
-        var second = SecondConstraintTarget.newBuilder()
-                .setCanBeValid(invalidMessage)
-                .build();
-        var aggregateState = ConstraintTargetAggregate.newBuilder()
-                .setFirst(first)
-                .setSecond(second)
-                .build();
-        validate(aggregateState);
-        assertIsValid();
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private IsValid() {
     }
 
-    private void validate(Message msg) {
-        violations = Validate.violationsOf(msg);
+    /**
+     * Assert the given {@code builder} produces a valid message.
+     *
+     * @param builder
+     *         the message builder
+     */
+    static void assertValid(Message.Builder builder) {
+        var msg = builder.build();
+        assertThat(msg)
+                .isNotNull();
     }
 
-    private void assertIsValid() {
-        assertTrue(violations.isEmpty());
+    /**
+     * Assert the given {@code builder} produces an invalid message.
+     *
+     * @param builder
+     *         the message builder
+     * @return the violations received from building the message
+     */
+    @CanIgnoreReturnValue
+    static List<ConstraintViolation> assertInvalid(Message.Builder builder) {
+        try {
+            var msg = builder.build();
+            return fail(format("Expected an invalid message but got: %s", toJson(msg)));
+        } catch (ValidationException e) {
+            return e.getConstraintViolations();
+        }
     }
 }

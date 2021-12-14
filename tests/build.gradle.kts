@@ -75,17 +75,12 @@ buildscript {
     }
 }
 
+@Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
 plugins {
     java
     idea
-    @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
-    io.spine.internal.dependency.Protobuf.GradlePlugin.apply {
-        id(id).version(version)
-    }
-    @Suppress("RemoveRedundantQualifierName") // Cannot use imports here.
-    io.spine.internal.dependency.ErrorProne.GradlePlugin.apply {
-        id(id)
-    }
+    id(io.spine.internal.dependency.Protobuf.GradlePlugin.id)
+    id(io.spine.internal.dependency.ErrorProne.GradlePlugin.id)
 }
 
 val baseRoot = "$rootDir/.."

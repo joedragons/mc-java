@@ -24,12 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Contains smoke tests for generated validating builders.
- */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.test.validate;
+package io.spine.internal.gradle.javascript.plugin
 
-import com.google.errorprone.annotations.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.gradle.kotlin.dsl.configure
+import org.gradle.plugins.ide.idea.model.IdeaModel
+
+/**
+ * Applies and configures `idea` plugin to work with a JavaScript module.
+ *
+ * In particular, this method:
+ *
+ *  1. Specifies directories for production and test sources.
+ *  2. Excludes directories with generated code and build artifacts.
+ *
+ * @see JsPlugins
+ */
+fun JsPlugins.idea() {
+
+    plugins {
+        apply("org.gradle.idea")
+    }
+
+    extensions.configure<IdeaModel> {
+
+        module {
+            sourceDirs.add(srcDir)
+            testSourceDirs.add(testSrcDir)
+
+            excludeDirs.addAll(
+                listOf(
+                    nodeModules,
+                    nycOutput,
+                    genProtoMain,
+                    genProtoTest
+                )
+            )
+        }
+    }
+}

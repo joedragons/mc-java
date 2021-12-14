@@ -26,8 +26,8 @@
 
 package io.spine.tools.mc.java.protoc;
 
-import io.spine.tools.mc.java.codegen.FilePattern;
 import io.spine.type.MessageType;
+import io.spine.validation.FilePattern;
 
 import java.util.function.Predicate;
 
@@ -50,14 +50,14 @@ public final class FilePatternMatcher implements Predicate<MessageType> {
     public boolean test(MessageType type) {
         checkNotNull(type);
         var protoFileName = type.declaringFileName().value();
-        switch (pattern.getValueCase()) {
+        switch (pattern.getKindCase()) {
             case SUFFIX:
                 return protoFileName.endsWith(pattern.getSuffix());
             case PREFIX:
                 return protoFileName.startsWith(pattern.getPrefix());
             case REGEX:
                 return protoFileName.matches(pattern.getRegex());
-            case VALUE_NOT_SET:
+            case KIND_NOT_SET:
             default:
                 return false;
         }

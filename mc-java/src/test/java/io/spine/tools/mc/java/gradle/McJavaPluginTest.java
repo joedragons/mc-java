@@ -57,8 +57,10 @@ class McJavaPluginTest {
         var project = StubProject.createFor(getClass())
                                  .withMavenRepositories()
                                  .get();
-        project.getPluginManager()
-               .apply(MC_JAVA_GRADLE_PLUGIN_ID);
+        var plugins = project.getPluginManager();
+        plugins.apply("java");
+        plugins.apply("com.google.protobuf");
+        plugins.apply(MC_JAVA_GRADLE_PLUGIN_ID);
         tasks = project.getTasks();
     }
 

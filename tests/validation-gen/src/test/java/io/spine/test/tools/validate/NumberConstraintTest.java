@@ -26,15 +26,13 @@
 
 package io.spine.test.tools.validate;
 
-import io.spine.type.TypeName;
-import io.spine.validate.ConstraintViolation;
-import io.spine.validate.MessageWithConstraints;
+import com.google.protobuf.Message;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.google.common.truth.Truth.assertThat;
+import static io.spine.test.tools.validate.IsValid.assertInvalid;
+import static io.spine.test.tools.validate.IsValid.assertValid;
 
 @DisplayName("Number boundaries constraints should be compiled so that")
 class NumberConstraintTest {
@@ -44,14 +42,12 @@ class NumberConstraintTest {
     void min() {
         assertViolation(
                 InterestRate.newBuilder()
-                            .setPercent(-3)
-                            .buildPartial(),
+                            .setPercent(-3),
                 "greater than 0.0"
         );
         assertValid(
                 InterestRate.newBuilder()
                             .setPercent(117.3F)
-                            .build()
         );
     }
 
@@ -60,68 +56,52 @@ class NumberConstraintTest {
     void minMax() {
         assertViolation(
                 Year.newBuilder()
-                    .setDayCount(42)
-                    .buildPartial(),
+                    .setDayCount(42),
                 "greater than or equal to 365"
         );
         assertViolation(
                 Year.newBuilder()
-                    .setDayCount(420)
-                    .buildPartial(),
+                    .setDayCount(420),
                 "less than or equal to 366"
         );
         assertValid(
                 Year.newBuilder()
                     .setDayCount(365)
-                    .buildPartial()
         );
         assertValid(
                 Year.newBuilder()
                     .setDayCount(366)
-                    .buildPartial()
         );
     }
 
     @Test
     @DisplayName("numerical range is checked")
     void range() {
-        var errorFragment = TypeName.of(Probability.class) + ".value";
         assertViolation(
                 Probability.newBuilder()
-                           .setValue(1.1)
-                           .buildPartial(),
-                errorFragment
+                           .setValue(1.1),
+                "1.1"
         );
         assertViolation(
                 Probability.newBuilder()
-                           .setValue(-0.1)
-                           .buildPartial(),
-                errorFragment
+                           .setValue(-0.1),
+                "-0.1"
         );
         assertValid(
                 Probability.newBuilder()
                            .setValue(0.0)
-                           .buildPartial()
         );
         assertValid(
                 Probability.newBuilder()
                            .setValue(1.0)
-                           .buildPartial()
         );
     }
 
-    private static void assertViolation(MessageWithConstraints message, String error) {
-        List<ConstraintViolation> violations = message.validate();
+    private static void assertViolation(Message.Builder message, String error) {
+        var violations = assertInvalid(message);
         assertThat(violations)
                 .hasSize(1);
-        assertThat(violations.get(0)
-                             .getMsgFormat())
+        assertThat(violations.get(0).getMsgFormat())
                 .contains(error);
-    }
-
-    private static void assertValid(MessageWithConstraints message) {
-        List<ConstraintViolation> violations = message.validate();
-        assertThat(violations)
-                .isEmpty();
     }
 }

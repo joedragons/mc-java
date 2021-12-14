@@ -164,10 +164,8 @@ final class ProtocPluginTest {
     void skipNonSpecifiedMessageTypes() {
         Class<?> cls = CustomerName.class;
         List<Class<?>> interfaces = ImmutableList.copyOf(cls.getInterfaces());
-        assertThat(interfaces).containsAtLeast(
-                CustomerNameOrBuilder.class,
-                io.spine.validate.MessageWithConstraints.class
-        );
+        assertThat(interfaces)
+                .contains(CustomerNameOrBuilder.class);
     }
 
     @Nested

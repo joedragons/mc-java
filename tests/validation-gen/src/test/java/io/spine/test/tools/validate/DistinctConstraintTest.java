@@ -31,6 +31,7 @@ import io.spine.validate.ConstraintViolation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.google.common.truth.Truth8.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static io.spine.protobuf.TypeConverter.toAny;
 
@@ -45,7 +46,11 @@ class DistinctConstraintTest {
                 .addElement(toAny("321"))
                 .addElement(toAny("123"))
                 .buildPartial();
-        assertThat(msg.validate())
+        var error = msg.validate();
+        assertThat(error)
+                .isPresent();
+        var violations = error.get().getConstraintViolationList();
+        assertThat(violations)
                 .comparingExpectedFieldsOnly()
                 .containsExactly(ConstraintViolation.newBuilder()
                                          .setFieldPath(FieldPath.newBuilder()
@@ -60,13 +65,15 @@ class DistinctConstraintTest {
                 .addElement(toAny("42"))
                 .addElement(toAny(42))
                 .build();
-        assertThat(msg.validate()).isEmpty();
+        assertThat(msg.validate())
+                .isEmpty();
     }
 
     @Test
     @DisplayName("empty list does not result in a violation")
     void empty() {
         var msg = ProtoSet.newBuilder().build();
-        assertThat(msg.validate()).isEmpty();
+        assertThat(msg.validate())
+                .isEmpty();
     }
 }

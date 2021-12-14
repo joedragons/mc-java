@@ -71,6 +71,7 @@ import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.NO_INTERNAL_OPTIONS_MULTIPLE;
 import static io.spine.tools.mc.java.annotation.given.GivenProtoFile.SPI_SERVICE;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.annotateProto;
+import static io.spine.tools.test.ProjectPaths.protobufGeneratedDir;
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 
 @DisplayName("`AnnotatorPlugin` should")
@@ -267,10 +268,8 @@ class AnnotatorPluginTest {
     }
 
     private static void check(Path sourcePath, SourceCheck check) throws IOException {
-        var filePath = DefaultJavaPaths.at(projectDir)
-                                       .generated()
-                                       .mainJava()
-                                       .resolve(sourcePath);
+        var filePath = protobufGeneratedDir(projectDir.toPath())
+                .resolve(sourcePath);
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
                 Roaster.parse(AbstractJavaSource.class, filePath.toFile());
@@ -279,13 +278,11 @@ class AnnotatorPluginTest {
 
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
-        var fullPath = DefaultJavaPaths.at(projectDir)
-                                       .generated()
-                                       .mainGrpc()
-                                       .resolve(serviceFile);
+        var filePath = protobufGeneratedDir(projectDir.toPath(), MAIN_SOURCE_SET_NAME, "grpc")
+                .resolve(serviceFile.path());
         @SuppressWarnings("unchecked")
         AbstractJavaSource<JavaClassSource> javaSource =
-                Roaster.parse(AbstractJavaSource.class, fullPath.toFile());
+                Roaster.parse(AbstractJavaSource.class, filePath.toFile());
         check.accept(javaSource);
     }
 

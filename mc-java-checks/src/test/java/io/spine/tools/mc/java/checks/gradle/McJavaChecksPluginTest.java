@@ -27,8 +27,6 @@
 package io.spine.tools.mc.java.checks.gradle;
 
 import io.spine.tools.mc.java.checks.gradle.given.StubProject;
-import org.gradle.api.Project;
-import org.gradle.api.plugins.ExtensionContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

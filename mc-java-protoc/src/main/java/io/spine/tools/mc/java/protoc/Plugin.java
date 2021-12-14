@@ -36,7 +36,6 @@ import io.spine.tools.mc.java.protoc.column.ColumnGen;
 import io.spine.tools.mc.java.protoc.field.FieldGen;
 import io.spine.tools.mc.java.protoc.message.BuilderGen;
 import io.spine.tools.mc.java.protoc.message.InterfaceGen;
-import io.spine.tools.mc.java.protoc.message.ValidationGen;
 import io.spine.tools.mc.java.protoc.message.NestedClassGen;
 import io.spine.tools.mc.java.protoc.method.MethodGen;
 import io.spine.tools.mc.java.protoc.query.EntityQueryGen;
@@ -81,7 +80,6 @@ public final class Plugin {
                 InterfaceGen.instance(config),
                 MethodGen.instance(config),
                 BuilderGen.instance(config),
-                ValidationGen.instance(config),
                 NestedClassGen.instance(config),
                 ColumnGen.instance(config),
                 EntityQueryGen.instance(config),

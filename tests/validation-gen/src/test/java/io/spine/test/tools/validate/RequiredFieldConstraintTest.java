@@ -26,24 +26,26 @@
 
 package io.spine.test.tools.validate;
 
-import com.google.common.collect.ImmutableList;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Message;
 import io.spine.type.TypeName;
 import io.spine.validate.ConstraintViolation;
-import io.spine.validate.MessageWithConstraints;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.base.Charsets.UTF_16;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static io.spine.test.tools.validate.IsValid.assertValid;
 
 @DisplayName("`(required_field)` option should be compiled so that")
+@Disabled
 class RequiredFieldConstraintTest {
 
     @Test
     @DisplayName("not set fields produce a violation")
     void notSet() {
-        var invalidMessage = Due.newBuilder().buildPartial();
+        var invalidMessage = Due.newBuilder();
         assertInvalid(invalidMessage, "date | never");
     }
 
@@ -52,40 +54,37 @@ class RequiredFieldConstraintTest {
     void notComplete() {
         var invalidMessage = Combination.newBuilder()
                 .setA1("a1")
-                .setB2(ByteString.copyFrom("b2", UTF_16))
-                .buildPartial();
+                .setB2(ByteString.copyFrom("b2", UTF_16));
         assertInvalid(invalidMessage, "a1 & a2 | b1 & b2");
-
     }
 
     @Test
     @DisplayName("if at least one alternative is set, no violation")
     void valid() {
-        var invalidMessage = Combination.newBuilder()
+        var message = Combination.newBuilder()
                 .setA1("a1")
-                .addA2("a2")
-                .build();
-        assertThat(invalidMessage.validate()).isEmpty();
+                .addA2("a2");
+        assertValid(message);
     }
 
     @Test
     @DisplayName("if all the alternatives are set, no violation")
     void all() {
-        var invalidMessage = Combination.newBuilder()
+        var message = Combination.newBuilder()
                 .setA1("a1")
                 .addA2("a2")
                 .putB1(42, 314)
-                .setB2(ByteString.copyFromUtf8("b2"))
-                .build();
-        assertThat(invalidMessage.validate()).isEmpty();
+                .setB2(ByteString.copyFromUtf8("b2"));
+        assertValid(message);
     }
 
-    private static void assertInvalid(MessageWithConstraints message, String violationParam) {
-        var violations = message.validate();
+    private static void assertInvalid(Message.Builder message, String violationParam) {
+        var violations = IsValid.assertInvalid(message);
+        var typeName = TypeName.of(message.buildPartial());
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
                 .containsExactly(ConstraintViolation.newBuilder()
-                                         .setTypeName(TypeName.of(message).value())
+                                         .setTypeName(typeName.value())
                                          .addParam(violationParam)
                                          .build());
     }

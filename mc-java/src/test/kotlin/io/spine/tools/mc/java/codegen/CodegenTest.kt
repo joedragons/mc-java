@@ -63,6 +63,7 @@ class `'codegen { }' block should` {
         project.repositories.applyStandard()
         project.apply {
             it.plugin("java")
+            it.plugin("com.google.protobuf")
             it.plugin(McJavaPlugin::class.java)
         }
         options = project.mcJava

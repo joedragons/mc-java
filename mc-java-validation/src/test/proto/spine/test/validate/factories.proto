@@ -50,7 +50,7 @@ message AllFields {
 
     float float_field = 6 [(range) = "[0.0..1.0]"];
 
-    google.protobuf.Empty message = 7 [(.validate) = true];
+    WithString message = 7 [(.validate) = true];
 
     AnEnum enum = 8 [(required) = true];
 
@@ -68,4 +68,9 @@ message AllFields {
 message WithBoolean {
 
     bool boolean = 1;
+}
+
+message WithString {
+
+    string value = 1 [(pattern).regex = ".+"];
 }
