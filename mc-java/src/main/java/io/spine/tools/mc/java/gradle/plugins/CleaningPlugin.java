@@ -48,25 +48,39 @@ public final class CleaningPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        var preCleanAction = (Action<Task>) task -> cleanIn(project);
+        var preCleanAction = new PreCleanAction(project);
         var preCleanTask = GradleTask.newBuilder(preClean, preCleanAction)
                 .insertBeforeTask(clean)
                 .applyNowTo(project);
         project.getLogger().debug("Pre-clean phase initialized: `{}`.", preCleanTask);
     }
 
-    private static void cleanIn(Project project) {
-        var logger = project.getLogger();
-        var dirsToClean = TempArtifactDirs.getFor(project);
-        logger.debug(
-                "Pre-clean: deleting the directories (`{}`).", lazy(dirsToClean::toString)
-        );
-        dirsToClean.stream()
-                   .map(File::toPath)
-                   .forEach(dir -> {
-                       logger.debug("Deleting directory `{}`...", dir);
-                       deleteRecursively(dir);
-                   });
+    /**
+     * Recursively deletes {@linkplain TempArtifactDirs temp. artifact directories} in
+     * the given project.
+     */
+    private static class PreCleanAction implements Action<Task> {
+
+        private final Project project;
+
+        private PreCleanAction(Project project) {
+            this.project = project;
+        }
+
+        @Override
+        public void execute(Task task) {
+            var logger = project.getLogger();
+            var dirsToClean = TempArtifactDirs.getFor(project);
+            logger.debug(
+                    "Pre-clean: deleting the directories (`{}`).", lazy(dirsToClean::toString)
+            );
+            dirsToClean.stream()
+                    .map(File::toPath)
+                    .forEach(dir -> {
+                        logger.debug("Deleting directory `{}`...", dir);
+                        deleteRecursively(dir);
+                    });
+        }
     }
 }
 
