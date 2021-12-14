@@ -43,16 +43,17 @@ class ValidateConstraintTest {
         var wrongAddress = DeliveryReceiver
                 .newBuilder()
                 .setName(PersonName.newBuilder()
-                                   .setGivenName("Adam")
-                                   .buildPartial())
+                                 .setGivenName("Adam")
+                                 .buildPartial())
                 .setAddress(Address.newBuilder()
-                                   .setSecondLine("Wall St. 1")
-                                   .buildPartial())
+                                    .setSecondLine("Wall St. 1")
+                                    .buildPartial())
                 .buildPartial();
         var error = wrongAddress.validate();
         assertThat(error)
                 .isPresent();
-        var violations = error.get().getConstraintViolationList();
+        var violations = error.get()
+                              .getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         var wrapperViolation = violations.get(0);
@@ -75,8 +76,7 @@ class ValidateConstraintTest {
     @Test
     @DisplayName("repeated message fields are validated and violations are stored separately")
     void validateRepeated() {
-        var msg = DeliveryReceiver
-                .newBuilder()
+        var msg = DeliveryReceiver.newBuilder()
                 .setName(PersonName.newBuilder()
                                  .setGivenName("Eve"))
                 .setAddress(Address.newBuilder()
@@ -127,12 +127,12 @@ class ValidateConstraintTest {
         var receiver = DeliveryReceiver
                 .newBuilder()
                 .setName(PersonName.newBuilder()
-                                   .setGivenName("Shawn"))
+                                 .setGivenName("Shawn"))
                 .setAddress(Address.newBuilder()
-                                   .setFirstLine("Window St. 2")
-                                   .setTown(Town.newBuilder()
-                                                .setCity("Kharkiv")
-                                                .setCountry("Ukraine")))
+                                    .setFirstLine("Window St. 2")
+                                    .setTown(Town.newBuilder()
+                                                     .setCity("Kharkiv")
+                                                     .setCountry("Ukraine")))
                 .addEmail(EmailAddress.newBuilder()
                                   .setValue("definitely not an email")
                                   .buildPartial())

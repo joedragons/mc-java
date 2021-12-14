@@ -52,8 +52,7 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("a complete group of fields must be set")
     void notComplete() {
-        var invalidMessage = Combination
-                .newBuilder()
+        var invalidMessage = Combination.newBuilder()
                 .setA1("a1")
                 .setB2(ByteString.copyFrom("b2", UTF_16));
         assertInvalid(invalidMessage, "a1 & a2 | b1 & b2");
@@ -62,8 +61,7 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("if at least one alternative is set, no violation")
     void valid() {
-        var message = Combination
-                .newBuilder()
+        var message = Combination.newBuilder()
                 .setA1("a1")
                 .addA2("a2");
         assertValid(message);
@@ -72,8 +70,7 @@ class RequiredFieldConstraintTest {
     @Test
     @DisplayName("if all the alternatives are set, no violation")
     void all() {
-        var message = Combination
-                .newBuilder()
+        var message = Combination.newBuilder()
                 .setA1("a1")
                 .addA2("a2")
                 .putB1(42, 314)
@@ -86,8 +83,7 @@ class RequiredFieldConstraintTest {
         var typeName = TypeName.of(message.buildPartial());
         assertThat(violations)
                 .comparingExpectedFieldsOnly()
-                .containsExactly(ConstraintViolation
-                                         .newBuilder()
+                .containsExactly(ConstraintViolation.newBuilder()
                                          .setTypeName(typeName.value())
                                          .addParam(violationParam)
                                          .build());
