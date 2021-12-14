@@ -23,12 +23,3 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-sourceSets {
-    main {
-        java.srcDirs("$buildDir/generated-proto/main/spine", "$buildDir/generated-proto/main/grpc")
-    }
-    test {
-        java.srcDirs("$buildDir/generated-proto/test/spine", "$buildDir/generated-proto/test/grpc")
-    }
-}
