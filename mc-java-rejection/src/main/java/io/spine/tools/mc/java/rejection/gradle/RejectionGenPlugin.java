@@ -64,7 +64,7 @@ public final class RejectionGenPlugin implements Plugin<Project> {
         );
     }
 
-    private ImmutableList<GradleTask> createTasks(Project project) {
+    private static ImmutableList<GradleTask> createTasks(Project project) {
         return getSourceSetNames(project).stream()
                 .map(ssn -> createTask(ssn, project))
                 .collect(toImmutableList());
