@@ -26,8 +26,6 @@
 
 package io.spine.tools.mc.java.annotation.mark;
 
-import io.spine.logging.Logging;
-
 /**
  * A source code annotation job obtains required {@link Annotator} instances from
  * {@link AnnotatorFactory} passed to the {@link #execute(AnnotatorFactory)} method.

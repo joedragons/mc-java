@@ -26,7 +26,7 @@
 
 package io.spine.internal.dependency
 
-import org.gradle.api.Project
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.extra
 
 /**
@@ -36,7 +36,7 @@ import org.gradle.kotlin.dsl.extra
  * Creates a new instance of `Spine` taking the `baseVersion` from the given project's
  * extra properties.
  */
-class Spine(p: Project) {
+class Spine(p: ExtensionAware) {
 
     val base = "io.spine:spine-base:${p.spineVersion}"
     val testlib = "io.spine.tools:spine-testlib:${p.spineVersion}"
@@ -47,10 +47,47 @@ class Spine(p: Project) {
 
     val modelCompiler = "io.spine.tools:spine-model-compiler:${p.mcVersion}"
 
-    private val Project.spineVersion: String
+    val validation = Validation(p)
+
+    private val ExtensionAware.spineVersion: String
         get() = extra["baseVersion"] as String
-    private val Project.mcVersion: String
+    private val ExtensionAware.mcVersion: String
         get() = extra["mcVersion"] as String
-    private val Project.toolBaseVersion: String
+    private val ExtensionAware.toolBaseVersion: String
         get() = extra["toolBaseVersion"] as String
+
+    /**
+     * Dependencies on Spine validation modules.
+     *
+     * See [`SpineEventEngine/validation`](https://github.com/SpineEventEngine/validation/).
+     */
+    class Validation(p: ExtensionAware) {
+
+        val runtime = "io.spine.validation:runtime:${p.validationVersion}"
+        val java = "io.spine.validation:java:${p.validationVersion}"
+        val model = "io.spine.validation:model:${p.validationVersion}"
+        val config = "io.spine.validation:configuration:${p.validationVersion}"
+
+        private val ExtensionAware.validationVersion: String
+            get() = extra["validationVersion"] as String
+    }
+
+    /**
+     * Dependencies on ProtoData modules.
+     *
+     * See [`SpineEventEngine/ProtoData`](https://github.com/SpineEventEngine/ProtoData/).
+     */
+    object ProtoData {
+
+        const val pluginId = "io.spine.proto-data"
+
+        /**
+         * The version of ProtoData.
+         *
+         * We declare ProtoData version here instead of `versions.gradle.kts` because we later use
+         * it in a `plugins` section in a build script.
+         */
+        const val version = "0.1.2"
+        const val pluginLib = "io.spine:proto-data:$version"
+    }
 }

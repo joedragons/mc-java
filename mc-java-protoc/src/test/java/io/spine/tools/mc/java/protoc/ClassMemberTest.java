@@ -26,7 +26,6 @@
 
 package io.spine.tools.mc.java.protoc;
 
-import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
 import io.spine.tools.java.code.Method;
 import io.spine.tools.java.fs.SourceFile;
 import io.spine.tools.protoc.plugin.MessageWithClassScopeInsertion;

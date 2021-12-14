@@ -38,9 +38,13 @@ import java.io.File;
 import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.tools.fs.DirectoryName.spine;
 import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
+import static io.spine.tools.test.ProjectPaths.protobufGeneratedDir;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
+import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`RejectionGenPlugin` should")
@@ -78,18 +82,16 @@ class RejectionGenPluginTest {
         }
     }
 
-    private static Path generatedRoot() {
+    private static Path generatedRoot(String sourceSetName) {
         checkNotNull(projectDir);
-        return projectDir.toPath().resolve("generated/");
+        return protobufGeneratedDir(projectDir.toPath(), sourceSetName, spine.name());
     }
     private static Path targetMainDir() {
-        var targetRoot = generatedRoot().resolve("main/spine/");
-        return targetRoot;
+        return generatedRoot(MAIN_SOURCE_SET_NAME);
     }
 
     private static Path targetTestDir() {
-        var targetRoot = generatedRoot().resolve("test/spine/");
-        return targetRoot;
+        return generatedRoot(TEST_SOURCE_SET_NAME);
     }
 
     @Nested

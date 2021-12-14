@@ -23,16 +23,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package io.spine.tools.mc.java.rejection.gradle;
 
 import com.google.common.collect.ImmutableList;
 import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.task.GradleTask;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static io.spine.tools.gradle.project.Projects.getSourceSetNames;
@@ -59,54 +57,28 @@ public final class RejectionGenPlugin implements Plugin<Project> {
      */
     @Override
     public void apply(Project project) {
-        var helper = new Helper(project);
-        helper.configure();
+        var tasks = createTasks(project);
         project.getLogger().info(
                 "Rejection generation plugin initialized with tasks: `{}`.",
-                helper.tasks
+                tasks
         );
     }
 
-    /**
-     * Creates tasks and applies them to the project.
-     */
-    private static final class Helper {
+    private static ImmutableList<GradleTask> createTasks(Project project) {
+        return getSourceSetNames(project).stream()
+                .map(ssn -> createTask(ssn, project))
+                .collect(toImmutableList());
+    }
 
-        private final Project project;
-        private final ProtoModule module;
-
-        /** Configured tasks are {@code null} until {@link #configure()} is called. */
-        private @MonotonicNonNull ImmutableList<GradleTask> tasks;
-
-        private Helper(Project project) {
-            this.project = project;
-            this.module = new ProtoModule(project);
-        }
-
-        private void configure() {
-            this.tasks = getSourceSetNames(project).stream()
-                    .map(this::createTask)
-                    .collect(toImmutableList());
-        }
-
-        private GradleTask createTask(SourceSetName ssn) {
-            var action = RejectionGenAction.create(project, ssn);
-            return createTask(action, ssn);
-        }
-
-        private GradleTask createTask(Action<Task> action, SourceSetName ssn) {
-            var rejections = generateRejections(ssn);
-            var mergeTask = mergeDescriptorSet(ssn);
-            var compileTask = compileJava(ssn);
-            var inputFiles = module.protoSource(ssn);
-            var outputFiles = module.generatedRejections(ssn);
-            var task = GradleTask.newBuilder(rejections, action)
-                    .insertBeforeTask(compileTask)
-                    .insertAfterTask(mergeTask)
-                    .withInputFiles(inputFiles)
-                    .withOutputFiles(outputFiles)
-                    .applyNowTo(project);
-            return task;
-        }
+    private static GradleTask createTask(SourceSetName ssn, Project project) {
+        var action = RejectionGenAction.create(project, ssn);
+        var rejections = generateRejections(ssn);
+        var mergeTask = mergeDescriptorSet(ssn);
+        var compileTask = compileJava(ssn);
+        var task = GradleTask.newBuilder(rejections, action)
+                .insertBeforeTask(compileTask)
+                .insertAfterTask(mergeTask)
+                .applyNowTo(project);
+        return task;
     }
 }

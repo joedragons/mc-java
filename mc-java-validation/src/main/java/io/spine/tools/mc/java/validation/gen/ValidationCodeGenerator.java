@@ -82,6 +82,7 @@ import static java.util.stream.Collectors.toList;
  * the message class. Note that some methods are declared as {@code static}.
  * Thus, they cannot be placed into an inner (non-static) class.
  */
+@SuppressWarnings("RedundantExplicitVariableType") // Avoid extra casts for lambda variables.
 final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMember>> {
 
     @SuppressWarnings("UnstableApiUsage")
@@ -151,8 +152,8 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     public void visitRequired(RequiredConstraint constraint) {
         var field = constraint.field();
         var fieldIsSet = new IsSet(field);
-        Check messageIsNotSet = fieldAccess -> fieldIsSet.invocation(messageAccess)
-                                                         .negate();
+        var messageIsNotSet = (Check) fieldAccess -> fieldIsSet.invocation(messageAccess)
+                                                               .negate();
         CreateViolation violation = fieldAccess -> violation(field, constraint);
         append(constraintCode(field)
                        .conditionCheck(messageIsNotSet)
@@ -237,7 +238,9 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
         var nestedViolations = obtainViolations(field, violationsVar);
         Check check = fieldAccess -> isEmpty(violationsVar).negate();
         var errorMessageOption = new IfInvalid().valueOrDefault(field.descriptor());
-        @SuppressWarnings("deprecation")    /* Backward compatibility in the current version. */
+        @SuppressWarnings("deprecation")
+            // Old validation uses the deprecated field.
+            // With the new validation lib, we will get rid of it.
         var errorMessage = errorMessage(errorMessageOption, errorMessageOption.getMsgFormat());
         CreateViolation violation = fieldAccess -> newViolation(field, constraint)
                 .setMessage(errorMessage)
@@ -257,7 +260,8 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
         externalConstraintFlags.add(flag);
         var isSet = new IsSet(field);
         return fieldAccess -> {
-            var assignViolations = isSet.valueIsNotSet(fieldAccess)
+            var assignViolations = isSet
+                    .valueIsNotSet(fieldAccess)
                     .ifTrue(assignToEmpty(violationsVar))
                     .elseIf(flag.value(), externalViolations(field, violationsVar, fieldAccess))
                     .orElse(intrinsicViolations(field, violationsVar, fieldAccess));
@@ -315,7 +319,6 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
                         () -> new IllegalStateException("`(required_field)` must not be empty.")
                 );
         var condition = fieldsAreSet.negate();
-        @SuppressWarnings("DuplicateStringLiteralInspection")
         Expression<ConstraintViolation> violation = newViolation()
                 .setMessage("Required fields are not set. Must match pattern `%s`.")
                 .setField(fieldContext.fieldPath())
@@ -355,14 +358,17 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     @Override
     public ImmutableSet<ClassMember> translate() {
         compileCustomConstraints();
-        List<ClassMember> isSetMethods = type.fields().stream()
+        List<ClassMember> isSetMethods = type
+                .fields()
+                .stream()
                 .map(IsSet::new)
                 .map(IsSet::method)
                 .map(Method::new)
                 .collect(toList());
         var validateMethod =
                 new ValidateMethod(type, methodName, messageAccess, compiledConstraints);
-        var externalFlags = externalConstraintFlags.stream()
+        var externalFlags = externalConstraintFlags
+                .stream()
                 .map(ExternalConstraintFlag::asClassMember)
                 .collect(toList());
         var methods = ImmutableSet.<ClassMember>builder()
@@ -397,7 +403,7 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
     private NewViolation.Builder newViolation(FieldDeclaration field, Constraint constraint) {
         var context = fieldContext.forChild(field);
         return NewViolation.forField(context)
-                .setMessage(constraint.errorMessage(context));
+                           .setMessage(constraint.errorMessage(context));
     }
 
     private NewViolation violation(FieldDeclaration field, Constraint constraint) {
@@ -413,8 +419,11 @@ final class ValidationCodeGenerator implements ConstraintTranslator<Set<ClassMem
 
     private
     CodeBlock applyIfTrue(BooleanExpression condition, Expression<ConstraintViolation> violation) {
-        var codeBlock = violationAccumulator.apply(violation).toCode();
-        var result = condition.ifTrue(codeBlock).toCode();
+        var codeBlock =
+                violationAccumulator.apply(violation)
+                                    .toCode();
+        var result = condition.ifTrue(codeBlock)
+                              .toCode();
         return result;
     }
 }

@@ -24,49 +24,49 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle.codegen;
+package io.spine.tools.test;
 
-import io.spine.validation.FilePattern;
-import org.checkerframework.checker.regex.qual.Regex;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.nio.file.Path;
 
 /**
- * An utility for working with {@link FilePattern}.
+ * A factory of paths to conventional locations in a Gradle project.
  */
-public final class FilePatterns {
+public final class ProjectPaths {
 
-    /** Prevents instantiation of this utility class. */
-    private FilePatterns() {
+    /**
+     * Prevents the utility class instantiation.
+     */
+    private ProjectPaths() {
     }
 
     /**
-     * Creates a new {@link FilePattern} with a {@code suffix} field filled.
+     * Obtains the path to the generated sources.
+     *
+     * @param projectDir
+     *         the absolute path to the project
+     * @param sourceSetName
+     *         the name of the source set
+     * @param generatorName
+     *         the name of the source code generator
+     * @return a path within the {@code projectDir}
      */
-    public static FilePattern fileSuffix(@Regex String suffix) {
-        checkNotNull(suffix);
-        return FilePattern.newBuilder()
-                          .setSuffix(suffix)
-                          .build();
+    public static Path protobufGeneratedDir(Path projectDir,
+                                            String sourceSetName,
+                                            String generatorName) {
+        return projectDir.resolve("build")
+                         .resolve("generated-proto")
+                         .resolve(sourceSetName)
+                         .resolve(generatorName);
     }
 
     /**
-     * Creates a new {@link FilePattern} with a {@code prefix} field filled.
+     * Obtains the path to the main-scope generated Java sources.
+     *
+     * @param projectDir
+     *         the absolute path to the project
+     * @return a path within the {@code projectDir}
      */
-    public static FilePattern filePrefix(@Regex String prefix) {
-        checkNotNull(prefix);
-        return FilePattern.newBuilder()
-                          .setPrefix(prefix)
-                          .build();
-    }
-
-    /**
-     * Creates a new {@link FilePattern} with a {@code regex} field filled.
-     */
-    public static FilePattern fileRegex(@Regex String regex) {
-        checkNotNull(regex);
-        return FilePattern.newBuilder()
-                          .setRegex(regex)
-                          .build();
+    public static Path protobufGeneratedDir(Path projectDir) {
+        return protobufGeneratedDir(projectDir, "main", "java");
     }
 }

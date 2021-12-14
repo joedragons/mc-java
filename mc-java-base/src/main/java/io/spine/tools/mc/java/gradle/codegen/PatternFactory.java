@@ -26,7 +26,7 @@
 
 package io.spine.tools.mc.java.gradle.codegen;
 
-import io.spine.tools.mc.java.codegen.FilePattern;
+import io.spine.validation.FilePattern;
 import org.checkerframework.checker.regex.qual.Regex;
 
 import static io.spine.tools.mc.java.gradle.codegen.FilePatterns.filePrefix;

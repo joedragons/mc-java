@@ -25,6 +25,7 @@
  */
 
 import io.spine.internal.dependency.Roaster
+import io.spine.internal.dependency.Spine
 
 dependencies {
     implementation(Roaster.api) {
@@ -36,8 +37,9 @@ dependencies {
 
     implementation(project(":mc-java-base"))
 
-    val spine = io.spine.internal.dependency.Spine(project)
+    val spine = Spine(project)
     testImplementation(spine.pluginTestlib)
+    testImplementation(project(":mc-java-testlib"))
     testImplementation(gradleTestKit())
 }
 

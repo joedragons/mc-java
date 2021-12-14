@@ -29,13 +29,16 @@ package io.spine.test.tools.validate;
 import io.spine.base.FieldPath;
 import io.spine.type.TypeName;
 import io.spine.validate.ConstraintViolation;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.google.common.truth.Truth8.assertThat;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static io.spine.base.Time.currentTime;
 
 @DisplayName("`(goes)` option should be compiled so that")
+@Disabled
 class GoesConstraintTest {
 
     @Test
@@ -45,7 +48,10 @@ class GoesConstraintTest {
         var paper = Paper.newBuilder()
                 .setWhenArchived(currentTime())
                 .buildPartial();
-        var violations = paper.validate();
+        var error = paper.validate();
+        assertThat(error)
+                .isPresent();
+        var violations = error.get().getConstraintViolationList();
         assertThat(violations)
                 .hasSize(1);
         assertThat(violations.get(0))

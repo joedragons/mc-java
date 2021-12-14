@@ -125,6 +125,7 @@ class EntityQueryBuilderTest {
 
         @Test
         @DisplayName("by the value of either of the entity columns")
+        @SuppressWarnings("RedundantExplicitVariableType") // Avoid extra casts for lambdas.
         void byEitherColumn() {
             var daysSinceStarted = 30;
             var statusValue = DONE;

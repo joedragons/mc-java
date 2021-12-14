@@ -24,17 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.Spine
+/**
+ * Common components for testing {@code mc-java}.
+ */
 
-dependencies {
-    api(gradleApi())
-    api(gradleKotlinDsl())
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.test;
 
-    val spine = Spine(project)
-    api(spine.modelCompiler)
-    api(spine.validation.config)
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    testImplementation(spine.testlib)
-    testImplementation(gradleTestKit())
-    testImplementation(spine.pluginTestlib)
-}
+import javax.annotation.ParametersAreNonnullByDefault;

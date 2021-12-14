@@ -28,16 +28,16 @@ package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.java.PackageName;
 import io.spine.code.proto.FieldName;
-import io.spine.tools.code.SourceSetName;
-import io.spine.tools.fs.DirectoryName;
-import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.FileName;
-import io.spine.tools.java.fs.JavaFiles;
+import io.spine.tools.test.ProjectPaths;
 
 import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Arrays;
 
+import static io.spine.tools.fs.DirectoryName.spine;
 import static java.lang.String.format;
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 
 final class TestEnv {
 
@@ -56,15 +56,10 @@ final class TestEnv {
     private TestEnv() {
     }
 
-    static String rejectionsJavadocThrowableSource() {
-        var fileName = DefaultJavaPaths.at(Paths.get("/"))
-                .generated()
-                .dir(SourceSetName.main)
-                .path()
-                .resolve("../" + DirectoryName.spine.value())
-                .resolve(JavaFiles.toDirectory(JAVA_PACKAGE))
-                .resolve(REJECTION_FILE_NAME.value());
-        return fileName.toString();
+    static Path rejectionsJavadocThrowableSource(Path projectDir) {
+        return ProjectPaths.protobufGeneratedDir(projectDir, MAIN_SOURCE_SET_NAME, spine.name())
+                    .resolve(Paths.get(JAVA_PACKAGE))
+                    .resolve(REJECTION_FILE_NAME.value());
     }
 
     static Iterable<String> rejectionWithJavadoc() {

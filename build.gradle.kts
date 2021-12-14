@@ -36,6 +36,7 @@ import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.Guava
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
+import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.IncrementGuard
 import io.spine.internal.gradle.RunBuild
@@ -70,6 +71,9 @@ plugins {
     id(io.spine.internal.dependency.Protobuf.GradlePlugin.id)
     id(io.spine.internal.dependency.ErrorProne.GradlePlugin.id)
     kotlin("jvm")
+    with(io.spine.internal.dependency.Spine.ProtoData) {
+        id(pluginId) version version
+    }
 }
 
 spinePublishing {
@@ -108,10 +112,15 @@ subprojects {
         plugin("net.ltgt.errorprone")
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
+        plugin("io.spine.proto-data")
     }
+
+    val validation = Spine(project).validation
 
     dependencies {
         errorprone(ErrorProne.core)
+
+        protoData(validation.java)
 
         compileOnlyApi(FindBugs.annotations)
         compileOnlyApi(CheckerFramework.annotations)
@@ -123,6 +132,8 @@ subprojects {
         JUnit.api.forEach { testImplementation(it) }
         Truth.libs.forEach { testImplementation(it) }
         testRuntimeOnly(JUnit.runner)
+
+        testImplementation(validation.runtime)
     }
 
     val baseVersion: String by extra
@@ -218,9 +229,24 @@ subprojects {
     publishProtoArtifact(project)
     LicenseReporter.generateReportIn(project)
 
-    protobuf {
-        generatedFilesBaseDir = generatedDir
-        protoc { artifact = Protobuf.compiler }
+    protobuf { protoc { artifact = Protobuf.compiler } }
+
+    protoData {
+        renderers(
+            "io.spine.validation.java.PrintValidationInsertionPoints",
+            "io.spine.validation.java.JavaValidationRenderer",
+
+            // Suppress warnings in the generated code.
+            "io.spine.protodata.codegen.java.file.PrintBeforePrimaryDeclaration",
+            "io.spine.protodata.codegen.java.suppress.SuppressRenderer"
+        )
+        plugins(
+            "io.spine.validation.ValidationPlugin"
+        )
+        options(
+            "spine/options.proto",
+            "spine/time_options.proto"
+        )
     }
 }
 

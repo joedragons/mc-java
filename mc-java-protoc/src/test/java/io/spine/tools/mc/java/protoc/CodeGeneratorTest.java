@@ -27,14 +27,11 @@
 package io.spine.tools.mc.java.protoc;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.truth.IterableSubject;
-import com.google.common.truth.StringSubject;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequest;
-import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse;
 import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
-import io.spine.tools.mc.java.protoc.given.TestInterface;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.codegen.Uuids;
+import io.spine.tools.mc.java.protoc.given.TestInterface;
 import io.spine.tools.protoc.plugin.EnhancedWithCodeGeneration;
 import io.spine.tools.protoc.plugin.TestGeneratorsProto;
 import io.spine.type.MessageType;

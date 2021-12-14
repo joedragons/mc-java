@@ -58,6 +58,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static com.google.common.flogger.LazyArgs.lazy;
+import static io.spine.tools.gradle.project.Projects.getSourceSets;
 import static io.spine.tools.mc.java.gradle.Projects.generatedRejectionsDir;
 import static io.spine.tools.mc.java.gradle.Projects.protoDir;
 
@@ -74,17 +75,6 @@ final class RejectionGenAction extends CodeGenerationAction {
 
     private final SourceSetName ssn;
 
-    /**
-     * Creates an action for generating Java source code for rejection types defined in proto
-     * files in the given sources set of the project.
-     */
-    static Action<Task> create(Project project, SourceSetName ssn) {
-        Supplier<String> protoSrcDir = () -> protoDir(project, ssn).toString();
-        var protoFiles = ProtoFiles.collect(project, ssn);
-        Supplier<String> targetDir = () -> generatedRejectionsDir(project, ssn).toString();
-        return new RejectionGenAction(project, ssn, protoSrcDir, protoFiles, targetDir);
-    }
-
     private RejectionGenAction(Project project,
                                SourceSetName ssn,
                                Supplier<String> protoSrcDir,
@@ -92,6 +82,33 @@ final class RejectionGenAction extends CodeGenerationAction {
                                Supplier<String> targetDir) {
         super(project, protoFiles, targetDir, protoSrcDir);
         this.ssn = checkNotNull(ssn);
+    }
+
+    /**
+     * Creates an action for generating Java source code for rejection types defined in proto
+     * files in the given sources set of the project.
+     */
+    @SuppressWarnings("RedundantExplicitVariableType") // Avoid extra casts.
+    static Action<Task> create(Project project, SourceSetName ssn) {
+        Supplier<String> protoSrcDir = () -> protoDir(project, ssn).toString();
+        var protoFiles = ProtoFiles.collect(project, ssn);
+        Supplier<String> targetDir = () -> generatedRejectionsDir(project, ssn).toString();
+
+        prepareSourceSets(project, ssn, targetDir);
+
+        return new RejectionGenAction(project, ssn, protoSrcDir, protoFiles, targetDir);
+    }
+
+    /**
+     * Adds the given {@code targetDir} to the source set with the given name.
+     */
+    private static void prepareSourceSets(Project project,
+                                          SourceSetName ssn,
+                                          Supplier<String> targetDir) {
+        var sourceSets = getSourceSets(project);
+        var sourceSet = sourceSets.getByName(ssn.getValue());
+        var dir = project.provider(targetDir::get);
+        sourceSet.java(sds -> sds.srcDir(dir));
     }
 
     @Override
@@ -128,14 +145,12 @@ final class RejectionGenAction extends CodeGenerationAction {
                 .stream()
                 .map(File::toPath)
                 .collect(toImmutableSet());
-
-        Predicate<SourceFile> predicate = file -> {
+        return file -> {
             var sourceFile = file.path();
-            var contains = protoFiles.stream()
-                    .anyMatch(path -> path.endsWith(sourceFile));
-            return contains;
+            return protoFiles.stream().anyMatch(
+                    path -> path.endsWith(sourceFile)
+            );
         };
-        return predicate;
     }
 
     private void generateRejections(RejectionsFile source) {

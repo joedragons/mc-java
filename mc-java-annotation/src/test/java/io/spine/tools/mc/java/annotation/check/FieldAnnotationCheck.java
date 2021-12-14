@@ -29,7 +29,6 @@ package io.spine.tools.mc.java.annotation.check;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import io.spine.annotation.Internal;
 import io.spine.code.proto.FieldName;
-import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.TypeHolder;
 import org.jboss.forge.roaster.model.VisibilityScoped;
 import org.jboss.forge.roaster.model.impl.AbstractJavaSource;

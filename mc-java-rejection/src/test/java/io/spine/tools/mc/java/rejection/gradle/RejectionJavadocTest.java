@@ -41,7 +41,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -68,9 +67,7 @@ class RejectionJavadocTest {
                 .addFile("src/main/proto/javadoc_rejections.proto", rejectionWithJavadoc())
                 .create();
         project.executeTask(generateRejections(SourceSetName.main));
-        var generatedFile = new File(
-                projectDir.getAbsolutePath() + rejectionsJavadocThrowableSource()
-        );
+        var generatedFile = rejectionsJavadocThrowableSource(projectDir.toPath()).toFile();
         generatedSource = Roaster.parse(JavaClassSource.class, generatedFile);
     }
 

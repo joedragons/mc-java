@@ -24,12 +24,4 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * Contains smoke tests for generated validating builders.
- */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.test.validate;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-import javax.annotation.ParametersAreNonnullByDefault;
+// No extra config required.
