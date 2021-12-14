@@ -37,8 +37,8 @@ import io.spine.base.EventMessage;
 import io.spine.base.RejectionMessage;
 import io.spine.base.UuidValue;
 import io.spine.code.java.PackageName;
-import io.spine.tools.java.fs.Directory;
 import io.spine.tools.java.fs.FileName;
+import io.spine.tools.java.fs.JavaFiles;
 import io.spine.tools.java.fs.SourceFile;
 import io.spine.tools.mc.java.codegen.CodegenOptions;
 import io.spine.tools.mc.java.gradle.codegen.CodegenOptionsConfig;
@@ -63,6 +63,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
@@ -477,7 +478,8 @@ final class InterfaceGenTest {
 
     private static SourceFile sourceWithPackage(String typeName) {
         var fileName = FileName.forType(typeName);
-        return Directory.of(JAVA_PACKAGE).resolve(fileName);
+        Path packageDir = JavaFiles.toDirectory(JAVA_PACKAGE);
+        return JavaFiles.resolve(packageDir, fileName);
     }
 
     private static boolean haveSamePath(File generatedFile, SourceFile anotherFile) {
@@ -491,9 +493,9 @@ final class InterfaceGenTest {
 
     private static void assertPackage(File generatedFile) {
         var generatedFilePath = Paths.get(generatedFile.getName());
-        var directory = Directory.of(JAVA_PACKAGE);
+        var directory = JavaFiles.toDirectory(JAVA_PACKAGE);
         assertThat(generatedFilePath.toString())
-                .startsWith(directory.path().toString());
+                .startsWith(directory.toString());
     }
 
     /**

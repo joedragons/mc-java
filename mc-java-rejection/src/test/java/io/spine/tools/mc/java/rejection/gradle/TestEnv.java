@@ -29,9 +29,9 @@ package io.spine.tools.mc.java.rejection.gradle;
 import io.spine.code.java.PackageName;
 import io.spine.code.proto.FieldName;
 import io.spine.tools.java.fs.FileName;
+import io.spine.tools.java.fs.JavaFiles;
 import io.spine.tools.test.ProjectPaths;
 
-import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -57,8 +57,9 @@ final class TestEnv {
     }
 
     static Path rejectionsJavadocThrowableSource(Path projectDir) {
+        Path javaPackage = JavaFiles.toDirectory(JAVA_PACKAGE);
         return ProjectPaths.protobufGeneratedDir(projectDir, MAIN_SOURCE_SET_NAME, spine.name())
-                    .resolve(Paths.get(JAVA_PACKAGE))
+                    .resolve(javaPackage)
                     .resolve(REJECTION_FILE_NAME.value());
     }
 
