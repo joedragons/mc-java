@@ -41,9 +41,8 @@ class ExternalConstraintTest {
     @Disabled
     void validateExternal() {
         var user = User.newBuilder()
-                        .addContact(Email.newBuilder()
-                                         .setValue("not an email"))
-                        .buildPartial();
+                .addContact(Email.newBuilder().setValue("not an email"))
+                .buildPartial();
         var error = user.validate();
         assertThat(error)
                 .isPresent();
@@ -64,8 +63,8 @@ class ExternalConstraintTest {
                 .setSecondLine("first line is required and not set")
                 .buildPartial();
         var user = User.newBuilder()
-                        .addShippingAddress(address)
-                        .buildPartial();
+                .addShippingAddress(address)
+                .buildPartial();
         var error = user.validate();
         assertThat(error)
                 .isPresent();
