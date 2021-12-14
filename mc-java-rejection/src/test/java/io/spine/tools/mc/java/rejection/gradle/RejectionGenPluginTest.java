@@ -38,6 +38,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.tools.fs.DirectoryName.spine;
 import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
 import static io.spine.tools.test.ProjectPaths.protobufGeneratedDir;
 import static java.lang.String.format;
@@ -83,7 +84,7 @@ class RejectionGenPluginTest {
 
     private static Path generatedRoot(String sourceSetName) {
         checkNotNull(projectDir);
-        return protobufGeneratedDir(projectDir.toPath(), sourceSetName, "spine");
+        return protobufGeneratedDir(projectDir.toPath(), sourceSetName, spine.name());
     }
     private static Path targetMainDir() {
         return generatedRoot(MAIN_SOURCE_SET_NAME);
