@@ -27,7 +27,9 @@
 package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.testing.TempDir;
+import io.spine.tools.code.SourceSetName;
 import io.spine.tools.gradle.testing.GradleProject;
+import io.spine.tools.java.fs.DefaultJavaPaths;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -38,13 +40,11 @@ import java.io.File;
 import java.nio.file.Path;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.tools.fs.DirectoryName.spine;
+import static io.spine.tools.code.SourceSetName.main;
+import static io.spine.tools.code.SourceSetName.test;
 import static io.spine.tools.gradle.task.JavaTaskName.compileTestJava;
-import static io.spine.tools.test.ProjectPaths.protobufGeneratedDir;
 import static java.lang.String.format;
 import static java.nio.file.Files.exists;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
-import static org.gradle.api.tasks.SourceSet.TEST_SOURCE_SET_NAME;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("`RejectionGenPlugin` should")
@@ -82,16 +82,16 @@ class RejectionGenPluginTest {
         }
     }
 
-    private static Path generatedRoot(String sourceSetName) {
+    private static Path generatedRoot(SourceSetName sourceSetName) {
         checkNotNull(projectDir);
-        return protobufGeneratedDir(projectDir.toPath(), sourceSetName, spine.name());
+        return DefaultJavaPaths.at(projectDir).generatedProto().spine(sourceSetName).path();
     }
     private static Path targetMainDir() {
-        return generatedRoot(MAIN_SOURCE_SET_NAME);
+        return generatedRoot(main);
     }
 
     private static Path targetTestDir() {
-        return generatedRoot(TEST_SOURCE_SET_NAME);
+        return generatedRoot(test);
     }
 
     @Nested
