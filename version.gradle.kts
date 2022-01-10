@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,5 +36,5 @@ val mcVersion by extra("2.0.0-SNAPSHOT.87")
  */
 val validationVersion by extra("2.0.0-SNAPSHOT.12")
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.87")
+val mcJavaVersion by extra("2.0.0-SNAPSHOT.88")
 val versionToPublish by extra(mcJavaVersion)
