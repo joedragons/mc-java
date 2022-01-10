@@ -36,7 +36,6 @@ dependencies {
     }
 
     implementation(project(":mc-java-base"))
-    testImplementation(project(":mc-java-testlib"))
     testImplementation(Spine(project).pluginTestlib)
     testImplementation(gradleTestKit())
 }

@@ -39,7 +39,6 @@ dependencies {
 
     val spine = Spine(project)
     testImplementation(spine.pluginTestlib)
-    testImplementation(project(":mc-java-testlib"))
     testImplementation(gradleTestKit())
 }
 

@@ -25,7 +25,7 @@
  */
 
 val baseVersion by extra("2.0.0-SNAPSHOT.80")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.85")
+val toolBaseVersion by extra("2.0.0-SNAPSHOT.86")
 val mcVersion by extra("2.0.0-SNAPSHOT.87")
 
 /**
@@ -36,5 +36,5 @@ val mcVersion by extra("2.0.0-SNAPSHOT.87")
  */
 val validationVersion by extra("2.0.0-SNAPSHOT.12")
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.88")
+val mcJavaVersion by extra("2.0.0-SNAPSHOT.89")
 val versionToPublish by extra(mcJavaVersion)

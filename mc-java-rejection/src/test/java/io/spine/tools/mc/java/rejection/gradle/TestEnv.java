@@ -28,16 +28,15 @@ package io.spine.tools.mc.java.rejection.gradle;
 
 import io.spine.code.java.PackageName;
 import io.spine.code.proto.FieldName;
+import io.spine.tools.java.fs.DefaultJavaPaths;
 import io.spine.tools.java.fs.FileName;
 import io.spine.tools.java.fs.JavaFiles;
-import io.spine.tools.test.ProjectPaths;
 
 import java.nio.file.Path;
 import java.util.Arrays;
 
-import static io.spine.tools.fs.DirectoryName.spine;
+import static io.spine.tools.code.SourceSetName.main;
 import static java.lang.String.format;
-import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME;
 
 final class TestEnv {
 
@@ -57,10 +56,13 @@ final class TestEnv {
     }
 
     static Path rejectionsJavadocThrowableSource(Path projectDir) {
-        Path javaPackage = JavaFiles.toDirectory(JAVA_PACKAGE);
-        return ProjectPaths.protobufGeneratedDir(projectDir, MAIN_SOURCE_SET_NAME, spine.name())
-                    .resolve(javaPackage)
-                    .resolve(REJECTION_FILE_NAME.value());
+        var javaPackage = JavaFiles.toDirectory(JAVA_PACKAGE);
+        return DefaultJavaPaths.at(projectDir)
+                               .generatedProto()
+                               .spine(main)
+                               .path()
+                               .resolve(javaPackage)
+                               .resolve(REJECTION_FILE_NAME.value());
     }
 
     static Iterable<String> rejectionWithJavadoc() {
@@ -73,13 +75,13 @@ final class TestEnv {
                 "// " + CLASS_COMMENT,
                 "message " + REJECTION_NAME + " {",
 
-                    "// " + FIRST_FIELD_COMMENT,
-                    "int32 " + FIRST_FIELD + " = 1; // Is not a part of Javadoc.",
+                "    // " + FIRST_FIELD_COMMENT,
+                "    int32 " + FIRST_FIELD + " = 1; // Is not a part of Javadoc.",
 
-                    "// " + SECOND_FIELD_COMMENT,
-                    "string " + SECOND_FIELD + " = 2;",
+                "    // " + SECOND_FIELD_COMMENT,
+                "    string " + SECOND_FIELD + " = 2;",
 
-                    "bool hasNoComment = 3;",
+                "    bool hasNoComment = 3;",
                 "}"
         );
     }
