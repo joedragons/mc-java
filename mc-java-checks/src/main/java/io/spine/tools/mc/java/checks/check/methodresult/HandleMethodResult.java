@@ -68,8 +68,8 @@ public final class HandleMethodResult extends CheckReturnValue {
             "Ignored return value of method that is annotated with `@CheckReturnValue`";
     private static final Pattern ACCESSOR_PREFIX = Pattern.compile("(set|add|put|merge|remove).+");
 
-    public HandleMethodResult(ErrorProneFlags flags) {
-        super(flags);
+    public HandleMethodResult() {
+        super(ErrorProneFlags.empty());
     }
 
     @Override
