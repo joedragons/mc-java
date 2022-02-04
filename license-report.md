@@ -1,6 +1,6 @@
 
 
-# Dependencies of `io.spine.tools:spine-mc-java:2.0.0-SNAPSHOT.89`
+# Dependencies of `io.spine.tools:spine-mc-java:2.0.0-SNAPSHOT.90`
 
 ## Runtime
 1.  **Group** : com.github.ben-manes.caffeine. **Name** : caffeine. **Version** : 2.8.8.
@@ -23,10 +23,6 @@
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -35,24 +31,20 @@
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.errorprone. **Name** : javac. **Version** : 9+181-r4173-1.
-     * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
-     * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
@@ -85,11 +77,11 @@
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -163,9 +155,9 @@
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 ## Compile, tests, and tooling
 1.  **Group** : com.beust. **Name** : jcommander. **Version** : 1.48.
@@ -230,10 +222,6 @@
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -242,24 +230,20 @@
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.errorprone. **Name** : javac. **Version** : 9+181-r4173-1.
-     * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
-     * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
@@ -295,15 +279,15 @@
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -456,8 +440,13 @@
 1.  **Group** : org.eclipse.jgit. **Name** : org.eclipse.jgit. **Version** : 4.4.1.201607150455-r.
      * **License:** Eclipse Distribution License (New BSD License)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.7.
      * **License:** [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
@@ -603,9 +592,9 @@
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 1.  **Group** : org.reflections. **Name** : reflections. **Version** : 0.10.2.
      * **Project URL:** [http://github.com/ronmamo/reflections](http://github.com/ronmamo/reflections)
@@ -619,12 +608,12 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri Feb 04 14:29:07 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:spine-mc-java-annotation:2.0.0-SNAPSHOT.89`
+# Dependencies of `io.spine.tools:spine-mc-java-annotation:2.0.0-SNAPSHOT.90`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -635,7 +624,7 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -669,11 +658,11 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -798,10 +787,6 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -810,19 +795,19 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -859,15 +844,15 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1019,8 +1004,13 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
 1.  **Group** : org.eclipse.jgit. **Name** : org.eclipse.jgit. **Version** : 4.4.1.201607150455-r.
      * **License:** Eclipse Distribution License (New BSD License)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.7.
      * **License:** [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
@@ -1166,9 +1156,9 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 1.  **Group** : org.reflections. **Name** : reflections. **Version** : 0.10.2.
      * **Project URL:** [http://github.com/ronmamo/reflections](http://github.com/ronmamo/reflections)
@@ -1182,12 +1172,12 @@ This report was generated on **Mon Jan 10 17:25:47 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri Feb 04 14:29:08 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:spine-mc-java-base:2.0.0-SNAPSHOT.89`
+# Dependencies of `io.spine.tools:spine-mc-java-base:2.0.0-SNAPSHOT.90`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -1198,7 +1188,7 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -1232,11 +1222,11 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -1353,10 +1343,6 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1365,19 +1351,19 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -1414,15 +1400,15 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1574,8 +1560,13 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
 1.  **Group** : org.eclipse.jgit. **Name** : org.eclipse.jgit. **Version** : 4.4.1.201607150455-r.
      * **License:** Eclipse Distribution License (New BSD License)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.7.
      * **License:** [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
@@ -1713,9 +1704,9 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 1.  **Group** : org.reflections. **Name** : reflections. **Version** : 0.10.2.
      * **Project URL:** [http://github.com/ronmamo/reflections](http://github.com/ronmamo/reflections)
@@ -1729,12 +1720,12 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri Feb 04 14:29:08 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:spine-mc-java-checks:2.0.0-SNAPSHOT.89`
+# Dependencies of `io.spine.tools:spine-mc-java-checks:2.0.0-SNAPSHOT.90`
 
 ## Runtime
 1.  **Group** : com.github.ben-manes.caffeine. **Name** : caffeine. **Version** : 2.8.8.
@@ -1757,10 +1748,6 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -1769,24 +1756,20 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.errorprone. **Name** : javac. **Version** : 9+181-r4173-1.
-     * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
-     * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
@@ -1819,11 +1802,11 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -1888,9 +1871,9 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://kotlinlang.org/](https://kotlinlang.org/)
      * **License:** [The Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 ## Compile, tests, and tooling
 1.  **Group** : com.beust. **Name** : jcommander. **Version** : 1.48.
@@ -1955,16 +1938,13 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/auto/tree/master/service](https://github.com/google/auto/tree/master/service)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.auto.value. **Name** : auto-value. **Version** : 1.5.3.
+1.  **Group** : com.google.auto.value. **Name** : auto-value. **Version** : 1.7.4.
+     * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.auto.value. **Name** : auto-value-annotations. **Version** : 1.9.
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
 
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
@@ -1974,31 +1954,23 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_test_helpers. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_test_helpers. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
-
-1.  **Group** : com.google.errorprone. **Name** : javac. **Version** : 9+181-r4173-1.
-     * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
-     * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
-
-1.  **Group** : com.google.errorprone. **Name** : javac-shaded. **Version** : 9-dev-r4023-3.
-     * **Project URL:** [https://github.com/google/error-prone-javac](https://github.com/google/error-prone-javac)
-     * **License:** [GNU General Public License, version 2, with the Classpath Exception](http://openjdk.java.net/legal/gplv2+ce.html)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
@@ -2008,7 +1980,7 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/flogger](https://github.com/google/flogger)
      * **License:** [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.4.
+1.  **Group** : com.google.googlejavaformat. **Name** : google-java-format. **Version** : 1.13.0.
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.gradle. **Name** : osdetector-gradle-plugin. **Version** : 1.7.0.
@@ -2033,7 +2005,7 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/j2objc/](https://github.com/google/j2objc/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.jimfs. **Name** : jimfs. **Version** : 1.1.
+1.  **Group** : com.google.jimfs. **Name** : jimfs. **Version** : 1.2.
      * **Project URL:** [http://www.google.com/](http://www.google.com/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -2041,20 +2013,20 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.testing.compile. **Name** : compile-testing. **Version** : 0.18.
+1.  **Group** : com.google.testing.compile. **Name** : compile-testing. **Version** : 0.19.
      * **Project URL:** [http://github.com/google/compile-testing](http://github.com/google/compile-testing)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -2206,11 +2178,17 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
 1.  **Group** : org.eclipse.jgit. **Name** : org.eclipse.jgit. **Version** : 4.4.1.201607150455-r.
      * **License:** Eclipse Distribution License (New BSD License)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-library. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : org.hamcrest. **Name** : hamcrest-library. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.7.
      * **License:** [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
@@ -2348,9 +2326,9 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 1.  **Group** : org.reflections. **Name** : reflections. **Version** : 0.10.2.
      * **Project URL:** [http://github.com/ronmamo/reflections](http://github.com/ronmamo/reflections)
@@ -2364,12 +2342,12 @@ This report was generated on **Mon Jan 10 17:25:48 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri Feb 04 14:29:12 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:spine-mc-java-protoc:2.0.0-SNAPSHOT.89`
+# Dependencies of `io.spine.tools:spine-mc-java-protoc:2.0.0-SNAPSHOT.90`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -2380,7 +2358,7 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -2414,11 +2392,11 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -2535,10 +2513,6 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2547,19 +2521,19 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -2596,15 +2570,15 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -2756,8 +2730,13 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
 1.  **Group** : org.eclipse.jgit. **Name** : org.eclipse.jgit. **Version** : 4.4.1.201607150455-r.
      * **License:** Eclipse Distribution License (New BSD License)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.7.
      * **License:** [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
@@ -2895,9 +2874,9 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 1.  **Group** : org.reflections. **Name** : reflections. **Version** : 0.10.2.
      * **Project URL:** [http://github.com/ronmamo/reflections](http://github.com/ronmamo/reflections)
@@ -2911,12 +2890,12 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri Feb 04 14:29:13 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:spine-mc-java-rejection:2.0.0-SNAPSHOT.89`
+# Dependencies of `io.spine.tools:spine-mc-java-rejection:2.0.0-SNAPSHOT.90`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -2927,7 +2906,7 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -2961,11 +2940,11 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -3090,10 +3069,6 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3102,19 +3077,19 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -3151,15 +3126,15 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3311,8 +3286,13 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
 1.  **Group** : org.eclipse.jgit. **Name** : org.eclipse.jgit. **Version** : 4.4.1.201607150455-r.
      * **License:** Eclipse Distribution License (New BSD License)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.7.
      * **License:** [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
@@ -3458,9 +3438,9 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 1.  **Group** : org.reflections. **Name** : reflections. **Version** : 0.10.2.
      * **Project URL:** [http://github.com/ronmamo/reflections](http://github.com/ronmamo/reflections)
@@ -3474,12 +3454,12 @@ This report was generated on **Mon Jan 10 17:25:49 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri Feb 04 14:29:13 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
 
-# Dependencies of `io.spine.tools:spine-mc-java-validation:2.0.0-SNAPSHOT.89`
+# Dependencies of `io.spine.tools:spine-mc-java-validation:2.0.0-SNAPSHOT.90`
 
 ## Runtime
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
@@ -3490,7 +3470,7 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -3516,11 +3496,11 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/j2objc/](https://github.com/google/j2objc/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -3628,10 +3608,6 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/auto/tree/master/value](https://github.com/google/auto/tree/master/value)
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.code.findbugs. **Name** : jFormatString. **Version** : 3.0.0.
-     * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
-     * **License:** [GNU Lesser Public License](http://www.gnu.org/licenses/lgpl.html)
-
 1.  **Group** : com.google.code.findbugs. **Name** : jsr305. **Version** : 3.0.2.
      * **Project URL:** [http://findbugs.sourceforge.net/](http://findbugs.sourceforge.net/)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3640,19 +3616,19 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/gson/gson](https://github.com/google/gson/gson)
      * **License:** [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotation. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_check_api. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_core. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.10.0.
+1.  **Group** : com.google.errorprone. **Name** : error_prone_type_annotations. **Version** : 2.11.0.
      * **License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 1.  **Group** : com.google.flogger. **Name** : flogger. **Version** : 0.6.
@@ -3689,15 +3665,15 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
      * **Project URL:** [https://github.com/google/protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
      * **License:** [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protobuf-java-util. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
 
-1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.2.
+1.  **Group** : com.google.protobuf. **Name** : protoc. **Version** : 3.19.3.
      * **Project URL:** [https://developers.google.com/protocol-buffers/](https://developers.google.com/protocol-buffers/)
      * **License:** [3-Clause BSD License](https://opensource.org/licenses/BSD-3-Clause)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
@@ -3849,8 +3825,13 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
 1.  **Group** : org.eclipse.jgit. **Name** : org.eclipse.jgit. **Version** : 4.4.1.201607150455-r.
      * **License:** Eclipse Distribution License (New BSD License)
 
-1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 1.3.
-     * **License:** [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+1.  **Group** : org.hamcrest. **Name** : hamcrest. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
+
+1.  **Group** : org.hamcrest. **Name** : hamcrest-core. **Version** : 2.2.
+     * **Project URL:** [http://hamcrest.org/JavaHamcrest/](http://hamcrest.org/JavaHamcrest/)
+     * **License:** [BSD License 3](http://opensource.org/licenses/BSD-3-Clause)
 
 1.  **Group** : org.jacoco. **Name** : org.jacoco.agent. **Version** : 0.8.7.
      * **License:** [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/)
@@ -3988,9 +3969,9 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
      * **License:** [BSD-3-Clause](https://asm.ow2.io/license.html)
      * **License:** [The Apache Software License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 2.1.2.
-     * **Project URL:** [http://pcollections.org](http://pcollections.org)
-     * **License:** [The MIT License](http://www.opensource.org/licenses/mit-license.php)
+1.  **Group** : org.pcollections. **Name** : pcollections. **Version** : 3.1.4.
+     * **Project URL:** [https://github.com/hrldcpr/pcollections](https://github.com/hrldcpr/pcollections)
+     * **License:** [The MIT License](https://opensource.org/licenses/mit-license.php)
 
 1.  **Group** : org.reflections. **Name** : reflections. **Version** : 0.10.2.
      * **Project URL:** [http://github.com/ronmamo/reflections](http://github.com/ronmamo/reflections)
@@ -4004,4 +3985,4 @@ This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-Lice
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Mon Jan 10 17:25:50 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri Feb 04 14:29:14 EET 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).

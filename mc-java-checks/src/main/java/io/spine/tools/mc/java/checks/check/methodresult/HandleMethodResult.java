@@ -28,10 +28,15 @@ package io.spine.tools.mc.java.checks.check.methodresult;
 
 import com.google.auto.service.AutoService;
 import com.google.errorprone.BugPattern;
+import com.google.errorprone.ErrorProneFlags;
 import com.google.errorprone.bugpatterns.BugChecker;
 import com.google.errorprone.bugpatterns.CheckReturnValue;
 import com.google.errorprone.matchers.Matcher;
+import com.google.errorprone.matchers.method.MethodMatchers;
+import com.google.protobuf.Message;
 import com.sun.source.tree.ExpressionTree;
+
+import java.util.regex.Pattern;
 
 import static com.google.errorprone.BugPattern.LinkType.NONE;
 import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
@@ -61,6 +66,11 @@ public final class HandleMethodResult extends CheckReturnValue {
 
     static final String SUMMARY =
             "Ignored return value of method that is annotated with `@CheckReturnValue`";
+    private static final Pattern ACCESSOR_PREFIX = Pattern.compile("(set|add|put|merge|remove).+");
+
+    public HandleMethodResult(ErrorProneFlags flags) {
+        super(flags);
+    }
 
     @Override
     public Matcher<ExpressionTree> specializedMatcher() {
@@ -70,6 +80,9 @@ public final class HandleMethodResult extends CheckReturnValue {
     }
 
     private static Matcher<ExpressionTree> builderSetter() {
-        return MessageBuilderWhich.callsSetterMethod();
+        return MethodMatchers
+                .instanceMethod()
+                .onDescendantOf(Message.Builder.class.getName())
+                .withNameMatching(ACCESSOR_PREFIX);
     }
 }

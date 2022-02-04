@@ -47,14 +47,22 @@ dependencies {
     testImplementation(spine.testlib)
 }
 
-fun getResolvedArtifactFor(dependency: String): String {
-    val resolvedTestClasspath = configurations.testRuntimeClasspath.get().resolvedConfiguration
-    val javacDependency = resolvedTestClasspath.resolvedArtifacts.filter {
-        it.name == dependency
-    }
-    if (javacDependency.isEmpty()) {
-        throw MissingResourceException(
-            "The `javac` dependency was not found among the resolved artifacts.")
-    }
-    return javacDependency[0].file.absolutePath
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.addAll(listOf(
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"
+    ))
 }
