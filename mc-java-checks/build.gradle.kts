@@ -52,17 +52,28 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+fun CompileOptions.exportsJavacPackage(packageName: String) {
+    compilerArgs.add("--add-exports")
+    compilerArgs.add("jdk.compiler/$packageName=ALL-UNNAMED")
+}
+
+fun CompileOptions.exportsJavacPackages(vararg packageNames: String) {
+    packageNames.forEach {
+        exportsJavacPackage(it)
+    }
+}
+
 tasks.withType<JavaCompile> {
-    options.compilerArgs.addAll(listOf(
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"
-    ))
+    options.exportsJavacPackages(
+        "com.sun.tools.javac.api",
+        "com.sun.tools.javac.file",
+        "com.sun.tools.javac.code",
+        "com.sun.tools.javac.util",
+        "com.sun.tools.javac.comp",
+        "com.sun.tools.javac.main",
+        "com.sun.tools.javac.model",
+        "com.sun.tools.javac.parser",
+        "com.sun.tools.javac.processing",
+        "com.sun.tools.javac.tree"
+    )
 }
