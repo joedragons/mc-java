@@ -47,11 +47,6 @@ dependencies {
     testImplementation(spine.testlib)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
 /**
  * Adds the `--add-exports` compiler argument which exports the given package from
  * the `jdk.compiler` module to the default unnamed module.
