@@ -52,11 +52,18 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+/**
+ * Adds the `--add-exports` compiler argument which exports the given package from
+ * the `jdk.compiler` module to the default unnamed module.
+ */
 fun CompileOptions.exportsJavacPackage(packageName: String) {
     compilerArgs.add("--add-exports")
     compilerArgs.add("jdk.compiler/$packageName=ALL-UNNAMED")
 }
 
+/**
+ * Adds the `--add-exports` compiler arguments for all the given packages.
+ */
 fun CompileOptions.exportsJavacPackages(vararg packageNames: String) {
     packageNames.forEach {
         exportsJavacPackage(it)
