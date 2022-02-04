@@ -57,25 +57,25 @@ fun CompileOptions.exportsJavacPackage(packageName: String) {
 }
 
 /**
- * Adds the `--add-exports` compiler arguments for all the given packages.
+ * Adds the `--add-exports` compiler arguments for all the given `com.sun.tools.javac` subpackages.
  */
-fun CompileOptions.exportsJavacPackages(vararg packageNames: String) {
-    packageNames.forEach {
-        exportsJavacPackage(it)
+fun CompileOptions.exportsSunJavacPackages(vararg subpackages: String) {
+    subpackages.forEach {
+        exportsJavacPackage("com.sun.tools.javac.$it")
     }
 }
 
 tasks.withType<JavaCompile> {
-    options.exportsJavacPackages(
-        "com.sun.tools.javac.api",
-        "com.sun.tools.javac.file",
-        "com.sun.tools.javac.code",
-        "com.sun.tools.javac.util",
-        "com.sun.tools.javac.comp",
-        "com.sun.tools.javac.main",
-        "com.sun.tools.javac.model",
-        "com.sun.tools.javac.parser",
-        "com.sun.tools.javac.processing",
-        "com.sun.tools.javac.tree"
+    options.exportsSunJavacPackages(
+        "api",
+        "file",
+        "code",
+        "util",
+        "comp",
+        "main",
+        "model",
+        "parser",
+        "processing",
+        "tree"
     )
 }
