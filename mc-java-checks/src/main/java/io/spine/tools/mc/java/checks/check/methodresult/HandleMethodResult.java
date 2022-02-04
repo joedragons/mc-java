@@ -54,7 +54,6 @@ import static com.google.errorprone.matchers.Matchers.not;
  */
 @AutoService(BugChecker.class)
 @BugPattern(
-        name = "HandleMethodResult",
         altNames = {"CheckReturnValue", "ResultOfMethodCallIgnored", "ReturnValueIgnored"},
         summary = HandleMethodResult.SUMMARY,
         severity = ERROR,
