@@ -47,14 +47,41 @@ dependencies {
     testImplementation(spine.testlib)
 }
 
-fun getResolvedArtifactFor(dependency: String): String {
-    val resolvedTestClasspath = configurations.testRuntimeClasspath.get().resolvedConfiguration
-    val javacDependency = resolvedTestClasspath.resolvedArtifacts.filter {
-        it.name == dependency
+/**
+ * Adds the `--add-exports` compiler argument which exports the given package from
+ * the `jdk.compiler` module to the default unnamed module.
+ */
+fun CompileOptions.exportsJavacPackage(packageName: String) {
+    compilerArgs.add("--add-exports")
+    compilerArgs.add("jdk.compiler/$packageName=ALL-UNNAMED")
+}
+
+/**
+ * Adds the `--add-exports` compiler arguments for all the given `com.sun.tools.javac` subpackages.
+ *
+ * We need to expose internal Java compiler API in order to find potential bugs in code.
+ * These compiler arguments are only required at compile time of the `mc-java-checks` module.
+ *
+ * Users of Error Prone, regardless of using `mc-java-checks`, might need to add compiler and
+ * runtime flags of their own. The full list if available in the [Error Prone docs](https://errorprone.info/docs/installation).
+ */
+fun CompileOptions.exportsSunJavacPackages(vararg subpackages: String) {
+    subpackages.forEach {
+        exportsJavacPackage("com.sun.tools.javac.$it")
     }
-    if (javacDependency.isEmpty()) {
-        throw MissingResourceException(
-            "The `javac` dependency was not found among the resolved artifacts.")
-    }
-    return javacDependency[0].file.absolutePath
+}
+
+tasks.withType<JavaCompile> {
+    options.exportsSunJavacPackages(
+        "api",
+        "file",
+        "code",
+        "util",
+        "comp",
+        "main",
+        "model",
+        "parser",
+        "processing",
+        "tree"
+    )
 }

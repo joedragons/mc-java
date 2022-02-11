@@ -48,7 +48,6 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
-import io.spine.internal.gradle.kotlin.applyJvmToolchain
 import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
 import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
 import io.spine.internal.gradle.publish.PublishExtension
@@ -147,7 +146,8 @@ subprojects {
                     "io.spine:spine-base:$baseVersion",
                     "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
-                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion",
+                    "org.hamcrest:hamcrest-core:2.2"
                 )
             }
         }
@@ -167,7 +167,6 @@ subprojects {
 
     val javaVersion = JavaVersion.VERSION_11.toString()
     kotlin {
-        applyJvmToolchain(javaVersion)
         explicitApi()
     }
 
