@@ -62,8 +62,8 @@ fun CompileOptions.exportsJavacPackage(packageName: String) {
  * We need to expose internal Java compiler API in order to find potential bugs in code.
  * These compiler arguments are only required at compile time of the `mc-java-checks` module.
  *
- * Users of ErrorProne, regardless of using `mc-java-checks`, might need to add compiler and runtime
- * flags of their own. The full list if available in the [Error Prone docs](https://errorprone.info/docs/installation).
+ * Users of Error Prone, regardless of using `mc-java-checks`, might need to add compiler and
+ * runtime flags of their own. The full list if available in the [Error Prone docs](https://errorprone.info/docs/installation).
  */
 fun CompileOptions.exportsSunJavacPackages(vararg subpackages: String) {
     subpackages.forEach {
