@@ -38,7 +38,7 @@ import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
-import io.spine.internal.gradle.IncrementGuard
+import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.RunBuild
 import io.spine.internal.gradle.VersionWriter
 import io.spine.internal.gradle.applyStandard
@@ -49,8 +49,7 @@ import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.javadoc.JavadocConfig
 import io.spine.internal.gradle.kotlin.setFreeCompilerArgs
-import io.spine.internal.gradle.publish.Publish.Companion.publishProtoArtifact
-import io.spine.internal.gradle.publish.PublishExtension
+import io.spine.internal.gradle.publish.SpinePublishing
 import io.spine.internal.gradle.publish.PublishingRepos
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
 import io.spine.internal.gradle.publish.spinePublishing
@@ -59,7 +58,6 @@ import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
 import io.spine.internal.gradle.test.configureLogging
 import io.spine.internal.gradle.test.registerTestTasks
-import io.spine.internal.gradle.testing.exposeTestArtifacts
 import java.time.Duration
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -76,13 +74,12 @@ plugins {
 }
 
 spinePublishing {
-    projectsToPublish.addAll(subprojects.map { it.path })
-    targetRepositories.addAll(
+    modules = subprojects.map { it.name }.toSet()
+    destinations = setOf(
         PublishingRepos.cloudRepo,
         PublishingRepos.cloudArtifactRegistry,
-        gitHub("mc-java")
+        gitHub("mc-java"),
     )
-    spinePrefix.set(true)
 }
 
 allprojects {
@@ -112,6 +109,7 @@ subprojects {
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
         plugin("io.spine.proto-data")
+        plugin("maven-publish")
     }
 
     val validation = Spine(project).validation
@@ -151,10 +149,6 @@ subprojects {
                 )
             }
         }
-    }
-
-    java {
-        exposeTestArtifacts()
     }
 
     tasks.withType<JavaCompile> {
@@ -225,7 +219,6 @@ subprojects {
 
     apply<IncrementGuard>()
     apply<VersionWriter>()
-    publishProtoArtifact(project)
     LicenseReporter.generateReportIn(project)
 
     protobuf { protoc { artifact = Protobuf.compiler } }
@@ -257,10 +250,10 @@ LicenseReporter.mergeAllReports(project)
  * Collect `publishToMavenLocal` tasks for all subprojects that are specified for
  * publishing in the root project.
  */
-val projectsToPublish: Set<String> = the<PublishExtension>().projectsToPublish.get()
+val publishedModules: Set<String> = extensions.getByType<SpinePublishing>().modules
 
 val testAll by tasks.registering {
-    val testTasks = projectsToPublish.map { p ->
+    val testTasks = publishedModules.map { p ->
         val subProject = project(p)
         subProject.tasks["test"]
     }
@@ -268,7 +261,7 @@ val testAll by tasks.registering {
 }
 
 val localPublish by tasks.registering {
-    val pubTasks = projectsToPublish.map { p ->
+    val pubTasks = publishedModules.map { p ->
         val subProject = project(p)
         subProject.tasks["publishToMavenLocal"]
     }
