@@ -113,15 +113,16 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
 
-    tasks.withType<JavaCompile> {
-        configureJavac()
-        configureErrorProne()
+        tasks {
+            withType<JavaCompile>().configureEach {
+                configureJavac()
+                configureErrorProne()
+            }
+        }
     }
 
     val baseVersion: String by extra
-
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
@@ -133,7 +134,7 @@ subprojects {
     }
 
     val toolBaseVersion: String by extra
-    with(configurations) {
+    configurations {
         forceVersions()
         excludeProtobufLite()
         all {
@@ -186,5 +187,5 @@ subprojects {
 
     //TODO:2021-07-22:alexander.yevsyukov: Turn to WARN and investigate duplicates.
     // see https://github.com/SpineEventEngine/base/issues/657
-    tasks.processTestResources.get().duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    tasks.processTestResources.get().duplicatesStrategy = DuplicatesStrategy.WARN
 }

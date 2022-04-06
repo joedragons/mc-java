@@ -113,7 +113,6 @@ subprojects {
     }
 
     val validation = Spine(project).validation
-
     dependencies {
         errorprone(ErrorProne.core)
 
@@ -135,7 +134,7 @@ subprojects {
 
     val baseVersion: String by extra
     val toolBaseVersion: String by extra
-    with(configurations) {
+    configurations {
         forceVersions()
         excludeProtobufLite()
         all {
@@ -151,22 +150,24 @@ subprojects {
         }
     }
 
-    tasks.withType<JavaCompile> {
-        configureJavac()
-        configureErrorProne()
+    java {
+        tasks {
+            withType<JavaCompile>().configureEach {
+                configureJavac()
+                configureErrorProne()
+            }
+        }
     }
 
-    JavadocConfig.applyTo(project)
-    CheckStyleConfig.applyTo(project)
-
-    val javaVersion = JavaVersion.VERSION_11.toString()
     kotlin {
         explicitApi()
-    }
 
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions.jvmTarget = javaVersion
-        setFreeCompilerArgs()
+        tasks {
+            withType<KotlinCompile>().configureEach {
+                kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
+                setFreeCompilerArgs()
+            }
+        }
     }
 
     tasks {
@@ -182,14 +183,13 @@ subprojects {
     val generatedDir = "$projectDir/generated"
     val generatedResources = "$generatedDir/main/resources"
 
-    tasks.create<DefaultTask>(name = "prepareProtocConfigVersions") {
+    val prepareProtocConfigVersions by tasks.registering {
         description = "Prepares the versions.properties file."
 
         val propertiesFile = file("$generatedResources/versions.properties")
         outputs.file(propertiesFile)
 
-        val versions = Properties()
-        with(versions) {
+        val versions = Properties().apply {
             setProperty("baseVersion", baseVersion)
             setProperty("protobufVersion", Protobuf.version)
             setProperty("gRPCVersion", Grpc.version)
@@ -207,10 +207,10 @@ subprojects {
                             " the Spine Protoc plugin.")
             }
         }
+    }
 
-        tasks.processResources {
-            dependsOn(this@create)
-        }
+    tasks.processResources {
+        dependsOn(prepareProtocConfigVersions)
     }
 
     sourceSets.main {
@@ -219,7 +219,10 @@ subprojects {
 
     apply<IncrementGuard>()
     apply<VersionWriter>()
+
     LicenseReporter.generateReportIn(project)
+    JavadocConfig.applyTo(project)
+    CheckStyleConfig.applyTo(project)
 
     protobuf { protoc { artifact = Protobuf.compiler } }
 
@@ -288,6 +291,6 @@ tasks.register("buildAll") {
     dependsOn(tasks.build, integrationTests)
 }
 
-val check: Task by tasks.getting {
+val check by tasks.existing {
     dependsOn(integrationTests)
 }
