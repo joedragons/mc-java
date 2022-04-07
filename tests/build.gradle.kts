@@ -113,15 +113,14 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
 
-    tasks.withType<JavaCompile> {
-        configureJavac()
-        configureErrorProne()
+        tasks.withType<JavaCompile>().configureEach {
+            configureJavac()
+            configureErrorProne()
+        }
     }
 
     val baseVersion: String by extra
-
     dependencies {
         errorprone(ErrorProne.core)
         errorproneJavac(ErrorProne.javacPlugin)
@@ -133,7 +132,7 @@ subprojects {
     }
 
     val toolBaseVersion: String by extra
-    with(configurations) {
+    configurations {
         forceVersions()
         excludeProtobufLite()
         all {

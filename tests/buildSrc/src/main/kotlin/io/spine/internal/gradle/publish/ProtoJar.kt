@@ -27,13 +27,25 @@
 package io.spine.internal.gradle.publish
 
 /**
- * Default artifact task names.
+ * A DSL element of [SpinePublishing] extension which allows disabling publishing
+ * of [protoJar] artifact.
  *
- * These tasks, if not present on a project already, are created by the [Publish] plugin.
- * Their output is published as project's artifacts.
+ * This artifact contains all the `.proto` definitions from `sourceSets.main.proto`. By default,
+ * it is published.
+ *
+ * Take a look on [SpinePublishing.protoJar] for a usage example.
+ *
+ * @see [registerArtifacts]
  */
-internal enum class ArtifactTaskName {
-    sourceJar,
-    testOutputJar,
-    javadocJar;
+class ProtoJar {
+
+    /**
+     * Set of modules, for which a proto JAR will not be published.
+     */
+    var exclusions: Set<String> = emptySet()
+
+    /**
+     * Disables proto JAR publishing for all published modules.
+     */
+    var disabled = false
 }

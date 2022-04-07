@@ -75,14 +75,16 @@ protobuf {
     }
 }
 
-/**
- * Tests use the artifacts published to `mavenLocal`, so we need to publish them all first.
- */
-tasks.test {
-    dependsOn(rootProject.tasks["localPublish"])
-}
+tasks {
+    /**
+     * Tests use the artifacts published to `mavenLocal`, so we need to publish them all first.
+     */
+    test {
+        dependsOn(rootProject.tasks.named("localPublish"))
+    }
 
-tasks.withType<WriteVersions> {
-    version(Grpc.protobufPlugin)
-    version(validation.java)
+    withType<WriteVersions>().configureEach {
+        version(Grpc.protobufPlugin)
+        version(validation.java)
+    }
 }

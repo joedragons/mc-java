@@ -23,3 +23,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+package io.spine.internal.gradle.publish
+
+/**
+ * A DSL element of [SpinePublishing] extension which allows disabling publishing
+ * of [protoJar] artifact.
+ *
+ * This artifact contains all the `.proto` definitions from `sourceSets.main.proto`. By default,
+ * it is published.
+ *
+ * Take a look on [SpinePublishing.protoJar] for a usage example.
+ *
+ * @see [registerArtifacts]
+ */
+class ProtoJar {
+
+    /**
+     * Set of modules, for which a proto JAR will not be published.
+     */
+    var exclusions: Set<String> = emptySet()
+
+    /**
+     * Disables proto JAR publishing for all published modules.
+     */
+    var disabled = false
+}

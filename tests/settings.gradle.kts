@@ -24,15 +24,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include("annotator")
-include("factories")
-include("entity-queries")
-include("known-types")
-include("model-compiler")
-include("rejection")
-include("validating-options")
-include("validation")
-include("validation-gen")
+include(
+    "annotator",
+    "factories",
+    "entity-queries",
+    "known-types",
+    "model-compiler",
+    "rejection",
+    "validating-options",
+    "validation",
+    "validation-gen",
+)
 
 /*
  * Dependency links established with the Gradle included build.

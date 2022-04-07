@@ -71,7 +71,7 @@ fun CompileOptions.exportsSunJavacPackages(vararg subpackages: String) {
     }
 }
 
-tasks.withType<JavaCompile> {
+tasks.withType<JavaCompile>().configureEach {
     options.exportsSunJavacPackages(
         "api",
         "file",

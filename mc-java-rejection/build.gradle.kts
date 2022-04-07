@@ -46,5 +46,5 @@ dependencies {
  * Tests use the artifacts published to `mavenLocal`, so we need to publish them all first.
  */
 tasks.test {
-    dependsOn(rootProject.tasks["localPublish"])
+    dependsOn(rootProject.tasks.named("localPublish"))
 }
