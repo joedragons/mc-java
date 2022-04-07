@@ -114,11 +114,9 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
 
-        tasks {
-            withType<JavaCompile>().configureEach {
-                configureJavac()
-                configureErrorProne()
-            }
+        tasks.withType<JavaCompile>().configureEach {
+            configureJavac()
+            configureErrorProne()
         }
     }
 

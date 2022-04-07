@@ -151,22 +151,18 @@ subprojects {
     }
 
     java {
-        tasks {
-            withType<JavaCompile>().configureEach {
-                configureJavac()
-                configureErrorProne()
-            }
+        tasks.withType<JavaCompile>().configureEach {
+            configureJavac()
+            configureErrorProne()
         }
     }
 
     kotlin {
         explicitApi()
 
-        tasks {
-            withType<KotlinCompile>().configureEach {
-                kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
-                setFreeCompilerArgs()
-            }
+        tasks.withType<KotlinCompile>().configureEach {
+            kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
+            setFreeCompilerArgs()
         }
     }
 
