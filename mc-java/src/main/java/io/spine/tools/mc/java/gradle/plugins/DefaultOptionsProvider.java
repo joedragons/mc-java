@@ -24,18 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-val baseVersion by extra("2.0.0-SNAPSHOT.88")
-val toolBaseVersion by extra("2.0.0-SNAPSHOT.88")
-val mcVersion by extra("2.0.0-SNAPSHOT.89")
+package io.spine.tools.mc.java.gradle.plugins;
+
+import com.google.protobuf.ExtensionRegistry;
+import io.spine.option.OptionsProto;
+import io.spine.protodata.option.OptionsProvider;
+import io.spine.time.validation.TimeOptionsProto;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Version of `SpineEventEngine/validation` modules.
- *
- * Keep in mind, the Validation library is tightly connected to ProtoData. For the version
- * of ProtoData, see `buildSrc/src/main/kotlin/io/spine/internal/dependency/Spine.kt`.
+ * Registers the definitions from {@code spine/options.proto} and {@code spine/time_options.proto}
+ * in the {@code ExtensionRegistry} for ProtoData.
  */
-val validationVersion by extra("2.0.0-SNAPSHOT.12")
-val protoDataVersion by extra("0.2.4")
+@SuppressWarnings("unused") /* The FQN of this type is used in the ProtoData launch command. */
+public final class DefaultOptionsProvider implements OptionsProvider {
 
-val mcJavaVersion by extra("2.0.0-SNAPSHOT.92")
-val versionToPublish by extra(mcJavaVersion)
+    @Override
+    public void registerIn(@NonNull ExtensionRegistry registry) {
+        OptionsProto.registerAllExtensions(registry);
+        TimeOptionsProto.registerAllExtensions(registry);
+    }
+}
