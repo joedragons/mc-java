@@ -24,13 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.AutoService
-
-dependencies {
-    testAnnotationProcessor(AutoService.processor)
-    testCompileOnly(AutoService.annotations)
-}
-
 modelCompiler {
     java {
         codegen {

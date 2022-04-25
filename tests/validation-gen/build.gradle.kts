@@ -30,3 +30,13 @@ dependencies {
     testAnnotationProcessor(AutoService.processor)
     testCompileOnly(AutoService.annotations)
 }
+
+modelCompiler {
+    java {
+        codegen {
+            validation {
+                skipValidation()
+            }
+        }
+    }
+}
