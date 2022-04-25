@@ -28,6 +28,7 @@
 
 import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.JUnit
+import io.spine.internal.dependency.Jackson
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.applyStandard
@@ -68,7 +69,13 @@ buildscript {
                 force(
                     "io.spine:spine-base:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
-                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion",
+                    io.spine.internal.dependency.Jackson.core,
+                    io.spine.internal.dependency.Jackson.moduleKotlin,
+                    io.spine.internal.dependency.Jackson.databind,
+                    "com.fasterxml.jackson:jackson-bom:2.13.2",
+                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
+                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
                 )
             }
         }
@@ -141,7 +148,13 @@ subprojects {
                     "io.spine:spine-base:$baseVersion",
                     "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
-                    "io.spine.tools:spine-plugin-base:$toolBaseVersion"
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion",
+                    Jackson.core,
+                    Jackson.moduleKotlin,
+                    Jackson.databind,
+                    "com.fasterxml.jackson:jackson-bom:2.13.2",
+                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
+                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
                 )
             }
         }
