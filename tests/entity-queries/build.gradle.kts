@@ -30,6 +30,9 @@ modelCompiler {
             forMessage("spine.tools.column.ProjectName") {
                 markFieldsAs("io.spine.tools.mc.java.protoc.given.ProjectNameField")
             }
+            validation {
+                skipValidation()
+            }
         }
     }
 }

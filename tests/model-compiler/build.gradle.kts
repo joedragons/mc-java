@@ -64,6 +64,10 @@ modelCompiler {
             forMessages(by().regex(".*multi.*factory.*test.*")) {
                 generateMethodsWith(methodFactory)
             }
+
+            validation {
+                skipValidation()
+            }
         }
     }
 }
