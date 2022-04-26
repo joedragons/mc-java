@@ -50,16 +50,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("`RejectionGenPlugin` should")
 class RejectionGenPluginTest {
 
-    private static @MonotonicNonNull File projectDir = null;
+    private static @MonotonicNonNull File moduleDir = null;
 
     @BeforeAll
     static void generateRejections() {
-        projectDir = TempDir.forClass(RejectionGenPluginTest.class);
+        var projectDir = TempDir.forClass(RejectionGenPluginTest.class);
 
         var project = GradleProject.setupAt(projectDir)
                 .fromResources("rejections-gen-plugin-test")
                 .copyBuildSrc()
                 .create();
+        moduleDir = projectDir.toPath()
+                              .resolve("tests")
+                              .toFile();
         // Executing the `compileTestJava` task should generate rejection types from both
         // `test` and `main` source sets.
         project.executeTask(compileTestJava);
@@ -83,8 +86,8 @@ class RejectionGenPluginTest {
     }
 
     private static Path generatedRoot(SourceSetName sourceSetName) {
-        checkNotNull(projectDir);
-        return DefaultJavaPaths.at(projectDir).generatedProto().spine(sourceSetName).path();
+        checkNotNull(moduleDir);
+        return DefaultJavaPaths.at(moduleDir).generatedProto().spine(sourceSetName).path();
     }
     private static Path targetMainDir() {
         return generatedRoot(main);
