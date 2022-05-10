@@ -135,6 +135,7 @@ subprojects {
 
     val baseVersion: String by extra
     val toolBaseVersion: String by extra
+    val serverVersion: String by extra
     configurations {
         forceVersions()
         excludeProtobufLite()
@@ -142,6 +143,7 @@ subprojects {
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-server:$serverVersion",
                     "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion",
@@ -162,6 +164,11 @@ subprojects {
             configureJavac()
             configureErrorProne()
         }
+
+        // Enforces the Java version for the output JARs
+        // in case the project is built by JDK 12 or above.
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlin {
