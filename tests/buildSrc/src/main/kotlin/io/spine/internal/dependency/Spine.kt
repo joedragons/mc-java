@@ -63,10 +63,10 @@ class Spine(p: ExtensionAware) {
      */
     class Validation(p: ExtensionAware) {
 
-        val runtime = "io.spine.validation:runtime:${p.validationVersion}"
-        val java = "io.spine.validation:java:${p.validationVersion}"
-        val model = "io.spine.validation:model:${p.validationVersion}"
-        val config = "io.spine.validation:configuration:${p.validationVersion}"
+        val runtime = "io.spine.validation:spine-validation-runtime:${p.validationVersion}"
+        val java = "io.spine.validation:spine-validation-java:${p.validationVersion}"
+        val model = "io.spine.validation:spine-validation-model:${p.validationVersion}"
+        val config = "io.spine.validation:spine-validation-configuration:${p.validationVersion}"
 
         private val ExtensionAware.validationVersion: String
             get() = extra["validationVersion"] as String
@@ -79,7 +79,7 @@ class Spine(p: ExtensionAware) {
      */
     object ProtoData {
 
-        const val pluginId = "io.spine.proto-data"
+        const val pluginId = "io.spine.protodata"
 
         /**
          * The version of ProtoData.
@@ -87,7 +87,7 @@ class Spine(p: ExtensionAware) {
          * We declare ProtoData version here instead of `versions.gradle.kts` because we later use
          * it in a `plugins` section in a build script.
          */
-        const val version = "0.1.2"
-        const val pluginLib = "io.spine:proto-data:$version"
+        const val version = "0.2.4"
+        const val pluginLib = "io.spine:protodata:$version"
     }
 }

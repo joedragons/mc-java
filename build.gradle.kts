@@ -42,6 +42,7 @@ import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.RunBuild
 import io.spine.internal.gradle.VersionWriter
+import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.checkstyle.CheckStyleConfig
 import io.spine.internal.gradle.excludeProtobufLite
@@ -62,6 +63,10 @@ import io.spine.internal.gradle.test.registerTestTasks
 import java.time.Duration
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+buildscript {
+    io.spine.internal.gradle.doApplyStandard(repositories)
+}
 
 plugins {
     `java-library`
@@ -98,6 +103,7 @@ allprojects {
         gitHub("base")
         gitHub("tool-base")
         gitHub("model-compiler")
+        applyGitHubPackages("ProtoData", project)
         applyStandard()
     }
 }
@@ -109,7 +115,7 @@ subprojects {
         plugin("net.ltgt.errorprone")
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
-        plugin("io.spine.proto-data")
+        plugin("io.spine.protodata")
         plugin("maven-publish")
     }
 
