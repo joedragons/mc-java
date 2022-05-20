@@ -142,6 +142,7 @@ subprojects {
     val baseVersion: String by extra
     val toolBaseVersion: String by extra
     val serverVersion: String by extra
+    val protoDataVersion: String by extra
     configurations {
         forceVersions()
         excludeProtobufLite()
@@ -153,6 +154,7 @@ subprojects {
                     "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion",
+                    "io.spine.protodata:protodata-codegen-java:$protoDataVersion",
                     "org.hamcrest:hamcrest-core:2.2",
                     Jackson.core,
                     Jackson.moduleKotlin,
@@ -253,10 +255,6 @@ subprojects {
         )
         plugins(
             "io.spine.validation.ValidationPlugin"
-        )
-        options(
-            "spine/options.proto",
-            "spine/time_options.proto"
         )
     }
 }

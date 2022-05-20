@@ -161,8 +161,8 @@
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-gradle-api. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-gradle-api. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : javax.annotation. **Name** : javax.annotation-api. **Version** : 1.3.2.
      * **Project URL:** [http://jcp.org/en/jsr/detail?id=250](http://jcp.org/en/jsr/detail?id=250)
@@ -441,11 +441,11 @@
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-gradle-api. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-gradle-api. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-context. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-java. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
@@ -679,7 +679,7 @@
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue May 10 15:34:49 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri May 20 13:23:10 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1006,10 +1006,10 @@ This report was generated on **Tue May 10 15:34:49 EEST 2022** using [Gradle-Lic
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-context. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-java. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
@@ -1242,7 +1242,7 @@ This report was generated on **Tue May 10 15:34:49 EEST 2022** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue May 10 15:34:50 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri May 20 13:23:12 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -1561,10 +1561,10 @@ This report was generated on **Tue May 10 15:34:50 EEST 2022** using [Gradle-Lic
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-context. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-java. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
@@ -1797,7 +1797,7 @@ This report was generated on **Tue May 10 15:34:50 EEST 2022** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue May 10 15:34:51 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri May 20 13:23:13 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2185,10 +2185,10 @@ This report was generated on **Tue May 10 15:34:51 EEST 2022** using [Gradle-Lic
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-context. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-java. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
@@ -2426,7 +2426,7 @@ This report was generated on **Tue May 10 15:34:51 EEST 2022** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue May 10 15:34:52 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri May 20 13:23:15 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -2745,10 +2745,10 @@ This report was generated on **Tue May 10 15:34:52 EEST 2022** using [Gradle-Lic
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-context. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-java. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
@@ -2981,7 +2981,7 @@ This report was generated on **Tue May 10 15:34:52 EEST 2022** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue May 10 15:34:53 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri May 20 13:23:16 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3308,10 +3308,10 @@ This report was generated on **Tue May 10 15:34:53 EEST 2022** using [Gradle-Lic
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-context. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-java. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
@@ -3544,7 +3544,7 @@ This report was generated on **Tue May 10 15:34:53 EEST 2022** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue May 10 15:34:54 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri May 20 13:23:18 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
 
 
 
@@ -3846,10 +3846,10 @@ This report was generated on **Tue May 10 15:34:54 EEST 2022** using [Gradle-Lic
      * **Project URL:** [https://github.com/perfmark/perfmark](https://github.com/perfmark/perfmark)
      * **License:** [Apache 2.0](https://opensource.org/licenses/Apache-2.0)
 
-1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.4.**No license information found**
-1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.4.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-cli. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-codegen-java. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-compiler. **Version** : 0.2.5.**No license information found**
+1.  **Group** : io.spine.protodata. **Name** : protodata-protoc. **Version** : 0.2.5.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-configuration. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-context. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
 1.  **Group** : io.spine.validation. **Name** : spine-validation-java. **Version** : 2.0.0-SNAPSHOT.19.**No license information found**
@@ -4082,4 +4082,4 @@ This report was generated on **Tue May 10 15:34:54 EEST 2022** using [Gradle-Lic
 
 The dependencies distributed under several licenses, are used according their commercial-use-friendly license.
 
-This report was generated on **Tue May 10 15:34:55 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
+This report was generated on **Fri May 20 13:23:19 EEST 2022** using [Gradle-License-Report plugin](https://github.com/jk1/Gradle-License-Report) by Evgeny Naumenko, licensed under [Apache 2.0 License](https://github.com/jk1/Gradle-License-Report/blob/master/LICENSE).
