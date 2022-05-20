@@ -40,6 +40,7 @@ buildscript {
 
     val baseVersion: String by extra
     val mcJavaVersion: String by extra
+    val protoDataVersion: String by extra
     dependencies {
         io.spine.internal.dependency.Protobuf.libs.forEach { classpath(it) }
 
@@ -48,7 +49,7 @@ buildscript {
             exclude(group = "com.google.guava")
         }
         classpath("io.spine.tools:spine-mc-java:${mcJavaVersion}")
-        classpath("io.spine:protodata:0.2.4")
+        classpath("io.spine:protodata:${protoDataVersion}")
     }
 }
 
