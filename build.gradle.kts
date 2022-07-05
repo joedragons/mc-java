@@ -34,6 +34,7 @@ import io.spine.internal.dependency.ErrorProne
 import io.spine.internal.dependency.FindBugs
 import io.spine.internal.dependency.Grpc
 import io.spine.internal.dependency.Guava
+import io.spine.internal.dependency.Jackson
 import io.spine.internal.dependency.JUnit
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
@@ -134,6 +135,7 @@ subprojects {
 
     val baseVersion: String by extra
     val toolBaseVersion: String by extra
+    val serverVersion: String by extra
     configurations {
         forceVersions()
         excludeProtobufLite()
@@ -141,10 +143,17 @@ subprojects {
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-server:$serverVersion",
                     "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion",
-                    "org.hamcrest:hamcrest-core:2.2"
+                    "org.hamcrest:hamcrest-core:2.2",
+                    Jackson.core,
+                    Jackson.moduleKotlin,
+                    Jackson.databind,
+                    "com.fasterxml.jackson:jackson-bom:2.13.2",
+                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
+                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
                 )
             }
         }
@@ -155,6 +164,11 @@ subprojects {
             configureJavac()
             configureErrorProne()
         }
+
+        // Enforces the Java version for the output JARs
+        // in case the project is built by JDK 12 or above.
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlin {

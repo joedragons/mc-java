@@ -24,15 +24,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-modelCompiler {
-    java {
-        codegen {
-            forMessage("spine.tools.column.ProjectName") {
-                markFieldsAs("io.spine.tools.mc.java.protoc.given.ProjectNameField")
-            }
-            validation {
-                skipValidation()
-            }
-        }
+package io.spine.tools.mc.java.gradle.plugins;
+
+import com.google.protobuf.ExtensionRegistry;
+import io.spine.option.OptionsProto;
+import io.spine.protodata.option.OptionsProvider;
+import io.spine.time.validation.TimeOptionsProto;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+/**
+ * Registers the definitions from {@code spine/options.proto} and {@code spine/time_options.proto}
+ * in the {@code ExtensionRegistry} for ProtoData.
+ */
+@SuppressWarnings("unused") /* The FQN of this type is used in the ProtoData launch command. */
+public final class DefaultOptionsProvider implements OptionsProvider {
+
+    @Override
+    public void registerIn(@NonNull ExtensionRegistry registry) {
+        OptionsProto.registerAllExtensions(registry);
+        TimeOptionsProto.registerAllExtensions(registry);
     }
 }

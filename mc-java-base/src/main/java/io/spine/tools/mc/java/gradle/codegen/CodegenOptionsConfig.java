@@ -220,4 +220,11 @@ public final class CodegenOptionsConfig extends Config<CodegenOptions> {
                      .forEach(classpath::addJar);
         return classpath.build();
     }
+
+    /**
+     * Returns the configuration settings for the generated validation code.
+     */
+    public ValidationConfig validation() {
+        return validation;
+    }
 }

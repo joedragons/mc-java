@@ -27,12 +27,11 @@
 modelCompiler {
     java {
         codegen {
-            forMessage("spine.tools.column.ProjectName") {
-                markFieldsAs("io.spine.tools.mc.java.protoc.given.ProjectNameField")
-            }
             validation {
                 skipValidation()
             }
         }
     }
 }
+
+tasks.processResources.get().duplicatesStrategy = DuplicatesStrategy.INCLUDE

@@ -79,15 +79,17 @@ class AnnotatorPluginTest {
 
     private static final String RESOURCE_DIR = "annotator-plugin-test";
 
-    private static File projectDir = null;
+    private static File moduleDir = null;
 
     @BeforeAll
     static void compileProject() {
-        projectDir = TempDir.forClass(AnnotatorPluginTest.class);
+        var projectDir = TempDir.forClass(AnnotatorPluginTest.class);
         var project = GradleProject.setupAt(projectDir)
-                .fromResources(RESOURCE_DIR)
-                .copyBuildSrc()
-                .create();
+                                   .fromResources(RESOURCE_DIR)
+                                   .copyBuildSrc().create();
+        moduleDir = projectDir.toPath()
+                              .resolve("tests")
+                              .toFile();
         project.executeTask(annotateProto);
     }
 
@@ -267,7 +269,7 @@ class AnnotatorPluginTest {
     }
 
     private static void check(Path sourcePath, SourceCheck check) throws IOException {
-        var filePath = DefaultJavaPaths.at(projectDir)
+        var filePath = DefaultJavaPaths.at(moduleDir)
                                        .generatedProto()
                                        .java(main)
                                        .path()
@@ -280,7 +282,7 @@ class AnnotatorPluginTest {
 
     private static void checkGrpcService(SourceFile serviceFile, SourceCheck check)
             throws IOException {
-        var filePath = DefaultJavaPaths.at(projectDir)
+        var filePath = DefaultJavaPaths.at(moduleDir)
                                        .generatedProto()
                                        .grpc(main)
                                        .path()
@@ -305,10 +307,10 @@ class AnnotatorPluginTest {
      * as defined in the test project under {@code resources/annotator-plugin-test}.
      */
     private static Path mainDescriptorPath() {
-        return DefaultJavaPaths.at(projectDir)
+        return DefaultJavaPaths.at(moduleDir)
                 .buildRoot()
                 .descriptors()
                 .forSourceSet(MAIN_SOURCE_SET_NAME)
-                .resolve("io.spine.test_" + projectDir.getName() + "_3.14" + DESC_EXTENSION);
+                .resolve("io.spine.test_" + moduleDir.getName() + "_3.14" + DESC_EXTENSION);
     }
 }

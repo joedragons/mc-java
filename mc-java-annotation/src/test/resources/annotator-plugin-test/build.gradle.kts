@@ -36,15 +36,11 @@ buildscript {
     apply(from = "$rootDir/test-env.gradle")
     apply(from = "${extra["enclosingRootDir"]}/version.gradle.kts")
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven { url = uri(io.spine.internal.gradle.Repos.artifactRegistry) }
-        maven { url = uri(io.spine.internal.gradle.Repos.artifactRegistrySnapshots) }
-    }
+    io.spine.internal.gradle.doApplyStandard(repositories)
 
     val baseVersion: String by extra
     val mcJavaVersion: String by extra
+    val protoDataVersion: String by extra
     dependencies {
         io.spine.internal.dependency.Protobuf.libs.forEach { classpath(it) }
 
@@ -53,6 +49,7 @@ buildscript {
             exclude(group = "com.google.guava")
         }
         classpath("io.spine.tools:spine-mc-java:${mcJavaVersion}")
+        classpath("io.spine:protodata:${protoDataVersion}")
     }
 }
 
@@ -60,35 +57,40 @@ plugins {
     java
 }
 
-// NOTE: this file is copied from the root project in the test setup.
-val commonPath = io.spine.internal.gradle.Scripts.commonPath
-apply {
-    plugin("com.google.protobuf")
-    plugin("io.spine.mc-java")
-    from("$rootDir/test-env.gradle")
+allprojects {
+    group = "io.spine.test"
+    version = "3.14"
 }
 
-group = "io.spine.test"
-version = "3.14"
+subprojects {
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven { url = uri(Repos.artifactRegistry) }
-    maven { url = uri(Repos.artifactRegistrySnapshots) }
-}
+    apply(plugin = "java")
 
-val baseVersion: String by extra
-dependencies {
-    implementation("io.spine:spine-base:$baseVersion")
-    implementation(Grpc.stub)
-    implementation(Grpc.protobuf)
-}
+    // NOTE: this file is copied from the root project in the test setup.
+    val commonPath = io.spine.internal.gradle.Scripts.commonPath
 
-sourceSets {
-    main {
-        java.srcDirs("$projectDir/generated/main/java", "$projectDir/generated/main/spine")
-        resources.srcDir("$projectDir/generated/main/resources")
-        (extensions.getByName("proto") as SourceDirectorySet).srcDir("$projectDir/src/main/proto")
+    apply(from = "$rootDir/test-env.gradle")
+    val enclosingRootDir: String by extra
+    apply {
+        plugin("com.google.protobuf")
+        plugin("io.spine.mc-java")
+        from("${enclosingRootDir}/version.gradle.kts")
+    }
+
+    io.spine.internal.gradle.doApplyStandard(repositories)
+
+    val baseVersion: String by extra
+    dependencies {
+        implementation("io.spine:spine-base:$baseVersion")
+        implementation(Grpc.stub)
+        implementation(Grpc.protobuf)
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs("$projectDir/generated/main/java", "$projectDir/generated/main/spine")
+            resources.srcDir("$projectDir/generated/main/resources")
+            (extensions.getByName("proto") as SourceDirectorySet).srcDir("$projectDir/src/main/proto")
+        }
     }
 }

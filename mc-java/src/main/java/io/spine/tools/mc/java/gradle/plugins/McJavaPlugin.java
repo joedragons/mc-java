@@ -78,7 +78,8 @@ public class McJavaPlugin extends LanguagePlugin implements Logging {
     }
 
     private void apply(Plugin<Project> plugin, Project project) {
-        _debug().log("Applying plugin `%s`.", plugin.getClass().getName());
+        _debug().log("Applying plugin `%s` to project `%s`.",
+                     plugin.getClass().getName(), project.getName());
         plugin.apply(project);
     }
 }

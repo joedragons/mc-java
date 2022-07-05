@@ -34,6 +34,7 @@ import io.spine.internal.dependency.Spine
 import io.spine.internal.gradle.WriteVersions
 
 val baseVersion: String by extra
+val protoDataVersion: String by extra
 
 val spine = Spine(project)
 val validation = spine.validation
@@ -53,7 +54,8 @@ dependencies {
     implementation(project(":mc-java-checks"))
     implementation(project(":mc-java-rejection"))
 
-    implementation(Spine.ProtoData.pluginLib)
+    implementation("io.spine:protodata:$protoDataVersion")
+    implementation("io.spine.protodata:protodata-compiler:$protoDataVersion")
     implementation(validation.config)
 
     testImplementation(gradleTestKit())
