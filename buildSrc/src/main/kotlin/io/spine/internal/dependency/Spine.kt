@@ -88,6 +88,6 @@ class Spine(p: ExtensionAware) {
          * it in a `plugins` section in a build script.
          */
         const val version = "0.2.5"
-        const val pluginLib = "io.spine:proto-data:$version"
+        const val pluginLib = "io.spine:protodata:$version"
     }
 }
