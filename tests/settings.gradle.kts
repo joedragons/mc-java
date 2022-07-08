@@ -33,8 +33,7 @@ include(
     "rejection",
     "validating-options",
     "validation",
-    // TODO: include again once the validation library is migrated to the new ProtoData API.
-//    "validation-gen",
+    "validation-gen",
 )
 
 /*

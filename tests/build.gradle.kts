@@ -73,9 +73,9 @@ buildscript {
                     io.spine.internal.dependency.Jackson.core,
                     io.spine.internal.dependency.Jackson.moduleKotlin,
                     io.spine.internal.dependency.Jackson.databind,
-                    "com.fasterxml.jackson:jackson-bom:2.13.2",
-                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
-                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
+                    io.spine.internal.dependency.Jackson.bom,
+                    io.spine.internal.dependency.Jackson.annotations,
+                    io.spine.internal.dependency.Jackson.dataformatYaml
                 )
             }
         }
@@ -152,9 +152,9 @@ subprojects {
                     Jackson.core,
                     Jackson.moduleKotlin,
                     Jackson.databind,
-                    "com.fasterxml.jackson:jackson-bom:2.13.2",
-                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
-                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
+                    Jackson.bom,
+                    Jackson.annotations,
+                    Jackson.dataformatYaml
                 )
             }
         }
