@@ -61,6 +61,7 @@ buildscript {
     }
 
     val baseVersion: String by extra
+    val timeVersion: String by extra
     val toolBaseVersion: String by extra
     with(configurations) {
         io.spine.internal.gradle.doForceVersions(this)
@@ -68,6 +69,7 @@ buildscript {
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-time:$timeVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion",
                     io.spine.internal.dependency.Jackson.core,
@@ -106,6 +108,31 @@ allprojects {
 
     group = "io.spine.tools.tests"
     version = extra["versionToPublish"]!!
+
+    val baseVersion: String by extra
+    val toolBaseVersion: String by extra
+    val timeVersion: String by extra
+    configurations {
+        forceVersions()
+        excludeProtobufLite()
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-time:$timeVersion",
+                    "io.spine.tools:spine-testlib:$baseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion",
+                    Jackson.core,
+                    Jackson.moduleKotlin,
+                    Jackson.databind,
+                    Jackson.bom,
+                    Jackson.annotations,
+                    Jackson.dataformatYaml
+                )
+            }
+        }
+    }
 }
 
 subprojects {
@@ -138,27 +165,6 @@ subprojects {
         testRuntimeOnly(JUnit.runner)
     }
 
-    val toolBaseVersion: String by extra
-    configurations {
-        forceVersions()
-        excludeProtobufLite()
-        all {
-            resolutionStrategy {
-                force(
-                    "io.spine:spine-base:$baseVersion",
-                    "io.spine.tools:spine-testlib:$baseVersion",
-                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
-                    "io.spine.tools:spine-plugin-base:$toolBaseVersion",
-                    Jackson.core,
-                    Jackson.moduleKotlin,
-                    Jackson.databind,
-                    Jackson.bom,
-                    Jackson.annotations,
-                    Jackson.dataformatYaml
-                )
-            }
-        }
-    }
 
     idea.module {
         generatedSourceDirs.addAll(files(
