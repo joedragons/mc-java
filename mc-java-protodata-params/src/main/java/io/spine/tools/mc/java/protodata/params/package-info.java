@@ -24,24 +24,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.tools.mc.java.gradle.plugins;
-
-import com.google.protobuf.ExtensionRegistry;
-import io.spine.option.OptionsProto;
-import io.spine.protodata.option.OptionsProvider;
-import io.spine.time.validation.TimeOptionsProto;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 /**
- * Registers the definitions from {@code spine/options.proto} and {@code spine/time_options.proto}
- * in the {@code ExtensionRegistry} for ProtoData.
+ * This package defines the parameters used by {@code modelCompiler} plugin
+ * to configure ProtoData.
  */
-@SuppressWarnings("unused") /* The FQN of this type is used in the ProtoData launch command. */
-public final class DefaultOptionsProvider implements OptionsProvider {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.tools.mc.java.protodata.params;
 
-    @Override
-    public void registerIn(@NonNull ExtensionRegistry registry) {
-        OptionsProto.registerAllExtensions(registry);
-        TimeOptionsProto.registerAllExtensions(registry);
-    }
-}
+import com.google.errorprone.annotations.CheckReturnValue;
+
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "mc-java"
+package io.spine.tools.mc.java.protodata.params;
 
-include(
-    "mc-java",
-    "mc-java-annotation",
-    "mc-java-base",
-    "mc-java-checks",
-    "mc-java-protoc",
-    "mc-java-rejection",
-    "mc-java-validation",
-    "mc-java-protodata-params"
-)
+import com.google.protobuf.ExtensionRegistry;
+import io.spine.option.OptionsProto;
+import io.spine.protodata.option.OptionsProvider;
+import io.spine.time.validation.TimeOptionsProto;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+/**
+ * Registers the definitions from {@code spine/options.proto} and {@code spine/time_options.proto}
+ * in the {@code ExtensionRegistry} for ProtoData.
+ */
+public final class DefaultOptionsProvider implements OptionsProvider {
+
+    @Override
+    public void registerIn(@NonNull ExtensionRegistry registry) {
+        OptionsProto.registerAllExtensions(registry);
+        TimeOptionsProto.registerAllExtensions(registry);
+    }
+}

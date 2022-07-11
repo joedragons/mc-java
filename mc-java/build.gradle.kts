@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":mc-java-annotation"))
     implementation(project(":mc-java-checks"))
     implementation(project(":mc-java-rejection"))
+    implementation(project(":mc-java-protodata-params"))
 
     implementation("io.spine:protodata:$protoDataVersion")
     implementation("io.spine.protodata:protodata-compiler:$protoDataVersion")

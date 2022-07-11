@@ -85,6 +85,9 @@ private val validationRuntimeDependency =
 private val mcJavaDependency =
     ThirdPartyDependency(SPINE_TOOLS_GROUP, "spine-mc-java")
 
+private val mcJavaProtoDataParamsDependency =
+    ThirdPartyDependency(SPINE_TOOLS_GROUP, "spine-mc-java-protodata-params")
+
 
 private val validationVersion: String by lazy {
     versions.versionOf(validationJavaDependency).orElseThrow()
@@ -122,6 +125,18 @@ internal val mcJava: Artifact by lazy {
     Artifact.newBuilder()
         .setName(mcJavaDependency.name())
         .setGroup(mcJavaDependency.groupId())
+        .setVersion(mcJavaVersion)
+        .build()
+}
+
+/**
+ * The Maven artifact containing the `spine-mc-java-protodata-params` module.
+ */
+@get:JvmName("mcJavaProtoDataParams")
+internal val mcJavaProtoDataParams: Artifact by lazy {
+    Artifact.newBuilder()
+        .setName(mcJavaProtoDataParamsDependency.name())
+        .setGroup(mcJavaProtoDataParamsDependency.groupId())
         .setVersion(mcJavaVersion)
         .build()
 }

@@ -28,10 +28,11 @@ package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.protodata.gradle.CodegenSettings;
 import io.spine.protodata.gradle.plugin.LaunchProtoData;
+import io.spine.tools.mc.java.protodata.params.DefaultOptionsProvider;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
-import static io.spine.tools.mc.java.gradle.Artifacts.mcJava;
+import static io.spine.tools.mc.java.gradle.Artifacts.mcJavaProtoDataParams;
 import static io.spine.tools.mc.java.gradle.Artifacts.validationJava;
 import static io.spine.tools.mc.java.gradle.Artifacts.validationRuntime;
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
@@ -93,8 +94,8 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
      * Configures ProtoData with the required Validation library extensions,
      * for the passed Gradle project.
      *
-     * <p>Among other things, includes the {@code mc-java} into the {@code protoData}
-     * configuration classpath. This is required in order to make
+     * <p>Among other things, includes the {@code mc-java-protodata-params} dependency
+     * into the {@code protoData} configuration classpath. This is required in order to make
      * the {@link DefaultOptionsProvider} available to the ProtoData runtime.
      *
      * <p>In case the Validation
@@ -119,7 +120,7 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
 
         var dependencies = target.getDependencies();
         dependencies.add(PROTODATA_CONFIGURATION, validationJava().notation());
-        dependencies.add(PROTODATA_CONFIGURATION, mcJava().notation());
+        dependencies.add(PROTODATA_CONFIGURATION, mcJavaProtoDataParams().notation());
         dependencies.add(IMPL_CONFIGURATION, validationRuntime().notation());
     }
 

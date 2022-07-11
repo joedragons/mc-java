@@ -140,6 +140,7 @@ subprojects {
     }
 
     val baseVersion: String by extra
+    val timeVersion: String by extra
     val toolBaseVersion: String by extra
     val serverVersion: String by extra
     val protoDataVersion: String by extra
@@ -150,6 +151,7 @@ subprojects {
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-time:$timeVersion",
                     "io.spine:spine-server:$serverVersion",
                     "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",

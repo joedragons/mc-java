@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2022, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "mc-java"
+import com.google.protobuf.gradle.generateProtoTasks
+import com.google.protobuf.gradle.protobuf
+import io.spine.internal.dependency.Grpc
+import io.spine.internal.dependency.JavaPoet
+import io.spine.internal.dependency.Protobuf
+import io.spine.internal.dependency.Roaster
+import io.spine.internal.dependency.Spine
+import io.spine.internal.gradle.WriteVersions
 
-include(
-    "mc-java",
-    "mc-java-annotation",
-    "mc-java-base",
-    "mc-java-checks",
-    "mc-java-protoc",
-    "mc-java-rejection",
-    "mc-java-validation",
-    "mc-java-protodata-params"
-)
+val baseVersion: String by extra
+val timeVersion: String by extra
+val protoDataVersion: String by extra
+
+dependencies {
+    implementation("io.spine.protodata:protodata-compiler:$protoDataVersion")
+    implementation("io.spine:spine-base:$baseVersion")
+    implementation("io.spine:spine-time:$timeVersion")
+}
