@@ -33,5 +33,6 @@ include(
     "mc-java-checks",
     "mc-java-protoc",
     "mc-java-rejection",
-    "mc-java-validation"
+    "mc-java-validation",
+    "mc-java-protodata-params"
 )

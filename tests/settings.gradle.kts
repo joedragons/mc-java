@@ -33,8 +33,7 @@ include(
     "rejection",
     "validating-options",
     "validation",
-    // TODO: include again once the validation library is migrated to the new ProtoData API.
-//    "validation-gen",
+    "validation-gen",
 )
 
 /*
@@ -44,7 +43,8 @@ include(
  */
 val links = mapOf(
     "io.spine.tools:spine-mc-java" to ":mc-java",
-    "io.spine.tools:spine-mc-java-checks" to ":mc-java-checks"
+    "io.spine.tools:spine-mc-java-checks" to ":mc-java-checks",
+    "io.spine.tools:spine-mc-java-protodata-params"  to ":mc-java-protodata-params"
 )
 
 /*

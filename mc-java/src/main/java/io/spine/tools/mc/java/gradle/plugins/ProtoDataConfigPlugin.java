@@ -28,9 +28,11 @@ package io.spine.tools.mc.java.gradle.plugins;
 
 import io.spine.protodata.gradle.CodegenSettings;
 import io.spine.protodata.gradle.plugin.LaunchProtoData;
+import io.spine.tools.mc.java.protodata.params.DefaultOptionsProvider;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 
+import static io.spine.tools.mc.java.gradle.Artifacts.mcJavaProtoDataParams;
 import static io.spine.tools.mc.java.gradle.Artifacts.validationJava;
 import static io.spine.tools.mc.java.gradle.Artifacts.validationRuntime;
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
@@ -50,6 +52,8 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
     private static final String PROTO_DATA_ID = "io.spine.protodata";
     private static final String CONFIG_SUBDIR = "protodata-config";
 
+    private static final String PROTODATA_CONFIGURATION = "protoData";
+    private static final String IMPL_CONFIGURATION = "implementation";
 
     /**
      * Applies the {@code io.spine.proto-data} plugin to the project and, if the user needs
@@ -90,6 +94,10 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
      * Configures ProtoData with the required Validation library extensions,
      * for the passed Gradle project.
      *
+     * <p>Among other things, includes the {@code mc-java-protodata-params} dependency
+     * into the {@code protoData} configuration classpath. This is required in order to make
+     * the {@link DefaultOptionsProvider} available to the ProtoData runtime.
+     *
      * <p>In case the Validation
      * {@linkplain io.spine.tools.mc.java.gradle.codegen.ValidationConfig#shouldSkipValidation()
      * is disabled}, does nothing.
@@ -108,11 +116,12 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
         ext.plugins(
                 "io.spine.validation.ValidationPlugin"
         );
-        ext.optionProviders("io.spine.tools.mc.java.gradle.plugins.DefaultOptionsProvider");
+        ext.optionProviders(DefaultOptionsProvider.class.getName());
 
         var dependencies = target.getDependencies();
-        dependencies.add("protoData", validationJava().notation());
-        dependencies.add("implementation", validationRuntime().notation());
+        dependencies.add(PROTODATA_CONFIGURATION, validationJava().notation());
+        dependencies.add(PROTODATA_CONFIGURATION, mcJavaProtoDataParams().notation());
+        dependencies.add(IMPL_CONFIGURATION, validationRuntime().notation());
     }
 
     private static void linkConfigFile(Project target, LaunchProtoData task,

@@ -22,7 +22,6 @@ package io.spine.tools.mc.java.validation.gradle;
 
 import io.spine.tools.gradle.testing.GradleProject;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -48,7 +47,6 @@ class ValidatingCodeGenTest {
 
     @Test
     @DisplayName("generate valid Java code")
-    @Disabled   //TODO:2022-04-26:alex.tymchenko: re-enable once the validation library is fixed.
     void generatingJavaCode() {
         project.executeTask(compileJava);
     }

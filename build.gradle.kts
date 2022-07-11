@@ -42,6 +42,7 @@ import io.spine.internal.dependency.Truth
 import io.spine.internal.gradle.publish.IncrementGuard
 import io.spine.internal.gradle.RunBuild
 import io.spine.internal.gradle.VersionWriter
+import io.spine.internal.gradle.applyGitHubPackages
 import io.spine.internal.gradle.applyStandard
 import io.spine.internal.gradle.checkstyle.CheckStyleConfig
 import io.spine.internal.gradle.excludeProtobufLite
@@ -57,11 +58,15 @@ import io.spine.internal.gradle.publish.spinePublishing
 import io.spine.internal.gradle.report.coverage.JacocoConfig
 import io.spine.internal.gradle.report.license.LicenseReporter
 import io.spine.internal.gradle.report.pom.PomGenerator
-import io.spine.internal.gradle.test.configureLogging
-import io.spine.internal.gradle.test.registerTestTasks
+import io.spine.internal.gradle.testing.configureLogging
+import io.spine.internal.gradle.testing.registerTestTasks
 import java.time.Duration
 import java.util.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+buildscript {
+    io.spine.internal.gradle.doApplyStandard(repositories)
+}
 
 plugins {
     `java-library`
@@ -98,6 +103,7 @@ allprojects {
         gitHub("base")
         gitHub("tool-base")
         gitHub("model-compiler")
+        applyGitHubPackages("ProtoData", project)
         applyStandard()
     }
 }
@@ -109,7 +115,7 @@ subprojects {
         plugin("net.ltgt.errorprone")
         plugin("pmd-settings")
         plugin(Protobuf.GradlePlugin.id)
-        plugin("io.spine.proto-data")
+        plugin("io.spine.protodata")
         plugin("maven-publish")
     }
 
@@ -134,8 +140,10 @@ subprojects {
     }
 
     val baseVersion: String by extra
+    val timeVersion: String by extra
     val toolBaseVersion: String by extra
     val serverVersion: String by extra
+    val protoDataVersion: String by extra
     configurations {
         forceVersions()
         excludeProtobufLite()
@@ -143,17 +151,19 @@ subprojects {
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-time:$timeVersion",
                     "io.spine:spine-server:$serverVersion",
                     "io.spine.tools:spine-testlib:$baseVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion",
+                    "io.spine.protodata:protodata-codegen-java:$protoDataVersion",
                     "org.hamcrest:hamcrest-core:2.2",
                     Jackson.core,
                     Jackson.moduleKotlin,
                     Jackson.databind,
-                    "com.fasterxml.jackson:jackson-bom:2.13.2",
-                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
-                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
+                    Jackson.bom,
+                    Jackson.annotations,
+                    Jackson.dataformatYaml
                 )
             }
         }
@@ -247,10 +257,6 @@ subprojects {
         )
         plugins(
             "io.spine.validation.ValidationPlugin"
-        )
-        options(
-            "spine/options.proto",
-            "spine/time_options.proto"
         )
     }
 }

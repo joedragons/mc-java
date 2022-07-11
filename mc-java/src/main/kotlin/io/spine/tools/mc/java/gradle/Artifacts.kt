@@ -76,12 +76,26 @@ internal val spineProtocPlugin: Artifact by lazy {
 
 private const val VALIDATION_GROUP = "io.spine.validation"
 
-private val validationJavaDependency = ThirdPartyDependency(VALIDATION_GROUP, "java")
+private val validationJavaDependency =
+    ThirdPartyDependency(VALIDATION_GROUP, "spine-validation-java")
+
+private val validationRuntimeDependency =
+    ThirdPartyDependency(VALIDATION_GROUP, "spine-validation-runtime")
+
+private val mcJavaDependency =
+    ThirdPartyDependency(SPINE_TOOLS_GROUP, "spine-mc-java")
+
+private val mcJavaProtoDataParamsDependency =
+    ThirdPartyDependency(SPINE_TOOLS_GROUP, "spine-mc-java-protodata-params")
+
 
 private val validationVersion: String by lazy {
     versions.versionOf(validationJavaDependency).orElseThrow()
 }
 
+/**
+ * The Maven artifact containing the `spine-validation-java` module.
+ */
 @get:JvmName("validationJava")
 internal val validationJava: Artifact by lazy {
     Artifact.newBuilder()
@@ -91,12 +105,39 @@ internal val validationJava: Artifact by lazy {
         .build()
 }
 
+/**
+ * The Maven artifact containing the `spine-validation-runtime` module.
+ */
 @get:JvmName("validationRuntime")
 internal val validationRuntime: Artifact by lazy {
     Artifact.newBuilder()
-        .setName("runtime")
+        .setName(validationRuntimeDependency.name())
         .setGroup(VALIDATION_GROUP)
         .setVersion(validationVersion)
+        .build()
+}
+
+/**
+ * The Maven artifact containing the `spine-mc-java` module.
+ */
+@get:JvmName("mcJava")
+internal val mcJava: Artifact by lazy {
+    Artifact.newBuilder()
+        .setName(mcJavaDependency.name())
+        .setGroup(mcJavaDependency.groupId())
+        .setVersion(mcJavaVersion)
+        .build()
+}
+
+/**
+ * The Maven artifact containing the `spine-mc-java-protodata-params` module.
+ */
+@get:JvmName("mcJavaProtoDataParams")
+internal val mcJavaProtoDataParams: Artifact by lazy {
+    Artifact.newBuilder()
+        .setName(mcJavaProtoDataParamsDependency.name())
+        .setGroup(mcJavaProtoDataParamsDependency.groupId())
+        .setVersion(mcJavaVersion)
         .build()
 }
 

@@ -37,7 +37,7 @@ import io.spine.internal.gradle.forceVersions
 import io.spine.internal.gradle.javac.configureErrorProne
 import io.spine.internal.gradle.javac.configureJavac
 import io.spine.internal.gradle.publish.PublishingRepos.gitHub
-import io.spine.internal.gradle.test.configureLogging
+import io.spine.internal.gradle.testing.configureLogging
 
 buildscript {
 
@@ -61,6 +61,7 @@ buildscript {
     }
 
     val baseVersion: String by extra
+    val timeVersion: String by extra
     val toolBaseVersion: String by extra
     with(configurations) {
         io.spine.internal.gradle.doForceVersions(this)
@@ -68,14 +69,15 @@ buildscript {
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-time:$timeVersion",
                     "io.spine.tools:spine-tool-base:$toolBaseVersion",
                     "io.spine.tools:spine-plugin-base:$toolBaseVersion",
                     io.spine.internal.dependency.Jackson.core,
                     io.spine.internal.dependency.Jackson.moduleKotlin,
                     io.spine.internal.dependency.Jackson.databind,
-                    "com.fasterxml.jackson:jackson-bom:2.13.2",
-                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
-                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
+                    io.spine.internal.dependency.Jackson.bom,
+                    io.spine.internal.dependency.Jackson.annotations,
+                    io.spine.internal.dependency.Jackson.dataformatYaml
                 )
             }
         }
@@ -106,6 +108,31 @@ allprojects {
 
     group = "io.spine.tools.tests"
     version = extra["versionToPublish"]!!
+
+    val baseVersion: String by extra
+    val toolBaseVersion: String by extra
+    val timeVersion: String by extra
+    configurations {
+        forceVersions()
+        excludeProtobufLite()
+        all {
+            resolutionStrategy {
+                force(
+                    "io.spine:spine-base:$baseVersion",
+                    "io.spine:spine-time:$timeVersion",
+                    "io.spine.tools:spine-testlib:$baseVersion",
+                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
+                    "io.spine.tools:spine-plugin-base:$toolBaseVersion",
+                    Jackson.core,
+                    Jackson.moduleKotlin,
+                    Jackson.databind,
+                    Jackson.bom,
+                    Jackson.annotations,
+                    Jackson.dataformatYaml
+                )
+            }
+        }
+    }
 }
 
 subprojects {
@@ -138,27 +165,6 @@ subprojects {
         testRuntimeOnly(JUnit.runner)
     }
 
-    val toolBaseVersion: String by extra
-    configurations {
-        forceVersions()
-        excludeProtobufLite()
-        all {
-            resolutionStrategy {
-                force(
-                    "io.spine:spine-base:$baseVersion",
-                    "io.spine.tools:spine-testlib:$baseVersion",
-                    "io.spine.tools:spine-tool-base:$toolBaseVersion",
-                    "io.spine.tools:spine-plugin-base:$toolBaseVersion",
-                    Jackson.core,
-                    Jackson.moduleKotlin,
-                    Jackson.databind,
-                    "com.fasterxml.jackson:jackson-bom:2.13.2",
-                    "com.fasterxml.jackson.core:jackson-annotations:2.13.2",
-                    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2"
-                )
-            }
-        }
-    }
 
     idea.module {
         generatedSourceDirs.addAll(files(
