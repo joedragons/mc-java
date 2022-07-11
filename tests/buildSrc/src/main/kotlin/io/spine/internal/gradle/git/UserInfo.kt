@@ -24,17 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.internal.dependency
+package io.spine.internal.gradle.git
 
-// https://github.com/jk1/Gradle-License-Report
-@Suppress("unused")
-object LicenseReport {
-    private const val version = "1.16"
-    const val lib = "com.github.jk1:gradle-license-report:${version}"
-
-    object GradlePlugin {
-        const val version = LicenseReport.version
-        const val id = "com.github.jk1.dependency-license-report"
-        const val lib = LicenseReport.lib
+/**
+ * Contains information about a Git user.
+ *
+ * Determines the author and committer fields of a commit.
+ *
+ * @constructor throws an [IllegalArgumentException] if the name or the email
+ *              is an empty string.
+ */
+data class UserInfo(val name: String, val email: String) {
+    init {
+        require(name.isNotBlank()) { "Name cannot be an empty string." }
+        require(email.isNotBlank()) { "Email cannot be an empty string." }
     }
 }
