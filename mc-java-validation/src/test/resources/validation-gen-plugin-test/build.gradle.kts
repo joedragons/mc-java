@@ -72,8 +72,6 @@ group = "io.spine.test"
 version = "3.14"
 
 repositories {
-    // Some Gradle plugins are needed to be resolved in scope of `protoData` configuration.
-    gradlePluginPortal()
     mavenLocal()
     mavenCentral()
     maven { url = uri(Repos.artifactRegistry) }
