@@ -26,11 +26,7 @@
 
 import io.spine.internal.dependency.AutoService
 
-val mcJavaVersion: String by extra
 dependencies {
-    // Supplies the `DefaultOptionsProvider`,
-    // so that Spine-specific Protobuf options become known to ProtoData.
-    protoData("io.spine.tools:spine-mc-java:$mcJavaVersion")
     testAnnotationProcessor(AutoService.processor)
     testCompileOnly(AutoService.annotations)
 }
