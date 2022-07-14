@@ -43,7 +43,7 @@ import static java.lang.String.format;
  * The plugin that configures ProtoData for the associated project.
  *
  * <p>We use ProtoData and the Validation library to generate validation code right inside
- * the Protobuf message classes. This plugin applies the {@code io.spine.proto-data} plugin,
+ * the Protobuf message classes. This plugin applies the {@code io.spine.protodata} plugin,
  * configures its extension, writes the ProtoData configuration file, and adds the required
  * dependencies to the target project.
  */
@@ -56,7 +56,7 @@ final class ProtoDataConfigPlugin implements Plugin<Project> {
     private static final String IMPL_CONFIGURATION = "implementation";
 
     /**
-     * Applies the {@code io.spine.proto-data} plugin to the project and, if the user needs
+     * Applies the {@code io.spine.protodata} plugin to the project and, if the user needs
      * validation code generation, configures ProtoData to generate Java validation code.
      *
      * <p>ProtoData configuration is a tricky operation because of Gradle's lifecycle. On one hand,
