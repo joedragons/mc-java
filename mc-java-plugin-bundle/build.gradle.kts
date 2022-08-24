@@ -34,6 +34,13 @@ plugins {
 /** The publishing settings from the root project. */
 val spinePublishing = rootProject.the<io.spine.internal.gradle.publish.SpinePublishing>()
 
+/**
+ * The ID of the far JAR artifact.
+ *
+ * This value is also used in `io.spine.tools.mc.java.gradle.Artifacts.kt`.
+ */
+val pArtifact = spinePublishing.artifactPrefix + "mc-java-all-plugins"
+
 dependencies {
     implementation(project(":mc-java"))
     implementation(project(":mc-java-protoc"))
@@ -50,7 +57,16 @@ publishing {
     publications {
         create("fat-jar", MavenPublication::class) {
             groupId = pGroup
+            artifactId = pArtifact
             version = pVersion
+
+            artifact(tasks.shadowJar) {
+                // Avoid `-all` suffix in the published artifact.
+                // We cannot remove the suffix by setting the `archiveClassifier` for
+                // the `shadowJar` task because of the duplication check for pairs
+                // (classifier, artifact extension) performed by `ValidatingMavenPublisher` class.
+                classifier = ""
+            }
         }
     }
 }
@@ -69,9 +85,15 @@ tasks.shadowJar {
          * This file is only present in `io:spine:protodata` artifact.
          */
         "io/spine/protodata/gradle/plugin/Plugin.class",
+
+        /**
+         * Exclude Gradle types to reduce the size of the resulting JAR.
+         *
+         * Those required for the plugins are available at runtime anyway.
+         */
         "org/gradle/**")
     setZip64(true)
-    archiveClassifier.set("all")
+    archiveClassifier.set("")
     mergeServiceFiles("desc.ref")
 }
 
