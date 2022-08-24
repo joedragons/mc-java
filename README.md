@@ -10,11 +10,51 @@
 
 This repository hosts the Java-specific parts of the Spine Model Compiler.
 
-Model Compilers for other languages:
+### Usage
+
+To use the Java part of the Model Compiler in Gradle, 
+declare the dependency in `buildscript` block:
+
+```kotlin
+
+buildscript {
+    //...
+    
+    val mcJavaVersion = ...
+
+    dependencies {
+        classpath("io.spine.tools:spine-mc-java-plugin-bundle:${mcJavaVersion}:all")
+    }
+    // ...
+}
+
+//...
+
+apply plugin: "io.spine.mc-java"
+
+```
+
+Then, configure the plugin in scope of the particular Gradle project:
+
+```kotlin
+
+
+modelCompiler {
+    java {
+        // Specify the options here.
+    }
+}
+```
+
+See [mc-java-protoc](./mc-java-protoc/README.md) documentation for more detail.
+
+### Model Compilers for other languages:
 * [JavaScript][mc-js]
 * [Dart][mc-dart]
 
 See the common parts of Model Compiler at [SpineEventEngine/model-compiler][model-compiler].
+
+### Environment
 
 The modules in this repository are built with Java 11.
 
