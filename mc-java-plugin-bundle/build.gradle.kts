@@ -30,6 +30,10 @@ plugins {
     id("com.github.johnrengelman.shadow").version("7.1.2")
 }
 
+
+/** The publishing settings from the root project. */
+val spinePublishing = rootProject.the<io.spine.internal.gradle.publish.SpinePublishing>()
+
 dependencies {
     implementation(project(":mc-java"))
     implementation(project(":mc-java-protoc"))
@@ -41,24 +45,12 @@ application {
 
 publishing {
     val pGroup = project.group.toString()
-    val pName = project.name.toString()
     val pVersion = project.version.toString()
 
     publications {
         create("fat-jar", MavenPublication::class) {
-            //TODO:2022-08-22:alex.tymchenko: prefix!
-            //TODO:2022-08-22:alex.tymchenko: remove the "small" JAR.
             groupId = pGroup
-            artifactId = pName
             version = pVersion
-
-            artifact(tasks.shadowJar) {
-                // Avoid `-all` suffix in the published artifact.
-                // We cannot remove the suffix by setting the `archiveClassifier` for
-                // the `shadowJar` task because of the duplication check for pairs
-                // (classifier, artifact extension) performed by `ValidatingMavenPublisher` class.
-                classifier = ""
-            }
         }
     }
 }
@@ -68,11 +60,23 @@ tasks.publish {
 }
 
 tasks.shadowJar {
+    exclude(
+        /**
+         * Excluding this type to avoid it being located in the fat JAR.
+         *
+         * Locating this type in its own `io:spine:protodata` artifact is crucial
+         * for obtaining proper version values from the manifest file.
+         * This file is only present in `io:spine:protodata` artifact.
+         */
+        "io/spine/protodata/gradle/plugin/Plugin.class",
+        "org/gradle/**")
     setZip64(true)
-    setClassifier("")
+    archiveClassifier.set("all")
     mergeServiceFiles("desc.ref")
 }
 
 // See https://github.com/johnrengelman/shadow/issues/153.
 tasks.shadowDistTar.get().enabled = false
 tasks.shadowDistZip.get().enabled = false
+tasks.distTar.get().enabled = false
+tasks.distZip.get().enabled = false
