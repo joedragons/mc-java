@@ -79,13 +79,23 @@ tasks.shadowJar {
          * This file is only present in `io:spine:protodata` artifact.
          */
         "io/spine/protodata/gradle/plugin/Plugin.class",
+        "META-INF/gradle-plugins/io.spine.protodata.properties",
 
         /**
          * Exclude Gradle types to reduce the size of the resulting JAR.
          *
          * Those required for the plugins are available at runtime anyway.
          */
-        "org/gradle/**")
+        "org/gradle/**",
+
+        /**
+         * Remove all third-party plugin declarations as well.
+         *
+         * They should be loaded from their respective dependencies.
+         */
+        "META-INF/gradle-plugins/com**",
+        "META-INF/gradle-plugins/net**",
+        "META-INF/gradle-plugins/org**")
     setZip64(true)
     archiveClassifier.set("all")    /** To prevent Gradle setting something like `osx-x86_64`. */
     mergeServiceFiles("desc.ref")
