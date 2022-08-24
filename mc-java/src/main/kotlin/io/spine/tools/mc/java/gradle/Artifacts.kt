@@ -42,12 +42,13 @@ private const val JAR_EXTENSION = "jar"
 private const val GRPC_GROUP = "io.grpc"
 private const val GRPC_PLUGIN_NAME = "protoc-gen-grpc-java"
 private const val MC_JAVA_NAME = "spine-mc-java"
-private const val EXECUTABLE_CLASSIFIER = "exe"
+private const val ALL_CLASSIFIER = "all"
 
 /**
- * The name of the Maven artifact of the Spine Protobuf compiler plugin.
+ * The name of the Maven artifact containing both Spine Protobuf compiler plugin
+ * and `modelCompiler` plugin.
  */
-internal const val SPINE_PROTOC_PLUGIN_NAME = "spine-mc-java-protoc"
+internal const val SPINE_MC_JAVA_PLUGIN_BUNDLE_NAME = "spine-mc-java-plugin-bundle"
 
 private val versions = DependencyVersions.loadFor(MC_JAVA_NAME)
 
@@ -61,15 +62,15 @@ internal val gRpcProtocPlugin: Artifact by lazy {
 }
 
 /**
- * The Maven artifact containing the `mc-java-protoc` module.
+ * The Maven artifact containing the `spine-mc-java-plugin-bundle` fat JAR artifact.
  */
-@get:JvmName("spineProtocPlugin")
-internal val spineProtocPlugin: Artifact by lazy {
+@get:JvmName("spineJavaPluginBundle")
+internal val spineJavaPluginBundle: Artifact by lazy {
     Artifact.newBuilder()
         .useSpineToolsGroup()
-        .setName(SPINE_PROTOC_PLUGIN_NAME)
+        .setName(SPINE_MC_JAVA_PLUGIN_BUNDLE_NAME)
         .setVersion(mcJavaVersion)
-        .setClassifier(EXECUTABLE_CLASSIFIER)
+        .setClassifier(ALL_CLASSIFIER)
         .setExtension(JAR_EXTENSION)
         .build()
 }
