@@ -23,7 +23,7 @@ buildscript {
     val mcJavaVersion = ...
 
     dependencies {
-        classpath("io.spine.tools:spine-mc-java-all-plugins:${mcJavaVersion}")
+        classpath("io.spine.tools:spine-mc-java-plugins:${mcJavaVersion}:all")
     }
     // ...
 }

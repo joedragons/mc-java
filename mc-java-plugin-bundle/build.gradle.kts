@@ -39,7 +39,7 @@ val spinePublishing = rootProject.the<io.spine.internal.gradle.publish.SpinePubl
  *
  * This value is also used in `io.spine.tools.mc.java.gradle.Artifacts.kt`.
  */
-val pArtifact = spinePublishing.artifactPrefix + "mc-java-all-plugins"
+val pArtifact = spinePublishing.artifactPrefix + "mc-java-plugins"
 
 dependencies {
     implementation(project(":mc-java"))
@@ -60,13 +60,7 @@ publishing {
             artifactId = pArtifact
             version = pVersion
 
-            artifact(tasks.shadowJar) {
-                // Avoid `-all` suffix in the published artifact.
-                // We cannot remove the suffix by setting the `archiveClassifier` for
-                // the `shadowJar` task because of the duplication check for pairs
-                // (classifier, artifact extension) performed by `ValidatingMavenPublisher` class.
-                classifier = ""
-            }
+            artifact(tasks.shadowJar)
         }
     }
 }
@@ -93,7 +87,7 @@ tasks.shadowJar {
          */
         "org/gradle/**")
     setZip64(true)
-    archiveClassifier.set("")
+    archiveClassifier.set("all")    /** To prevent Gradle setting something like `osx-x86_64`. */
     mergeServiceFiles("desc.ref")
 }
 
