@@ -57,7 +57,7 @@ buildscript {
         classpath(io.spine.internal.dependency.ErrorProne.GradlePlugin.lib) {
             exclude(group = "com.google.guava")
         }
-        classpath("io.spine.tools:spine-mc-java:$mcJavaVersion")
+        classpath("io.spine.tools:spine-mc-java-plugins:${mcJavaVersion}:all")
     }
 
     val baseVersion: String by extra
@@ -116,6 +116,7 @@ allprojects {
         forceVersions()
         excludeProtobufLite()
         all {
+            exclude(group = "io.spine.validation", module = "spine-validation-runtime")
             resolutionStrategy {
                 force(
                     "io.spine:spine-base:$baseVersion",

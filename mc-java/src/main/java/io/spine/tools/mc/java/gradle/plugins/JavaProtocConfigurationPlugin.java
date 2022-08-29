@@ -51,9 +51,9 @@ import static io.spine.tools.gradle.task.BaseTaskName.clean;
 import static io.spine.tools.gradle.task.JavaTaskName.processResources;
 import static io.spine.tools.gradle.task.Tasks.getSourceSetName;
 import static io.spine.tools.mc.java.StandardTypes.toBase64Encoded;
-import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_PROTOC_PLUGIN_NAME;
+import static io.spine.tools.mc.java.gradle.Artifacts.SPINE_MC_JAVA_ALL_PLUGINS_NAME;
 import static io.spine.tools.mc.java.gradle.Artifacts.gRpcProtocPlugin;
-import static io.spine.tools.mc.java.gradle.Artifacts.spineProtocPlugin;
+import static io.spine.tools.mc.java.gradle.Artifacts.spineJavaAllPlugins;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writeDescriptorReference;
 import static io.spine.tools.mc.java.gradle.McJavaTaskName.writePluginConfiguration;
 import static io.spine.tools.mc.java.gradle.Projects.getMcJava;
@@ -72,7 +72,7 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
                        locator -> locator.setArtifact(gRpcProtocPlugin().notation())
         );
         plugins.create(spineProtoc.name(),
-                       locator -> locator.setArtifact(spineProtocPlugin().notation())
+                       locator -> locator.setArtifact(spineJavaAllPlugins().notation())
         );
     }
 
@@ -178,7 +178,8 @@ public final class JavaProtocConfigurationPlugin extends ProtocConfigurationPlug
 
         private Path pluginTempDir() {
             var buildDir = project.getBuildDir();
-            var result = Paths.get(buildDir.getAbsolutePath(), "tmp", SPINE_PROTOC_PLUGIN_NAME);
+            var result =
+                    Paths.get(buildDir.getAbsolutePath(), "tmp", SPINE_MC_JAVA_ALL_PLUGINS_NAME);
             return result;
         }
 

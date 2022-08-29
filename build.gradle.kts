@@ -106,6 +106,10 @@ allprojects {
         applyGitHubPackages("ProtoData", project)
         applyStandard()
     }
+
+    configurations.all {
+        exclude(group = "io.spine.validation", module = "spine-validation-runtime")
+    }
 }
 
 subprojects {

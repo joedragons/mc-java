@@ -42,12 +42,13 @@ private const val JAR_EXTENSION = "jar"
 private const val GRPC_GROUP = "io.grpc"
 private const val GRPC_PLUGIN_NAME = "protoc-gen-grpc-java"
 private const val MC_JAVA_NAME = "spine-mc-java"
-private const val EXECUTABLE_CLASSIFIER = "exe"
+private const val ALL_CLASSIFIER = "all"
 
 /**
- * The name of the Maven artifact of the Spine Protobuf compiler plugin.
+ * The name of the Maven artifact containing both Spine Protobuf compiler plugin
+ * and `modelCompiler` plugin.
  */
-internal const val SPINE_PROTOC_PLUGIN_NAME = "spine-mc-java-protoc"
+internal const val SPINE_MC_JAVA_ALL_PLUGINS_NAME = "spine-mc-java-plugins"
 
 private val versions = DependencyVersions.loadFor(MC_JAVA_NAME)
 
@@ -61,15 +62,15 @@ internal val gRpcProtocPlugin: Artifact by lazy {
 }
 
 /**
- * The Maven artifact containing the `mc-java-protoc` module.
+ * The Maven artifact containing the `spine-mc-java-plugins:all` fat JAR artifact.
  */
-@get:JvmName("spineProtocPlugin")
-internal val spineProtocPlugin: Artifact by lazy {
+@get:JvmName("spineJavaAllPlugins")
+internal val spineJavaAllPlugins: Artifact by lazy {
     Artifact.newBuilder()
         .useSpineToolsGroup()
-        .setName(SPINE_PROTOC_PLUGIN_NAME)
+        .setName(SPINE_MC_JAVA_ALL_PLUGINS_NAME)
         .setVersion(mcJavaVersion)
-        .setClassifier(EXECUTABLE_CLASSIFIER)
+        .setClassifier(ALL_CLASSIFIER)
         .setExtension(JAR_EXTENSION)
         .build()
 }
@@ -78,12 +79,6 @@ private const val VALIDATION_GROUP = "io.spine.validation"
 
 private val validationJavaDependency =
     ThirdPartyDependency(VALIDATION_GROUP, "spine-validation-java")
-
-private val validationRuntimeDependency =
-    ThirdPartyDependency(VALIDATION_GROUP, "spine-validation-runtime")
-
-private val mcJavaDependency =
-    ThirdPartyDependency(SPINE_TOOLS_GROUP, "spine-mc-java")
 
 private val mcJavaProtoDataParamsDependency =
     ThirdPartyDependency(SPINE_TOOLS_GROUP, "spine-mc-java-protodata-params")
@@ -102,30 +97,6 @@ internal val validationJava: Artifact by lazy {
         .setName(validationJavaDependency.name())
         .setGroup(validationJavaDependency.groupId())
         .setVersion(validationVersion)
-        .build()
-}
-
-/**
- * The Maven artifact containing the `spine-validation-runtime` module.
- */
-@get:JvmName("validationRuntime")
-internal val validationRuntime: Artifact by lazy {
-    Artifact.newBuilder()
-        .setName(validationRuntimeDependency.name())
-        .setGroup(VALIDATION_GROUP)
-        .setVersion(validationVersion)
-        .build()
-}
-
-/**
- * The Maven artifact containing the `spine-mc-java` module.
- */
-@get:JvmName("mcJava")
-internal val mcJava: Artifact by lazy {
-    Artifact.newBuilder()
-        .setName(mcJavaDependency.name())
-        .setGroup(mcJavaDependency.groupId())
-        .setVersion(mcJavaVersion)
         .build()
 }
 
