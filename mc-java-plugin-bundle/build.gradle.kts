@@ -1,3 +1,5 @@
+import groovy.util.Node
+
 /*
  * Copyright 2022, TeamDev. All rights reserved.
  *
@@ -41,6 +43,8 @@ val spinePublishing = rootProject.the<io.spine.internal.gradle.publish.SpinePubl
  */
 val pArtifact = spinePublishing.artifactPrefix + "mc-java-plugins"
 
+val protoDataVersion: String by extra
+
 dependencies {
     implementation(project(":mc-java"))
     implementation(project(":mc-java-protoc"))
@@ -59,8 +63,37 @@ publishing {
             groupId = pGroup
             artifactId = pArtifact
             version = pVersion
-
             artifact(tasks.shadowJar)
+
+            /**
+             * Manually add the dependency onto `io.spine:protodata`,
+             * as there is no good way to remove all the dependencies
+             * from the fat JAR artifact, but leave just this one.
+             *
+             * This dependency is required in order to place the ProtoData plugin
+             * onto the build classpath, so that `mc-java` routines
+             * could apply it programmatically.
+             *
+             * The appended content should look like this:
+             * ```
+             *     <dependency>
+             *         <groupId>io.spine</groupId>
+             *         <artifactId>protodata</artifactId>
+             *         <version>0.2.7</version>
+             *         <scope>runtime</scope>
+             *    </dependency>
+             * ```
+             */
+            pom.withXml {
+                val projectNode: Node = asNode() as Node
+
+                val dependencies = Node(projectNode, "dependencies")
+                val dependency = Node(dependencies, "dependency")
+                Node(dependency, "groupId", "io.spine")
+                Node(dependency, "artifactId", "protodata")
+                Node(dependency, "version", protoDataVersion)
+                Node(dependency, "scope", "runtime")
+            }
         }
     }
 }
@@ -96,7 +129,8 @@ tasks.shadowJar {
         "META-INF/gradle-plugins/com**",
         "META-INF/gradle-plugins/net**",
         "META-INF/gradle-plugins/org**")
-    setZip64(true)
+
+    setZip64(true)  /* The archive has way too many items. So using the Zip64 mode. */
     archiveClassifier.set("all")    /** To prevent Gradle setting something like `osx-x86_64`. */
     mergeServiceFiles("desc.ref")
 }
